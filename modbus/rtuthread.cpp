@@ -10,6 +10,7 @@
 #include <QMultiHash>
 
 static ushort gBoxArray[4] = {0, 0, 0, 0};
+int gVerflag = 2;//1代表一期 2代表二期
 
 void set_box_num(int id, int num)
 {
@@ -228,7 +229,7 @@ int RtuThread::transData(int addr)
     Rtu_recv *pkt = mRtuPkt; //数据包
     sBoxData *box = &(mBusData->box[addr]); //共享内存
 
-    int rtn = rtu_sent_buff(addr+1,buf); // 把数据打包成通讯格式的数据
+    int rtn = rtu_sent_buff(addr+1 , buf , RTU_SENT_LEN_V25); // 把数据打包成通讯格式的数据
     #if (SI_RTUWIFI==1)
     rtn = mSerial->transmit_p(buf, rtn, buf); // 传输数据，发送同时接收
     static int preaddr = -1;
@@ -392,6 +393,77 @@ void RtuThread::BusTransData()
     }
 }
 
+void RtuThread::BusTransDataV3()
+{
+    for(int i=0; i<=mBusData->boxNum; ++i)
+    {
+        if(transDataV3(i) == 0 ) {
+            msleep(900);//900
+            transDataV3(i);
+        }
+        msleep(750);//750
+    }
+}
+
+int RtuThread::transDataV3(int addr)
+{
+    char offLine = 0;
+    uchar *buf = mBuf;
+    Rtu_recv *pkt = mRtuPkt; //数据包
+    sBoxData *box = &(mBusData->box[addr]); //共享内存
+
+    int rtn = rtu_sent_buff(addr+1,buf); // 把数据打包成通讯格式的数据
+    //    QByteArray sendarray;
+    //    QString sendstrArray;
+    //    sendarray.append((char *)buf, rtn);
+    //    sendstrArray = sendarray.toHex(); // 十六进制
+    //    for(int i=0; i<sendarray.size(); ++i)
+    //        sendstrArray.insert(2+3*i, " "); // 插入空格
+    //    qDebug()<<"  send:" << sendstrArray;
+    //    qDebug()<< "rtn  "<<rtn;
+    rtn = mSerial->transmitV3(buf, rtn, buf); // 传输数据，发送同时接收
+    //    QByteArray array;
+    //    QString strArray;
+    //    array.append((char *)buf, rtn);
+    //    strArray = array.toHex(); // 十六进制
+    //    for(int i=0; i<array.size(); ++i)
+    //        strArray.insert(2+3*i, " "); // 插入空格
+    //    qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
+
+    if(rtn > 0) {
+        bool ret = rtu_recv_packet(buf, rtn, pkt); // 解析数据 data - len - it
+        if(ret) {
+            if(addr+1 == pkt->addr) { //回收地址和发送地址同
+                offLine = 4;
+                loopData(box, pkt); //更新数据
+                envData(&(box->env), pkt);
+                box->rate = pkt->rate;
+                box->minRate = pkt->minRate;
+                box->maxRate = pkt->maxRate;
+                box->dc = pkt->dc;
+                box->version = pkt->version;
+                box->data.totalPow = pkt->totalPow;
+                thdData(pkt);
+            }
+
+            box->rtuLen = rtn;
+            for(int i = 0; i < box->rtuLen; i++){
+                box->rtuArray[i] = buf[i];
+            }
+
+        }else{
+            box->rtuLen = 0;  //数据出错清零
+        }
+    }
+    if(offLine) {
+        box->offLine = offLine; //在线
+    } else {
+        if(box->offLine > 0)
+            box->offLine--;
+    }
+
+    return offLine;
+}
 
 void RtuThread::run()
 {
@@ -399,12 +471,16 @@ void RtuThread::run()
     while(isRun)
     {
 #if( SI_RTUWIFI == 0)
-        ushort num = gBoxArray[mId];
-        if(num) {
-            setBoxNum(num);
-            gBoxArray[mId] = 0;
+        if(gVerflag == 1){
+            ushort num = gBoxArray[mId];
+            if(num) {
+                setBoxNum(num);
+                gBoxArray[mId] = 0;
+            }
+            BusTransData();
+        }else{
+            BusTransDataV3();
         }
-        BusTransData();
 #endif
 #if( SI_RTUWIFI == 1)
         for(int k = 1 ; k <= 4 ; ++k)

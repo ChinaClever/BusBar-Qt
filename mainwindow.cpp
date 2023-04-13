@@ -45,23 +45,23 @@ void MainWindow::initSerial()
 {
     rtu[0] = new RtuThread(this);
     rtu[0]->init(SERIAL_COM1, 1); //只操作母线1
-//#if (SI_RTUWIFI==0)
-//#if BUS_NUM > 1
-//    rtu[1] = new RtuThread(this);
-//    rtu[1]->init(SERIAL_COM2, 2);
-//#endif
-//#if BUS_NUM > 2
-//    rtu[2] = new RtuThread(this);
-//    rtu[2]->init(SERIAL_COM3, 3);
-//#endif
-//#if BUS_NUM > 3
-//    rtu[3] = new RtuThread(this);
-//    rtu[3]->init(SERIAL_COM4, 4);
-//#endif
-//#endif
+#if (SI_RTUWIFI==0)
+#if BUS_NUM > 1
+    rtu[1] = new RtuThread(this);
+    rtu[1]->init(SERIAL_COM2, 2);
+#endif
+#if BUS_NUM > 2
+    rtu[2] = new RtuThread(this);
+    rtu[2]->init(SERIAL_COM3, 3);
+#endif
+#if BUS_NUM > 3
+    rtu[3] = new RtuThread(this);
+    rtu[3]->init(SERIAL_COM4, 4);
+#endif
+#endif
 
-//    thr = new ThirdThread(this);
-//    thr->init(SERIAL_COM5);
+    thr = new ThirdThread(this);
+    thr->init(SERIAL_COM5);
 }
 
 void MainWindow::updateTime()
@@ -102,7 +102,7 @@ void MainWindow::setBusName(int index)
     sBusData *busData = &(shm->data[index]);
     double rateCur = busData->box[0].ratedCur/COM_RATE_CUR;
     ui->ratedLab->setText(QString::number(rateCur));
-    ui->ratedLab->setText("V2.5.0");
+    ui->ratedLab->setText("V3.0.0");
 }
 
 void MainWindow::checkAlarm()

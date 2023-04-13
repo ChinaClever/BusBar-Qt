@@ -283,3 +283,57 @@ int Serial_Trans::getSerialFd(void)
 {
     return fd;
 }
+
+/**
+  * 功　能：读取数据
+  * 入口参数：pBuf -> 缓冲区
+  * 返回值：读取的实际长度  <=0 出错
+  */
+int Serial_Trans::recvDataV3(uchar *pBuf, int msecs)
+{
+    //QMutexLocker locker(&mutex);
+    int count=0, ret=0;
+    if(fd >= 0)
+    {
+        do
+        {
+           int rtn = read(fd, pBuf, RTU_SENT_LEN_V30*2+15);
+#if (SI_RTUWIFI==1)
+           msleep(90);
+#endif
+           if(rtn > 0) {
+               pBuf += rtn; // 指针移动
+               ret += rtn; // 长度增加
+               count = msecs-1;
+           } else {
+               count++;
+           }
+           if(ret > RTU_SENT_LEN_V30*2+15) {
+               read(fd, pBuf-RTU_SENT_LEN_V30*2+5, RTU_SENT_LEN_V30*2+15);
+               ret = 0;
+               break;
+           }
+
+        } while (count < msecs);
+
+    }
+    return ret;
+}
+
+/**
+  * 功　能：传输数据
+  * 入口参数：sent -> 发送缓冲区, len ->  发送长度
+  * 出口参数：recv -> 接收缓冲区
+  * 返回值：读取的实际长度  <=0 出错
+  */
+int Serial_Trans::transmitV3(uchar *sent, int len, uchar *recv)
+{
+    //QMutexLocker locker(&mutex);
+    int ret = sendData(sent, len);
+    if(ret > 0) {
+        usleep(10);
+        ret = recvDataV3(recv, 10);
+        //         if(ret <=0 ) qDebug() << "Serial Trans Err!!!" << ret;
+    }
+    return ret;
+}

@@ -33,6 +33,10 @@ protected:
     void setBoxNum(ushort num);
     void thdData(Rtu_recv *pkt);
     void BusTransData();
+
+    int transDataV3(int addr);
+    void BusTransDataV3();
+
     #if (SI_RTUWIFI==1)
     void ChangeBusCh(int ch, int index);
     bool SendCmdToWifi(int& steps,int len ,const QString& send,QString& recv);

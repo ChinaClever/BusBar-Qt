@@ -98,17 +98,16 @@ static int rtu_sent_packet(Rtu_Sent *pkt, uchar *ptr)
   * 出口参数：ptr -> 缓冲区
   * 返回值：打包后的长度
   */
-int rtu_sent_buff(uchar addr, uchar *buf)
+int rtu_sent_buff(uchar addr, uchar *buf , uint len)
 {
     static Rtu_Sent msg;
     static QMutex mutex; // 互拆锁
     QMutexLocker locker(&mutex);
 
     msg.addr = addr;
+    msg.len  = len;
     return rtu_sent_packet(&msg, buf);
 }
-
-
 
 int rtu_sent_buff(uchar addr, ushort reg, uint len, uchar *buf)
 {

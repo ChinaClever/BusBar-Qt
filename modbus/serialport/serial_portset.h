@@ -30,10 +30,10 @@
 //#define SERIAL_COM6     "usb/tty1-1.2"
 //Android
 #define SERIAL_COM1     "ttymxc1"
-//#define SERIAL_COM2     "ttymxc4"
-//#define SERIAL_COM3     "ttymxc5"
-//#define SERIAL_COM4     "ttymxc6"
-//#define SERIAL_COM5     "ttymxc2"
+#define SERIAL_COM2     "ttymxc4"
+#define SERIAL_COM3     "ttymxc5"
+#define SERIAL_COM4     "ttymxc6"
+#define SERIAL_COM5     "ttymxc2"
 #endif
 
 #define SERIAL_BAUDRATE    "B9600"

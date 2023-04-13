@@ -33,6 +33,9 @@ public:
     int transmit(uchar *sent, int len, uchar *recv);
     int transmit_p(uchar *sent, int len, uchar *recv);
 
+    int recvDataV3(uchar *pBuf, int msecs);
+    int transmitV3(uchar *sent, int len, uchar *recv);
+
 protected:
     int readData(uchar *pBuf, int nCount);
 

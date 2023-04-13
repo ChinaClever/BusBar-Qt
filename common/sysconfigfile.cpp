@@ -74,6 +74,7 @@ int sys_configFile_readInt(QString strParameterName, QString strGroup)
     return nParameter;
 }
 
+
 /**
  * 功 能：读浮点形串配置文件
  * 开发人员：Lzy     2013 - 七夕
