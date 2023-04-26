@@ -183,8 +183,8 @@ uchar ThirdThread::rtu_sent_to_input_packet(sBoxData *box)
         *(ptr++) = (0xff)&(box->data.pf[i]); /*低8位*/
     }//38
     /*填入输入频率*/
-    *(ptr++) = ((box->rate) >> 8); /*高8位*/
-    *(ptr++) = (0xff)&(box->rate); /*低8位*///40
+    *(ptr++) = ((box->rate.svalue) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(box->rate.svalue); /*低8位*///40
 
     /*填入CRC*/
     ushort crc =  rtu_crc(box->rtuArray, 40+3);

@@ -9,12 +9,17 @@ class SetRtuCmd : public QThread
 public:
     explicit SetRtuCmd(QObject *parent = nullptr);
 
-     void send(sThresholdItem &item);
+    void send(sThresholdItem &item);
+    void sendStartV3(sThresholdItem &item);
+    void sendPlugV3(sThresholdItem &item);
 
 protected:
-     void sendData(int busID, int addr, ushort reg, uint len);
-     void sendReg(int reg, sThresholdItem &item);
-     int getReg(sThresholdItem &item);
+    void sendData(int busID, int addr, ushort reg, uint len);
+    void sendReg(int reg, sThresholdItem &item);
+    void sendRegV3(int reg, sThresholdItem &item);
+    void sendDataUintV3(int busID, int addr, ushort reg, uint val1 , uint val2);
+    void sendDataUshortV3(int busID, int addr, ushort reg, uint val1 , uint val2);
+    int getReg(sThresholdItem &item);
 
 };
 

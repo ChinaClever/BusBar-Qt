@@ -29,7 +29,11 @@ void SetThread::workDown()
     if(mItems.size()) {
         sThresholdItem item = mItems.first();
         bool ret = mNetCmd->send(item);
-        if(!ret) mRtuCmd->send(item);
+        //if(!ret) mRtuCmd->send(item);//V2.5
+        if(!ret){
+            if(item.box == 0) mRtuCmd->sendStartV3(item);
+            else mRtuCmd->sendPlugV3(item);
+        }
 
         mSetShm->setItem(item);
         mItems.removeFirst();

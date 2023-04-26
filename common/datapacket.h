@@ -22,7 +22,7 @@
 #define BOX_NUM 20 // 插接箱数量
 #define BUS_NUM 4  // 四条母线
 #define NAME_LEN 32 // 名称最大长度
-#define SENSOR_NUM 4  // 二个传感器
+#define SENSOR_NUM 4  // 四个传感器
 
 #define SRC_DATA_LEN_MAX 1024 //一包数据最长 —— 用于对接动环
 
@@ -65,6 +65,29 @@ typedef struct _sDataUnit {
     uchar crAlarm[LINE_NUM_MAX]; // 临界告警值
 }sDataUnit;
 
+struct sRtuUshortUnit {
+    ushort svalue;
+    ushort smin;
+    ushort smax;//剩余电流时，存储报警界限值
+
+    ushort scrMin; // 临界最小值
+    ushort scrMax; // 临界最大值
+    uchar salarm;
+    uchar scrAlarm; // 临界告警值
+};
+
+struct sRtuULLintUnit {
+    unsigned long long ivalue;
+    unsigned long long imin;
+    unsigned long long imax;
+
+    unsigned long long icrMin; // 临界最小值
+    unsigned long long icrMax; // 临界最大值
+
+    uchar ialarm;
+    uchar icrAlarm; // 临界告警值
+};
+
 /**
  * 数据单元：包括当前值，阈值，临界值，告警状态等
  */
@@ -86,6 +109,7 @@ typedef struct _sObjData {
     int lineNum; //相数
     sDataUnit vol; // 电压
     sDataUnit cur;  // 电流
+    sDataUnit lineVol;  // 线电压
 
     sDataPowUnit pow; // 功率
     uint ele[LINE_NUM_MAX]; // 电能
@@ -93,7 +117,6 @@ typedef struct _sObjData {
     uchar sw[LINE_NUM_MAX]; // 开关状态
     uint apPow[LINE_NUM_MAX]; // 视在功率
     ushort ratedCur[LINE_NUM_MAX]; // 额定电流
-    ushort wave[LINE_NUM_MAX]; // 谐波值
     uint reactivePower[LINE_NUM_MAX]; // 无功功率
 
     ushort pl[3]; // 负载百分比
@@ -108,7 +131,6 @@ typedef struct _sObjData {
  */
 typedef struct _sEnvData {
     sDataUnit tem; // 温度
-//    sDataUnit hum; // 湿度
 }sEnvData;
 
 
@@ -117,9 +139,18 @@ typedef struct _sEnvData {
  */
 typedef struct _sBoxData {
     char offLine; // 离线标识
-    char loopNum; // 回路数量
-    char version;
+    uchar loopNum; // 回路数量
+    uchar version;
     char protocol;// 协议区分标志位
+    uchar curSpecification;// 表示电流规格
+    uchar workMode;// 0表示始端箱和插接箱主从模式 1表示始端箱Modbus模式
+    uchar baudRate;// 表示波特率
+    uchar iOF;// 表示iOF触点
+    uchar alarmTime;// 表示告警滤波2-5
+    uchar shuntRelease;// 表示分励脱扣
+    uchar proNum;//项目编号 0：标准 1：定制
+    uchar buzzerStatus;//蜂鸣器
+    unsigned long long totalApPow;//   总视在功率
 
     sObjData data; // 回路数据
     char loopName[LINE_NUM_MAX][NAME_LEN]; // 回路名称
@@ -133,14 +164,15 @@ typedef struct _sBoxData {
     char boxName[NAME_LEN]; // 插接箱名称
 
     int ratedCur; // 额定电流
-    int rate; // 电压频率
-    int minRate;// 电压频率最小值
-    int maxRate;// 电压频率最大值
+    sRtuUshortUnit rate;//新频率
+    sRtuUshortUnit reCur;//剩余电流
+    sRtuUshortUnit zeroLineCur;//零线电流
+    sRtuULLintUnit totalPow; //总有功功率
     char dc; // 交直流标志位
     uchar lps; // 防雷开关
     uchar lpsAlarm;//防雷开关告警值 0表示未告警 1表示已告警 2表示已记录
     uchar HzAlarm;//频率告警值 0表示未告警 1表示已告警 2表示已记录
-    sDataUnit hz;//新频率
+
     uint zeroCur;//零线电流
     uint volUnbalance;//电压三相不平衡
     uint curUnbalance;//电流三相不平衡
@@ -171,7 +203,6 @@ typedef struct _sBusData{
 typedef struct _sDataPacket
 {
     sBusData data[BUS_NUM];  // 四条母线数据
-    bool initFlag;
 }sDataPacket;
 
 
@@ -326,6 +357,171 @@ enum  sSetType{
     ,SetStartBoxAddr    = 0x1079           //设置始端箱地址1-31
     ,SetBuzzer          = 0x1080           //1:开启 0:关闭
     ,SetBreaker         = 0x1081           //断路器开关状态
+};
+
+enum  sSetStartType{
+    StartCurSpecification    = 3
+    ,StartWorkMode           = 4
+    ,StartBaudRate           = 5           //01:9600 02:9600 03:38400 04:56000
+    ,SetStartBuzzer          = 6           //0:开启 1:关闭
+    ,SetStartiOF             = 7           //0:没有 1:有
+    ,SetStartAlarmTime       = 8           //2-5
+    ,SetStartBreaker         = 9           //0:没有 1:正常 2:损坏
+    ,SetStartLps             = 10           //0:没有 1:正常 2:损坏
+
+    ,StartTemperatureMIN_1   = 284           //温度上限
+    ,StartTemperatureMAX_1   = 285           //温度下限
+    ,StartTemperatureMIN_2   = 286
+    ,StartTemperatureMAX_2   = 287
+    ,StartTemperatureMIN_3   = 288
+    ,StartTemperatureMAX_3   = 289
+    ,StartTemperatureMIN_4   = 290
+    ,StartTemperatureMAX_4   = 291
+
+    ,StartReCurAlarm         = 292
+    ,StartZoneCurMIN         = 293
+    ,StartZoneCurMAX         = 294
+
+    ,StartTotalPowMIN_1      = 295
+    ,StartTotalPowMIN_2      = 296
+    ,StartTotalPowMAX_1      = 297
+    ,StartTotalPowMAX_2      = 298
+
+    ,StartSetHzMIN           = 299
+    ,StartSetHzMAX           = 300
+
+    ,StartLineVoltageMIN_L1  = 301           //线电压下限
+    ,StartLineVoltageMAX_L1  = 302           //线电压上限
+    ,StartVoltageMIN_L1      = 303           //电压下限
+    ,StartVoltageMAX_L1      = 304           //电压上限
+    ,StartCurrentMIN_L1      = 305           //电流下限
+    ,StartCurrentMAX_L1      = 306           //电流上限
+    ,StartPowerMIN_L1_1      = 307           //功率下限
+    ,StartPowerMIN_L1_2      = 308           //功率下限
+    ,StartPowerMAX_L1_1      = 309           //功率上限
+    ,StartPowerMAX_L1_2      = 310           //功率上限
+
+    ,StartLineVoltageMIN_L2  = 311           //电压下限
+    ,StartLineVoltageMAX_L2  = 312           //电压上限
+    ,StartVoltageMIN_L2      = 313           //电压下限
+    ,StartVoltageMAX_L2      = 314           //电压上限
+    ,StartCurrentMIN_L2      = 315           //电流下限
+    ,StartCurrentMAX_L2      = 316           //电流上限
+    ,StartPowerMIN_L2_1      = 317           //功率下限
+    ,StartPowerMIN_L2_2      = 318           //功率下限
+    ,StartPowerMAX_L2_1      = 319           //功率上限
+    ,StartPowerMAX_L2_2      = 320           //功率上限
+
+    ,StartLineVoltageMIN_L3  = 321           //电压下限
+    ,StartLineVoltageMAX_L3  = 322           //电压上限
+    ,StartVoltageMIN_L3      = 323           //电压下限
+    ,StartVoltageMAX_L3      = 324           //电压上限
+    ,StartCurrentMIN_L3      = 325           //电流下限
+    ,StartCurrentMAX_L3      = 326           //电流上限
+    ,StartPowerMIN_L3_1      = 327           //功率下限
+    ,StartPowerMIN_L3_2      = 328           //功率下限
+    ,StartPowerMAX_L3_1      = 329           //功率上限
+    ,StartPowerMAX_L3_2      = 330           //功率上限
+
+};
+
+enum  sSetPlugType{
+    SetPlugAddress           = 3           //地址
+    ,PlugBaudRate            = 4           //01:9600 02:9600 03:38400 04:56000
+    ,SetPlugiOF              = 5           //0:没有 1:有
+    ,SetPlugBuzzer           = 6           //0:开启 1:关闭
+    ,SetPlugAlarmTime        = 7            //2-5
+
+    ,PlugTemperatureMIN_1    = 165           //温度上限
+    ,PlugTemperatureMAX_1    = 166           //温度下限
+    ,PlugTemperatureMIN_2    = 167
+    ,PlugTemperatureMAX_2    = 168
+    ,PlugTemperatureMIN_3    = 169
+    ,PlugTemperatureMAX_3    = 170
+    ,PlugTemperatureMIN_4    = 171
+    ,PlugTemperatureMAX_4    = 172
+
+    ,PlugVoltageMIN_L1       = 173           //电压下限
+    ,PlugVoltageMAX_L1       = 174           //电压上限
+    ,PlugCurrentMIN_L1       = 175           //电流下限
+    ,PlugCurrentMAX_L1       = 176           //电流上限
+    ,PlugPowerMIN_L1_1       = 177           //功率下限
+    ,PlugPowerMIN_L1_2       = 178           //功率下限
+    ,PlugPowerMAX_L1_1       = 179           //功率上限
+    ,PlugPowerMAX_L1_2       = 180           //功率上限
+
+    ,PlugVoltageMIN_L2       = 181           //电压下限
+    ,PlugVoltageMAX_L2       = 182           //电压上限
+    ,PlugCurrentMIN_L2       = 183           //电流下限
+    ,PlugCurrentMAX_L2       = 184           //电流上限
+    ,PlugPowerMIN_L2_1       = 185           //功率下限
+    ,PlugPowerMIN_L2_2       = 186           //功率下限
+    ,PlugPowerMAX_L2_1       = 187           //功率上限
+    ,PlugPowerMAX_L2_2       = 188           //功率上限
+
+    ,PlugVoltageMIN_L3       = 189           //电压下限
+    ,PlugVoltageMAX_L3       = 190           //电压上限
+    ,PlugCurrentMIN_L3       = 191           //电流下限
+    ,PlugCurrentMAX_L3       = 192           //电流上限
+    ,PlugPowerMIN_L3_1       = 193           //功率下限
+    ,PlugPowerMIN_L3_2       = 194           //功率下限
+    ,PlugPowerMAX_L3_1       = 195           //功率上限
+    ,PlugPowerMAX_L3_2       = 196           //功率上限
+
+    ,PlugVoltageMIN_L4       = 197           //电压下限
+    ,PlugVoltageMAX_L4       = 198           //电压上限
+    ,PlugCurrentMIN_L4       = 199           //电流下限
+    ,PlugCurrentMAX_L4       = 200           //电流上限
+    ,PlugPowerMIN_L4_1       = 201           //功率下限
+    ,PlugPowerMIN_L4_2       = 202           //功率下限
+    ,PlugPowerMAX_L4_1       = 203           //功率上限
+    ,PlugPowerMAX_L4_2       = 204           //功率上限
+
+    ,PlugVoltageMIN_L5       = 205           //电压下限
+    ,PlugVoltageMAX_L5       = 206           //电压上限
+    ,PlugCurrentMIN_L5       = 207           //电流下限
+    ,PlugCurrentMAX_L5       = 208           //电流上限
+    ,PlugPowerMIN_L5_1       = 209           //功率下限
+    ,PlugPowerMIN_L5_2       = 210           //功率下限
+    ,PlugPowerMAX_L5_1       = 211           //功率上限
+    ,PlugPowerMAX_L5_2       = 212           //功率上限
+
+    ,PlugVoltageMIN_L6       = 213           //电压下限
+    ,PlugVoltageMAX_L6       = 214           //电压上限
+    ,PlugCurrentMIN_L6       = 215           //电流下限
+    ,PlugCurrentMAX_L6       = 216           //电流上限
+    ,PlugPowerMIN_L6_1       = 217           //功率下限
+    ,PlugPowerMIN_L6_2       = 218           //功率下限
+    ,PlugPowerMAX_L6_1       = 219           //功率上限
+    ,PlugPowerMAX_L6_2       = 220           //功率上限
+
+    ,PlugVoltageMIN_L7       = 221           //电压下限
+    ,PlugVoltageMAX_L7       = 222           //电压上限
+    ,PlugCurrentMIN_L7       = 223           //电流下限
+    ,PlugCurrentMAX_L7       = 224           //电流上限
+    ,PlugPowerMIN_L7_1       = 225           //功率下限
+    ,PlugPowerMIN_L7_2       = 226           //功率下限
+    ,PlugPowerMAX_L7_1       = 227           //功率上限
+    ,PlugPowerMAX_L7_2       = 228           //功率上限
+
+    ,PlugVoltageMIN_L8       = 229           //电压下限
+    ,PlugVoltageMAX_L8       = 230           //电压上限
+    ,PlugCurrentMIN_L8       = 231           //电流下限
+    ,PlugCurrentMAX_L8       = 232           //电流上限
+    ,PlugPowerMIN_L8_1       = 233           //功率下限
+    ,PlugPowerMIN_L8_2       = 234           //功率下限
+    ,PlugPowerMAX_L8_1       = 235           //功率上限
+    ,PlugPowerMAX_L8_2       = 236           //功率上限
+
+    ,PlugVoltageMIN_L9       = 237           //电压下限
+    ,PlugVoltageMAX_L9       = 238           //电压上限
+    ,PlugCurrentMIN_L9       = 239           //电流下限
+    ,PlugCurrentMAX_L9       = 240           //电流上限
+    ,PlugPowerMIN_L9_1       = 241           //功率下限
+    ,PlugPowerMIN_L9_2       = 242           //功率下限
+    ,PlugPowerMAX_L9_1       = 243           //功率上限
+    ,PlugPowerMAX_L9_2       = 244           //功率上限
+
 };
 
 sDataPacket *share_mem_get();

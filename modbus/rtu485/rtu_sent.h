@@ -3,8 +3,10 @@
 
 #include <QtCore>
 
-#define RTU_LINE_NUM 9 // 3相
+#define RTU_LOOP_NUM 9 // 9回路
+#define RTU_LINE_NUM 3 // 3相
 #define RTU_TH_NUM 4 // 4个传感器
+#define RTU_THD_NUM 4 // 4个谐波含量
 //1.4版本
 //#define RTU_SENT_LEN (22*RTU_LINE_NUM+1+3*3+1+1+3+11+6)
 //1.3版本
@@ -24,8 +26,33 @@ struct Rtu_Sent {
     ushort crc; // 表示CRC校验
 };
 
+struct Rtu_Sent_Ushort_V3 {
+    Rtu_Sent_Ushort_V3():fn(3),reg(0),num(2){} // 下位机有问题
+    uchar addr; // 表示从机地址码
+    uchar fn;  // 表示功能码
+    ushort reg; // 表示寄存器首地址
+    ushort num; // 表示寄存器个数
+    ushort val1; // 表示最小值
+    ushort val2; // 表示最大值
+    ushort crc; // 表示CRC校验
+};
+
+struct Rtu_Sent_Uint_V3 {
+    Rtu_Sent_Uint_V3():fn(3),reg(0),num(4){} // 下位机有问题
+    uchar addr; // 表示从机地址码
+    uchar fn;  // 表示功能码
+    ushort reg; // 表示寄存器首地址
+    ushort num; // 表示寄存器个数
+    ushort val1; // 表示最小值低位
+    ushort val2; // 表示最小值高位
+    ushort val3; // 表示最大值低位
+    ushort val4; // 表示最大值高位
+    ushort crc; // 表示CRC校验
+};
+
 ushort rtu_crc(uchar *buf, int len);
 int rtu_sent_buff(uchar addr, uchar *buf , uint len = RTU_SENT_LEN_V30);
 int rtu_sent_buff(uchar addr, ushort reg, uint len, uchar *buf);
-
+int rtu_sent_ushortV3_buff(uchar addr, ushort reg, uint num,  uint val1, uint val2 , uchar *buf);
+int rtu_sent_uintV3_buff(uchar addr, ushort reg, uint num,  uint val1, uint val2,uchar *buf);
 #endif // RTU_SENT_H

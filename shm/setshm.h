@@ -7,11 +7,13 @@
 
 struct sThresholdItem{
     int id;
-    int type; // 阈值类型 1 电压阈值  2 电流阈值   3 温度   4 功率   5 频率
+    // 阈值类型 1 电压阈值;2 电流阈值;3 温度;4 有功功率;5 频率;6 总有功功率
+    //7 线电压;8 零线电流;9 剩余电流
+    int type;
     int bus; // 母线编号 0~3
     int box; // 插接箱
     int num; // 编号
-    int min, crmin, crmax, max; // 最小值，临界下限  临界上限  最大值
+    uint min, crmin, crmax, max; // 最小值，临界下限  临界上限  最大值
 };
 
 class SetShm : public QObject

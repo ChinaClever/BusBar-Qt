@@ -44,7 +44,7 @@ static void pdu_hashData_function(sBoxData *dev,pdu_dev_data *data, sThdData *th
         break;
 
     case PDU_CMD_RATE:
-        dev->rate = data->data[0];
+        dev->rate.svalue = data->data[0];
         break;
 
     case PDU_CMD_LINE: // 设备相参数

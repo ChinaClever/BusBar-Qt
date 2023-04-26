@@ -74,7 +74,7 @@ void MainWindow::timeoutDone()
 {
     updateTime();
     checkAlarm();
-    if((get_share_mem() && get_share_mem()->initFlag)) ui->comboBox->setEnabled(true);
+    if(get_share_mem()) ui->comboBox->setEnabled(true);
     setBusName(mIndex);
     for(int i = 0; i<BUS_NUM; ++i)
         updateBusName(i);

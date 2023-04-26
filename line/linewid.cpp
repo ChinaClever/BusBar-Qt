@@ -71,7 +71,7 @@ void LineWid::timeoutDone()
     if(isRun) {
         QString str;
         if(mData->box[0].dc){ //交流
-            str= QString::number(mData->box[0].rate) + "Hz";
+            str= QString::number(mData->box[0].rate.svalue) + "Hz";
             ui->rateLab->setText(str); //频率
             ui->label->setText("频率：");
 
@@ -91,7 +91,7 @@ void LineWid::timeoutDone()
             }
             updateTem();
         }else{
-            str= QString::number(mData->box[0].rate) + "路";
+            str= QString::number(mData->box[0].rate.svalue) + "路";
             ui->rateLab->setText(str); //频率
             ui->label->setText("输入：");
 

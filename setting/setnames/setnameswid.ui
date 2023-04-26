@@ -10,6 +10,12 @@
     <height>338</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Ubuntu</family>
+    <pointsize>7</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -50,6 +56,11 @@
          <width>50</width>
          <height>40</height>
         </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
        </property>
        <property name="styleSheet">
         <string notr="true">border:none;</string>
@@ -145,6 +156,7 @@
 	border-left-style:solid;
 	border-top-right-radius:3px;
 	image: url(:/new/prefix1/image/up.png);
+	font-size:7px;
 }
 
 QSpinBox::down-button
@@ -193,6 +205,11 @@ border-radius:15px
          <height>40</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">border:none;</string>
        </property>
@@ -224,6 +241,11 @@ border-radius:15px
          <height>50</height>
         </size>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
        <property name="styleSheet">
         <string notr="true">QSpinBox::up-button
 {
@@ -234,6 +256,7 @@ border-radius:15px
 	border-left-style:solid;
 	border-top-right-radius:3px;
 	image: url(:/new/prefix1/image/up.png);
+	font-size:7px;
 }
 
 QSpinBox::down-button
@@ -305,7 +328,14 @@ border-radius:15px
     </layout>
    </item>
    <item>
-    <widget class="QTableWidget" name="tableWidget"/>
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="font">
+      <font>
+       <family>Ubuntu</family>
+       <pointsize>7</pointsize>
+      </font>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

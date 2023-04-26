@@ -48,7 +48,7 @@ void SetLineItem::updateWidget(int bus, int line)
     sBusData *busData = &(mPacket->data[bus]);
     int dc = busData->box[0].dc;
     if(!dc){
-        int len = busData->box[0].rate ? busData->box[0].rate : 1;
+        int len = busData->box[0].rate.svalue ? busData->box[0].rate.svalue : 1;
         if(line>len) this->hide();
         str = "D ";
     }else{  //交流
@@ -61,16 +61,16 @@ void SetLineItem::updateWidget(int bus, int line)
     if(mFlag)
         ui->curLab->setText(QString::number(objData ->cur.value[line]/COM_RATE_CUR,'f', 2)+"A");
     else
-        ui->curLab->setText(QString::number(busData->box[0].rate)+"Hz");
+        ui->curLab->setText(QString::number(busData->box[0].rate.svalue)+"Hz");
     ui->volLab->setText(QString::number(objData ->vol.value[line]/COM_RATE_VOL,'f', 1)+"V");
     ui->nameLab->setText(str+ QString::number(mLine+1));
 
     if(mFlag)
         setProgressbarValue(ui->curBar,&(objData->cur),line);
     else{
-        int max = busData->box[0].maxRate;
-        int min = busData->box[0].minRate;
-        int value = busData->box[0].rate;
+        int max = busData->box[0].rate.smax;
+        int min = busData->box[0].rate.smin;
+        int value = busData->box[0].rate.svalue;
         if(max > 0 && min > 0 && max > min)
         {
             int ret = ((value-min)*100.0/(max-min));

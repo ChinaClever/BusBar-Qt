@@ -146,7 +146,7 @@ void DpTgThread::tgBox(sBoxData *box)
         if(box->dc) {
             lineTgObj(loop, linTgBox);
         } else  {
-            dcLineTgObj(loop, linTgBox, box->rate, box->loopNum);
+            dcLineTgObj(loop, linTgBox, box->rate.svalue, box->loopNum);
         }
 
         tgBox->tem = averData(box->env.tem.value);

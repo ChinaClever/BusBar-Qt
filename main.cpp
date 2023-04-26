@@ -19,6 +19,8 @@ bool appendFile(const QString &msg)
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    frmInput::Instance()->Init("bottom" , "black" , 10 , 10);
+    frmInput::Instance()->hide();
     //appendFile("monitor");
     MainWindow w;
     //w.showFullScreen();

@@ -19,6 +19,8 @@ public:
     int transmit(int addr, ushort reg, uint len); //发送数据并回收
     int sendData(int addr, ushort reg, uint len, bool value = false); //发送数据
     int sendData(uchar *pBuff, int nCount, int msec); //发送数据
+    int sendDataUintV3(int addr, ushort reg, uint val1 , uint val2);
+    int sendDataUshortV3(int addr, ushort reg, uint val1 , uint val2);
     
 signals:    
     
@@ -32,6 +34,7 @@ protected:
     void envData(sEnvData *env, Rtu_recv *pkt);
     void setBoxNum(ushort num);
     void thdData(Rtu_recv *pkt);
+    void thdDataV3(Rtu_recv *pkt);
     void BusTransData();
 
     int transDataV3(int addr);
@@ -50,7 +53,6 @@ private:
     sBusData *mBusData;
     int mId;
     bool isRun;
-    int mRecoder;
 };
 #if (SI_RTUWIFI == 1)
 void set_ch(const QStringList &chs, int recordindex);

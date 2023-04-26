@@ -28,6 +28,24 @@ void SetRtuCmd::sendReg(int reg, sThresholdItem &item)
     sendData(item.bus, item.box, reg+1, item.min);
 }
 
+void SetRtuCmd::sendRegV3(int reg, sThresholdItem &item)
+{
+    if(item.type == 4)
+        sendDataUintV3(item.bus, item.box, reg, item.min , item.max);
+    else
+        sendDataUshortV3(item.bus, item.box, reg, item.min , item.max);
+}
+
+void SetRtuCmd::sendDataUintV3(int busID, int addr, ushort reg, uint val1, uint val2)
+{
+    if(rtu[busID]) rtu[busID]->sendDataUintV3(addr, reg, val1 , val2);
+}
+
+void SetRtuCmd::sendDataUshortV3(int busID, int addr, ushort reg, uint val1, uint val2)
+{
+    if(rtu[busID]) rtu[busID]->sendDataUshortV3(addr, reg, val1 , val2);
+}
+
 void SetRtuCmd::send(sThresholdItem &item)
 {
     int reg=0;
@@ -44,4 +62,29 @@ void SetRtuCmd::send(sThresholdItem &item)
     case 5: reg = SetHzMAX ; break;
     }
     sendReg(reg, item);
+}
+
+void SetRtuCmd::sendStartV3(sThresholdItem &item)
+{
+    int reg=0;
+    switch (item.type) {
+    case 1: reg = StartVoltageMIN_L1 + item.num*10; item.max*=10; item.min*=10; break;
+    case 2: reg = StartCurrentMIN_L1 + item.num*10; item.max*=100; item.min*=100; break;
+    case 3: reg = StartTemperatureMIN_1 + item.num*2; break;
+    case 4: reg = StartPowerMIN_L1_1 + item.num*10; break;
+    case 5: reg = StartSetHzMIN ; break;
+    }
+    sendRegV3(reg, item);
+}
+
+void SetRtuCmd::sendPlugV3(sThresholdItem &item)
+{
+    int reg=0;
+    switch (item.type) {
+    case 1: reg = PlugVoltageMIN_L1 + item.num*8; item.max*=10; item.min*=10; break;
+    case 2: reg = PlugCurrentMIN_L1 + item.num*8; item.max*=100; item.min*=100; break;
+    case 3: reg = PlugTemperatureMIN_1 + item.num*2; break;
+    case 4: reg = PlugPowerMIN_L1_1 + item.num*8; break;
+    }
+    sendRegV3(reg, item);
 }

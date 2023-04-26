@@ -100,8 +100,8 @@ void SetThresholdDlg::set(sThresholdItem &item)
     }else{
         ui->mindoubleSpinBox->hide();
         ui->maxdoubleSpinBox->hide();
-        item.min = busData->box[item.box].minRate;
-        item.max = busData->box[item.box].maxRate;
+        item.min = busData->box[item.box].rate.smin;
+        item.max = busData->box[item.box].rate.smax;
     }
 
     mItem = item;
@@ -113,8 +113,8 @@ void SetThresholdDlg::set(sThresholdItem &item)
 bool SetThresholdDlg::checkData()
 {
     bool ret = true;
-    int min = 0;
-    int max = 0;
+    uint min = 0;
+    uint max = 0;
     if(mItem.type != 4){
         min = ui->minBox->value();
         max = ui->maxBox->value();

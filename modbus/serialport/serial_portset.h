@@ -29,14 +29,15 @@
 //#define SERIAL_COM5     "usb/tty1-1.3"
 //#define SERIAL_COM6     "usb/tty1-1.2"
 //Android
-#define SERIAL_COM1     "ttymxc1"
+#define SERIAL_COM1     "ttymxc5"
 #define SERIAL_COM2     "ttymxc4"
-#define SERIAL_COM3     "ttymxc5"
+#define SERIAL_COM3     "ttymxc1"
 #define SERIAL_COM4     "ttymxc6"
 #define SERIAL_COM5     "ttymxc2"
 #endif
 
-#define SERIAL_BAUDRATE    "B9600"
+//#define SERIAL_BAUDRATE    "B9600"
+#define SERIAL_BAUDRATE    "B57600"
 
 
 struct Serial_PortData

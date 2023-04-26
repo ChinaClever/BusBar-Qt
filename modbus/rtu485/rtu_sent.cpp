@@ -121,3 +121,121 @@ int rtu_sent_buff(uchar addr, ushort reg, uint len, uchar *buf)
     msg.len  = len;
     return rtu_sent_packet(&msg, buf);
 }
+
+/**
+  * 功　能：发送数据打包
+  * 入口参数：pkt -> 发送结构体
+  * 出口参数：ptr -> 缓冲区
+  * 返回值：打包后的长度
+  */
+static int rtu_sent_packet_ushort_V3(Rtu_Sent_Ushort_V3 *pkt, uchar *ptr)
+{
+    uchar *buf = ptr;
+    *(ptr++) = pkt->addr;  /*地址码*/
+    *(ptr++) = pkt->fn; /*功能码*/
+
+    /*填入寄存器首地址*/
+    *(ptr++) = ((pkt->reg) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->reg); /*低8位*/
+
+    /*填入寄存器个数*/
+    *(ptr++) = ((pkt->num) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->num); /*低8位*/
+
+    *(ptr++) = pkt->num * 2;
+
+    /*填入数据1*/
+    *(ptr++) = ((pkt->val1) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->val1); /*低8位*/
+
+    /*填入数据2*/
+    *(ptr++) = ((pkt->val2) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->val2); /*低8位*/
+
+    /*填入CRC*/
+    pkt->crc = rtu_crc(buf, 11);
+    *(ptr++) = (0xff)&(pkt->crc); /*低8位*/
+    *(ptr++) = ((pkt->crc) >> 8); /*高8位*/
+
+    return 13;
+}
+
+int rtu_sent_ushortV3_buff(uchar addr, ushort reg, uint num,  uint val1, uint val2 , uchar *buf)
+{
+    static Rtu_Sent_Ushort_V3 msg;
+    static QMutex mutex; // 互拆锁
+    QMutexLocker locker(&mutex);
+
+    msg.addr = addr;
+    msg.fn   = 0x10;
+    msg.reg  = reg;
+    msg.num  = num;
+    msg.val1 = val1;
+    msg.val2 = val2;
+    return rtu_sent_packet_ushort_V3(&msg, buf);
+}
+
+/**
+  * 功　能：发送数据打包
+  * 入口参数：pkt -> 发送结构体
+  * 出口参数：ptr -> 缓冲区
+  * 返回值：打包后的长度
+  */
+static int rtu_sent_packet_uint_V3(Rtu_Sent_Uint_V3 *pkt, uchar *ptr)
+{
+    uchar *buf = ptr;
+    *(ptr++) = pkt->addr;  /*地址码*/
+    *(ptr++) = pkt->fn; /*功能码*/
+
+    /*填入寄存器首地址*/
+    *(ptr++) = ((pkt->reg) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->reg); /*低8位*/
+
+    /*填入寄存器个数*/
+    *(ptr++) = ((pkt->num) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->num); /*低8位*/
+
+    *(ptr++) = pkt->num * 2;
+
+    /*填入数据1*/
+    *(ptr++) = ((pkt->val1) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->val1); /*低8位*/
+
+    /*填入数据2*/
+    *(ptr++) = ((pkt->val2) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->val2); /*低8位*/
+
+    /*填入数据3*/
+    *(ptr++) = ((pkt->val3) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->val3); /*低8位*/
+
+    /*填入数据4*/
+    *(ptr++) = ((pkt->val4) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->val4); /*低8位*/
+
+    /*填入CRC*/
+    pkt->crc = rtu_crc(buf, 15);
+    *(ptr++) = (0xff)&(pkt->crc); /*低8位*/
+    *(ptr++) = ((pkt->crc) >> 8); /*高8位*/
+
+    return 17;
+}
+
+int rtu_sent_uintV3_buff(uchar addr, ushort reg, uint num,  uint val1, uint val2,uchar *buf)
+{
+    static Rtu_Sent_Uint_V3 msg;
+    static QMutex mutex; // 互拆锁
+    QMutexLocker locker(&mutex);
+
+    msg.addr = addr;
+    msg.fn   = 0x10;
+    msg.reg  = reg;
+    msg.num  = num;
+    msg.val1 = (val1 >> 16) & (0xffff);
+    msg.val2 = val1 & (0xffff);
+    msg.val3 = (val2 >> 16) & (0xffff);
+    msg.val4 = val2 & (0xffff);
+    return rtu_sent_packet_uint_V3(&msg, buf);
+}
+
+

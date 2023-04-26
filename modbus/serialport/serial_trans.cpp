@@ -151,7 +151,7 @@ int Serial_Trans::sendData(uchar *pBuff, int nCount, int msec)
     QMutexLocker locker(&mutex);
     int ret;
 
-    for(int i = 0; i < 3; i++){ //连发三次
+    //for(int i = 0; i < 3; i++){ //连发三次
         ret = sendData(pBuff, nCount);
 //        QByteArray array;
 //        QString strArray;
@@ -159,9 +159,9 @@ int Serial_Trans::sendData(uchar *pBuff, int nCount, int msec)
 //        strArray = array.toHex(); // 十六进制
 //        for(int i=0; i<array.size(); ++i)
 //            strArray.insert(2+3*i, " "); // 插入空格
-        //qDebug()<< "send:" << strArray;
+//        qDebug()<< "send:" << strArray;
         msleep(msec);
-    }
+    //}
     if(ret > 0) {
         if(msec > 0) msleep(msec);
     }

@@ -58,7 +58,6 @@ RtuThread::RtuThread(QObject *parent) :
     mBuf = (uchar *)malloc(RTU_BUF_SIZE); //申请内存  -- 随便用
     mRtuPkt = new Rtu_recv; //传输数据结构
     mSerial = new Serial_Trans(this); //串口线程
-    mRecoder = 1;
 }
 
 RtuThread::~RtuThread()
@@ -127,10 +126,33 @@ int RtuThread::sendData(int addr, ushort reg, uint len, bool value)
         if((box->offLine > 0) || value){ //在线
             //打包数据
             uchar *buf = mBuf;
-//            int rtn = rtu_sent_buff(addr, reg, len, buf); // 把数据打包成通讯格式的数据
             int rtn = rtu_sent_buff(addr+1, reg, len, buf); // 把数据打包成通讯格式的数据
             return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
         }
+    }
+    return -1;
+}
+
+int RtuThread::sendDataUintV3(int addr, ushort reg, uint val1 , uint val2)
+{
+    sBoxData *box = &(mBusData->box[addr]); //共享内存
+    if( box->offLine > 0 ){ //在线
+        //打包数据
+        uchar *buf = mBuf;
+        int rtn = rtu_sent_uintV3_buff(addr+1, reg, 4 , val1 , val2, buf); // 把数据打包成通讯格式的数据
+        return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
+    }
+    return -1;
+}
+
+int RtuThread::sendDataUshortV3(int addr, ushort reg, uint val1 , uint val2)
+{
+    sBoxData *box = &(mBusData->box[addr]); //共享内存
+    if( box->offLine > 0 ){ //在线
+        //打包数据
+        uchar *buf = mBuf;
+        int rtn = rtu_sent_ushortV3_buff(addr+1, reg, 2 , val1 , val2, buf); // 把数据打包成通讯格式的数据
+        return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
     }
     return -1;
 }
@@ -147,17 +169,17 @@ void RtuThread::setBoxNum(ushort num)
 
 void RtuThread::loopObjData(sObjData *loop, int id, RtuRecvLine *data)
 {
-    loop->vol.value[id] = data->vol;
-    loop->vol.crMin[id] = loop->vol.min[id] = data->minVol;
-    loop->vol.crMax[id] = loop->vol.max[id] = data->maxVol;
+    loop->vol.value[id] = data->vol.svalue;
+    loop->vol.crMin[id] = loop->vol.min[id] = data->vol.smin;
+    loop->vol.crMax[id] = loop->vol.max[id] = data->vol.smax;
 
-    loop->cur.value[id] = data->cur;
-    loop->cur.crMin[id] = loop->cur.min[id] = data->minCur;
-    loop->cur.crMax[id] = loop->cur.max[id] = data->maxCur;
+    loop->cur.value[id] = data->cur.svalue;
+    loop->cur.crMin[id] = loop->cur.min[id] = data->cur.smin;
+    loop->cur.crMax[id] = loop->cur.max[id] = data->cur.smax;
 
-    loop->pow.value[id] = data->pow;
-    loop->pow.crMin[id] = loop->pow.min[id] = data->minPow;
-    loop->pow.crMax[id] = loop->pow.max[id] = data->maxPow;
+    loop->pow.value[id] = data->pow.ivalue;
+    loop->pow.crMin[id] = loop->pow.min[id] = data->pow.imin;
+    loop->pow.crMax[id] = loop->pow.max[id] = data->pow.imax;
     loop->ele[id] = data->ele;
     loop->pf[id] = data->pf;
     loop->sw[id] = data->sw;
@@ -187,8 +209,6 @@ void RtuThread::envData(sEnvData *env, Rtu_recv *pkt)
         env->tem.value[i] = pkt->env[i].tem.value;
         env->tem.crMin[i] = env->tem.min[i] = pkt->env[i].tem.min;
         env->tem.crMax[i] = env->tem.max[i] = pkt->env[i].tem.max;
-
-//        env->hum.value[i] = pkt->env[i].hum.value;
     }
 }
 
@@ -213,6 +233,30 @@ void RtuThread::thdData(Rtu_recv *pkt)
             box->data.curThd[line] = thd[0];
         }
         thd[0] = 0;
+
+    } else {
+        ushort *thd = box->data.curThd;
+        for(int i=0; i<3; ++i) {
+            thd[i] = pkt->thd[i];
+        }
+    }
+}
+
+void RtuThread::thdDataV3(Rtu_recv *pkt)
+{
+    sBoxData *box = &(mBusData->box[pkt->addr-1]);
+
+    box->lps = pkt->lps;
+    for(int i=0; i<3; ++i) {
+        box->data.pl[i] = pkt->pl[i];
+    }
+
+    if(pkt->addr == 1) {
+        for(int line = 0 ; line < RTU_LINE_NUM ; ++line)
+            for(int i=0; i<32; ++i){
+                mBusData->thdData.curThd[line][i] = pkt->curThd[line][i];
+                mBusData->thdData.volThd[line][i] = pkt->volThd[line][i];
+            }
 
     } else {
         ushort *thd = box->data.curThd;
@@ -272,12 +316,12 @@ int RtuThread::transData(int addr)
                 offLine = 4;
                 loopData(box, pkt); //更新数据
                 envData(&(box->env), pkt);
-                box->rate = pkt->rate;
-                box->minRate = pkt->minRate;
-                box->maxRate = pkt->maxRate;
+                box->rate.svalue = pkt->rate.svalue;
+                box->rate.smin = pkt->rate.smin;
+                box->rate.smax = pkt->rate.smax;
                 box->dc = pkt->dc;
                 box->version = pkt->version;
-                box->data.totalPow = pkt->totalPow;
+                box->data.totalPow = pkt->totalPow.ivalue;
                 thdData(pkt);
             }
 
@@ -397,7 +441,8 @@ void RtuThread::BusTransDataV3()
 {
     for(int i=0; i<=mBusData->boxNum; ++i)
     {
-        if(transDataV3(i) == 0 ) {
+        int ret = transDataV3(i);
+        if( ret == 0 ) {
             msleep(900);//900
             transDataV3(i);
         }
@@ -413,37 +458,37 @@ int RtuThread::transDataV3(int addr)
     sBoxData *box = &(mBusData->box[addr]); //共享内存
 
     int rtn = rtu_sent_buff(addr+1,buf); // 把数据打包成通讯格式的数据
-    //    QByteArray sendarray;
-    //    QString sendstrArray;
-    //    sendarray.append((char *)buf, rtn);
-    //    sendstrArray = sendarray.toHex(); // 十六进制
-    //    for(int i=0; i<sendarray.size(); ++i)
-    //        sendstrArray.insert(2+3*i, " "); // 插入空格
-    //    qDebug()<<"  send:" << sendstrArray;
-    //    qDebug()<< "rtn  "<<rtn;
+//        QByteArray sendarray;
+//        QString sendstrArray;
+//        sendarray.append((char *)buf, rtn);
+//        sendstrArray = sendarray.toHex(); // 十六进制
+//        for(int i=0; i<sendarray.size(); ++i)
+//            sendstrArray.insert(2+3*i, " "); // 插入空格
+//        qDebug()<<"  send:" << sendstrArray;
+//        qDebug()<< "rtn  "<<rtn;
     rtn = mSerial->transmitV3(buf, rtn, buf); // 传输数据，发送同时接收
-    //    QByteArray array;
-    //    QString strArray;
-    //    array.append((char *)buf, rtn);
-    //    strArray = array.toHex(); // 十六进制
-    //    for(int i=0; i<array.size(); ++i)
-    //        strArray.insert(2+3*i, " "); // 插入空格
-    //    qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
+//        QByteArray array;
+//        QString strArray;
+//        array.append((char *)buf, rtn);
+//        strArray = array.toHex(); // 十六进制
+//        for(int i=0; i<array.size(); ++i)
+//            strArray.insert(2+3*i, " "); // 插入空格
+//        qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
 
     if(rtn > 0) {
-        bool ret = rtu_recv_packet(buf, rtn, pkt); // 解析数据 data - len - it
+        bool ret = rtu_recv_packetV3(buf, rtn, pkt); // 解析数据 data - len - it
         if(ret) {
             if(addr+1 == pkt->addr) { //回收地址和发送地址同
                 offLine = 4;
                 loopData(box, pkt); //更新数据
                 envData(&(box->env), pkt);
-                box->rate = pkt->rate;
-                box->minRate = pkt->minRate;
-                box->maxRate = pkt->maxRate;
+                box->rate.svalue = pkt->rate.svalue;
+                box->rate.smin = pkt->rate.smin;
+                box->rate.smax = pkt->rate.smax;
                 box->dc = pkt->dc;
                 box->version = pkt->version;
-                box->data.totalPow = pkt->totalPow;
-                thdData(pkt);
+                box->data.totalPow = pkt->totalPow.ivalue;
+                thdDataV3(pkt);
             }
 
             box->rtuLen = rtn;
