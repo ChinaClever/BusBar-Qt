@@ -313,7 +313,7 @@ int RtuThread::transData(int addr)
         bool ret = rtu_recv_packet(buf, rtn, pkt); // 解析数据 data - len - it
         if(ret) {
             if(addr+1 == pkt->addr) { //回收地址和发送地址同
-                offLine = 4;
+                offLine = 18;
                 loopData(box, pkt); //更新数据
                 envData(&(box->env), pkt);
                 box->rate.svalue = pkt->rate.svalue;
@@ -447,6 +447,9 @@ void RtuThread::BusTransDataV3()
             transDataV3(i);
         }
         msleep(750);//750
+        QString str = "snmpwalk -v 3 -u IDC-BUSBAR -l authPriv -a md5 -A authkey123 -x des -X privatekey1 192.168.1.163 .1.3.6.1.4.1.30966.12.1";
+        QString cc = QString(system(str.toStdString().c_str()));
+        qDebug()<<cc<<endl;
     }
 }
 

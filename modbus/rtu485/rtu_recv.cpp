@@ -246,10 +246,14 @@ static int rtu_start_recv_init(uchar *ptr, Rtu_recv *msg)
     msg->workMode = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[始端箱的工作模式]
     msg->baudRate = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[波特率]
     msg->buzzerStatus = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[蜂鸣器]
-    msg->iOF = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[iOF触点]
     msg->alarmTime = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    msg->shuntRelease = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->lps = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->iOF = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[iOF触点]
+    msg->isd = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[isd触点]
+
+    msg->shuntRelease = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->lpsState = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    ptr+=2;len+=2;
 
     return len; //3.0.0版本
 }
@@ -522,7 +526,7 @@ bool rtu_recv_packetV3(uchar *buf, int len, Rtu_recv *pkt)
         ptr += rtu_recv_head(ptr, pkt); //指针偏移0
         if( pkt->addr == 0x01 ){//始端箱
             ptr += rtu_start_recv_init(ptr , pkt);
-            ptr += 8*2;//保留
+            ptr += 5*2;//保留
             for(int i = 0 ; i < RTU_LINE_NUM ; ++i) // 读取相 数据
                 ptr += rtu_start_recv_line_data(ptr , pkt , i);
             ptr += rtu_start_recv_other_data(ptr , pkt);

@@ -66,7 +66,9 @@ struct Rtu_recv {
     uchar alarmTime;// 表示告警滤波2-5
     uchar shuntRelease;// 表示分励脱扣
     uchar lps; // 防雷开关
+    uchar lpsState; // 防雷开关
     uchar breaker;// 始端箱开关状态
+    uchar isd;// ISD状态
 
     RtuRecvLine data[RTU_LOOP_NUM];
     RtuRecvEnv  env[RTU_TH_NUM];

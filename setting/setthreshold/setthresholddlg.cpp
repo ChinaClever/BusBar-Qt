@@ -9,6 +9,7 @@ SetThresholdDlg::SetThresholdDlg(QWidget *parent) :
     ui->setupUi(this);
     com_setBackColour(tr("阈值设置"),this);
     ui->checkBox->hide();
+    setWindowModality(Qt::WindowModal);
 }
 
 SetThresholdDlg::~SetThresholdDlg()

@@ -13,6 +13,7 @@ CheckPasswordDlg::CheckPasswordDlg(QWidget *parent) :
     QHBoxLayout *layout = new QHBoxLayout(ui->widget_2);
     layout->addWidget(mNumberKeyboard);
     mNumberKeyboard->setCurrentLineEdit(ui->lineEdit);
+    setWindowModality(Qt::WindowModal);
 }
 
 CheckPasswordDlg::~CheckPasswordDlg()

@@ -5,6 +5,7 @@
 #include "common.h"
 #include "serialport/serial_trans.h"
 #include "rtu485/rtu_recv.h"
+#include <QModbusDataUnit>
 
 #define RTU_BUF_SIZE 1024
 
