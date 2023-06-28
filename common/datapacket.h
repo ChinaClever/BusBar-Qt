@@ -146,6 +146,7 @@ typedef struct _sBoxData {
     uchar workMode;// 0表示始端箱和插接箱主从模式 1表示始端箱Modbus模式
     uchar baudRate;// 表示波特率
     uchar iOF;// 表示iOF触点
+    uchar isd;// 表示isd报警触点
     uchar alarmTime;// 表示告警滤波2-5
     uchar shuntRelease;// 表示分励脱扣
     uchar proNum;//项目编号 0：标准 1：定制
@@ -177,7 +178,8 @@ typedef struct _sBoxData {
     uint volUnbalance;//电压三相不平衡
     uint curUnbalance;//电流三相不平衡
     uint totalCur;//总电流
-    unsigned long long totalPower;//总有功功率
+    uint online1;
+    uint online2;
 
     ushort rtuLen;
     uchar rtuArray[SRC_DATA_LEN_MAX];

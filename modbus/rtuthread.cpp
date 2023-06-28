@@ -10,8 +10,8 @@
 #include <QMultiHash>
 
 static ushort gBoxArray[4] = {0, 0, 0, 0};
-int gVerflag = 2;//1代表一期 2代表二期
 
+int gVerflag = 2;
 void set_box_num(int id, int num)
 {
     gBoxArray[id] = num;
@@ -447,9 +447,6 @@ void RtuThread::BusTransDataV3()
             transDataV3(i);
         }
         msleep(750);//750
-        QString str = "snmpwalk -v 3 -u IDC-BUSBAR -l authPriv -a md5 -A authkey123 -x des -X privatekey1 192.168.1.163 .1.3.6.1.4.1.30966.12.1";
-        QString cc = QString(system(str.toStdString().c_str()));
-        qDebug()<<cc<<endl;
     }
 }
 

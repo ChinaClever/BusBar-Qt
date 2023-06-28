@@ -8,7 +8,7 @@
 #include <QModbusDataUnit>
 
 #define RTU_BUF_SIZE 1024
-
+extern int gVerflag;//1代表一期 2代表二期
 class RtuThread : public QThread
 {
     Q_OBJECT

@@ -6,11 +6,13 @@
 #include "interfacechangesig.h"
 #include "beepthread.h"
 #include "datetime/timesettingdlg.h"
+#include "snmp/snmpthread.h"
 
 #include "modbus/thirdthread.h"
 
 RtuThread *rtu[4] = {NULL, NULL, NULL, NULL};
 ThirdThread *thr = NULL;
+SnmpThread *snmp= NULL;
 extern int get_alarm_len();
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -62,6 +64,9 @@ void MainWindow::initSerial()
 
     thr = new ThirdThread(this);
     thr->init(SERIAL_COM5);
+
+    snmp = new SnmpThread(this);
+    snmp->init(1);
 }
 
 void MainWindow::updateTime()
@@ -137,7 +142,6 @@ void MainWindow::initFunSLot()
     mCheckDlg = new CheckPasswordDlg(this);
     connect(mCheckDlg,SIGNAL(dialogClosed(bool)),this,SLOT(dialogClosed(bool)));
 
-    QTimer::singleShot(7750,this,SLOT(initNetSLot())); //延时初始化
     ui->comboBox->setEnabled(false);
     QPixmap pix(1,60);
     pix.fill(Qt::transparent);
@@ -147,13 +151,6 @@ void MainWindow::initFunSLot()
     ui->comboBox->setItemIcon(1 , icon);
     ui->comboBox->setItemIcon(2 , icon);
     ui->comboBox->setItemIcon(3 , icon);
-}
-
-void MainWindow::initNetSLot()
-{
-    mServer = new Server(this);
-    mServer->setMaxPendingConnections(30);
-    mServer->listen(QHostAddress::AnyIPv4, 20086);
 }
 
 void MainWindow::initWidget()

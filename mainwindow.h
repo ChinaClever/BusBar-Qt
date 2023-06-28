@@ -11,7 +11,8 @@
 #include "setmainwid.h"
 #include "modbustcp/qtcpmodbus.h"
 #include "net/tcp/server/server.h"
-#include "watchdogthread.h"
+//#include "watchdogthread.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -42,7 +43,6 @@ protected slots:
     void initFunSLot();
     void timeoutDone();
     void dialogClosed(bool ret);
-    void initNetSLot();
     //void watchdogDone();
     //void clearCacheDone();
 
@@ -80,7 +80,7 @@ private:
 
     NetWork *mNetWork;
     QTcpModbus* mTcpModbus;
-    Server* mServer;
+
     //Watchdogthread* mWatchdogThread;
 };
 
