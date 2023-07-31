@@ -7,17 +7,17 @@
 
 #include <stdarg.h> /* va_list */
 
-#ifdef __cplusplus
-extern          "C++" {
-#endif
+//#ifdef __cplusplus
+//extern          "C++" {
+//#endif
 
-#ifndef HAVE_STRCASESTR
+//#ifndef HAVE_STRCASESTR
     //char           *strcasestr(const char *, const char *);
-#endif
+//#endif
 
-#ifdef __cplusplus
-}
-#endif
+//#ifdef __cplusplus
+//}
+//#endif
 
 #ifdef __cplusplus
 extern          "C" {
@@ -105,10 +105,10 @@ SOFTWARE.
     int             closedir(DIR * dirp);
 #endif /* HAVE_READDIR */
 
-#ifndef HAVE_GETTIMEOFDAY
-    NETSNMP_IMPORT
-    int             gettimeofday(struct timeval *, struct timezone *tz);
-#endif
+//#ifndef HAVE_GETTIMEOFDAY
+    //NETSNMP_IMPORT
+    //int             gettimeofday(struct timeval *, struct timezone *tz);
+//#endif
 
 #endif                         /* MSVC_PERL */
 

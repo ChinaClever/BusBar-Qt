@@ -4,6 +4,8 @@
 #include <QThread>
 #include "common.h"
 #include "rtuthread.h"
+#include <net-snmp/net-snmp-config.h>
+#include <net-snmp/net-snmp-includes.h>
 
 #define MIB_OID_HEAD "SNMPv2-SMI::enterprises.30966.12"
 extern int gVerflag;
@@ -16,7 +18,7 @@ public:
     ~SnmpThread();
 protected:
     void run();
-    int initSnmp();
+    int initSnmp(netsnmp_session &session, netsnmp_session **ss);
     void praseMasterVal(QString str);
 
     int getItemByOid(int id);
@@ -29,11 +31,12 @@ protected:
     void parseCurHar(QString val, int line);
 
 
-    void praseSlaveVal(QString str);
     void baseSlaveInformation(QString val , int addr);
     void loopSlaveInformation(QString val , int addr);
     void temSlaveInformation(QString val , int addr);
-
+    int walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *pdu , int index);
+    void releaseCon(netsnmp_session &session, netsnmp_session **ss, netsnmp_pdu *response);
+    void praseSlaveVal(QString str , int index);
 private:
     sBusData *mBusData;
     int mId;

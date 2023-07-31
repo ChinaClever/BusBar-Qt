@@ -1,6 +1,4 @@
 #include "snmpthread.h"
-#include <net-snmp/net-snmp-config.h>
-#include <net-snmp/net-snmp-includes.h>
 #include <QDebug>
 
 SnmpThread::SnmpThread(QObject *parent)
@@ -20,23 +18,22 @@ bool SnmpThread::init(int id)
     bool ret = true;
     sDataPacket *shm = get_share_mem(); // 获取共享内存
     mBusData = &(shm->data[id-1]);
-
-
     mId = id-1;
 
     return ret;
 }
 
-int SnmpThread::initSnmp()
+int SnmpThread::initSnmp(netsnmp_session &session,
+                         netsnmp_session **ss)
 {
     // 初始化NET-SNMP库
     init_snmp("busbar");
 
     // 创建SNMP会话
-    netsnmp_session session, *ss;
-    ss = NULL;
-    netsnmp_pdu *response = NULL;
-    netsnmp_pdu *pdu = NULL;
+    //netsnmp_session session, *ss;
+    //ss = NULL;
+    //netsnmp_pdu *response = NULL;
+    //netsnmp_pdu *pdu = NULL;
     QString ip = "192.168.1.163";
     QString name = "IDC-BUSBAR";
     QString v3auth = "authkey123";
@@ -75,15 +72,21 @@ int SnmpThread::initSnmp()
         snmp_perror("Error generating Ku from encryption pass phrase");
         return -1;
     }
+    // 发送SNMP GET请求
     SOCK_STARTUP;
-    ss = snmp_open(&session);
+    *ss = snmp_open(&session);
 
-    if (ss == NULL) {
+    if (*ss == NULL) {
         snmp_sess_perror("busbar", &session);
         return -1;
     }
+    return 0;
+}
 
-    // 发送SNMP GET请求
+
+int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *pdu,int index)
+{
+
     oid anOID[]={1,3,6,1,4,1,30966,12,1}; // OID
     // 创建SNMP请求PDU
     pdu = snmp_pdu_create(SNMP_MSG_GETNEXT);
@@ -92,12 +95,37 @@ int SnmpThread::initSnmp()
     // 发送SNMP GET请求
     oid end_oid[]={1,3,6,1,4,1,30966,12,2}; // OID
     size_t end_len = OID_LENGTH(end_oid);
+
+    //判断是否插接箱在线
+    sBoxData *t= & mBusData->box[0];
+    int key = index;
+    if(index != 1){
+        //if( t->online1 != 0 && index <= 9 ){
+        if(  index <= 9 ){
+            //if( (t->online1 >> (key - 1)) & 0x03 == 1 ){
+                anOID[(int)anOID_len - 1] = key;
+                end_oid[(int)end_len - 1] = key + 1;
+            //}
+        }
+        //if( t->online2 != 0 && index > 9 && index <= 18 ){
+        if( index > 9 && index <= 18 ){
+            //key -= 9;
+            //if( (t->online2 >> (key - 1)) & 0x03 == 1 ){
+                anOID[(int)anOID_len - 1] = key;
+                end_oid[(int)end_len - 1] = key + 1;
+            //}
+        }
+    }
+
+
     int count = 0;
     int status = 0;
     int running = 1;
+    bool endflag = false;
     snmp_add_null_var(pdu, anOID, anOID_len);
+
     // 循环进行SNMP Walk
-    while (running && (status = snmp_synch_response(ss, pdu, &response)) == STAT_SUCCESS) {
+    while (running && (status = snmp_synch_response(*ss, pdu, &response)) == STAT_SUCCESS) {
         if (response->errstat == SNMP_ERR_NOERROR) {
             // 遍历每个返回的变量绑定
             for (netsnmp_variable_list* vars = response->variables; vars; vars = vars->next_variable) {
@@ -110,13 +138,25 @@ int SnmpThread::initSnmp()
                 char buf[1024];
                 if( vars->name_length >= 1024 ) continue;//length long
                 snprint_variable(buf, sizeof(buf), vars->name, vars->name_length, vars);
-                //printf("%s\n", buf);
+                printf("%s\n", buf);
                 QString oidValue = QString(buf);
-                praseMasterVal(oidValue);
-                //praseSlaveVal(oidValue);
+                if(oidValue.contains("No Such Object available on this agent at this OID")){
+                    if(response){
+                        snmp_free_pdu(response);
+                        response = NULL;
+                    }
+                    endflag = true;
+                    break;
+                }
+                if(index == 1){
+                    praseMasterVal(oidValue);
+                }else{
+                    praseSlaveVal(oidValue , index);
+                }
             }
             // 准备下一个SNMP请求
-            //snmp_free_pdu(response);
+            //snmp_free_pdu( response);
+            if( endflag == true ) break;
             pdu = snmp_pdu_create(SNMP_MSG_GETNEXT);
             snmp_add_null_var(pdu, response->variables->name, response->variables->name_length);
             if(response){
@@ -135,23 +175,7 @@ int SnmpThread::initSnmp()
         count++;
     }
 
-    // 处理SNMP Walk结束的情况
-    //    if (status != STAT_TARGET_STATS_END) {
-    //        snmp_sess_perror("busbar", ss);
-    //    }
 
-    // 释放SNMP会话和响应
-    if (response) {
-        snmp_free_pdu(response);
-        response = NULL;
-    }
-    if(ss){
-        snmp_close(ss);
-        ss = NULL;
-    }
-    //SNMP_FREE(session.community);
-    SNMP_FREE(session.peername);
-    SOCK_CLEANUP;
 
     return 0;
 }
@@ -340,10 +364,15 @@ void SnmpThread::praseMasterVal(QString str)
 void SnmpThread::baseSlaveInformation(QString val , int addr)
 {
     int item = getItemByOid(3);
-    sBoxData *t= & mBusData->box[addr];
+    sBoxData *t= & mBusData->box[addr-1];
     bool ok;
     switch(item){
-    case 1: t->version = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok);break;
+    case 1: {
+        t->version = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok);
+        t->offLine = 10;
+        t->dc = 1;
+    }
+    break;
     case 2: t->buzzerStatus = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
     case 3: t->data.curThd[0] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
@@ -428,7 +457,7 @@ void SnmpThread::temSlaveInformation(QString val , int addr)
     }
 }
 
-void SnmpThread::praseSlaveVal(QString str)
+void SnmpThread::praseSlaveVal(QString str , int index)
 {
     if( str.contains("=") ){
         QStringList oidStrValue = str.remove( MIB_OID_HEAD ).simplified().split( "=" );
@@ -437,7 +466,7 @@ void SnmpThread::praseSlaveVal(QString str)
         int item = getItemByOid(1);
         if( item == 1 ) return;
         int addr = item;
-        if(addr >= 19){
+        if( addr == index ){
             item = getItemByOid(2);
             switch(item){
             case 1: baseSlaveInformation( value , addr ); break;
@@ -449,6 +478,29 @@ void SnmpThread::praseSlaveVal(QString str)
     }
 }
 
+void SnmpThread::releaseCon(netsnmp_session &session,
+                            netsnmp_session **ss,
+                            netsnmp_pdu *response)
+{
+    // 处理SNMP Walk结束的情况
+    //    if (status != STAT_TARGET_STATS_END) {
+    //        snmp_sess_perror("busbar", ss);
+    //    }
+
+    // 释放SNMP会话和响应
+    if (response) {
+        snmp_free_pdu(response);
+        response = NULL;
+    }
+    if(*ss){
+        snmp_close(*ss);
+        *ss = NULL;
+    }
+    //SNMP_FREE(session.community);
+    SNMP_FREE(session.peername);
+    SOCK_CLEANUP;
+}
+
 int SnmpThread::getItemByOid(int id)
 {
     QStringList list = mOid.split(".");
@@ -458,10 +510,17 @@ int SnmpThread::getItemByOid(int id)
 void SnmpThread::run()
 {
     isRun = true;
+    netsnmp_session session, *ss;
+    ss = NULL;
+    netsnmp_pdu *response = NULL;
+    netsnmp_pdu *pdu = NULL;
+    initSnmp(session , &ss );
     while(isRun)
     {
         if(gVerflag == 2){
-            initSnmp();
+            for(int index = 1 ; index < 20 ; index++)
+                walkSnmp(&ss , response , pdu , index);
         }
     }
+    releaseCon(session , &ss , response);
 }
