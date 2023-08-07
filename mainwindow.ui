@@ -77,7 +77,7 @@ color: rgb(255, 255, 255);</string>
          <property name="font">
           <font>
            <family>URW Bookman L</family>
-           <pointsize>15</pointsize>
+           <pointsize>10</pointsize>
            <bold>true</bold>
           </font>
          </property>
@@ -288,7 +288,7 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <pointsize>8</pointsize>
          <bold>true</bold>
         </font>
        </property>
@@ -360,7 +360,7 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <pointsize>8</pointsize>
          <bold>true</bold>
         </font>
        </property>
@@ -433,7 +433,7 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <pointsize>8</pointsize>
          <bold>true</bold>
         </font>
        </property>
@@ -506,7 +506,7 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <pointsize>8</pointsize>
          <bold>true</bold>
         </font>
        </property>
@@ -579,7 +579,7 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <pointsize>8</pointsize>
          <bold>true</bold>
         </font>
        </property>
@@ -624,7 +624,7 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="font">
         <font>
-         <pointsize>15</pointsize>
+         <pointsize>8</pointsize>
         </font>
        </property>
        <property name="styleSheet">

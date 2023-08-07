@@ -138,7 +138,7 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
                 char buf[1024];
                 if( vars->name_length >= 1024 ) continue;//length long
                 snprint_variable(buf, sizeof(buf), vars->name, vars->name_length, vars);
-                printf("%s\n", buf);
+//                printf("%s\n", buf);
                 QString oidValue = QString(buf);
                 if(oidValue.contains("No Such Object available on this agent at this OID")){
                     if(response){
@@ -146,8 +146,12 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
                         response = NULL;
                     }
                     endflag = true;
+                    sBoxData *t= & mBusData->box[index-1];
+                    if( t && t->offLine > 0 ) t->offLine--;
+                    qDebug()<<"No Such Object t->offLine   "<<index << (t->offLine-'0')<<endl;
                     break;
                 }
+//                msleep(100);
                 if(index == 1){
                     praseMasterVal(oidValue);
                 }else{
@@ -157,6 +161,7 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
             // 准备下一个SNMP请求
             //snmp_free_pdu( response);
             if( endflag == true ) break;
+
             pdu = snmp_pdu_create(SNMP_MSG_GETNEXT);
             snmp_add_null_var(pdu, response->variables->name, response->variables->name_length);
             if(response){
@@ -170,12 +175,34 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
                 snmp_free_pdu(response);
                 response = NULL;
             }
+            sBoxData *t= & mBusData->box[index-1];
+            if( t && t->offLine > 0 ) t->offLine--;
+            qDebug()<<index << " Error in packet: t->offLine   "<<(t->offLine-'0')<<endl;
             break;
         }
+
         count++;
     }
 
+    if(status == STAT_TIMEOUT){
+        if(response){
+            snmp_free_pdu(response);
+            response = NULL;
+        }
+        sBoxData *t= & mBusData->box[index-1];
+        if( t && t->offLine > 0 ) t->offLine--;
+        qDebug()<<"time out  "<<index << (t->offLine-'0')<<endl;
+    }
 
+    else if(status == STAT_ERROR){
+        if(response){
+            snmp_free_pdu(response);
+            response = NULL;
+        }
+        sBoxData *t= & mBusData->box[index-1];
+        if( t && t->offLine > 0 ) t->offLine--;
+        qDebug()<<"STAT_ERROR  "<<index << (t->offLine-'0')<<endl;
+    }
 
     return 0;
 }
@@ -188,7 +215,7 @@ void SnmpThread::startBoxBaseInfo(QString val)
     switch(item){
     case 1: break;
     case 2: {
-        t->offLine = 10;
+        t->offLine = 3;
         t->dc = 1;
         t->proNum = (val.remove("INTEGER:").simplified().toUInt())&0x0f;
     }break;
@@ -381,7 +408,7 @@ void SnmpThread::baseSlaveInformation(QString val , int addr)
     case 6: t->data.pl[0] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
     case 7: t->data.pl[1] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
     case 8: t->data.pl[2] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
-    case 9: t->loopNum = val.remove("INTEGER:").simplified().toUInt(&ok);break;
+    case 9: t->data.lineNum = t->loopNum = val.remove("INTEGER:").simplified().toUInt(&ok);break;
     case 10: t->alarmTime = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
     default: break;
@@ -391,32 +418,32 @@ void SnmpThread::baseSlaveInformation(QString val , int addr)
 void SnmpThread::loopSlaveInformation(QString val , int addr)
 {
     int item = getItemByOid(4);
-    sBoxData *t= & mBusData->box[addr];
+    sBoxData *t= & mBusData->box[addr-1];
     int loop = getItemByOid(3);
-    if( loop <= mBusData->box[addr].loopNum ){
+    if( loop <= mBusData->box[addr-1].loopNum ){
         bool ok;
         switch(item){
-        case 1: t->data.vol.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_VOL;break;
+        case 1: t->data.vol.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
         case 2: t->data.vol.alarm[loop-1] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-        case 3: t->data.cur.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_CUR;break;
+        case 3: t->data.cur.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_CUR;break;
         case 4: t->data.cur.alarm[loop-1] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-        case 5: t->data.pow.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_POW;break;
+        case 5: t->data.pow.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
         case 6: t->data.pow.alarm[loop-1] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-        case 7: t->data.reactivePower[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_POW;break;
-        case 8: t->data.apPow[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_POW;break;
-        case 9: t->data.pf[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_PF;break;
-        case 10: t->data.ele[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_ELE;break;
+        case 7: t->data.reactivePower[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
+        case 8: t->data.apPow[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
+        case 9: t->data.pf[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_PF;break;
+        case 10: t->data.ele[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_ELE;break;
 
-        case 11: t->data.sw[loop-1] = val.remove("INTEGER:").replace("\"","").simplified().remove(".").toUInt(&ok)==1?0:1;break;
-        case 12: t->data.vol.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_VOL;break;
-        case 13: t->data.vol.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_VOL;break;
-        case 14: t->data.cur.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_CUR;break;
-        case 15: t->data.cur.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_CUR;break;
-        case 16: t->data.pow.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_POW;break;
-        case 17: t->data.pow.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_POW;break;
+        case 11: t->data.sw[loop-1] = val.remove("INTEGER:").replace("\"","").simplified().toUInt(&ok)==1?0:1;break;
+        case 12: t->data.vol.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
+        case 13: t->data.vol.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
+        case 14: t->data.cur.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_CUR;break;
+        case 15: t->data.cur.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_CUR;break;
+        case 16: t->data.pow.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
+        case 17: t->data.pow.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
         default: break;
         }
     }
@@ -425,33 +452,33 @@ void SnmpThread::loopSlaveInformation(QString val , int addr)
 void SnmpThread::temSlaveInformation(QString val , int addr)
 {
     int item = getItemByOid(3);
-    sBoxData *t= & mBusData->box[addr];
+    sBoxData *t= & mBusData->box[addr-1];
 
     bool ok;
     switch(item){
-    case 1: t->env.tem.value[0] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
+    case 1: t->env.tem.value[0] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
     case 2: t->env.tem.alarm[0] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-    case 3: t->env.tem.value[1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
+    case 3: t->env.tem.value[1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
     case 4: t->env.tem.alarm[1] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-    case 5: t->env.tem.value[2] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
+    case 5: t->env.tem.value[2] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
     case 6: t->env.tem.alarm[2] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-    case 7: t->env.tem.value[3] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
+    case 7: t->env.tem.value[3] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
     case 8: t->env.tem.alarm[3] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-    case 9: t->env.tem.min[0] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
-    case 10: t->env.tem.max[0] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
+    case 9: t->env.tem.min[0] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 10: t->env.tem.max[0] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
 
-    case 11: t->env.tem.min[1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
-    case 12: t->env.tem.max[1] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
+    case 11: t->env.tem.min[1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 12: t->env.tem.max[1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
 
-    case 13: t->env.tem.min[2] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
-    case 14: t->env.tem.max[2] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
+    case 13: t->env.tem.min[2] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 14: t->env.tem.max[2] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
 
-    case 15: t->env.tem.min[3] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
-    case 16: t->env.tem.max[3] = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok)*COM_RATE_TEM;break;
+    case 15: t->env.tem.min[3] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 16: t->env.tem.max[3] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
 
     default: break;
     }
@@ -517,8 +544,9 @@ void SnmpThread::run()
     initSnmp(session , &ss );
     while(isRun)
     {
-        if(gVerflag == 2){
-            for(int index = 1 ; index < 20 ; index++)
+        if(gVerflag == 3){
+
+            for(int index = 1 ; index <= mBusData->boxNum+1 ; index++)
                 walkSnmp(&ss , response , pdu , index);
         }
     }

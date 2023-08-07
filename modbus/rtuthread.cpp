@@ -11,7 +11,7 @@
 
 static ushort gBoxArray[4] = {0, 0, 0, 0};
 
-int gVerflag = 2;
+int gVerflag = 3;
 void set_box_num(int id, int num)
 {
     gBoxArray[id] = num;
@@ -313,7 +313,7 @@ int RtuThread::transData(int addr)
         bool ret = rtu_recv_packet(buf, rtn, pkt); // 解析数据 data - len - it
         if(ret) {
             if(addr+1 == pkt->addr) { //回收地址和发送地址同
-                offLine = 18;
+                offLine = 4;
                 loopData(box, pkt); //更新数据
                 envData(&(box->env), pkt);
                 box->rate.svalue = pkt->rate.svalue;
@@ -523,9 +523,11 @@ void RtuThread::run()
                 gBoxArray[mId] = 0;
             }
             BusTransData();
-        }else{
+        }else if(gVerflag == 2){
             BusTransDataV3();
         }
+        else
+            sleep(1000);
 #endif
 #if( SI_RTUWIFI == 1)
         for(int k = 1 ; k <= 4 ; ++k)
