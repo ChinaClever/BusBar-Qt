@@ -16,6 +16,9 @@ protected:
     void run();
     void workDown();
 
+signals:
+    void sendSetSnmpSig(sThresholdItem *);
+
 private:
     bool isRun;
 

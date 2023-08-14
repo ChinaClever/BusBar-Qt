@@ -1,4 +1,6 @@
 #include "setthread.h"
+#include "snmp/snmpthread.h"
+
 
 SetThread::SetThread(QObject *parent) : QThread(parent)
 {
@@ -28,11 +30,18 @@ void SetThread::workDown()
 {
     if(mItems.size()) {
         sThresholdItem item = mItems.first();
-        bool ret = mNetCmd->send(item);
+        //bool ret = mNetCmd->send(item);
         //if(!ret) mRtuCmd->send(item);//V2.5
+        bool ret = false;
         if(!ret){
-            if(item.box == 0) mRtuCmd->sendStartV3(item);
-            else mRtuCmd->sendPlugV3(item);
+            if(gVerflag == 2){
+                if(item.box == 0) mRtuCmd->sendStartV3(item);
+                else mRtuCmd->sendPlugV3(item);
+            }
+            if(gVerflag == 3){
+                gReadWriteflag = 2;
+                emit sendSetSnmpSig(&item);
+            }
         }
 
         mSetShm->setItem(item);

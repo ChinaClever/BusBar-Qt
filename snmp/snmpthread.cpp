@@ -1,10 +1,11 @@
 #include "snmpthread.h"
 #include <QDebug>
 
+int gReadWriteflag = 1;
 SnmpThread::SnmpThread(QObject *parent)
     : QThread{parent}
 {
-    QTimer::singleShot(3*1000,this,SLOT(start()));
+
 }
 
 SnmpThread::~SnmpThread()
@@ -20,6 +21,7 @@ bool SnmpThread::init(int id)
     mBusData = &(shm->data[id-1]);
     mId = id-1;
 
+    QTimer::singleShot(3*1000,this,SLOT(start()));
     return ret;
 }
 
@@ -103,16 +105,16 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
         //if( t->online1 != 0 && index <= 9 ){
         if(  index <= 9 ){
             //if( (t->online1 >> (key - 1)) & 0x03 == 1 ){
-                anOID[(int)anOID_len - 1] = key;
-                end_oid[(int)end_len - 1] = key + 1;
+            anOID[(int)anOID_len - 1] = key;
+            end_oid[(int)end_len - 1] = key + 1;
             //}
         }
         //if( t->online2 != 0 && index > 9 && index <= 18 ){
         if( index > 9 && index <= 18 ){
             //key -= 9;
             //if( (t->online2 >> (key - 1)) & 0x03 == 1 ){
-                anOID[(int)anOID_len - 1] = key;
-                end_oid[(int)end_len - 1] = key + 1;
+            anOID[(int)anOID_len - 1] = key;
+            end_oid[(int)end_len - 1] = key + 1;
             //}
         }
     }
@@ -138,7 +140,7 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
                 char buf[1024];
                 if( vars->name_length >= 1024 ) continue;//length long
                 snprint_variable(buf, sizeof(buf), vars->name, vars->name_length, vars);
-//                printf("%s\n", buf);
+                //                printf("%s\n", buf);
                 QString oidValue = QString(buf);
                 if(oidValue.contains("No Such Object available on this agent at this OID")){
                     if(response){
@@ -151,7 +153,7 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
                     qDebug()<<"No Such Object t->offLine   "<<index << (t->offLine-'0')<<endl;
                     break;
                 }
-//                msleep(100);
+                //                msleep(100);
                 if(index == 1){
                     praseMasterVal(oidValue);
                 }else{
@@ -437,7 +439,7 @@ void SnmpThread::loopSlaveInformation(QString val , int addr)
         case 9: t->data.pf[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_PF;break;
         case 10: t->data.ele[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_ELE;break;
 
-        case 11: t->data.sw[loop-1] = val.remove("INTEGER:").replace("\"","").simplified().toUInt(&ok)==1?0:1;break;
+        case 11: t->data.sw[loop-1] = val.remove("INTEGER:").replace("\"","").simplified().toUInt(&ok)==1?1:0;break;
         case 12: t->data.vol.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
         case 13: t->data.vol.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
         case 14: t->data.cur.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_CUR;break;
@@ -534,6 +536,143 @@ int SnmpThread::getItemByOid(int id)
     return list.at(id).toInt();
 }
 
+bool SnmpThread::setOid(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *pdu)
+{
+    // 创建SNMP SET请求
+    bool ret = false;
+    if(mItems.size()){
+        sThresholdItem item = mItems.first();
+//        qDebug() << " item bus "<<item.bus
+//                 << " item box "<<item.box
+//                 << " item num "<<item.num
+//                 << " item type "<<item.type
+//                 << " item min "<<item.min
+//                 << " item max "<<item.max;
+
+        oid target_min[13],target_max[13];
+        char type = 's';
+        char min_value[20];  // 要设置的最小值
+        char max_value[20];  // 要设置的最大值
+        if( item.box == 0 ){//master
+            switch(item.type){
+            case 1: {getMasterVolOid( item , target_min , target_max );
+                //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
+                QString str1 = QString::number(item.min/1.0, 'f' , 1);
+                QString str2 = QString::number(item.max/1.0, 'f' , 1);
+                qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
+                qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
+                break;
+            }
+            case 2:{ getMasterCurOid( item , target_min , target_max);
+                //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
+                QString str1 = QString::number(item.min/1.0, 'f' , 2);
+                QString str2 = QString::number(item.max/1.0, 'f' , 2);
+                qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
+                qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
+                break;
+            }
+            case 3:{ getMasterTemperatureOid( item , target_min , target_max );
+                QString str1 = QString::number(item.min);
+                QString str2 = QString::number(item.max);
+                qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
+                qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
+                //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
+                break;
+            }
+            case 4:{ getMasterActivePowerOid( item , target_min , target_max );
+                QString str1 = QString::number(item.min/1000.0, 'f' , 3);
+                QString str2 = QString::number(item.max/1000.0, 'f' , 3);
+                qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
+                qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
+                //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
+                break;
+            }
+            case 5:{ getMasterFrequencyOid( target_min , target_max );type = 'i';
+                //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
+                QString str1 = QString::number(item.min);
+                QString str2 = QString::number(item.max);
+                qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
+                qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
+                break;
+            }
+            }
+        }else{
+            switch(item.type){
+            case 1: {
+                getSlaveVolOid( item , target_min , target_max );
+                QString str1 = QString::number(item.min/1.0, 'f' , 1);
+                QString str2 = QString::number(item.max/1.0, 'f' , 1);
+                qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
+                qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
+
+                //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
+                break;
+            }
+            case 2: {
+                getSlaveCurOid( item , target_min , target_max);
+                QString str1 = QString::number(item.min/1.0, 'f' , 1);
+                QString str2 = QString::number(item.max/1.0, 'f' , 1);
+                qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
+                qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
+                //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
+                break;
+            }
+            case 3:{ getSlaveTemperatureOid( item , target_min , target_max );
+                QString str1 = QString::number(item.min);
+                QString str2 = QString::number(item.max);
+                qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
+                qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
+                //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
+                break;
+            }
+            case 4:{ getSlaveActivePowerOid( item , target_min , target_max );
+                QString str1 = QString::number(item.min/1000.0, 'f' , 3);
+                QString str2 = QString::number(item.max/1000.0, 'f' , 3);
+                qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
+                qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
+                //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
+                break;
+            }
+            }
+        }
+        pdu = snmp_pdu_create(SNMP_MSG_SET);
+        //oid target_oid1[] = {1,3,6,1,4,1,30966,12,1,1,3,18,0};  // 要设置的OID
+        size_t target_min_len = OID_LENGTH(target_min);
+
+        snmp_add_var(pdu,target_min,target_min_len,type,min_value);
+
+        //oid target_oid2[] = {1,3,6,1,4,1,30966,12,1,3,16,0};  // 要设置的OID
+        size_t target_max_len = OID_LENGTH(target_max);
+
+        snmp_add_var(pdu,target_max,target_max_len,type,max_value);
+
+
+        // 发送SNMP SET请求
+        int status = snmp_synch_response(*ss, pdu, &response);
+
+        if( status == STAT_SUCCESS ) printf("SNMP SET STAT_SUCCESS.\n");
+        else printf("SNMP SET failed.\n");
+        // 处理SNMP响应
+        if (response) {
+            if (response->errstat == SNMP_ERR_NOERROR) {
+                printf("SNMP SET successful.\n");
+                ret = true;
+                for(netsnmp_variable_list *var = response->variables ; var ;var = var->next_variable){
+                    print_variable(var->name , var->name_length , var);
+                }
+            } else {
+                fprintf(stderr, "Error in SNMP response: %s\n", snmp_errstring(response->errstat));
+            }
+            snmp_free_pdu(response);
+        } else {
+            fprintf(stderr, "No SNMP response received.\n");
+        }
+        mItems.removeFirst();
+    }
+    return ret;
+}
+
+
 void SnmpThread::run()
 {
     isRun = true;
@@ -546,9 +685,206 @@ void SnmpThread::run()
     {
         if(gVerflag == 3){
 
-            for(int index = 1 ; index <= mBusData->boxNum+1 ; index++)
-                walkSnmp(&ss , response , pdu , index);
+            for(int index = 1 ; index <= mBusData->boxNum+1 ; ){
+                if(gReadWriteflag == 1){
+                    walkSnmp(&ss , response , pdu , index);
+                    index++;
+                }else{
+                    setOid(&ss , response , pdu);
+                    gReadWriteflag = 1;
+                }
+            }
+
         }
     }
     releaseCon(session , &ss , response);
+}
+
+void SnmpThread::recvSendSetSlot(sThresholdItem *item)
+{
+    mItems.append(*item);
+}
+
+void SnmpThread::getMasterVolOid(sThresholdItem &item, oid *target_min , oid *target_max )
+{
+    QString oidstr = "1.3.6.1.4.1.30966.12.1.2.1.18.0";
+    QStringList list = oidstr.split(".");
+    for(int i = 0 ; i < list.size() ; i++){
+        if(i == list.size() - 3){
+            target_min[i] = item.num + 1;
+            target_max[i] = item.num + 1;
+        }
+        else if(i == list.size() - 2){
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt() + 1;
+        }
+        else{
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt();
+        }
+    }
+}
+
+void SnmpThread::getMasterCurOid(sThresholdItem &item , oid *target_min, oid *target_max)
+{
+    QString oidstr = "1.3.6.1.4.1.30966.12.1.2.1.20.0";
+    QStringList list = oidstr.split(".");
+    for(int i = 0 ; i < list.size() ; i++){
+        if(i == list.size() - 3){
+            target_min[i] = item.num + 1;
+            target_max[i] = item.num + 1;
+        }
+        else if(i == list.size() - 2){
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt() + 1;
+        }
+        else{
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt();
+        }
+    }
+}
+
+void SnmpThread::getMasterActivePowerOid(sThresholdItem &item , oid* target_min, oid *target_max)
+{
+    QString oidstr = "1.3.6.1.4.1.30966.12.1.2.1.22.0";
+    QStringList list = oidstr.split(".");
+    for(int i = 0 ; i < list.size() ; i++){
+        if(i == list.size() - 3){
+            target_min[i] = item.num + 1;
+            target_max[i] = item.num + 1;
+        }
+        else if(i == list.size() - 2){
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt() + 1;
+        }
+        else{
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt();
+        }
+    }
+}
+
+void SnmpThread::getMasterFrequencyOid(oid *target_min, oid *target_max)
+{
+    QString oidstr = "1.3.6.1.4.1.30966.12.1.1.3.18.0";
+    QStringList list = oidstr.split(".");
+    for(int i = 0 ; i < list.size() ; i++){
+        if(i == list.size() - 2){
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt() + 1;
+        }
+        else{
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt();
+        }
+    }
+}
+
+void SnmpThread::getMasterTemperatureOid(sThresholdItem &item , oid* target_min, oid *target_max)
+{
+    QString oidstr = "1.3.6.1.4.1.30966.12.1.3.9.0";
+    QStringList list = oidstr.split(".");
+    for(int i = 0 ; i < list.size() ; i++){
+        if(i == list.size() - 2){
+            target_min[i] = item.num * 2 + 9;
+            target_max[i] = item.num * 2 + 10;
+        }
+        else {
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt();
+        }
+    }
+}
+
+void SnmpThread::getSlaveVolOid(sThresholdItem &item , oid* target_min, oid *target_max)
+{
+    QString oidstr = "1.3.6.1.4.1.30966.12.2.2.1.12.0";
+    QStringList list = oidstr.split(".");
+    int box = item.box + 1;
+    int loop = item.num + 1;
+    for(int i = 0 ; i < list.size() ; i++){
+        if(i == list.size() - 5) {
+           target_min[i] = box;
+           target_max[i] = box;
+        }else if(i == list.size() - 3){
+           target_min[i] = loop;
+           target_max[i] = loop;
+        }else if(i == list.size() - 2){
+           target_min[i] = list.at(i).toInt();
+           target_max[i] = list.at(i).toInt() + 1;
+        }
+        else{
+           target_min[i] = list.at(i).toInt();
+           target_max[i] = list.at(i).toInt();
+        }
+    }
+}
+
+void SnmpThread::getSlaveCurOid(sThresholdItem &item , oid* target_min, oid *target_max)
+{
+    QString oidstr = "1.3.6.1.4.1.30966.12.2.2.1.14.0";
+    QStringList list = oidstr.split(".");
+    int box = item.box + 1;
+    int loop = item.num + 1;
+    for(int i = 0 ; i < list.size() ; i++){
+        if(i == list.size() - 5) {
+           target_min[i] = box;
+           target_max[i] = box;
+        }else if(i == list.size() - 3){
+           target_min[i] = loop;
+           target_max[i] = loop;
+        }else if(i == list.size() - 2){
+           target_min[i] = list.at(i).toInt();
+           target_max[i] = list.at(i).toInt() + 1;
+        }
+        else{
+           target_min[i] = list.at(i).toInt();
+           target_max[i] = list.at(i).toInt();
+        }
+    }
+}
+
+void SnmpThread::getSlaveActivePowerOid(sThresholdItem &item , oid* target_min, oid *target_max)
+{
+    QString oidstr = "1.3.6.1.4.1.30966.12.2.2.1.16.0";
+    QStringList list = oidstr.split(".");
+    int box = item.box + 1;
+    int loop = item.num + 1;
+    for(int i = 0 ; i < list.size() ; i++){
+        if(i == list.size() - 5) {
+           target_min[i] = box;
+           target_max[i] = box;
+        }else if(i == list.size() - 3){
+           target_min[i] = loop;
+           target_max[i] = loop;
+        }else if(i == list.size() - 2){
+           target_min[i] = list.at(i).toInt();
+           target_max[i] = list.at(i).toInt() + 1;
+        }
+        else{
+           target_min[i] = list.at(i).toInt();
+           target_max[i] = list.at(i).toInt();
+        }
+    }
+}
+
+void SnmpThread::getSlaveTemperatureOid(sThresholdItem &item , oid* target_min, oid *target_max)
+{
+    QString oidstr = "1.3.6.1.4.1.30966.12.2.3.9.0";
+    QStringList list = oidstr.split(".");
+    int box = item.box + 1;
+    for(int i = 0 ; i < list.size() ; i++){
+        if(i == list.size() - 4) {
+           target_min[i] = box;
+           target_max[i] = box;
+        }else if(i == list.size() - 2){
+           target_min[i] = item.num * 2 + 9;
+           target_max[i] = item.num * 2 + 10;
+        }
+        else{
+           target_min[i] = list.at(i).toInt();
+           target_max[i] = list.at(i).toInt();
+        }
+    }
 }

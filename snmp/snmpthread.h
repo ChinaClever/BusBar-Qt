@@ -4,11 +4,13 @@
 #include <QThread>
 #include "common.h"
 #include "rtuthread.h"
+#include "setting/setthreshold/setthread.h"
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
 
 #define MIB_OID_HEAD "SNMPv2-SMI::enterprises.30966.12"
 extern int gVerflag;
+extern int gReadWriteflag;//1读取 2写入
 class SnmpThread : public QThread
 {
     Q_OBJECT
@@ -37,12 +39,31 @@ protected:
     int walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *pdu , int index);
     void releaseCon(netsnmp_session &session, netsnmp_session **ss, netsnmp_pdu *response);
     void praseSlaveVal(QString str , int index);
+    bool setOid(netsnmp_session **ss, netsnmp_pdu *response, netsnmp_pdu *pdu);
+
+public slots:
+    void recvSendSetSlot(sThresholdItem *item);
+
+private:
+    void getMasterVolOid(sThresholdItem &item , oid* target_min, oid *target_max);
+    void getMasterCurOid(sThresholdItem &item , oid* target_min, oid *target_max);
+    void getMasterActivePowerOid(sThresholdItem &item , oid* target_min, oid *target_max);
+    void getMasterFrequencyOid(oid* target_min, oid *target_max);
+    void getMasterTemperatureOid(sThresholdItem &item , oid* target_min, oid *target_max);
+
+    void getSlaveVolOid(sThresholdItem &item , oid* target_min, oid *target_max);
+    void getSlaveCurOid(sThresholdItem &item , oid* target_min, oid *target_max);
+    void getSlaveActivePowerOid(sThresholdItem &item , oid* target_min, oid *target_max);
+    void getSlaveTemperatureOid(sThresholdItem &item , oid* target_min, oid *target_max);
+
+
 private:
     sBusData *mBusData;
     int mId;
     QString mOid;
     QString mValue;
     bool isRun;
+    QList<sThresholdItem> mItems;
 };
 
 #endif // SNMPTHREAD_H

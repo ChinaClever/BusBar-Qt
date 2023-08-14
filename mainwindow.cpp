@@ -67,6 +67,7 @@ void MainWindow::initSerial()
 
     snmp = new SnmpThread(this);
     snmp->init(1);
+    connect(SetThread::bulid() , SIGNAL(sendSetSnmpSig(sThresholdItem *)) , snmp , SLOT(recvSendSetSlot(sThresholdItem* )));
 }
 
 void MainWindow::updateTime()
