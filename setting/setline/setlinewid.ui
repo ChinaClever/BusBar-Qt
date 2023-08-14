@@ -10,8 +10,19 @@
     <height>446</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Ubuntu</family>
+    <pointsize>8</pointsize>
+    <italic>false</italic>
+    <bold>false</bold>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">font: 8pt &quot;Ubuntu&quot;;</string>
   </property>
   <widget class="QWidget" name="widget" native="true">
    <property name="geometry">
@@ -33,7 +44,10 @@
      <widget class="QLabel" name="label_4">
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <family>Ubuntu</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="styleSheet">
@@ -52,7 +66,10 @@ color: rgb(0,0,0);</string>
      <widget class="QLabel" name="label_5">
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <family>Ubuntu</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="styleSheet">
@@ -71,7 +88,10 @@ color: rgb(0,0,0);</string>
      <widget class="QLabel" name="label_6">
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <family>Ubuntu</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="styleSheet">
@@ -90,7 +110,10 @@ color: rgb(0,0,0);</string>
      <widget class="QLabel" name="label_7">
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <family>Ubuntu</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="styleSheet">
@@ -115,7 +138,10 @@ color: rgb(0,0,0);</string>
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <family>Ubuntu</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
        </font>
       </property>
       <property name="styleSheet">

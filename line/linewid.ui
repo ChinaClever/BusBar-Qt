@@ -10,8 +10,19 @@
     <height>427</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Ubuntu</family>
+    <pointsize>8</pointsize>
+    <italic>false</italic>
+    <bold>false</bold>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">font: 8pt &quot;Ubuntu&quot;;</string>
   </property>
   <widget class="QWidget" name="totalWid" native="true">
    <property name="geometry">
@@ -38,6 +49,14 @@
      <height>18</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>V 0.0</string>
    </property>
@@ -56,6 +75,14 @@
      <width>50</width>
      <height>18</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="text">
     <string>版本：</string>
@@ -79,6 +106,14 @@
      <height>18</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>---</string>
    </property>
@@ -98,6 +133,14 @@
      <height>18</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>频率:</string>
    </property>
@@ -114,6 +157,14 @@
      <height>31</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>谐波分析</string>
    </property>
@@ -126,6 +177,9 @@
      <width>1001</width>
      <height>161</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 8pt &quot;Ubuntu&quot;;</string>
    </property>
   </widget>
   <widget class="QWidget" name="layoutWidget">
@@ -143,6 +197,14 @@
     </property>
     <item>
      <widget class="QWidget" name="linetitleWid" native="true">
+      <property name="font">
+       <font>
+        <family>Ubuntu</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true">background-color: rgb(228,228,228);</string>
       </property>
@@ -176,6 +238,14 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Ubuntu</family>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
          <property name="styleSheet">
           <string notr="true"/>
          </property>
@@ -201,6 +271,14 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Ubuntu</family>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
          <property name="text">
           <string>电压</string>
          </property>
@@ -222,6 +300,14 @@
            <width>120</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Ubuntu</family>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
          </property>
          <property name="text">
           <string>电流</string>
@@ -245,6 +331,14 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Ubuntu</family>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
          <property name="text">
           <string>过载电流</string>
          </property>
@@ -266,6 +360,14 @@
            <width>120</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Ubuntu</family>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
          </property>
          <property name="text">
           <string>有功功率</string>
@@ -289,6 +391,14 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Ubuntu</family>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
          <property name="text">
           <string>功率因数</string>
          </property>
@@ -310,6 +420,14 @@
            <width>120</width>
            <height>16777215</height>
           </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Ubuntu</family>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
          </property>
          <property name="text">
           <string>无功功率</string>
@@ -333,6 +451,14 @@
            <height>16777215</height>
           </size>
          </property>
+         <property name="font">
+          <font>
+           <family>Ubuntu</family>
+           <pointsize>8</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
+          </font>
+         </property>
          <property name="text">
           <string>电能</string>
          </property>
@@ -346,6 +472,14 @@
     </item>
     <item>
      <widget class="QWidget" name="line1Wid" native="true">
+      <property name="font">
+       <font>
+        <family>Ubuntu</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true">QWidget{
 border-bottom:2px solid rgb(228,228,228);
@@ -355,6 +489,14 @@ border-bottom:2px solid rgb(228,228,228);
     </item>
     <item>
      <widget class="QWidget" name="line2Wid" native="true">
+      <property name="font">
+       <font>
+        <family>Ubuntu</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true">QWidget{
 border-bottom:2px solid rgb(228,228,228);
@@ -364,6 +506,14 @@ border-bottom:2px solid rgb(228,228,228);
     </item>
     <item>
      <widget class="QWidget" name="line3Wid" native="true">
+      <property name="font">
+       <font>
+        <family>Ubuntu</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true">QWidget{
 border-bottom:2px solid rgb(228,228,228);
@@ -388,6 +538,14 @@ border-bottom:2px solid rgb(228,228,228);
      <height>18</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>---</string>
    </property>
@@ -406,6 +564,14 @@ border-bottom:2px solid rgb(228,228,228);
      <width>20</width>
      <height>18</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="text">
     <string>防雷:</string>
@@ -429,6 +595,14 @@ border-bottom:2px solid rgb(228,228,228);
      <height>18</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>A相温度:</string>
    </property>
@@ -451,6 +625,14 @@ border-bottom:2px solid rgb(228,228,228);
      <height>18</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>---</string>
    </property>
@@ -470,6 +652,14 @@ border-bottom:2px solid rgb(228,228,228);
      <height>18</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>---</string>
    </property>
@@ -488,6 +678,14 @@ border-bottom:2px solid rgb(228,228,228);
      <width>50</width>
      <height>18</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="text">
     <string>B相温度:</string>
@@ -511,6 +709,14 @@ border-bottom:2px solid rgb(228,228,228);
      <height>18</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>---</string>
    </property>
@@ -529,6 +735,14 @@ border-bottom:2px solid rgb(228,228,228);
      <width>50</width>
      <height>18</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="text">
     <string>C相温度:</string>
@@ -552,6 +766,14 @@ border-bottom:2px solid rgb(228,228,228);
      <height>18</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>---</string>
    </property>
@@ -570,6 +792,14 @@ border-bottom:2px solid rgb(228,228,228);
      <width>55</width>
      <height>18</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="text">
     <string>零线温度:</string>
@@ -593,6 +823,14 @@ border-bottom:2px solid rgb(228,228,228);
      <height>18</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
    <property name="text">
     <string>总有功功率:</string>
    </property>
@@ -614,6 +852,14 @@ border-bottom:2px solid rgb(228,228,228);
      <width>30</width>
      <height>18</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
    </property>
    <property name="text">
     <string>---</string>

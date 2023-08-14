@@ -10,11 +10,18 @@
     <height>441</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>8</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QPushButton{border:2px solid rgb(15,80,232);border-radius:15px;}</string>
+   <string notr="true">QPushButton{border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \&quot;Ubuntu\&quot;;}
+
+</string>
   </property>
   <widget class="QStackedWidget" name="stackedWidget">
    <property name="geometry">
@@ -38,6 +45,11 @@
      <height>361</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
+   </property>
    <property name="styleSheet">
     <string notr="true">QGroupBox{
 border:5px solid rgb(15,78,225);
@@ -55,6 +67,14 @@ border-radius:15px;
         <width>16777215</width>
         <height>30</height>
        </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>&quot;Ubuntu&quot;</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
@@ -75,6 +95,14 @@ border-radius:15px;
         <height>30</height>
        </size>
       </property>
+      <property name="font">
+       <font>
+        <family>&quot;Ubuntu&quot;</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
       <property name="styleSheet">
        <string notr="true"/>
       </property>
@@ -90,6 +118,14 @@ border-radius:15px;
         <width>16777215</width>
         <height>30</height>
        </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>&quot;Ubuntu&quot;</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
@@ -107,6 +143,17 @@ border-radius:15px;
         <height>30</height>
        </size>
       </property>
+      <property name="font">
+       <font>
+        <family>&quot;Ubuntu&quot;</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="text">
        <string>功率设置</string>
       </property>
@@ -119,6 +166,14 @@ border-radius:15px;
         <width>16777215</width>
         <height>30</height>
        </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>&quot;Ubuntu&quot;</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true"/>
@@ -135,6 +190,14 @@ border-radius:15px;
         <width>16777215</width>
         <height>30</height>
        </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>&quot;Ubuntu&quot;</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
       </property>
       <property name="styleSheet">
        <string notr="true"/>

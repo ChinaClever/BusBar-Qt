@@ -13,11 +13,16 @@
   <property name="font">
    <font>
     <family>Ubuntu</family>
-    <pointsize>7</pointsize>
+    <pointsize>8</pointsize>
+    <italic>false</italic>
+    <bold>false</bold>
    </font>
   </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">font: 8pt &quot;Ubuntu&quot;;</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
@@ -59,7 +64,10 @@
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <family>Ubuntu</family>
+         <pointsize>8</pointsize>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
@@ -207,7 +215,10 @@ border-radius:15px
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <family>Ubuntu</family>
+         <pointsize>8</pointsize>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
@@ -243,7 +254,10 @@ border-radius:15px
        </property>
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
+         <family>Ubuntu</family>
+         <pointsize>8</pointsize>
+         <italic>false</italic>
+         <bold>false</bold>
         </font>
        </property>
        <property name="styleSheet">
@@ -332,7 +346,9 @@ border-radius:15px
      <property name="font">
       <font>
        <family>Ubuntu</family>
-       <pointsize>7</pointsize>
+       <pointsize>8</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
       </font>
      </property>
     </widget>

@@ -128,6 +128,7 @@ void LogBranchEleWid::initFunSLot()
 
     initBtnBar();
     initTableSlot(0);
+    ui->tableView->setStyleSheet("font: 8pt \"Ubuntu\";");
 }
 
 void LogBranchEleWid::initBtnBar()
@@ -166,7 +167,7 @@ void LogBranchEleWid::updateColumnHidden()
     ui->tableView->sortByColumn(0, Qt::DescendingOrder); // 降序排列
     ui->tableView->setColumnHidden(0, true);
     ui->tableView->setColumnHidden(13, true);
-    //ui->tableView->resizeColumnsToContents();
+    ui->tableView->resizeColumnsToContents();
 }
 
 void LogBranchEleWid::initTableSlot(int id)
@@ -179,7 +180,9 @@ void LogBranchEleWid::initTableSlot(int id)
     /* for(int i=0; i<9; ++i)
         mHeadList << "L" + QString::number(i+1);*/
     //--------------------[由于界面不好修改——By_MW 2018.3.21]-----------
-    mHeadList << tr("A1/D1") << tr("B1/D2") << tr("C1/D3") << tr("A2/D4") << tr("B2")
+//    mHeadList << tr("A1/D1") << tr("B1/D2") << tr("C1/D3") << tr("A2/D4") << tr("B2")
+//              << tr("C2") << tr("A3") << tr("B3") << tr("C3");
+    mHeadList << tr("A1") << tr("B1") << tr("C1") << tr("A2") << tr("B2")
               << tr("C2") << tr("A3") << tr("B3") << tr("C3");
     //---------------------------------------------------------------
     mHeadList << tr("合计");

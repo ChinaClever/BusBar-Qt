@@ -48,14 +48,14 @@ void SetMainWid::initWidget()
 
 void SetMainWid::setButtonColor(QPushButton *button)
 {
-    ui->nameBtn->setStyleSheet("");
-    ui->lineBtn->setStyleSheet("");
-    ui->loopBtn->setStyleSheet("");
-    ui->temBtn->setStyleSheet("");
-    ui->sysBtn->setStyleSheet("");
-    ui->powerBtn->setStyleSheet("");
+    ui->nameBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
+    ui->lineBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
+    ui->loopBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
+    ui->temBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
+    ui->sysBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
+    ui->powerBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
 
-    button->setStyleSheet("background-color: rgb(96,238,250);");
+    button->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";background-color: rgb(96,238,250);");
     BeepThread::bulid()->beep();
 }
 

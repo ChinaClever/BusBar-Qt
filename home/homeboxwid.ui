@@ -58,6 +58,11 @@ border:1px solid rgba(0,0,0,0);</string>
      <height>20</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
+   </property>
    <property name="styleSheet">
     <string notr="true">background-color: transparent;</string>
    </property>

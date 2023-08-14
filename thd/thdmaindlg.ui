@@ -10,8 +10,19 @@
     <height>497</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Ubuntu</family>
+    <pointsize>8</pointsize>
+    <italic>false</italic>
+    <bold>false</bold>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">font: 8pt &quot;Ubuntu&quot;;</string>
   </property>
   <widget class="QPushButton" name="curBbtn">
    <property name="geometry">
@@ -123,8 +134,11 @@
      <x>10</x>
      <y>210</y>
      <width>951</width>
-     <height>188</height>
+     <height>231</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 8pt &quot;Ubuntu&quot;;</string>
    </property>
   </widget>
   <widget class="QWidget" name="chartwid" native="true">
@@ -135,6 +149,9 @@
      <width>951</width>
      <height>191</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 8pt &quot;Ubuntu&quot;;</string>
    </property>
   </widget>
   <widget class="QPushButton" name="quitBtn">

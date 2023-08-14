@@ -10,8 +10,19 @@
     <height>430</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Ubuntu</family>
+    <pointsize>8</pointsize>
+    <italic>false</italic>
+    <bold>false</bold>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">font: 8pt &quot;Ubuntu&quot;;</string>
   </property>
   <widget class="QTableView" name="tableView">
    <property name="geometry">
@@ -24,7 +35,10 @@
    </property>
    <property name="font">
     <font>
+     <family>Ubuntu</family>
      <pointsize>8</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
     </font>
    </property>
   </widget>
