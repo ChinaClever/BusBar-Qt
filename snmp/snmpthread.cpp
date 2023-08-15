@@ -17,6 +17,8 @@ SnmpThread::~SnmpThread()
 bool SnmpThread::init(int id)
 {
     bool ret = true;
+    mClose = false;
+    mOpen = true;
     sDataPacket *shm = get_share_mem(); // 获取共享内存
     mBusData = &(shm->data[id-1]);
     mId = id-1;
@@ -25,8 +27,7 @@ bool SnmpThread::init(int id)
     return ret;
 }
 
-int SnmpThread::initSnmp(netsnmp_session &session,
-                         netsnmp_session **ss)
+int SnmpThread::initSnmp(netsnmp_session &session , netsnmp_session **ss)
 {
     // 初始化NET-SNMP库
     init_snmp("busbar");
@@ -74,7 +75,7 @@ int SnmpThread::initSnmp(netsnmp_session &session,
         snmp_perror("Error generating Ku from encryption pass phrase");
         return -1;
     }
-    // 发送SNMP GET请求
+
     SOCK_STARTUP;
     *ss = snmp_open(&session);
 
@@ -84,6 +85,7 @@ int SnmpThread::initSnmp(netsnmp_session &session,
     }
     return 0;
 }
+
 
 
 int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *pdu,int index)
@@ -194,6 +196,13 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
         sBoxData *t= & mBusData->box[index-1];
         if( t && t->offLine > 0 ) t->offLine--;
         qDebug()<<"time out  "<<index << (t->offLine-'0')<<endl;
+        if(index == 1) {
+            for(int off = 2 ; off <= mBusData->boxNum+1 ; off++){
+                t = & mBusData->box[off-1];
+                if( t && t->offLine > 0 ) t->offLine--;
+            }
+            mClose = true;
+        }
     }
 
     else if(status == STAT_ERROR){
@@ -204,6 +213,13 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
         sBoxData *t= & mBusData->box[index-1];
         if( t && t->offLine > 0 ) t->offLine--;
         qDebug()<<"STAT_ERROR  "<<index << (t->offLine-'0')<<endl;
+        if(index == 1) {
+            for(int off = 2 ; off <= mBusData->boxNum+1 ; off++){
+                t = & mBusData->box[off-1];
+                if( t && t->offLine > 0 ) t->offLine--;
+            }
+            mClose = true;
+        }
     }
 
     return 0;
@@ -680,24 +696,36 @@ void SnmpThread::run()
     ss = NULL;
     netsnmp_pdu *response = NULL;
     netsnmp_pdu *pdu = NULL;
-    initSnmp(session , &ss );
+
+    unsigned long long count = 0;
     while(isRun)
     {
         if(gVerflag == 3){
+            if(mOpen){
+                initSnmp(session , &ss);
+                mOpen = false;
+                count++;
+                qDebug()<<"openSnmpSession   "<< count;
+            }
 
             for(int index = 1 ; index <= mBusData->boxNum+1 ; ){
                 if(gReadWriteflag == 1){
                     walkSnmp(&ss , response , pdu , index);
                     index++;
+                    if(mClose) break;
                 }else{
                     setOid(&ss , response , pdu);
                     gReadWriteflag = 1;
                 }
             }
-
+            if(mClose){
+                releaseCon(session , &ss , response);
+                mClose = false;
+                mOpen = true;
+            }
         }
     }
-    releaseCon(session , &ss , response);
+
 }
 
 void SnmpThread::recvSendSetSlot(sThresholdItem *item)

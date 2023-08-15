@@ -20,7 +20,7 @@ public:
     ~SnmpThread();
 protected:
     void run();
-    int initSnmp(netsnmp_session &session, netsnmp_session **ss);
+    int initSnmp(netsnmp_session &session , netsnmp_session **ss);
     void praseMasterVal(QString str);
 
     int getItemByOid(int id);
@@ -64,6 +64,7 @@ private:
     QString mValue;
     bool isRun;
     QList<sThresholdItem> mItems;
+    bool mClose,mOpen;
 };
 
 #endif // SNMPTHREAD_H
