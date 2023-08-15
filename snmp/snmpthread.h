@@ -64,7 +64,7 @@ private:
     QString mValue;
     bool isRun;
     QList<sThresholdItem> mItems;
-    bool mClose,mOpen;
+    bool mOpen,mClose;
 };
 
 #endif // SNMPTHREAD_H
