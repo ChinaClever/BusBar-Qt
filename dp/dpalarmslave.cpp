@@ -331,7 +331,7 @@ void DpAlarmSlave::busAlarm(int id)
             QString str = tr("母线：%1").arg(bus->busName);
             QString tempStr = typeStr + tr("告警");
             str += tr(" 当前值：%2%3, 最小值：%4%5, 最大值：%6%7")
-                    .arg(busBox->rate.svalue).arg("Hz")
+                       .arg(QString::number(busBox->rate.svalue/10.0,'f',1)).arg("Hz")
                     .arg(busBox->rate.smin).arg("Hz")
                     .arg(busBox->rate.smax).arg("Hz");
             saveMsg( typeStr , str );

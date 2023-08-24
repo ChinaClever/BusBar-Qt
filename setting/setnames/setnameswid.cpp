@@ -302,6 +302,14 @@ bool SetNamesWid::saveBusName()
         CriticalMsgBox box(this, tr("母线名称保存失败!!"));
         ret = false;
     }
+    if(ui->boxNumSpin->value() < 0 || ui->boxNumSpin->value() > 18){
+        CriticalMsgBox box(this, tr("个数应应在0-18!!"));
+        ret = false;
+    }
+    if(ui->rateCurSpin->value() < 100 || ui->rateCurSpin->value() > 600){
+        CriticalMsgBox box(this, tr("额定电流应在100-600!!"));
+        ret = false;
+    }
     return ret;
 }
 

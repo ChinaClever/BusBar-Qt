@@ -12,6 +12,8 @@
 #include <QtSql>
 #include <QPushButton>
 #include <QTimer>
+#include <QSpinBox>
+#include <QDoubleSpinBox>
 
 namespace Ui
 {
@@ -89,6 +91,8 @@ private:
     QTextEdit *currentTextEdit;     //当前焦点的多行文本框
     QPlainTextEdit *currentPlain;   //当前焦点的富文本框
     QTextBrowser *currentBrowser;   //当前焦点的文本浏览框
+    QSpinBox *currentSpinBox;       //当前焦点的SpinBox
+    QDoubleSpinBox *currentDoubleSpinBox;  //当前焦点的QDoubleSpinBox
 
     QString currentEditType;        //当前焦点控件的类型
     QString currentPosition;        //当前输入法面板位置类型

@@ -139,9 +139,7 @@ void DpAlarmThread::boxAlarm(sBoxData &box)
         alarmDataUnit(box.env.tem, lineNum);
         box.boxEnvAlarm =  alarmFlag(box.env.tem, lineNum);
 
-
-
-        if((box.rate.svalue < box.rate.smin) || (box.rate.svalue > box.rate.smax))
+        if((box.rate.svalue < box.rate.smin*10) || (box.rate.svalue > box.rate.smax*10))
         {
             if(box.HzAlarm == 0)
                 box.HzAlarm = 1;

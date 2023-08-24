@@ -65,9 +65,9 @@ void MainWindow::initSerial()
     thr = new ThirdThread(this);
     thr->init(SERIAL_COM5);
 
-    snmp = new SnmpThread(this);
-    snmp->init(1);
-    connect(SetThread::bulid() , SIGNAL(sendSetSnmpSig(sThresholdItem *)) , snmp , SLOT(recvSendSetSlot(sThresholdItem* )));
+//    snmp = new SnmpThread(this);
+//    snmp->init(1);
+//    connect(SetThread::bulid() , SIGNAL(sendSetSnmpSig(sThresholdItem *)) , snmp , SLOT(recvSendSetSlot(sThresholdItem* )));
 }
 
 void MainWindow::updateTime()
@@ -271,7 +271,7 @@ void MainWindow::dialogClosed(bool ret)
 
 void MainWindow::on_timeBtn_clicked()
 {
-#if 0
+#if 1
     //    BeepThread::bulid()->beep();
     TimeSettingDlg dlg(this);
     dlg.exec();

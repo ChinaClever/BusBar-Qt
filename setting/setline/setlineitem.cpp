@@ -61,17 +61,20 @@ void SetLineItem::updateWidget(int bus, int line)
     if(mFlag)
         ui->curLab->setText(QString::number(objData ->cur.value[line]/COM_RATE_CUR,'f', 2)+"A");
     else
-        ui->curLab->setText(QString::number(busData->box[0].rate.svalue)+"Hz");
-    ui->volLab->setText(QString::number(objData ->vol.value[line]/COM_RATE_VOL,'f', 1)+"V");
+        ui->curLab->setText(QString::number(busData->box[0].rate.svalue/10.0,'f',1)+"Hz");
+    ui->volLab->setText(QString::number(objData->vol.value[line]/COM_RATE_VOL,'f', 1)+"V");
     ui->nameLab->setText(str+ QString::number(mLine+1));
 
-    if(mFlag)
+    if(mFlag){
         setProgressbarValue(ui->curBar,&(objData->cur),line);
+        setLabeColor(ui->curLab , objData->cur.alarm[line], 0);
+        setLabeColor(ui->volLab , objData->vol.alarm[line], 0);
+    }
     else{
-        int max = busData->box[0].rate.smax;
-        int min = busData->box[0].rate.smin;
+        int max = busData->box[0].rate.smax*10;
+        int min = busData->box[0].rate.smin*10;
         int value = busData->box[0].rate.svalue;
-        if(max > 0 && min > 0 && max > min)
+        if(max > 0 && min > 0 && max > min && value >= min && value < max)
         {
             int ret = ((value-min)*100.0/(max-min));
             if(ret > 100) ret = 100;
@@ -84,6 +87,7 @@ void SetLineItem::updateWidget(int bus, int line)
             setProcessBarColor(ui->curBar,"red"); //告警
         else
             setProcessBarColor(ui->curBar,"green"); //正常
+        setLabeColor(ui->curLab , alarm, 0);
     }
     setProgressbarValue(ui->volBar,&(objData->vol),line);
 }
@@ -92,10 +96,11 @@ void SetLineItem::updateWidget(int bus, int line)
 void SetLineItem::setProgressbarValue(QProgressBar *bar, sDataUnit *data, int index)
 {
     int max = data->max[index];
-    if(max > 0)
+    int min = data->min[index];
+    if(max - min > 0)
     {
         double value = data->value[index]*1.0;
-        int ret = (value/max)*100;
+        int ret = (value - min)*100/(max - min);
         bar->setValue(ret);
     }else
         bar->setValue(0);
@@ -152,4 +157,17 @@ void SetLineItem::volBarClicked()
     dlg.move(0,0);
     dlg.set(item);
     dlg.exec();
+}
+
+void SetLineItem::setLabeColor(QLabel *label, int alarm, int crAlarm)
+{
+    QPalette pa;
+    if(alarm) { // 告警
+        pa.setColor(QPalette::WindowText,Qt::red);
+    } else  if(crAlarm) { // 预警
+        pa.setColor(QPalette::WindowText,"#CD7E80");
+    } else {
+        pa.setColor(QPalette::WindowText,Qt::black);
+    }
+    label->setPalette(pa);
 }

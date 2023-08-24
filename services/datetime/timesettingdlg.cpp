@@ -37,7 +37,7 @@ TimeSettingDlg::TimeSettingDlg(QWidget *parent) :
 
     connect(ui->monSpin, SIGNAL(valueChanged(int)), this, SLOT(dateSetLimit(int)));
     connect(ui->yearSpin, SIGNAL(valueChanged(int)), this, SLOT(dateSetLimit(int)));
-//    connect(ui->timeSet_but, SIGNAL(clicked()), this, SLOT(timeSetup()));
+//    connect(ui->timeSet_but, SIGNAL(clicked()), this, SLOT(on_timeSet_but_clicked()));
 
     initEditBtn();
     initKey();
@@ -121,27 +121,35 @@ bool TimeSettingDlg::isLeap(int yN)
  */
 void TimeSettingDlg::timeSetup(void)
 {
-    struct tm setDataTime;
-    time_t timep;
-    struct timeval tv;
+//    struct tm setDataTime;
+//    time_t timep;
+//    struct timeval tv;
 
-    setDataTime.tm_year = ui->yearSpin->value() - 1900;
-    setDataTime.tm_mon = ui->monSpin->value() - 1;
-    setDataTime.tm_mday = ui->daySpin->value();
+//    setDataTime.tm_year = ui->yearSpin->value() - 1900;
+//    setDataTime.tm_mon = ui->monSpin->value() - 1;
+//    setDataTime.tm_mday = ui->daySpin->value();
 
-    setDataTime.tm_hour = ui->hourSpin->value();
-    setDataTime.tm_min = ui->minSpin->value();
-    setDataTime.tm_sec = ui->secSpin->value();
+//    setDataTime.tm_hour = ui->hourSpin->value();
+//    setDataTime.tm_min = ui->minSpin->value();
+//    setDataTime.tm_sec = ui->secSpin->value();
 
-    timep = mktime(&setDataTime);
+//    timep = mktime(&setDataTime);
 
-    tv.tv_sec = timep;
-    tv.tv_usec = 0;
+//    tv.tv_sec = timep;
+//    tv.tv_usec = 0;
 
-    if (settimeofday(&tv, (struct timezone *)0) < 0)
-        return;
-
-    int ret = system("hwclock -w");
+    //if (settimeofday(&tv, (struct timezone *)0) < 0)
+    //    return;
+    QString command = QString("date -s \'%1-%2-%3 %4:%5:%6\'")
+                          .arg(ui->yearSpin->value())
+                      .arg(ui->monSpin->value())
+                      .arg(ui->daySpin->value())
+                      .arg(ui->hourSpin->value())
+                      .arg(ui->minSpin->value())
+                          .arg(ui->secSpin->value());
+    int ret = system(command.toLatin1().data());
+    qDebug()<<command;
+    ret = system("hwclock -w");
  
     //int ret = system(command.toLatin1().data());
 
@@ -390,3 +398,4 @@ void TimeSettingDlg::on_timeSet_but_clicked()
     else
         this->close();
 }
+

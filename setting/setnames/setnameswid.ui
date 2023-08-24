@@ -183,7 +183,7 @@ border-radius:15px
 }</string>
        </property>
        <property name="suffix">
-        <string>A</string>
+        <string/>
        </property>
        <property name="prefix">
         <string/>
@@ -289,7 +289,7 @@ QSpinBox{
 }</string>
        </property>
        <property name="suffix">
-        <string>个</string>
+        <string/>
        </property>
        <property name="prefix">
         <string/>

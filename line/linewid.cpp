@@ -71,7 +71,7 @@ void LineWid::timeoutDone()
     if(isRun) {
         QString str;
         if(mData->box[0].dc){ //交流
-            str= QString::number(mData->box[0].rate.svalue) + "Hz";
+            str= QString::number(mData->box[0].rate.svalue/10.0,'f',1) + "Hz";
             ui->rateLab->setText(str); //频率
             ui->label->setText("频率：");
 
@@ -155,16 +155,24 @@ void LineWid::updateTem()
             temLab[i]->setText(QString::number(unit.value[i]/COM_RATE_TEM) + "°C");
             updateAlarmStatus(temLab[i],unit,i);
         }
-        if(mData->box[0].data.totalPow == 0 )
+        if(mData->box[0].data.totalPow.value == 0 )
             str = QString::number(0, 'f', 2)+"kW";
         else
-            str = QString::number(mData->box[0].data.totalPow/COM_RATE_POW, 'f', 3)+"kW";
+            str = QString::number(mData->box[0].data.totalPow.value[0]/COM_RATE_POW, 'f', 3)+"kW";
         ui->totalPowLab->setText(str);
+        setLabeColor(ui->rateLab , mData->box[0].HzAlarm , 0);
+        int flag = 0;
+        if(mData->box[0].data.totalPow.value[0] < mData->box[0].data.totalPow.min[0] || mData->box[0].data.totalPow.value[0] > mData->box[0].data.totalPow.max[0] )
+        {
+            flag = 2;
+        }
+        setLabeColor(ui->totalPowLab , flag , 0);
     }else{
         for(int i = 0 ; i < SENSOR_NUM ; i++){
             temLab[i]->setText(str);
         }
         ui->totalPowLab->setText(str);
+        ui->rateLab->setText(str);
     }
 }
 
@@ -207,4 +215,17 @@ void LineWid::updateAlarmStatus(QLabel *lab, sDataUnit &unit , int id)
         pe.setColor(QPalette::WindowText,Qt::black);
 
     lab->setPalette(pe);
+}
+
+void LineWid::setLabeColor(QLabel *label, int alarm, int crAlarm)
+{
+    QPalette pa;
+    if(alarm) { // 告警
+        pa.setColor(QPalette::WindowText,Qt::red);
+    } else  if(crAlarm) { // 预警
+        pa.setColor(QPalette::WindowText,"#CD7E80");
+    } else {
+        pa.setColor(QPalette::WindowText,Qt::black);
+    }
+    label->setPalette(pa);
 }

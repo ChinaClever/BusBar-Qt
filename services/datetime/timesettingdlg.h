@@ -33,9 +33,7 @@ protected slots:
 
 private slots:
     void on_btn_enter_clicked();
-
     void on_quitBtn_clicked();
-
     void on_timeSet_but_clicked();
 
 private:

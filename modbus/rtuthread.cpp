@@ -11,7 +11,7 @@
 
 static ushort gBoxArray[4] = {0, 0, 0, 0};
 
-int gVerflag = 3;
+int gVerflag = 2;
 void set_box_num(int id, int num)
 {
     gBoxArray[id] = num;
@@ -321,7 +321,12 @@ int RtuThread::transData(int addr)
                 box->rate.smax = pkt->rate.smax;
                 box->dc = pkt->dc;
                 box->version = pkt->version;
-                box->data.totalPow = pkt->totalPow.ivalue;
+                box->data.totalPow.value[0] = pkt->totalPow.ivalue;
+                box->data.totalPow.alarm[0] = pkt->totalPow.ialarm;
+                box->data.totalPow.max[0] = pkt->totalPow.imax;
+                box->data.totalPow.min[0] = pkt->totalPow.imin;
+                box->data.totalPow.crMax[0] = pkt->totalPow.icrMax;
+                box->data.totalPow.crMin[0] = pkt->totalPow.icrMin;
                 thdData(pkt);
             }
 
@@ -487,7 +492,7 @@ int RtuThread::transDataV3(int addr)
                 box->rate.smax = pkt->rate.smax;
                 box->dc = pkt->dc;
                 box->version = pkt->version;
-                box->data.totalPow = pkt->totalPow.ivalue;
+                box->data.totalPow.value[0] = pkt->totalPow.ivalue;
                 thdDataV3(pkt);
             }
 

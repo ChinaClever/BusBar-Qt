@@ -30,6 +30,7 @@ protected:
     void updateTotalWid();
     void updatePlot();
     void updateAlarmStatus(QLabel *lab, sDataUnit &unit , int id);
+    void setLabeColor(QLabel *label, int alarm, int crAlarm);
     void updateTem();
 
 protected slots:

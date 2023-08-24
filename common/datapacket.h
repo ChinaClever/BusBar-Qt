@@ -122,7 +122,7 @@ typedef struct _sObjData {
     ushort pl[3]; // 负载百分比
     ushort curThd[3]; // 电流谐波含量
     ushort volThd[3]; // 电压谐波含量
-    uint totalPow;
+    sDataPowUnit totalPow;
 }sObjData;
 
 

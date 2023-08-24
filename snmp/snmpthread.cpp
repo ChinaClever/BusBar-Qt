@@ -44,6 +44,8 @@ int SnmpThread::initSnmp(netsnmp_session &session , netsnmp_session **ss)
 
     snmp_sess_init(&session);
     session.peername = strdup(ip.toStdString().c_str());
+//    session.version = SNMP_VERSION_2c;
+//    session.community = (u_char*)"public";
     session.version = SNMP_VERSION_3;
     session.securityName = strdup(name.toStdString().c_str());
     session.securityNameLen = strlen(session.securityName);
@@ -105,15 +107,17 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
     int key = index;
     if(index != 1){
         //if( t->online1 != 0 && index <= 9 ){
-        if(  index <= 9 ){
+        if(  index <= 9 )
+        {
             //if( (t->online1 >> (key - 1)) & 0x03 == 1 ){
             anOID[(int)anOID_len - 1] = key;
             end_oid[(int)end_len - 1] = key + 1;
             //}
         }
         //if( t->online2 != 0 && index > 9 && index <= 18 ){
-        if( index > 9 && index <= 18 ){
-            //key -= 9;
+        if( index > 9 && index <= 18 )
+        {
+            key -= 9;
             //if( (t->online2 >> (key - 1)) & 0x03 == 1 ){
             anOID[(int)anOID_len - 1] = key;
             end_oid[(int)end_len - 1] = key + 1;
@@ -201,7 +205,7 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
                 t = & mBusData->box[off-1];
                 if( t && t->offLine > 0 ) t->offLine--;
             }
-            mClose = true;
+            //mClose = true;
         }
     }
 
@@ -218,7 +222,7 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
                 t = & mBusData->box[off-1];
                 if( t && t->offLine > 0 ) t->offLine--;
             }
-            mClose = true;
+            //mClose = true;
         }
     }
 
@@ -233,7 +237,7 @@ void SnmpThread::startBoxBaseInfo(QString val)
     switch(item){
     case 1: break;
     case 2: {
-        t->offLine = 3;
+        t->offLine = 5;
         t->dc = 1;
         t->proNum = (val.remove("INTEGER:").simplified().toUInt())&0x0f;
     }break;
@@ -697,16 +701,11 @@ void SnmpThread::run()
     netsnmp_pdu *response = NULL;
     netsnmp_pdu *pdu = NULL;
 
-    unsigned long long count = 0;
+
+    initSnmp(session , &ss);
     while(isRun)
     {
         if(gVerflag == 3){
-            if(mOpen){
-                initSnmp(session , &ss);
-                mOpen = false;
-                count++;
-                qDebug()<<"openSnmpSession   "<< count;
-            }
 
             for(int index = 1 ; index <= mBusData->boxNum+1 ; ){
                 if(gReadWriteflag == 1){
@@ -718,13 +717,9 @@ void SnmpThread::run()
                     gReadWriteflag = 1;
                 }
             }
-            if(mClose){
-                releaseCon(session , &ss , response);
-                mClose = false;
-                mOpen = true;
-            }
         }
     }
+    releaseCon(session , &ss , response);
 
 }
 
