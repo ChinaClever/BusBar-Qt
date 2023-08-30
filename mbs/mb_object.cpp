@@ -1,0 +1,193 @@
+/*
+ *
+ *  Created on: 2022年10月1日
+ *      Author: Lzy
+ */
+#include "mb_object.h"
+
+Mb_Object::Mb_Object(QObject *parent) : Modbus_SlaveRtu{parent}
+{
+
+}
+
+void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
+{
+    sBoxData *dev = &(data->box[index]);
+    if(dev->offLine > 0){
+        vshort vs; //initFucRegs();
+        vs << dev->proNum <<dev->version << dev->dc << dev->curSpecification << dev->workMode; // 通讯协议版本
+        vs << dev->baudRate << dev->buzzerStatus << dev->alarmTime << dev->lps << dev->iOF;
+        vs << dev->isd << dev->shuntRelease << dev->reState << dev->lpsAlarm;
+        vs << 0 << 0 << 0 << 0;
+
+        sObjData *p = &(dev->data);
+        for(int i = 0 ; i < START_LINE_NUM ; ++i) // 读取相 数据
+        {
+            vs << p->lineVol.value[i];
+            vs << p->lineVol.alarm[i];
+            vs << p->vol.value[i];
+            vs << p->vol.alarm[i];
+            vs << p->cur.value[i];
+            vs << p->cur.alarm[i];
+            vs << (p->pow.value[i] >> 16);
+            vs << (p->pow.value[i] & 0xffff);
+            vs << p->pow.alarm[i];
+            vs << (p->reactivePower[i] >> 16);
+            vs << (p->reactivePower[i] & 0xffff);
+            vs << (p->apPow[i] >> 16);
+            vs << (p->apPow[i] & 0xffff);
+            vs << p->pf[i];
+            vs << (p->ele[i]>> 16);
+            vs << (p->ele[i] & 0xffff);
+            vs << p->pl[i];
+        }
+        vs << (dev->totalApPow >> 16) << (dev->totalApPow & 0xffff);
+        vs << (dev->totalPow.ivalue >> 16) << (dev->totalPow.ivalue & 0xffff);
+        vs << dev->totalPow.ialarm << dev->reCur.svalue << dev->reCur.salarm;
+        vs << dev->zeroLineCur.svalue << dev->zeroLineCur.salarm;
+        vs << dev->volUnbalance << dev->curUnbalance << dev->data.sw[0];
+        vs << dev->rate.svalue << dev->rate.salarm;
+        for(int i = 0 ;  i < SENSOR_NUM ; i++){
+            vs << dev->env.tem.value[i] << dev->env.tem.alarm[i];
+        }
+        for(int k = 0 ; k < START_LINE_NUM ; k++){
+            for(int i = 0 ;  i < HARMONIC_NUM ; i++){
+                vs << data->thdData.volThd[k][i];
+            }
+            for(int i = 0 ;  i < HARMONIC_NUM ; i++){
+                vs << data->thdData.curThd[k][i];
+            }
+        }
+        setRegs(MbMasterReg_Factory+10000*(bus-1), vs);
+    }else{//clear
+
+    }
+}
+
+void Mb_Object::upMasterDevRange(sBusData *data , int bus, int index)
+{
+    sBoxData *dev = &(data->box[index]);
+    if(dev->offLine > 0){
+        vshort vs;
+        for(int i = 0 ;  i < SENSOR_NUM ; i++){
+            vs << dev->env.tem.min[i] << dev->env.tem.max[i];
+        }
+        vs << dev->reCur.salarm;
+        vs << dev->zeroLineCur.smin << dev->zeroLineCur.smax;
+        vs << (dev->totalPow.imin >> 16) << (dev->totalPow.imin & 0xffff);
+        vs << (dev->totalPow.imax >> 16) << (dev->totalPow.imax & 0xffff);
+        vs << dev->rate.smin << dev->rate.smax;
+        for(int i = 0 ; i < START_LINE_NUM ; i++){
+            vs << dev->data.lineVol.min[i] << dev->data.lineVol.max[i];
+            vs << dev->data.vol.min[i] << dev->data.vol.max[i];
+            vs << dev->data.cur.min[i] << dev->data.cur.max[i];
+            vs << (dev->data.pow.min[i] >> 16)  << (dev->data.pow.min[i] & 0xffff);
+            vs << (dev->data.pow.max[i] >> 16)  << (dev->data.pow.max[i] & 0xffff);
+        }
+        setRegs(MbMasterReg_Range+10000*(bus-1), vs);
+    }else{//clear
+    }
+}
+
+void Mb_Object::upSlaveDevInfo(sBusData *data ,int bus, int index)
+{
+    sBoxData *dev = &(data->box[index]);
+    if(dev->offLine > 0){
+        vshort vs; //initFucRegs();
+        vs << dev->version << dev->proNum << dev->loopNum << (index+1) << dev->baudRate;
+        vs << dev->iOF << dev->buzzerStatus << dev->alarmTime;
+        vs << 0 << 0 << 0 << 0 << 0 << 0 << 0 << 0;
+        sObjData *p = &(dev->data);
+        for(int i = 0 ; i < LOOP_NUM_MAX ; i++)
+        {
+            if( i < dev->loopNum ){
+                vs << p->vol.value[i] << p->vol.alarm[i];
+                vs << p->cur.value[i] << p->cur.alarm[i];
+                vs << ( p->pow.value[i] >> 16 ) << ( p->pow.value[i] & 0xffff);
+                vs << p->pow.alarm[i];
+                vs << ( p->apPow[i] >> 16 ) << ( p->apPow[i] & 0xffff);
+                vs << ( p->reactivePower[i] >> 16 ) << ( p->reactivePower[i] & 0xffff);
+                vs << p->pf[i] << p->sw[i];
+                vs << ( p->ele[i] >> 16 ) << ( p->ele[i] & 0xffff);
+            }else{
+                vs << 0 << 0;
+                vs << 0 << 0;
+                vs << 0 << 0;
+                vs << 0;
+                vs << 0 << 0;
+                vs << 0 << 0;
+                vs << 0 << 0;
+                vs << 0 << 0;
+            }
+        }
+
+        vs << dev->data.curThd[0] << dev->data.curThd[1] << dev->data.curThd[2];
+        vs << dev->data.pl[0] << dev->data.pl[1] << dev->data.pl[2];
+        for(int i = 0 ;  i < SENSOR_NUM ; i++){
+            vs << dev->env.tem.value[i] << dev->env.tem.alarm[i];
+        }
+        setRegs(MbSlaveReg_Factory+10000*(bus-1), vs);
+    }else{//clear
+
+    }
+}
+
+void Mb_Object::upSlaveDevRange(sBusData *data , int bus, int index)
+{
+    sBoxData *dev = &(data->box[index]);
+    if(dev->offLine > 0){
+        vshort vs;
+        for(int i = 0 ;  i < SENSOR_NUM ; i++){
+            vs << dev->env.tem.min[i] << dev->env.tem.max[i];
+        }
+        for(int i = 0 ; i < LOOP_NUM_MAX ; i++){
+            if( i < dev->loopNum ){
+                vs << dev->data.vol.min[i] << dev->data.vol.max[i];
+                vs << dev->data.cur.min[i] << dev->data.cur.max[i];
+                vs << (dev->data.pow.min[i] >> 16)  << (dev->data.pow.min[i] & 0xffff);
+                vs << (dev->data.pow.max[i] >> 16)  << (dev->data.pow.max[i] & 0xffff);
+            }else{
+                vs << 0 << 0;
+                vs << 0 << 0;
+                vs << 0  << 0;
+                vs << 0  << 0;
+            }
+        }
+        setRegs(MbSlaveReg_Range+10000*(bus-1), vs);
+    }else{//clear
+    }
+}
+
+bool Mb_Object::setReg(ushort reg, const char *str)
+{
+    vshort values = strToShort(str);
+    return setHoldingRegisters(reg, values);
+}
+
+vshort Mb_Object::strToShort(const char *str)
+{
+    vshort res; ushort buf[32] = {0};
+    int size = strlen(str) + 1;
+    memcpy(buf, str, size);
+    uchar *ptr = (uchar *)str;
+
+    for(int i=0; i<size; i+=2) {
+        buf[i] = (ptr[i]<<8) + ptr[i+1];
+        res.append(buf[i]);
+    }
+
+    return res;
+}
+
+
+//bool Mb_Object::alarmUnitCheck(int reg, int id, sAlarmUnit *unit, ushort v)
+//{
+//    bool ret = true; switch (reg) {
+//    case 1: if((v > unit->rated[id]*1.3) || (v < unit->crMax[id])) ret = false; break;
+//    case 2: if((v > unit->max[id]) || (v < unit->crMin[id])) ret = false; break;
+//    case 3: if((v > unit->crMax[id]) || (v < unit->min[id])) ret = false; break;
+//    case 4: if(v > unit->crMin[id]) ret = false; break;
+//    } if(id >= unit->size) ret = false;
+
+//    return ret;
+//}

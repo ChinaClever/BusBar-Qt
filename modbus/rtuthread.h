@@ -5,7 +5,6 @@
 #include "common.h"
 #include "serialport/serial_trans.h"
 #include "rtu485/rtu_recv.h"
-#include <QModbusDataUnit>
 
 #define RTU_BUF_SIZE 1024
 extern int gVerflag;//1代表一期 2代表二期
@@ -34,6 +33,7 @@ protected:
     void loopData(sBoxData *box, Rtu_recv *pkt);
 
     void envData(sEnvData *env, Rtu_recv *pkt);
+    void initData(sBoxData *box, Rtu_recv *pkt);
     void setBoxNum(ushort num);
     void thdData(Rtu_recv *pkt);
     void thdDataV3(Rtu_recv *pkt);

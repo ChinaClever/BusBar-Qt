@@ -9,7 +9,7 @@
 #include "logswid.h"
 #include "network.h"
 #include "setmainwid.h"
-#include "modbustcp/qtcpmodbus.h"
+
 #include "net/tcp/server/server.h"
 //#include "watchdogthread.h"
 
@@ -79,7 +79,6 @@ private:
     CheckPasswordDlg *mCheckDlg;
 
     NetWork *mNetWork;
-    QTcpModbus* mTcpModbus;
 
     //Watchdogthread* mWatchdogThread;
 };

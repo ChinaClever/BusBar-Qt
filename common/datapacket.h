@@ -18,11 +18,14 @@
 #include <QtCore>
 
 #define LINE_NUM 9 // 三相
+#define START_LINE_NUM 3 // 3相
 #define LINE_NUM_MAX 9 // 三相
+#define LOOP_NUM_MAX 9 // 9回路
 #define BOX_NUM 20 // 插接箱数量
 #define BUS_NUM 4  // 四条母线
 #define NAME_LEN 32 // 名称最大长度
 #define SENSOR_NUM 4  // 四个传感器
+#define HARMONIC_NUM 32  // 谐波数量
 
 #define SRC_DATA_LEN_MAX 1024 //一包数据最长 —— 用于对接动环
 
@@ -151,6 +154,7 @@ typedef struct _sBoxData {
     uchar shuntRelease;// 表示分励脱扣
     uchar proNum;//项目编号 0：标准 1：定制
     uchar buzzerStatus;//蜂鸣器
+    uchar reState;
     unsigned long long totalApPow;//   总视在功率
 
     sObjData data; // 回路数据

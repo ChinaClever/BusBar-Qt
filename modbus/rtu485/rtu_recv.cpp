@@ -252,8 +252,8 @@ static int rtu_start_recv_init(uchar *ptr, Rtu_recv *msg)
     msg->isd = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[isd触点]
 
     msg->shuntRelease = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->reState = (*ptr) * 256 + *(ptr+1);ptr+=2;len+=2;
     msg->lpsState = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    ptr+=2;len+=2;
 
     return len; //3.0.0版本
 }

@@ -3,6 +3,7 @@ include(beep/beep.pri)
 include(charts/charts.pri)
 include(keyboard/keyboard.pri)
 include(customdialplot/customdialplot.pri)
+include(modbus/modbusbase.pri)
 
 INCLUDEPATH += $$PWD
 

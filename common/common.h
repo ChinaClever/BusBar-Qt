@@ -42,6 +42,7 @@ bool cm_isIPaddress(const QString& ip);
 QString getPassword();
 int getBoxNum(int index);
 int getRateCur(int index);
+void mdelay(int msec);
 
 sDataPacket *get_share_mem();
 

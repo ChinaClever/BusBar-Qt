@@ -7,7 +7,7 @@
 #include "beepthread.h"
 #include "datetime/timesettingdlg.h"
 #include "snmp/snmpthread.h"
-
+#include "mbs/mb_core.h"
 #include "modbus/thirdthread.h"
 
 RtuThread *rtu[4] = {NULL, NULL, NULL, NULL};
@@ -61,9 +61,9 @@ void MainWindow::initSerial()
     rtu[3]->init(SERIAL_COM4, 4);
 #endif
 #endif
-
-    thr = new ThirdThread(this);
-    thr->init(SERIAL_COM5);
+    Mb_Core::build(this);
+//    thr = new ThirdThread(this);
+//    thr->init(SERIAL_COM5);
 
 //    snmp = new SnmpThread(this);
 //    snmp->init(1);

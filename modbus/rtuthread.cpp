@@ -455,6 +455,23 @@ void RtuThread::BusTransDataV3()
     }
 }
 
+void RtuThread::initData(sBoxData *box, Rtu_recv *pkt)
+{
+    box->dc = pkt->dc;
+    box->version = pkt->version;
+    box->lps = pkt->lps;
+    box->lpsAlarm = pkt->lpsState;
+    box->proNum = pkt->proNum;
+    box->curSpecification = pkt->curSpecification;
+    box->workMode = pkt->workMode; // 通讯协议版本
+    box->baudRate = pkt->baudRate;
+    box->buzzerStatus = pkt->buzzerStatus;
+    box->alarmTime = pkt->alarmTime;
+    box->iOF = pkt->iOF;
+    box->isd = pkt->isd;
+    box->reState = pkt->reState;
+}
+
 int RtuThread::transDataV3(int addr)
 {
     char offLine = 0;
@@ -487,11 +504,11 @@ int RtuThread::transDataV3(int addr)
                 offLine = 4;
                 loopData(box, pkt); //更新数据
                 envData(&(box->env), pkt);
+                initData(box, pkt);
                 box->rate.svalue = pkt->rate.svalue;
                 box->rate.smin = pkt->rate.smin;
                 box->rate.smax = pkt->rate.smax;
-                box->dc = pkt->dc;
-                box->version = pkt->version;
+
                 box->data.totalPow.value[0] = pkt->totalPow.ivalue;
                 thdDataV3(pkt);
             }
