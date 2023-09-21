@@ -4,6 +4,8 @@ INCLUDEPATH += $$PWD
 HEADERS += \
     $$PWD/setloop/setlooppowerwid.h \
     $$PWD/setloop/setpowmain.h \
+    $$PWD/setsystem/localnetsettingdlg.h \
+    #$$PWD/setsystem/modedlg.h \
     $$PWD/setsystem/systemsettingdlg.h \
     $$PWD/setsystem/netsettingdlg.h \
     $$PWD/setsystem/othersettingdlg.h \
@@ -34,6 +36,8 @@ HEADERS += \
 SOURCES += \
     $$PWD/setloop/setlooppowerwid.cpp \
     $$PWD/setloop/setpowmain.cpp \
+    $$PWD/setsystem/localnetsettingdlg.cpp \
+    #$$PWD/setsystem/modedlg.cpp \
     $$PWD/setsystem/systemsettingdlg.cpp \
     $$PWD/setsystem/netsettingdlg.cpp \
     $$PWD/setsystem/othersettingdlg.cpp \
@@ -62,6 +66,8 @@ SOURCES += \
 
 FORMS += \
     $$PWD/setloop/setpowmain.ui \
+    $$PWD/setsystem/localnetsettingdlg.ui \
+    #$$PWD/setsystem/modedlg.ui \
     $$PWD/setsystem/systemsettingdlg.ui \
     $$PWD/setsystem/netsettingdlg.ui \
     $$PWD/setsystem/othersettingdlg.ui \

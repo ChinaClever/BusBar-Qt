@@ -35,11 +35,11 @@ void ExcelExportWid::set(const QString &path, const QString &file, const QList<Q
 
     switch (mode) {
     case 1:
-        mExportThread->set(fileName, list);
+        mExportThread->set(path , fileName, list);
         break;
 
     case 2:
-        mtxtThread->set(fileName, list);
+        mtxtThread->set(path , fileName, list);
         break;
 
     default:

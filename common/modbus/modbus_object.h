@@ -18,9 +18,10 @@ struct sModbusSetting {
     int enRtu = false;
     QString portName = MB_NAME;
     int parity = QSerialPort::NoParity;
-    int baud = QSerialPort::Baud115200;
+    int baud = QSerialPort::Baud9600;
     int dataBits = QSerialPort::Data8;
     int stopBits = QSerialPort::OneStop;
+    int flowControl = QSerialPort::NoFlowControl;
     int addrRtu = 1;
 
     int enTcp = false;

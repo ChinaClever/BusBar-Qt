@@ -70,7 +70,7 @@ bool LogExportModelDlg::checkInput()
         return false;
     }
 
-    str = ui->pathEdit->text() + ui->fileEdit->text() +".xls";
+    str = ui->pathEdit->text() + ui->fileEdit->text() +".csv";
     QFile file(str);
     if (file.exists()){
         CriticalMsgBox box(this, str + tr("\n文件已存在！!"));
@@ -144,7 +144,21 @@ void LogExportModelDlg::on_pushButton_clicked()
     BeepThread::bulid()->beep();
     QFileDialog dlg(this,tr("路径选择"));
     dlg.setFileMode(QFileDialog::DirectoryOnly);
-    dlg.setDirectory("/mnt/sda1/");
+    QString filepath = "/run/media/sda";
+    QDir directory(filepath);
+    if(!directory.exists()){
+        filepath = "/run/media/sda1";
+        QDir directory1(filepath);
+        if(!directory1.exists()){
+            filepath = "/run/media/sda2";
+            QDir directory2(filepath);
+            if(!directory2.exists()){
+                return;
+            }
+        }
+    }
+
+    dlg.setDirectory(filepath);
     if(dlg.exec() == QDialog::Accepted) {
         QStringList fileNames = dlg.selectedFiles();
         ui->pathEdit->setText(fileNames.at(0) + "/");

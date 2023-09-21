@@ -1,6 +1,6 @@
 #include "setnetcmd.h"
 
-extern QString getIpByKey(int key);
+//extern QString getIpByKey(int key);
 extern int net_data_packets(net_dev_data *pkt, uchar *buf);
 
 SetNetCmd::SetNetCmd(QObject *parent) : QObject(parent)
@@ -24,7 +24,7 @@ SetNetCmd *SetNetCmd::bulid(QObject *parent)
 bool SetNetCmd::sentNetData(int bus, uchar *buf, int len)
 {
     bool ret = false;
-    QString ip = getIpByKey(bus);
+    QString ip = "192.168.1.163";//getIpByKey(bus);
     if(!ip.isEmpty()) {
         QHostAddress addr(ip);
         ret = mSocket->sentData(addr, buf, len);

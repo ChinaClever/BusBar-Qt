@@ -21,17 +21,16 @@ protected:
     void updateWid();
     void setTem(int id);
     void setBtnColor(QPushButton *label, int alarm, int crAlarm);
+    void showWid();
+    void hideWid();
 
 protected slots:
     void timeoutDone();
 
 private slots:
     void on_temBtn_1_clicked();
-
     void on_temBtn_2_clicked();
-
     void on_temBtn_3_clicked();
-
     void on_temBtn_4_clicked();
 
 private:

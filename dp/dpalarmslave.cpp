@@ -282,9 +282,16 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
             }
         }
     } else {
-        mAlarmStr << shm->data[mBusId].busName;
-        mAlarmStr << tr("插接箱离线");
-        mAlarmStr << tr("插接箱：%1 已离线").arg(box.boxName);
+        if(box.boxOffLineAlarm == 2){
+            QString tempStr ,str;
+            tempStr = tr("离线告警");
+            str += shm->data[mBusId].busName+tr("插接箱离线")+tr("插接箱：%1 已离线").arg(box.boxName);
+            mAlarmStr << shm->data[mBusId].busName;
+            mAlarmStr << tr("插接箱离线");
+            mAlarmStr << tr("插接箱：%1 已离线").arg(box.boxName);
+            saveMsg(tempStr,str);
+            box.boxOffLineAlarm = 3;
+        }
     }
 }
 
@@ -299,45 +306,56 @@ void DpAlarmSlave::busAlarm(int id)
         alarmStr = "输入";
     }
     //--------------------------------------------------
+    if(busBox->offLine){
+        if(busBox->boxAlarm) {
+            if(busBox->boxCurAlarm) { // 总线电流告警
+                QString typeStr = tr("主路电流");
+                QString msg = tr("母线：%1，%2 ").arg(bus->busName).arg(alarmStr);
+                unitAlarm(typeStr, msg, busBox->data.cur, COM_RATE_CUR, "A");
+            }
 
-    if(busBox->boxAlarm) {
-        if(busBox->boxCurAlarm) { // 总线电流告警
-            QString typeStr = tr("主路电流");
-            QString msg = tr("母线：%1，%2 ").arg(bus->busName).arg(alarmStr);
-            unitAlarm(typeStr, msg, busBox->data.cur, COM_RATE_CUR, "A");
+            if(busBox->boxVolAlarm) { // 总线电压告警
+                QString typeStr = tr("主路电压");
+                QString msg = tr("母线：%1，%2 ").arg(bus->busName).arg(alarmStr);
+                unitAlarm(typeStr, msg, busBox->data.vol, COM_RATE_VOL, "V");
+            }
+
+            if(busBox->boxEnvAlarm) { // 温度
+                QString typeStr = tr("主路温度");
+                QString msg = tr("母线：%1，温度").arg(bus->busName);
+                unitAlarm(typeStr, msg, busBox->env.tem, COM_RATE_TEM, "°C");
+            }
+
+            if(busBox->boxPowerAlarm){
+                QString typeStr = tr("主路功率");
+                QString msg = tr("母线：%1，功率").arg(bus->busName);
+                unitAlarm(typeStr, msg, busBox->data.pow, COM_RATE_POW , "kW");
+            }
+
+            if( busBox->HzAlarm == 1) {
+                busBox->HzAlarm = 2;
+                QString typeStr = tr("主路频率");
+                QString str = tr("母线：%1").arg(bus->busName);
+                QString tempStr = typeStr + tr("告警");
+                str += tr(" 当前值：%2%3, 最小值：%4%5, 最大值：%6%7")
+                           .arg(QString::number(busBox->rate.svalue/COM_RATE_FREQUENCY,'f',1)).arg("Hz")
+                           .arg(QString::number(busBox->rate.smin/COM_RATE_FREQUENCY,'f',1)).arg("Hz")
+                        .arg(QString::number(busBox->rate.smax/COM_RATE_FREQUENCY,'f',1)).arg("Hz");
+                saveMsg( typeStr , str );
+                mAlarmStr << shm->data[mBusId].busName;
+                mAlarmStr << tempStr;
+                mAlarmStr << str;
+            }
         }
-
-        if(busBox->boxVolAlarm) { // 总线电压告警
-            QString typeStr = tr("主路电压");
-            QString msg = tr("母线：%1，%2 ").arg(bus->busName).arg(alarmStr);
-            unitAlarm(typeStr, msg, busBox->data.vol, COM_RATE_VOL, "V");
-        }
-
-        if(busBox->boxEnvAlarm) { // 温度
-            QString typeStr = tr("主路温度");
-            QString msg = tr("母线：%1，温度").arg(bus->busName);
-            unitAlarm(typeStr, msg, busBox->env.tem, COM_RATE_TEM, "°C");
-        }
-
-        if(busBox->boxPowerAlarm){
-            QString typeStr = tr("主路功率");
-            QString msg = tr("母线：%1，功率").arg(bus->busName);
-            unitAlarm(typeStr, msg, busBox->data.pow, COM_RATE_POW , "kW");
-        }
-
-        if( busBox->HzAlarm == 1) {
-            busBox->HzAlarm = 2;
-            QString typeStr = tr("主路频率");
-            QString str = tr("母线：%1").arg(bus->busName);
-            QString tempStr = typeStr + tr("告警");
-            str += tr(" 当前值：%2%3, 最小值：%4%5, 最大值：%6%7")
-                       .arg(QString::number(busBox->rate.svalue/10.0,'f',1)).arg("Hz")
-                    .arg(busBox->rate.smin).arg("Hz")
-                    .arg(busBox->rate.smax).arg("Hz");
-            saveMsg( typeStr , str );
+    }else{
+        if(busBox->boxOffLineAlarm == 2){
             mAlarmStr << shm->data[mBusId].busName;
-            mAlarmStr << tempStr;
-            mAlarmStr << str;
+            mAlarmStr << tr("始端箱离线");
+            QString tempStr ,str;
+            tempStr = tr("离线告警");
+            str += shm->data[mBusId].busName+tr("始端箱离线");
+            saveMsg(tempStr,str);
+            busBox->boxOffLineAlarm = 3;
         }
     }
 

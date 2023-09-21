@@ -31,6 +31,8 @@ protected:
 
     void loopObjData(sObjData *loop, int id, RtuRecvLine *data);
     void loopData(sBoxData *box, Rtu_recv *pkt);
+    void loopDataV3(sBoxData *box, Rtu_recv *pkt);
+    void loopObjDataV3(sObjData *loop, int id, RtuRecvLine *data);
 
     void envData(sEnvData *env, Rtu_recv *pkt);
     void initData(sBoxData *box, Rtu_recv *pkt);
@@ -41,6 +43,7 @@ protected:
 
     int transDataV3(int addr);
     void BusTransDataV3();
+    void readLocalTemHum();
 
     #if (SI_RTUWIFI==1)
     void ChangeBusCh(int ch, int index);

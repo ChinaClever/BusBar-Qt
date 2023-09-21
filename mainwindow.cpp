@@ -6,20 +6,22 @@
 #include "interfacechangesig.h"
 #include "beepthread.h"
 #include "datetime/timesettingdlg.h"
-#include "snmp/snmpthread.h"
+//#include "snmp/snmpthread.h"
 #include "mbs/mb_core.h"
 #include "modbus/thirdthread.h"
 
 RtuThread *rtu[4] = {NULL, NULL, NULL, NULL};
 ThirdThread *thr = NULL;
-SnmpThread *snmp= NULL;
+//SnmpThread *snmp= NULL;
 extern int get_alarm_len();
+int gVerflag = 2;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     mInitShm = new InitShm(this); //线程
     mInitShm->start(); //初始化共享内存 -- 单线程运行一次
 
@@ -61,6 +63,7 @@ void MainWindow::initSerial()
     rtu[3]->init(SERIAL_COM4, 4);
 #endif
 #endif
+
     Mb_Core::build(this);
 //    thr = new ThirdThread(this);
 //    thr->init(SERIAL_COM5);
@@ -130,11 +133,6 @@ void MainWindow::initFunSLot()
     timer = new QTimer(this);
     timer->start(1000);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
-    //mWatchdogThread = new Watchdogthread(this);
-    //mWatchdogThread->start(QThread::HighestPriority);
-    //mWatchdogtimer = new QTimer(this);
-    //mWatchdogtimer->start(1000);
-    //connect(mWatchdogtimer, SIGNAL(timeout()),this, SLOT(watchdogDone()));
 
 //    mClearCachetimer = new QTimer(this);
 //    mClearCachetimer->start(2*24*60*60*1000-5*60*1000);
@@ -156,6 +154,18 @@ void MainWindow::initFunSLot()
 
 void MainWindow::initWidget()
 {
+//    bool ret = sys_configFile_open();
+//    if(ret)
+//    {
+//        int index = sys_configFile_readInt("readmode");
+//        if( 0 == index ){
+//            gVerflag = 2;
+//            sys_configFile_write("readmode" , QString::number(gVerflag));
+//        }else{
+//            gVerflag = index;
+//        }
+//    }
+//     sys_configFile_close();
     //    set_background_color(ui->stackedWid,Qt::white);
     set_background_icon(ui->stackedWid,":/new/prefix1/image/background.png");
     initBackground(); //按钮图标
@@ -179,6 +189,7 @@ void MainWindow::initWidget()
     mSettingWid = new SetMainWid(ui->stackedWid); //配置
     ui->stackedWid->addWidget(mSettingWid);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), mSettingWid, SLOT(busChangedSlot(int)));
+    checkFile();
 }
 
 void MainWindow::on_homeBtn_clicked()
@@ -187,6 +198,17 @@ void MainWindow::on_homeBtn_clicked()
     setButtonClickedImage(ui->homeBtn,"home_select");
 
     InterfaceChangeSig::get()->changeType(1);
+}
+
+void MainWindow::checkFile()//check file exists ,delete file
+{
+    QFileInfo fi(QString("/home/root/tmp/busbar"));
+    if(fi.exists()){
+        int ret = system("rm /home/root/tmp/busbar");
+        if(ret < 0) {
+            qDebug() <<"rm /home/root/tmp/busbar err";
+        }
+    }
 }
 
 void MainWindow::on_lineBtn_clicked()

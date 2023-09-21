@@ -11,6 +11,7 @@
 
 extern QString cm_pathOfData(const QString& name);
 static QSettings *pConfigIni = NULL;
+static QSettings *pNetConfigIni = NULL;
 
 /**
  * 功 能：打开系统配置文件
@@ -108,3 +109,45 @@ void sys_configFile_writeParam(QString name, QString value, QString strGroup)
     sys_configFile_write(name, value, strGroup);
     sys_configFile_close();
 }
+
+bool sys_configNetFile_open(QString name)
+{
+    bool ret = true;
+
+    QString strFilename = "/etc/systemd/network/";
+    strFilename += name;
+
+    if(!QFileInfo(strFilename).exists())
+        ret = false;
+
+    if( pNetConfigIni == NULL ){
+        pNetConfigIni = new QSettings(strFilename, QSettings::IniFormat);
+    }
+
+    return ret;
+}
+
+void sys_configNetFile_close(void)
+{
+    if( pNetConfigIni ){
+        delete pNetConfigIni;
+        pNetConfigIni = NULL;
+    }
+    // sync();
+}
+
+QString sys_configNetFile_readStr(QString strParameterName, QString strGroup)
+{
+    QString strParameter = "";
+    strParameterName = "/" + strGroup + "/" + strParameterName;
+    strParameter = pNetConfigIni->value(strParameterName).toString();
+    return strParameter;
+}
+
+void sys_configNetFile_write(QString strParameterName, QString strParameter, QString strGroup)
+{
+    strParameterName = "/" + strGroup + "/" + strParameterName;
+    pNetConfigIni->setValue(strParameterName, strParameter);
+}
+
+

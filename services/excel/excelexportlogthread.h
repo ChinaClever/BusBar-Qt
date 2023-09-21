@@ -22,7 +22,7 @@ public:
     explicit ExcelExportLogThread(QObject *parent = 0);
     ~ExcelExportLogThread();
 
-    void set(const QString &file, const QList<QStringList> &list);
+    void set(const QString &path, const QString &file, const QList<QStringList> &list);
 
 signals:
     void overSig(bool);
@@ -40,6 +40,7 @@ protected:
     int mSize, mAllSize;
     QList<QStringList> mList;
     QString mFile; // 导出文件
+    QString mPath; // 文件路径
 };
 
 #endif // EXCELEXPORTLOGTHREAD_H

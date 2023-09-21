@@ -7,22 +7,30 @@ SystemSettingDlg::SystemSettingDlg(QWidget *parent) :
     ui(new Ui::SystemSettingDlg)
 {
     ui->setupUi(this);
-    //mEmailWid = new EmailWid(ui->smtpWid);
-#if ( SI_RTUWIFI == 0 )
-    mIpWid = new IpSettingDlg(ui->smtpWid);
-#elif ( SI_RTUWIFI == 1)
-    mChannelWid = new ChannelSettingDlg(ui->smtpWid);
-    connect(this, SIGNAL(busChangedSig(int)), mChannelWid, SLOT(busChangedSlot(int)));
-#endif
-    mNetWid = new NetSettingDlg(ui->netWid);
-    mOtherWid = new OtherSettingDlg(ui->otherWid);
 
-    ui->netWid->setHidden(true);
+    initWid();
+
 }
 
 SystemSettingDlg::~SystemSettingDlg()
 {
     delete ui;
+}
+
+void SystemSettingDlg::initWid()
+{
+    mLocaNetSettingWid = new LocalNetSettingDlg(this);
+//    mNetWid = new NetSettingDlg(this);
+    mOtherWid = new OtherSettingDlg(this);
+//    mModeWid = new ModeDlg(this);
+    QString str = tr("本地IP设置");
+    ui->tabWidget->addTab(mLocaNetSettingWid,str);
+//    str = tr("切换模式");
+//    ui->tabWidget->addTab(mModeWid,str);
+//    str = tr("网络设置");
+//    ui->tabWidget->addTab(mNetWid,str);
+    str = tr("其他参数设置");
+    ui->tabWidget->addTab(mOtherWid,str);
 }
 
 

@@ -42,8 +42,9 @@ void ExcelExportLogThread::progressSlot()
 }
 
 
-void ExcelExportLogThread::set(const QString &file, const QList<QStringList> &list)
+void ExcelExportLogThread::set(const QString &path , const QString &file, const QList<QStringList> &list)
 {
+    mPath = path;
     mFile = file;
     mList = list;
     progressSlot();
@@ -57,11 +58,24 @@ void ExcelExportLogThread::set(const QString &file, const QList<QStringList> &li
  */
 void ExcelExportLogThread::exportMsg(QList<QStringList> &list)
 {
+    QStringList strList = mPath.split("/");
+    QString str = "sda";
+    for(int i = 0 ; i < strList.size() ; i++){
+         if(i == strList.size() - 2)str = strList.at(i);
+    }
+    qDebug() << str;
+    QString cstr = QString("mount | grep %1").arg(str);
+    int ans = system(cstr.toLatin1());
+    if(ans < 0) {
+         qDebug() << cstr+" err";
+    }
     bool ret = true;
     QString fileName = mFile +".csv";
     QFile csvfile(fileName);
     csvfile.open(QIODevice::WriteOnly | QIODevice::Text);
+
     QTextStream out(&csvfile);
+    out.setCodec("GBK");
     for(int i=0; i<list.size(); ++i)
     {
         for(int j=0; j<list.at(i).size(); ++j) {
@@ -83,8 +97,16 @@ void ExcelExportLogThread::exportMsg(QList<QStringList> &list)
     //   qDebug() << "csv Export Log Save Err!!!";
     //} else
     //    ret = true;
-    //system("sync");
+    ans = system("sync");
+    if(ans < 0) {
+        qDebug() <<"sync err";
+    }
 
+    cstr = QString("umount /run/media/%1").arg(str);
+    ans = system(cstr.toLatin1());
+    if(ans < 0) {
+        qDebug() << cstr+" err";
+    }
 
     emit overSig(ret);
 }

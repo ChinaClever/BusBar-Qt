@@ -56,6 +56,8 @@ HEADERS += \
     $$PWD/net-snmp/agent/table_tdata.h \
     $$PWD/net-snmp/agent/var_struct.h \
     $$PWD/net-snmp/agent/watcher.h \
+    $$PWD/net-snmp/agent/agent_module_config.h\
+    $$PWD/net-snmp/agent/mib_module_config.h\
     $$PWD/net-snmp/config_api.h \
     $$PWD/net-snmp/data_access/arp.h \
     $$PWD/net-snmp/data_access/defaultrouter.h \
@@ -161,6 +163,7 @@ HEADERS += \
     $$PWD/net-snmp/net-snmp-config.h \
     $$PWD/net-snmp/net-snmp-features.h \
     $$PWD/net-snmp/net-snmp-includes.h \
+    $$PWD/net-snmp/netsnmp-attribute-format.h \
     $$PWD/net-snmp/openssl_md5.h \
     $$PWD/net-snmp/output_api.h \
     $$PWD/net-snmp/pdu_api.h \

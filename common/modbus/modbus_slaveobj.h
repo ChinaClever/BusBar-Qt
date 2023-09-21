@@ -2,6 +2,14 @@
 #define MODBUS_SLAVEOBJ_H
 
 #include "modbus_mastertcp.h"
+enum eMbMasterRegs {
+    MbMasterReg_Factory   =   0,     // 生产厂家
+    MbMasterReg_Range     = 284,
+    MbMasterReg_End     = 330,
+    MbSlaveReg_Factory    =   0,
+    MbSlaveReg_Range      =   165,
+    MbSlaveReg_End     = 244,
+};
 
 class Modbus_SlaveObj : public Modbus_Object
 {
@@ -18,7 +26,7 @@ public:
 
     bool setRegister(ushort reg, ushort v) {return setHoldingRegister(reg, v);}
     bool setRegisters(ushort reg, const vshort &v) {return setHoldingRegisters(reg, v);}
-
+    bool checkWriteAddress(int address);
 signals:
     void registerDataSig(int address, ushort value);
     void rcvDataSig(int address, vshort values);

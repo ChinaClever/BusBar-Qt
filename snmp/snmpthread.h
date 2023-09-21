@@ -7,6 +7,8 @@
 #include "setting/setthreshold/setthread.h"
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
+//#include <net-snmp/agent/net-snmp-agent-includes.h>
+//#include <net-snmp/library/snmpusm.h>
 
 #define MIB_OID_HEAD "SNMPv2-SMI::enterprises.30966.12"
 extern int gVerflag;
@@ -18,6 +20,7 @@ public:
     explicit SnmpThread(QObject *parent = nullptr);
     bool init(int id);
     ~SnmpThread();
+    bool mOpen,mClose;
 protected:
     void run();
     int initSnmp(netsnmp_session &session , netsnmp_session **ss);
@@ -36,7 +39,7 @@ protected:
     void baseSlaveInformation(QString val , int addr);
     void loopSlaveInformation(QString val , int addr);
     void temSlaveInformation(QString val , int addr);
-    int walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *pdu , int index);
+    int walkSnmp(netsnmp_session & session,netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *pdu , int index);
     void releaseCon(netsnmp_session &session, netsnmp_session **ss, netsnmp_pdu *response);
     void praseSlaveVal(QString str , int index);
     bool setOid(netsnmp_session **ss, netsnmp_pdu *response, netsnmp_pdu *pdu);
@@ -64,7 +67,6 @@ private:
     QString mValue;
     bool isRun;
     QList<sThresholdItem> mItems;
-    bool mOpen,mClose;
 };
 
 #endif // SNMPTHREAD_H

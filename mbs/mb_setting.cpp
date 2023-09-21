@@ -7,7 +7,7 @@
 #include "mb_core.h"
 
 
-Mb_Setting::Mb_Setting(QObject *parent) : Mb_Env{parent}
+Mb_Setting::Mb_Setting(QObject *parent) : Mb_Object{parent}
 {
     connect(this, &Modbus_SlaveObj::registerDataSig, this, &Mb_Setting::registerRecvSlot);
 }

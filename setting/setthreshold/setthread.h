@@ -2,7 +2,7 @@
 #define SETTHREAD_H
 
 #include "setnetcmd.h"
-
+extern int gVerflag;//1代表一期 2代表二期
 class SetThread : public QThread
 {
     Q_OBJECT

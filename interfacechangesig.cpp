@@ -15,5 +15,5 @@ InterfaceChangeSig *InterfaceChangeSig::get()
 void InterfaceChangeSig::changeType(int type)
 {
     emit typeSig(type);
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
 }

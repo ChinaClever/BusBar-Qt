@@ -55,8 +55,8 @@ void SetRtuCmd::send(sThresholdItem &item)
 //    case 3: reg = temperatureMAX_1 + item.num*2; break;
 //    }
     switch (item.type) {
-    case 1: reg = VoltageMAX_L1 + item.num*2; item.max*=10; item.min*=10; break;
-    case 2: reg = CurrentMAX_L1 + item.num*2; item.max*=100; item.min*=100; break;
+    case 1: reg = VoltageMAX_L1 + item.num*2; /*item.max*=10; item.min*=10;*/ break;
+    case 2: reg = CurrentMAX_L1 + item.num*2; /*item.max*=100; item.min*=100;*/ break;
     case 3: reg = temperatureMAX_1 + item.num*2; break;
     case 4: reg = PowerMAX_L1 + item.num*2; break;
     case 5: reg = SetHzMAX ; break;
@@ -68,8 +68,8 @@ void SetRtuCmd::sendStartV3(sThresholdItem &item)
 {
     int reg=0;
     switch (item.type) {
-    case 1: reg = StartVoltageMIN_L1 + item.num*10; item.max*=10; item.min*=10; break;
-    case 2: reg = StartCurrentMIN_L1 + item.num*10; item.max*=100; item.min*=100; break;
+    case 1: reg = StartVoltageMIN_L1 + item.num*10; /*item.max*=10; item.min*=10;*/ break;
+    case 2: reg = StartCurrentMIN_L1 + item.num*10; /*item.max*=100; item.min*=100;*/ break;
     case 3: reg = StartTemperatureMIN_1 + item.num*2; break;
     case 4: reg = StartPowerMIN_L1_1 + item.num*10;break;
     case 5: reg = StartSetHzMIN ; break;
@@ -81,8 +81,8 @@ void SetRtuCmd::sendPlugV3(sThresholdItem &item)
 {
     int reg=0;
     switch (item.type) {
-    case 1: reg = PlugVoltageMIN_L1 + item.num*8; item.max*=10; item.min*=10; break;
-    case 2: reg = PlugCurrentMIN_L1 + item.num*8; item.max*=100; item.min*=100; break;
+    case 1: reg = PlugVoltageMIN_L1 + item.num*8; /*item.max*=10; item.min*=10;*/break;
+    case 2: reg = PlugCurrentMIN_L1 + item.num*8; /*item.max*=100; item.min*=100;*/break;
     case 3: reg = PlugTemperatureMIN_1 + item.num*2; break;
     case 4: reg = PlugPowerMIN_L1_1 + item.num*8;break;
     }

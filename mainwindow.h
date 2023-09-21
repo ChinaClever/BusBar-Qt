@@ -13,7 +13,7 @@
 #include "net/tcp/server/server.h"
 //#include "watchdogthread.h"
 
-
+extern int gVerflag;//1代表一期 2代表二期
 namespace Ui {
 class MainWindow;
 }
@@ -36,6 +36,7 @@ protected:
     void setButtonImage(QToolButton *button, QString name);
     void setButtonClickedImage(QToolButton *button, QString name);
     void updateTime();
+    void checkFile();
     //void seedWatchdog();
     //void clearCache();
 

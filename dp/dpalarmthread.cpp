@@ -139,7 +139,7 @@ void DpAlarmThread::boxAlarm(sBoxData &box)
         alarmDataUnit(box.env.tem, lineNum);
         box.boxEnvAlarm =  alarmFlag(box.env.tem, lineNum);
 
-        if((box.rate.svalue < box.rate.smin*10) || (box.rate.svalue > box.rate.smax*10))
+        if((box.rate.svalue < box.rate.smin) || (box.rate.svalue > box.rate.smax))
         {
             if(box.HzAlarm == 0)
                 box.HzAlarm = 1;
@@ -148,8 +148,10 @@ void DpAlarmThread::boxAlarm(sBoxData &box)
         } else
             box.HzAlarm = 0;
 
+        box.boxOffLineAlarm = 1;
         box.boxAlarm = box.boxCurAlarm + box.boxVolAlarm + box.boxEnvAlarm + box.boxPowerAlarm + box.HzAlarm;
     } else {
+        if(box.boxOffLineAlarm == 1) box.boxOffLineAlarm = 2;
         box.boxAlarm = 0;
     }
 }

@@ -11,7 +11,6 @@
 
 static ushort gBoxArray[4] = {0, 0, 0, 0};
 
-int gVerflag = 2;
 void set_box_num(int id, int num)
 {
     gBoxArray[id] = num;
@@ -242,6 +241,46 @@ void RtuThread::thdData(Rtu_recv *pkt)
     }
 }
 
+void RtuThread::loopDataV3(sBoxData *box, Rtu_recv *pkt)
+{
+    sObjData *loop = &(box->data);
+    box->loopNum = loop->lineNum = pkt->lineNum;
+
+    for(int i=0; i<loop->lineNum; i++)
+    {
+        RtuRecvLine *data = &(pkt->data[i]);
+        loopObjDataV3(loop, i, data);
+    }
+}
+
+void RtuThread::loopObjDataV3(sObjData *loop, int id, RtuRecvLine *data)
+{
+    loop->lineVol.value[id] = data->lineVol.svalue;
+    loop->lineVol.crMin[id] = loop->lineVol.min[id] = data->lineVol.smin;
+    loop->lineVol.crMax[id] = loop->lineVol.max[id] = data->lineVol.smax;
+
+    loop->vol.value[id] = data->vol.svalue;
+    loop->vol.crMin[id] = loop->vol.min[id] = data->vol.smin;
+    loop->vol.crMax[id] = loop->vol.max[id] = data->vol.smax;
+
+    loop->cur.value[id] = data->cur.svalue;
+    loop->cur.crMin[id] = loop->cur.min[id] = data->cur.smin;
+    loop->cur.crMax[id] = loop->cur.max[id] = data->cur.smax;
+
+    loop->pow.value[id] = data->pow.ivalue;
+    loop->pow.crMin[id] = loop->pow.min[id] = data->pow.imin;
+    loop->pow.crMax[id] = loop->pow.max[id] = data->pow.imax;
+    loop->ele[id] = data->ele;
+    loop->pf[id] = data->pf;
+    loop->sw[id] = data->sw;
+    loop->apPow[id] = data->apPow;
+    loop->reactivePower[id] = data->reactivePower;
+    //    loop->ratedCur[id] = data->curAlarm; ////
+
+    //loop->wave[id] = data->wave;
+}
+
+
 void RtuThread::thdDataV3(Rtu_recv *pkt)
 {
     sBoxData *box = &(mBusData->box[pkt->addr-1]);
@@ -252,11 +291,14 @@ void RtuThread::thdDataV3(Rtu_recv *pkt)
     }
 
     if(pkt->addr == 1) {
-        for(int line = 0 ; line < RTU_LINE_NUM ; ++line)
+        for(int line = 0 ; line < RTU_LINE_NUM ; ++line){
+            box->data.volThd[line] = pkt->volThd[line][0];
+            box->data.curThd[line] = pkt->curThd[line][0];
             for(int i=0; i<32; ++i){
                 mBusData->thdData.curThd[line][i] = pkt->curThd[line][i];
                 mBusData->thdData.volThd[line][i] = pkt->volThd[line][i];
             }
+        }
 
     } else {
         ushort *thd = box->data.curThd;
@@ -472,12 +514,48 @@ void RtuThread::initData(sBoxData *box, Rtu_recv *pkt)
     box->reState = pkt->reState;
 }
 
+void RtuThread::readLocalTemHum()
+{
+    if(0 == mId){
+        sBoxData *box = &(mBusData->box[0]); //共享内存
+        int data[4];
+        int fd;
+        char *path = "/dev/sht30";
+        fd = open(path, O_RDONLY);
+        if (fd < 0)
+        {
+            //perror("open");
+            return ;
+        }
+        bzero(data, sizeof(data));
+        if (read(fd, data, sizeof(data)) < 0){
+            perror("read");
+        }
+        else{
+            //for (int i = 0; i < sizeof(data) / sizeof(data[0]) / 2; i++){
+            for (int i = 0; i < sizeof(data) / sizeof(data[0]) / 2; i++){
+                if (data[i * 2] == -1 || data[i * 2 + 1] == -1)
+                    printf("th%d不存在\n", i);
+                else{
+                    if(i == 0){
+                        //printf("th%d:温度(%d),湿度(%d)\n", i, data[i * 2], data[i * 2 + 1]);
+                        box->env.tem.value[7] = data[i * 2];
+                        box->env.tem.value[8] = data[i * 2 + 1];
+                    }
+                }
+            }
+        }
+        close(fd);
+    }
+}
+
 int RtuThread::transDataV3(int addr)
 {
     char offLine = 0;
     uchar *buf = mBuf;
     Rtu_recv *pkt = mRtuPkt; //数据包
     sBoxData *box = &(mBusData->box[addr]); //共享内存
+    readLocalTemHum();
 
     int rtn = rtu_sent_buff(addr+1,buf); // 把数据打包成通讯格式的数据
 //        QByteArray sendarray;
@@ -501,6 +579,7 @@ int RtuThread::transDataV3(int addr)
         bool ret = rtu_recv_packetV3(buf, rtn, pkt); // 解析数据 data - len - it
         if(ret) {
             if(addr+1 == pkt->addr) { //回收地址和发送地址同
+                box->boxOffLineAlarm = 1;
                 offLine = 4;
                 loopData(box, pkt); //更新数据
                 envData(&(box->env), pkt);
@@ -508,8 +587,18 @@ int RtuThread::transDataV3(int addr)
                 box->rate.svalue = pkt->rate.svalue;
                 box->rate.smin = pkt->rate.smin;
                 box->rate.smax = pkt->rate.smax;
+                box->reCur.svalue = pkt->reCur.svalue;
+                box->reCur.smin = pkt->reCur.smin;
+                box->reCur.smax = pkt->reCur.smax;
+                box->zeroLineCur.svalue = pkt->zeroLineCur.svalue;
+                box->zeroLineCur.smin = pkt->zeroLineCur.smin;
+                box->zeroLineCur.smax = pkt->zeroLineCur.smax;
+                box->volUnbalance = pkt->volUnbalance;
+                box->curUnbalance = pkt->curUnbalance;
 
                 box->data.totalPow.value[0] = pkt->totalPow.ivalue;
+                box->data.totalPow.min[0] = pkt->totalPow.imin;
+                box->data.totalPow.max[0] = pkt->totalPow.imax;
                 thdDataV3(pkt);
             }
 

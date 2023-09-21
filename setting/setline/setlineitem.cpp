@@ -71,8 +71,8 @@ void SetLineItem::updateWidget(int bus, int line)
         setLabeColor(ui->volLab , objData->vol.alarm[line], 0);
     }
     else{
-        int max = busData->box[0].rate.smax*10;
-        int min = busData->box[0].rate.smin*10;
+        int max = busData->box[0].rate.smax;
+        int min = busData->box[0].rate.smin;
         int value = busData->box[0].rate.svalue;
         if(max > 0 && min > 0 && max > min && value >= min && value < max)
         {

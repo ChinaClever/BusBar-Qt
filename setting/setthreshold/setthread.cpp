@@ -1,5 +1,5 @@
 #include "setthread.h"
-#include "snmp/snmpthread.h"
+//#include "snmp/snmpthread.h"
 
 
 SetThread::SetThread(QObject *parent) : QThread(parent)
@@ -38,10 +38,10 @@ void SetThread::workDown()
                 if(item.box == 0) mRtuCmd->sendStartV3(item);
                 else mRtuCmd->sendPlugV3(item);
             }
-            if(gVerflag == 3){
-                gReadWriteflag = 2;
-                emit sendSetSnmpSig(&item);
-            }
+//            if(gVerflag == 3){
+//                gReadWriteflag = 2;
+//                emit sendSetSnmpSig(&item);
+//            }
         }
 
         mSetShm->setItem(item);

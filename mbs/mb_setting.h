@@ -1,9 +1,9 @@
 #ifndef MB_SETTING_H
 #define MB_SETTING_H
 
-#include "mb_env.h"
+#include "mb_object.h"
 
-class Mb_Setting : public Mb_Env
+class Mb_Setting : public Mb_Object
 {
 public:
     explicit Mb_Setting(QObject *parent = nullptr);

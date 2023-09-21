@@ -6,7 +6,7 @@
 #include "dbdevname.h"
 
 struct sThresholdItem{
-    int id;
+    int id=0;
     // 阈值类型 1 电压阈值;2 电流阈值;3 温度;4 有功功率;5 频率;6 总有功功率
     //7 线电压;8 零线电流;9 剩余电流
     int type;

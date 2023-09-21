@@ -28,7 +28,7 @@ LogBtnBar::LogBtnBar(QWidget *parent) :
     connect(ui->refreshBtn, SIGNAL(clicked()),this,SIGNAL(refreshSig()));
     connect(LogSignal::get(), SIGNAL(logTypeSig(int)), ui->comboBox,SLOT(setCurrentIndex(int)));
 
-    ui->exportBtn->setHidden(true);
+    //ui->exportBtn->setHidden(true);
     mExportDlg = new LogExportModelDlg(this);
     connect(mExportDlg, SIGNAL(exportSig(int)),this,SIGNAL(exportSig(int))); // 导出信号
 }
@@ -60,6 +60,7 @@ void LogBtnBar::on_exportBtn_clicked()
 {
     BeepThread::bulid()->beep();
     mExportDlg->show();
+    mExportDlg->move(0,0);
 }
 
 void LogBtnBar::on_clearBtn_clicked()

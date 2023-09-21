@@ -149,7 +149,7 @@ void TimeSettingDlg::timeSetup(void)
                           .arg(ui->secSpin->value());
     int ret = system(command.toLatin1().data());
     qDebug()<<command;
-    ret = system("hwclock -w");
+    ret = system("hwclock -f /dev/rtc0 -w");
  
     //int ret = system(command.toLatin1().data());
 

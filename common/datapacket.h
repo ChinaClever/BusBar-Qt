@@ -163,7 +163,7 @@ typedef struct _sBoxData {
 
     sTgObjData tgBox; // 插接箱统计信息
     sLineTgObjData lineTgBox;
-    char boxAlarm, boxVolAlarm, boxCurAlarm, boxEnvAlarm , boxPowerAlarm; // 插接箱告警
+    char boxAlarm, boxVolAlarm, boxCurAlarm, boxEnvAlarm , boxPowerAlarm , boxOffLineAlarm; // 插接箱告警
     char boxStatus; // 插接箱状态
     char boxSpec; //  0 表示 SI  1 表示 IP
     char boxName[NAME_LEN]; // 插接箱名称

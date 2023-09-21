@@ -23,21 +23,71 @@ void SetThresholdDlg::initSpinBox(sThresholdItem &item)
     int range = 63;
     QString str = "A";
     switch (item.type) {
-    case 1:  str = "V"; range = 400;  break;
-    case 2: if(!item.box) range = 650; str = "A";  break;
+    case 1:
+        {
+            str = "V"; range = 400;
+            ui->mindoubleSpinBox->setMaximum(range);
+            ui->maxdoubleSpinBox->setMaximum(range);
+            ui->mindoubleSpinBox->setSingleStep(0.1);
+            ui->maxdoubleSpinBox->setSingleStep(0.1);
+
+            ui->mindoubleSpinBox->setDecimals(1);
+            ui->maxdoubleSpinBox->setDecimals(1);
+            ui->mindoubleSpinBox->setValue(item.min/COM_RATE_VOL);
+            ui->maxdoubleSpinBox->setValue(item.max/COM_RATE_VOL);
+            ui->mindoubleSpinBox->setSuffix(str);
+            ui->maxdoubleSpinBox->setSuffix(str);
+        }
+        break;
+    case 2:
+            {
+            if(!item.box){
+                str = "A"; range = 650;
+            }
+            ui->mindoubleSpinBox->setMaximum(range);
+            ui->maxdoubleSpinBox->setMaximum(range);
+            ui->mindoubleSpinBox->setSingleStep(0.01);
+            ui->maxdoubleSpinBox->setSingleStep(0.01);
+
+            ui->mindoubleSpinBox->setDecimals(2);
+            ui->maxdoubleSpinBox->setDecimals(2);
+            ui->mindoubleSpinBox->setValue(item.min/COM_RATE_CUR);
+            ui->maxdoubleSpinBox->setValue(item.max/COM_RATE_CUR);
+            ui->mindoubleSpinBox->setSuffix(str);
+            ui->maxdoubleSpinBox->setSuffix(str);
+            }
+            break;
     case 3: str = "℃"; range = 99;  break;
     case 4:
         {
             str = "kW"; if(item.box)range = 130; else range = 1500;
             ui->mindoubleSpinBox->setMaximum(range);
             ui->maxdoubleSpinBox->setMaximum(range);
+            ui->mindoubleSpinBox->setSingleStep(0.01);
+            ui->maxdoubleSpinBox->setSingleStep(0.01);
+            ui->mindoubleSpinBox->setDecimals(2);
+            ui->maxdoubleSpinBox->setDecimals(2);
             ui->mindoubleSpinBox->setValue(item.min/COM_RATE_POW);
             ui->maxdoubleSpinBox->setValue(item.max/COM_RATE_POW);
             ui->mindoubleSpinBox->setSuffix(str);
             ui->maxdoubleSpinBox->setSuffix(str);
         }
         break;
-    case 5: str = "Hz"; range = 60; break;
+    case 5:
+        {
+            str = "Hz"; range = 70;
+            ui->mindoubleSpinBox->setMaximum(range);
+            ui->maxdoubleSpinBox->setMaximum(range);
+            ui->mindoubleSpinBox->setSingleStep(0.1);
+            ui->maxdoubleSpinBox->setSingleStep(0.1);
+            ui->mindoubleSpinBox->setDecimals(1);
+            ui->maxdoubleSpinBox->setDecimals(1);
+            ui->mindoubleSpinBox->setValue(item.min/COM_RATE_VOL);
+            ui->maxdoubleSpinBox->setValue(item.max/COM_RATE_VOL);
+            ui->mindoubleSpinBox->setSuffix(str);
+            ui->maxdoubleSpinBox->setSuffix(str);
+        }
+        break;
     }
 
     ui->minBox->setSuffix(str);
@@ -72,7 +122,7 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
 
 void SetThresholdDlg::set(sThresholdItem &item)
 {
-    int rate = 1;//int rate = 1;
+    int rate = 1;
     sBusData *busData = &(share_mem_get()->data[item.bus]);
     sObjData *obj = &(busData->box[item.box].data);
 
@@ -83,24 +133,32 @@ void SetThresholdDlg::set(sThresholdItem &item)
     else if(item.type == 4)
         unitPower = &(obj->pow);
     switch (item.type) {
-    case 1: unit = &(obj->vol); rate = 10; break;
-    case 2: unit = &(obj->cur); rate = 100; break;//rate = 10; break;
+    case 1: unit = &(obj->vol); /*rate = 10;*/ break;
+    case 2: unit = &(obj->cur); /*rate = 100;*/  break;//rate = 10; break;
     case 3: unit = &(busData->box[item.box].env.tem);break;
     case 4: unitPower = &(obj->pow);break;
+    case 5: rate = 10;break;
     }
-    if( item.type <= 3){
+    if( item.type == 3){
         ui->mindoubleSpinBox->hide();
         ui->maxdoubleSpinBox->hide();
-        item.min = unit->min[item.num] / rate;
-        item.max = unit->max[item.num] / rate;
+        /*item.min = unit->min[item.num] / rate;
+        item.max = unit->max[item.num] / rate;*/
+        item.min = unit->min[item.num];
+        item.max = unit->max[item.num];
+    }else if( item.type <= 2 ){
+        ui->minBox->hide();
+        ui->maxBox->hide();
+        item.min = unit->min[item.num];
+        item.max = unit->max[item.num];
     }else if( item.type == 4 ){
         ui->minBox->hide();
         ui->maxBox->hide();
-        item.min = unitPower->min[item.num] / rate;
-        item.max = unitPower->max[item.num] / rate;
+        item.min = unitPower->min[item.num];
+        item.max = unitPower->max[item.num];
     }else{
-        ui->mindoubleSpinBox->hide();
-        ui->maxdoubleSpinBox->hide();
+        ui->minBox->hide();
+        ui->maxBox->hide();
         item.min = busData->box[item.box].rate.smin;
         item.max = busData->box[item.box].rate.smax;
     }
@@ -116,9 +174,18 @@ bool SetThresholdDlg::checkData()
     bool ret = true;
     uint min = 0;
     uint max = 0;
-    if(mItem.type != 4){
+    if(mItem.type == 3){
         min = ui->minBox->value();
         max = ui->maxBox->value();
+    }else if(mItem.type == 1){
+        min = ui->mindoubleSpinBox->value()*COM_RATE_VOL;
+        max = ui->maxdoubleSpinBox->value()*COM_RATE_VOL;
+    }else if(mItem.type == 2){
+        min = ui->mindoubleSpinBox->value()*COM_RATE_CUR;
+        max = ui->maxdoubleSpinBox->value()*COM_RATE_CUR;
+    }else if(mItem.type == 5){
+        min = ui->mindoubleSpinBox->value()*COM_RATE_VOL;
+        max = ui->maxdoubleSpinBox->value()*COM_RATE_VOL;
     }else{
         min = ui->mindoubleSpinBox->value()*COM_RATE_POW;
         max = ui->maxdoubleSpinBox->value()*COM_RATE_POW;

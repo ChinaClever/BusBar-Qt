@@ -44,7 +44,7 @@ include(services/services.pri)
 include(shm/shm.pri)
 include(net/net.pri)
 include(thd/thd.pri)
-include(snmp/snmp.pri)
+#include(snmp/snmp.pri)
 include(mbs/mbs.pri)
 
 SOURCES += \

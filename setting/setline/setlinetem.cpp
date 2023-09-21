@@ -13,12 +13,12 @@ SetLineTem::SetLineTem(QWidget *parent, bool flag) :
         ui->label_2->setText(tr("B相温度"));
         ui->label_3->setText(tr("C相温度"));
         ui->label_5->setText(tr("零线温度"));
-        ui->label_5->show();
+        showWid();
     }else{
         ui->label->setText(tr("A相功率"));
         ui->label_2->setText(tr("B相功率"));
         ui->label_3->setText(tr("C相功率"));
-        ui->label_5->hide();
+        hideWid();
     }
     timer = new QTimer(this);
     timer->start(2000);
@@ -30,6 +30,25 @@ SetLineTem::~SetLineTem()
     delete ui;
 }
 
+void SetLineTem::showWid()
+{
+    ui->label_5->show();
+    ui->label_6->show();
+    ui->label_7->show();
+    ui->temlab->show();
+    ui->humlab->show();
+    ui->label_8->show();
+}
+
+void SetLineTem::hideWid()
+{
+    ui->label_5->hide();
+    ui->label_6->hide();
+    ui->label_7->hide();
+    ui->temlab->hide();
+    ui->humlab->hide();
+    ui->label_8->hide();
+}
 
 void SetLineTem::updateWid()
 {
@@ -42,6 +61,11 @@ void SetLineTem::updateWid()
             btn[i]->setText(str);
             sDataUnit *unit = &(get_share_mem()->data[mBus].box[0].env.tem);
             setBtnColor(btn[i] , unit->alarm[i], unit->crAlarm[i]);
+        }
+        sDataUnit *it = &(get_share_mem()->data[0].box[0].env.tem);
+        if(it->value[7] !=0 && it->value[8] != 0){
+            ui->temlab->setText(QString::number(it->value[7])+"℃");
+            ui->humlab->setText(QString::number(it->value[8])+"%");
         }
     }else{
         for(int i=0; i<SENSOR_NUM; ++i) {

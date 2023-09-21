@@ -19,6 +19,7 @@ void Modbus_Object::initModbusSerial(const sModbusSetting &set)
     setModbus(QModbusDevice::SerialParityParameter, set.parity);
     setModbus(QModbusDevice::SerialDataBitsParameter, set.dataBits);
     setModbus(QModbusDevice::SerialStopBitsParameter, set.stopBits);
+
 }
 
 void Modbus_Object::setModbus(int parameter, const QVariant &value)

@@ -6,13 +6,10 @@
 #include <QDateTime>
 #include <QDebug>
 #include "common.h"
-//#include "smtp/emailwid.h"
-#include "netsettingdlg.h"
+//#include "netsettingdlg.h"
 #include "othersettingdlg.h"
-#include "ipsettingdlg.h"
-#if (SI_RTUWIFI == 1)
-#include "channelsettingdlg.h"
-#endif
+//#include "modedlg.h"
+#include "localnetsettingdlg.h"
 
 namespace Ui {
 class SystemSettingDlg;
@@ -29,16 +26,15 @@ public:
 signals:
     void busChangedSig(int);
     #endif
+    void initWid();
 
 private:
     Ui::SystemSettingDlg *ui;
-    //EmailWid *mEmailWid;
-    NetSettingDlg *mNetWid;
+//    NetSettingDlg *mNetWid;
     OtherSettingDlg *mOtherWid;
-    IpSettingDlg* mIpWid;
-    #if (SI_RTUWIFI == 1)
-    ChannelSettingDlg* mChannelWid;
-    #endif
+//    IpSettingDlg *mIpWid;
+//    ModeDlg *mModeWid;
+    LocalNetSettingDlg *mLocaNetSettingWid;
 };
 
 #endif // SYSTEMSETTINGDLG_H

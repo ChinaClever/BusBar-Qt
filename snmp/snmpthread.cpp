@@ -44,8 +44,9 @@ int SnmpThread::initSnmp(netsnmp_session &session , netsnmp_session **ss)
 
     snmp_sess_init(&session);
     session.peername = strdup(ip.toStdString().c_str());
-//    session.version = SNMP_VERSION_2c;
-//    session.community = (u_char*)"public";
+    //    session.version = SNMP_VERSION_2c;
+    //    session.community = (u_char*)"public";
+    //    session.community_len = strlen("public");
     session.version = SNMP_VERSION_3;
     session.securityName = strdup(name.toStdString().c_str());
     session.securityNameLen = strlen(session.securityName);
@@ -53,6 +54,16 @@ int SnmpThread::initSnmp(netsnmp_session &session , netsnmp_session **ss)
     session.securityAuthProto = usmHMACMD5AuthProtocol;
     session.securityAuthProtoLen = USM_AUTH_PROTO_MD5_LEN;
     session.securityAuthKeyLen = USM_AUTH_KU_LEN;
+    //    session.contextEngineID = (u_char*)strdup("8000000003020101");
+    //    session.contextEngineIDLen = strlen((char*)session.contextEngineID);
+    //    session.engineBoots = 0;
+    //    session.engineTime = 0;
+    //    session.contextName = strdup("contextName");
+    //    session.contextNameLen = strlen(session.contextName);
+    //    session.securityEngineID = (u_char*)strdup("8000000003020102");
+    //    session.securityEngineIDLen = strlen((char*)session.securityEngineID);
+    session.retries = 2;
+    session.timeout = 500000;
 
     if(generate_Ku(session.securityAuthProto ,
                     session.securityAuthProtoLen,
@@ -90,7 +101,7 @@ int SnmpThread::initSnmp(netsnmp_session &session , netsnmp_session **ss)
 
 
 
-int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *pdu,int index)
+int SnmpThread::walkSnmp(netsnmp_session & session,netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *pdu,int index)
 {
 
     oid anOID[]={1,3,6,1,4,1,30966,12,1}; // OID
@@ -110,17 +121,17 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
         if(  index <= 9 )
         {
             //if( (t->online1 >> (key - 1)) & 0x03 == 1 ){
-            anOID[(int)anOID_len - 1] = key;
-            end_oid[(int)end_len - 1] = key + 1;
+            anOID[(int)anOID_len - 1] = index;
+            end_oid[(int)end_len - 1] = index + 1;
             //}
         }
         //if( t->online2 != 0 && index > 9 && index <= 18 ){
         if( index > 9 && index <= 18 )
         {
-            key -= 9;
+            //key -= 9;
             //if( (t->online2 >> (key - 1)) & 0x03 == 1 ){
-            anOID[(int)anOID_len - 1] = key;
-            end_oid[(int)end_len - 1] = key + 1;
+            anOID[(int)anOID_len - 1] = index;
+            end_oid[(int)end_len - 1] = index + 1;
             //}
         }
     }
@@ -132,7 +143,7 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
     bool endflag = false;
     snmp_add_null_var(pdu, anOID, anOID_len);
 
-    // 循环进行SNMP Walk
+    // 循环进行SNMP Walk//snmp_synch_response
     while (running && (status = snmp_synch_response(*ss, pdu, &response)) == STAT_SUCCESS) {
         if (response->errstat == SNMP_ERR_NOERROR) {
             // 遍历每个返回的变量绑定
@@ -154,9 +165,10 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
                         response = NULL;
                     }
                     endflag = true;
-                    sBoxData *t= & mBusData->box[index-1];
-                    if( t && t->offLine > 0 ) t->offLine--;
-                    qDebug()<<"No Such Object t->offLine   "<<index << (t->offLine-'0')<<endl;
+                    sBoxData *it= & mBusData->box[index-1];
+                    //it->offLine = 5;///
+                    if( it && it->offLine > 0 ) it->offLine--;
+                    qDebug()<<"No Such Object t->offLine   "<<index << (it->offLine-'0')<<endl;
                     break;
                 }
                 //                msleep(100);
@@ -183,9 +195,9 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
                 snmp_free_pdu(response);
                 response = NULL;
             }
-            sBoxData *t= & mBusData->box[index-1];
-            if( t && t->offLine > 0 ) t->offLine--;
-            qDebug()<<index << " Error in packet: t->offLine   "<<(t->offLine-'0')<<endl;
+            sBoxData *it= & mBusData->box[index-1];
+            if( it && it->offLine > 0 ) it->offLine--;
+            qDebug()<<index << " Error in packet: t->offLine   "<<(it->offLine-'0')<<endl;
             break;
         }
 
@@ -193,19 +205,30 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
     }
 
     if(status == STAT_TIMEOUT){
+        qDebug()<< "snmp request failed:"<<snmp_api_errstring((*ss)->s_snmp_errno)<<endl;
         if(response){
+            qDebug()<< "error in snmp response:"<<snmp_api_errstring(response->errstat)<<endl;
+
             snmp_free_pdu(response);
             response = NULL;
         }
-        sBoxData *t= & mBusData->box[index-1];
-        if( t && t->offLine > 0 ) t->offLine--;
+        sBoxData *it= & mBusData->box[index-1];
+        if( it && it->offLine > 0 ) t->offLine--;
         qDebug()<<"time out  "<<index << (t->offLine-'0')<<endl;
+
         if(index == 1) {
             for(int off = 2 ; off <= mBusData->boxNum+1 ; off++){
-                t = & mBusData->box[off-1];
-                if( t && t->offLine > 0 ) t->offLine--;
+                it = & mBusData->box[off-1];
+                if( it && it->offLine > 0 ) it->offLine--;
+                if( it && it->offLine == 0 ){
+//                    if(*ss){
+//                        snmp_close(*ss);
+//                        *ss = NULL;
+//                    }
+//                    initSnmp(session , ss);
+                }
+
             }
-            //mClose = true;
         }
     }
 
@@ -214,18 +237,16 @@ int SnmpThread::walkSnmp(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu 
             snmp_free_pdu(response);
             response = NULL;
         }
-        sBoxData *t= & mBusData->box[index-1];
-        if( t && t->offLine > 0 ) t->offLine--;
-        qDebug()<<"STAT_ERROR  "<<index << (t->offLine-'0')<<endl;
+        sBoxData *it= & mBusData->box[index-1];
+        if( it && it->offLine > 0 ) it->offLine--;
+        qDebug()<<"STAT_ERROR  "<<index << (it->offLine-'0')<<endl;
         if(index == 1) {
             for(int off = 2 ; off <= mBusData->boxNum+1 ; off++){
-                t = & mBusData->box[off-1];
-                if( t && t->offLine > 0 ) t->offLine--;
+                it = & mBusData->box[off-1];
+                if( it && it->offLine > 0 ) it->offLine--;
             }
-            //mClose = true;
         }
     }
-
     return 0;
 }
 
@@ -245,6 +266,7 @@ void SnmpThread::startBoxBaseInfo(QString val)
     case 4: t->version = val.remove("STRING:").replace("\"","").simplified().remove(".").toUInt(&ok);break;
     case 5: t->workMode = val.remove("INTEGER:").simplified().toUInt(&ok);break;
     case 6: mBusData->boxNum = val.remove("INTEGER:").simplified().toUInt(&ok);break;
+        // mBusData->boxNum = 10;break;
     case 7: t->online1 = val.remove("INTEGER:").simplified().toUInt(&ok);break;
     case 8: t->online2 = val.remove("INTEGER:").simplified().toUInt(&ok);break;
     case 9: t->buzzerStatus = val.remove("INTEGER:").simplified().toUInt(&ok);break;
@@ -264,23 +286,23 @@ void SnmpThread::startBoxEleParaInfo(QString val)
     sBoxData *t= & mBusData->box[0];
     bool ok;
     switch(item){
-    case 1: t->reCur.svalue = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat()*COM_RATE_CUR;break;
+    case 1: t->reCur.svalue = (val.remove("STRING:").replace("\"","").simplified().toFloat()*(short)COM_RATE_CUR);break;
     case 2: t->reCur.salarm = val.remove("INTEGER:").simplified().toUInt(&ok);break;
-    case 3: t->zeroLineCur.svalue = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat()*COM_RATE_CUR;break;
+    case 3: t->zeroLineCur.svalue = (val.remove("STRING:").replace("\"","").simplified().toFloat()*(short)COM_RATE_CUR);break;
     case 4: t->zeroLineCur.salarm = val.remove("INTEGER:").simplified().toUInt(&ok);break;
-    case 5: t->totalApPow = (unsigned long long)val.remove("STRING:").replace("\"","").simplified().toFloat()*COM_RATE_POW;break;
-    case 6: t->totalPow.ivalue = (unsigned long long)val.remove("STRING:").replace("\"","").simplified().toFloat()*COM_RATE_POW;break;
+    case 5: t->totalApPow = (unsigned long long)(val.remove("STRING:").replace("\"","").simplified().toFloat()*(short)COM_RATE_POW);break;
+    case 6: t->totalPow.ivalue = (unsigned long long)(val.remove("STRING:").replace("\"","").simplified().toFloat()*(short)COM_RATE_POW);break;
     case 7: t->totalPow.ialarm = val.remove("INTEGER:").simplified().toUInt(&ok);break;
     case 8: break;
-    case 9: t->rate.svalue = (ushort)val.remove("INTEGER:").simplified().toUInt(&ok)/10;break;
-    case 10: t->rate.salarm = (ushort)val.remove("INTEGER:").simplified().toUInt(&ok);break;
+    case 9: t->rate.svalue = val.remove("INTEGER:").simplified().toUInt(&ok);break;
+    case 10: t->rate.salarm = val.remove("INTEGER:").simplified().toUInt(&ok);break;
     case 11: t->volUnbalance = (uint)val.remove("INTEGER:").simplified().toUInt(&ok);break;
     case 12: t->curUnbalance = (uint)val.remove("INTEGER:").simplified().toUInt(&ok);break;
-    case 13: t->reCur.smax = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat()*COM_RATE_CUR;break;
-    case 14: t->zeroLineCur.smin = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat()*COM_RATE_CUR;break;
-    case 15: t->zeroLineCur.smax = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat()*COM_RATE_CUR;break;
-    case 16: t->totalPow.imin = (unsigned long long)val.remove("STRING:").replace("\"","").simplified().toFloat()*COM_RATE_POW;break;
-    case 17: t->totalPow.imax = (unsigned long long)val.remove("STRING:").replace("\"","").simplified().toFloat()*COM_RATE_POW;break;
+    case 13: t->reCur.smax = (val.remove("STRING:").replace("\"","").simplified().toFloat()*(short)COM_RATE_CUR);break;
+    case 14: t->zeroLineCur.smin = (val.remove("STRING:").replace("\"","").simplified().toFloat()*(short)COM_RATE_CUR);break;
+    case 15: t->zeroLineCur.smax = (val.remove("STRING:").replace("\"","").simplified().toFloat()*(short)COM_RATE_CUR);break;
+    case 16: t->totalPow.imin = (unsigned long long)(val.remove("STRING:").replace("\"","").simplified().toFloat()*(short)COM_RATE_POW);break;
+    case 17: t->totalPow.imax = (unsigned long long)(val.remove("STRING:").replace("\"","").simplified().toFloat()*(short)COM_RATE_POW);break;
     case 18: t->rate.smin = (ushort)val.remove("INTEGER:").simplified().toUInt(&ok);break;
     case 19: t->rate.smax = (ushort)val.remove("INTEGER:").simplified().toUInt(&ok);break;
     default: break;
@@ -333,31 +355,31 @@ void SnmpThread::loopMsInformation(QString val)
     bool ok;
     if(t){
         switch(item){
-        case 1:  t->lineVol.value[line] = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
+        case 1:  t->lineVol.value[line] = (val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_VOL);break;
         case 2:  t->lineVol.alarm[line] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
-        case 3:  t->vol.value[line] = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
+        case 3:  t->vol.value[line] = (val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_VOL);break;
         case 4:  t->vol.alarm[line] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
-        case 5:  t->cur.value[line] = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_CUR;break;
+        case 5:  t->cur.value[line] = (val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_CUR);break;
         case 6:  t->cur.alarm[line] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
-        case 7:  t->pow.value[line] = (uint)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
+        case 7:  t->pow.value[line] = (uint)(val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_POW);break;
         case 8:  t->pow.alarm[line] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
-        case 9:  t->reactivePower[line] = (uint)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
-        case 10:  t->apPow[line] = (uint)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
-        case 11:  t->pf[line] = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_PF;break;
-        case 12:  t->ele[line] = (uint)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_ELE;break;
+        case 9:  t->reactivePower[line] = (uint)(val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_POW);break;
+        case 10:  t->apPow[line] = (uint)(val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_POW);break;
+        case 11:  t->pf[line] = (val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_PF);break;
+        case 12:  t->ele[line] = (uint)(val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_ELE);break;
 
         case 13: parseVolHar( val , line );break;
         case 14: parseCurHar( val , line );break;
-        case 15:  t->pl[line] = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_PF;break;
+        case 15:  t->pl[line] = (val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_PF);break;
 
-        case 16:  t->lineVol.min[line] = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
-        case 17:  t->lineVol.max[line] = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
-        case 18:  t->vol.min[line] = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
-        case 19:  t->vol.max[line] = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
-        case 20:  t->cur.min[line] = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_CUR;break;
-        case 21:  t->cur.max[line] = (ushort)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_CUR;break;
-        case 22:  t->pow.min[line] = (uint)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
-        case 23:  t->pow.max[line] = (uint)val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
+        case 16:  t->lineVol.min[line] = (val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_VOL);break;
+        case 17:  t->lineVol.max[line] = (val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_VOL);break;
+        case 18:  t->vol.min[line] = (val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_VOL);break;
+        case 19:  t->vol.max[line] = (val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_VOL);break;
+        case 20:  t->cur.min[line] = (val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_CUR);break;
+        case 21:  t->cur.max[line] = (val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_CUR);break;
+        case 22:  t->pow.min[line] = (uint)(val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_POW);break;
+        case 23:  t->pow.max[line] = (uint)(val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_POW);break;
         default: break;
         }
     }
@@ -445,27 +467,27 @@ void SnmpThread::loopSlaveInformation(QString val , int addr)
     if( loop <= mBusData->box[addr-1].loopNum ){
         bool ok;
         switch(item){
-        case 1: t->data.vol.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
+        case 1: t->data.vol.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_VOL;break;
         case 2: t->data.vol.alarm[loop-1] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-        case 3: t->data.cur.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_CUR;break;
+        case 3: t->data.cur.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_CUR;break;
         case 4: t->data.cur.alarm[loop-1] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-        case 5: t->data.pow.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
+        case 5: t->data.pow.value[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_POW;break;
         case 6: t->data.pow.alarm[loop-1] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-        case 7: t->data.reactivePower[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
-        case 8: t->data.apPow[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
-        case 9: t->data.pf[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_PF;break;
-        case 10: t->data.ele[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_ELE;break;
+        case 7: t->data.reactivePower[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_POW;break;
+        case 8: t->data.apPow[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_POW;break;
+        case 9: t->data.pf[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_PF;break;
+        case 10: t->data.ele[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_ELE;break;
 
         case 11: t->data.sw[loop-1] = val.remove("INTEGER:").replace("\"","").simplified().toUInt(&ok)==1?1:0;break;
-        case 12: t->data.vol.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
-        case 13: t->data.vol.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_VOL;break;
-        case 14: t->data.cur.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_CUR;break;
-        case 15: t->data.cur.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_CUR;break;
-        case 16: t->data.pow.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
-        case 17: t->data.pow.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_POW;break;
+        case 12: t->data.vol.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_VOL;break;
+        case 13: t->data.vol.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_VOL;break;
+        case 14: t->data.cur.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_CUR;break;
+        case 15: t->data.cur.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_CUR;break;
+        case 16: t->data.pow.min[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_POW;break;
+        case 17: t->data.pow.max[loop-1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_POW;break;
         default: break;
         }
     }
@@ -478,29 +500,29 @@ void SnmpThread::temSlaveInformation(QString val , int addr)
 
     bool ok;
     switch(item){
-    case 1: t->env.tem.value[0] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 1: t->env.tem.value[0] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
     case 2: t->env.tem.alarm[0] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-    case 3: t->env.tem.value[1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 3: t->env.tem.value[1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
     case 4: t->env.tem.alarm[1] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-    case 5: t->env.tem.value[2] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 5: t->env.tem.value[2] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
     case 6: t->env.tem.alarm[2] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-    case 7: t->env.tem.value[3] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 7: t->env.tem.value[3] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
     case 8: t->env.tem.alarm[3] = val.remove("INTEGER:").simplified().toUInt(&ok);break;
 
-    case 9: t->env.tem.min[0] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
-    case 10: t->env.tem.max[0] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 9: t->env.tem.min[0] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
+    case 10: t->env.tem.max[0] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
 
-    case 11: t->env.tem.min[1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
-    case 12: t->env.tem.max[1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 11: t->env.tem.min[1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
+    case 12: t->env.tem.max[1] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
 
-    case 13: t->env.tem.min[2] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
-    case 14: t->env.tem.max[2] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 13: t->env.tem.min[2] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
+    case 14: t->env.tem.max[2] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
 
-    case 15: t->env.tem.min[3] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
-    case 16: t->env.tem.max[3] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*COM_RATE_TEM;break;
+    case 15: t->env.tem.min[3] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
+    case 16: t->env.tem.max[3] = val.remove("STRING:").replace("\"","").simplified().toFloat(&ok)*(short)COM_RATE_TEM;break;
 
     default: break;
     }
@@ -562,12 +584,12 @@ bool SnmpThread::setOid(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *
     bool ret = false;
     if(mItems.size()){
         sThresholdItem item = mItems.first();
-//        qDebug() << " item bus "<<item.bus
-//                 << " item box "<<item.box
-//                 << " item num "<<item.num
-//                 << " item type "<<item.type
-//                 << " item min "<<item.min
-//                 << " item max "<<item.max;
+        //        qDebug() << " item bus "<<item.bus
+        //                 << " item box "<<item.box
+        //                 << " item num "<<item.num
+        //                 << " item type "<<item.type
+        //                 << " item min "<<item.min
+        //                 << " item max "<<item.max;
 
         oid target_min[13],target_max[13];
         char type = 's';
@@ -575,23 +597,30 @@ bool SnmpThread::setOid(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *
         char max_value[20];  // 要设置的最大值
         if( item.box == 0 ){//master
             switch(item.type){
-            case 1: {getMasterVolOid( item , target_min , target_max );
+            case 1: {
+                getMasterVolOid( item , target_min , target_max );
                 //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
-                QString str1 = QString::number(item.min/1.0, 'f' , 1);
-                QString str2 = QString::number(item.max/1.0, 'f' , 1);
+                //                QString str1 = QString::number(item.min/10.0, 'f' , 1);
+                //                QString str2 = QString::number(item.max/10.0, 'f' , 1);
+                QString str1 = QString::number(item.min);
+                QString str2 = QString::number(item.max);
                 qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
                 qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
                 break;
             }
-            case 2:{ getMasterCurOid( item , target_min , target_max);
+            case 2:{
+                getMasterCurOid( item , target_min , target_max);
                 //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
-                QString str1 = QString::number(item.min/1.0, 'f' , 2);
-                QString str2 = QString::number(item.max/1.0, 'f' , 2);
+                //                QString str1 = QString::number(item.min/100.0, 'f' , 2);
+                //                QString str2 = QString::number(item.max/100.0, 'f' , 2);
+                QString str1 = QString::number(item.min);
+                QString str2 = QString::number(item.max);
                 qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
                 qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
                 break;
             }
-            case 3:{ getMasterTemperatureOid( item , target_min , target_max );
+            case 3:{
+                getMasterTemperatureOid( item , target_min , target_max );
                 QString str1 = QString::number(item.min);
                 QString str2 = QString::number(item.max);
                 qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
@@ -599,15 +628,19 @@ bool SnmpThread::setOid(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *
                 //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
                 break;
             }
-            case 4:{ getMasterActivePowerOid( item , target_min , target_max );
-                QString str1 = QString::number(item.min/1000.0, 'f' , 3);
-                QString str2 = QString::number(item.max/1000.0, 'f' , 3);
+            case 4:{
+                getMasterActivePowerOid( item , target_min , target_max );
+                //                QString str1 = QString::number(item.min/1000.0, 'f' , 3);
+                //                QString str2 = QString::number(item.max/1000.0, 'f' , 3);
+                QString str1 = QString::number(item.min);
+                QString str2 = QString::number(item.max);
                 qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
                 qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
                 //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
                 break;
             }
-            case 5:{ getMasterFrequencyOid( target_min , target_max );type = 'i';
+            case 5:{
+                getMasterFrequencyOid( target_min , target_max );type = 'i';
                 //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
                 QString str1 = QString::number(item.min);
                 QString str2 = QString::number(item.max);
@@ -620,8 +653,10 @@ bool SnmpThread::setOid(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *
             switch(item.type){
             case 1: {
                 getSlaveVolOid( item , target_min , target_max );
-                QString str1 = QString::number(item.min/1.0, 'f' , 1);
-                QString str2 = QString::number(item.max/1.0, 'f' , 1);
+                //                QString str1 = QString::number(item.min/10.0, 'f' , 1);
+                //                QString str2 = QString::number(item.max/10.0, 'f' , 1);
+                QString str1 = QString::number(item.min);
+                QString str2 = QString::number(item.max);
                 qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
                 qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
 
@@ -630,8 +665,10 @@ bool SnmpThread::setOid(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *
             }
             case 2: {
                 getSlaveCurOid( item , target_min , target_max);
-                QString str1 = QString::number(item.min/1.0, 'f' , 1);
-                QString str2 = QString::number(item.max/1.0, 'f' , 1);
+                //                QString str1 = QString::number(item.min/100.0, 'f' , 1);
+                //                QString str2 = QString::number(item.max/100.0, 'f' , 1);
+                QString str1 = QString::number(item.min);
+                QString str2 = QString::number(item.max);
                 qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
                 qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
                 //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
@@ -646,8 +683,10 @@ bool SnmpThread::setOid(netsnmp_session **ss,netsnmp_pdu *response,netsnmp_pdu *
                 break;
             }
             case 4:{ getSlaveActivePowerOid( item , target_min , target_max );
-                QString str1 = QString::number(item.min/1000.0, 'f' , 3);
-                QString str2 = QString::number(item.max/1000.0, 'f' , 3);
+                //                QString str1 = QString::number(item.min/1000.0, 'f' , 3);
+                //                QString str2 = QString::number(item.max/1000.0, 'f' , 3);
+                QString str1 = QString::number(item.min);
+                QString str2 = QString::number(item.max);
                 qstrncpy(min_value , str1.toLatin1().data() , str1.size()+1);
                 qstrncpy(max_value , str2.toLatin1().data() , str2.size()+1);
                 //for(int i = 0 ; i < OID_LENGTH(target_o) ; i++) qDebug()<<target_min[i];
@@ -701,25 +740,25 @@ void SnmpThread::run()
     netsnmp_pdu *response = NULL;
     netsnmp_pdu *pdu = NULL;
 
-
-    initSnmp(session , &ss);
-    while(isRun)
-    {
-        if(gVerflag == 3){
-
+    if(gVerflag == 3){
+        initSnmp(session , &ss);
+        while(isRun)
+        {
             for(int index = 1 ; index <= mBusData->boxNum+1 ; ){
                 if(gReadWriteflag == 1){
-                    walkSnmp(&ss , response , pdu , index);
+                    walkSnmp(session, &ss , response , pdu , index);
                     index++;
-                    if(mClose) break;
+                    //if(mClose) break;
                 }else{
                     setOid(&ss , response , pdu);
                     gReadWriteflag = 1;
                 }
             }
+            //if(mClose) isRun = false;
+
         }
+        releaseCon(session , &ss , response);
     }
-    releaseCon(session , &ss , response);
 
 }
 
@@ -828,18 +867,18 @@ void SnmpThread::getSlaveVolOid(sThresholdItem &item , oid* target_min, oid *tar
     int loop = item.num + 1;
     for(int i = 0 ; i < list.size() ; i++){
         if(i == list.size() - 5) {
-           target_min[i] = box;
-           target_max[i] = box;
+            target_min[i] = box;
+            target_max[i] = box;
         }else if(i == list.size() - 3){
-           target_min[i] = loop;
-           target_max[i] = loop;
+            target_min[i] = loop;
+            target_max[i] = loop;
         }else if(i == list.size() - 2){
-           target_min[i] = list.at(i).toInt();
-           target_max[i] = list.at(i).toInt() + 1;
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt() + 1;
         }
         else{
-           target_min[i] = list.at(i).toInt();
-           target_max[i] = list.at(i).toInt();
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt();
         }
     }
 }
@@ -852,18 +891,18 @@ void SnmpThread::getSlaveCurOid(sThresholdItem &item , oid* target_min, oid *tar
     int loop = item.num + 1;
     for(int i = 0 ; i < list.size() ; i++){
         if(i == list.size() - 5) {
-           target_min[i] = box;
-           target_max[i] = box;
+            target_min[i] = box;
+            target_max[i] = box;
         }else if(i == list.size() - 3){
-           target_min[i] = loop;
-           target_max[i] = loop;
+            target_min[i] = loop;
+            target_max[i] = loop;
         }else if(i == list.size() - 2){
-           target_min[i] = list.at(i).toInt();
-           target_max[i] = list.at(i).toInt() + 1;
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt() + 1;
         }
         else{
-           target_min[i] = list.at(i).toInt();
-           target_max[i] = list.at(i).toInt();
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt();
         }
     }
 }
@@ -876,18 +915,18 @@ void SnmpThread::getSlaveActivePowerOid(sThresholdItem &item , oid* target_min, 
     int loop = item.num + 1;
     for(int i = 0 ; i < list.size() ; i++){
         if(i == list.size() - 5) {
-           target_min[i] = box;
-           target_max[i] = box;
+            target_min[i] = box;
+            target_max[i] = box;
         }else if(i == list.size() - 3){
-           target_min[i] = loop;
-           target_max[i] = loop;
+            target_min[i] = loop;
+            target_max[i] = loop;
         }else if(i == list.size() - 2){
-           target_min[i] = list.at(i).toInt();
-           target_max[i] = list.at(i).toInt() + 1;
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt() + 1;
         }
         else{
-           target_min[i] = list.at(i).toInt();
-           target_max[i] = list.at(i).toInt();
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt();
         }
     }
 }
@@ -899,15 +938,15 @@ void SnmpThread::getSlaveTemperatureOid(sThresholdItem &item , oid* target_min, 
     int box = item.box + 1;
     for(int i = 0 ; i < list.size() ; i++){
         if(i == list.size() - 4) {
-           target_min[i] = box;
-           target_max[i] = box;
+            target_min[i] = box;
+            target_max[i] = box;
         }else if(i == list.size() - 2){
-           target_min[i] = item.num * 2 + 9;
-           target_max[i] = item.num * 2 + 10;
+            target_min[i] = item.num * 2 + 9;
+            target_max[i] = item.num * 2 + 10;
         }
         else{
-           target_min[i] = list.at(i).toInt();
-           target_max[i] = list.at(i).toInt();
+            target_min[i] = list.at(i).toInt();
+            target_max[i] = list.at(i).toInt();
         }
     }
 }

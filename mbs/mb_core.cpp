@@ -7,8 +7,10 @@
 
 sModbusSetting Mb_Core::modbusCfg;
 Mb_Core::Mb_Core(QObject *parent) : QThread{parent}
-{    
-    mRtu = new Mb_Update(this);  mTcp = new Mb_Update(this); mCfg = &modbusCfg;
+{
+    mRtu = new Mb_Update(this);
+    mTcp = new Mb_Update(this);
+    mCfg = &modbusCfg;
     connect(this, &Mb_Core::connectTcpSig, this, &Mb_Core::connectTcpSlot);
     connect(this, &Mb_Core::connectRtuSig, this, &Mb_Core::connectRtuSlot);
     mTimer = new QTimer(this); mTimer->start(1000);
@@ -27,9 +29,8 @@ Mb_Core *Mb_Core::build(QObject *parent)
 
 void Mb_Core::initFunSlot()
 {
-     mCfg->enTcp = 1;
-     mCfg->port = 502;
-    //cm::masterDev()->cfg.param.devMode = DevMode::DM_Rtu;/////////////////
+    mCfg->enTcp = 1;
+    mCfg->port = 502;
     mCfg->enRtu = 1;/////////////////
 
     emit connectTcpSig();
