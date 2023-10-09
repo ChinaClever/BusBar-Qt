@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
-#include "frminput.h"
-#include "frmnum.h"
+#include "common/keyboard/frminput.h"
+#include "common/keyboard/frmnum.h"
 
 bool appendFile(const QString &msg)
 {

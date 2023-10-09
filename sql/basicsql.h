@@ -3,7 +3,7 @@
 
 #include <QtSql>
 #include <QObject>
-#include "common.h"
+#include "common/common.h"
 
 
 struct DbBasicItem{

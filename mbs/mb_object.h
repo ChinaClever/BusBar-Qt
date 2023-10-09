@@ -1,6 +1,6 @@
 #ifndef MB_OBJECT_H
 #define MB_OBJECT_H
-#include "modbus_slavertu.h"
+#include "common/modbus/modbus_slavertu.h"
 
 class Mb_Object : public Modbus_SlaveRtu
 {

@@ -2,7 +2,7 @@
 #define PDUHASHSAVECOM_H
 
 #include "netdataformat.h"
-#include "common.h"
+#include "common/common.h"
 
 #define NET_DATA_VERSION		2 /*IP设备通讯类型*/
 #define OFF_LINE_TIME   35

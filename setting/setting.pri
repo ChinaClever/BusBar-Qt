@@ -12,7 +12,7 @@ HEADERS += \
     $$PWD/setsystem/passordsettingdlg.h \
     $$PWD/setsystem/checkpassworddlg.h \
     $$PWD/setthreshold/setkey.h \
-    $$PWD/setthreshold/myspinbox.h \
+    #$$PWD/setthreshold/myspinbox.h \
     $$PWD/setthreshold/mylabel.h \
     $$PWD/setnames/setnameswid.h \
     $$PWD/setnames/setnamedlg.h \
@@ -44,7 +44,7 @@ SOURCES += \
     $$PWD/setsystem/passordsettingdlg.cpp \
     $$PWD/setsystem/checkpassworddlg.cpp \
     $$PWD/setthreshold/setkey.cpp \
-    $$PWD/setthreshold/myspinbox.cpp \
+    #$$PWD/setthreshold/myspinbox.cpp \
     $$PWD/setthreshold/mylabel.cpp \
     $$PWD/setnames/setnameswid.cpp \
     $$PWD/setnames/setnamedlg.cpp \

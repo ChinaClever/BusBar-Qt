@@ -2,7 +2,7 @@
 #define LINETOTALWID_H
 
 #include <QWidget>
-#include "common.h"
+#include "common/common.h"
 
 namespace Ui {
 class LineTotalWid;

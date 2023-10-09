@@ -2,7 +2,7 @@
 #define CHANNELSETTINGDLG_H
 
 #include <QWidget>
-#include "common.h"
+#include "common/common.h"
 #include "modbus/rtuthread.h"
 #define CH1 "435"
 namespace Ui {

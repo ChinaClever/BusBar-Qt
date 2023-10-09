@@ -1,5 +1,5 @@
 #include "dpbeepthread.h"
-#include "beepthread.h"
+#include "common/beep/beepthread.h"
 
 DpBeepThread::DpBeepThread(QObject *parent) : QThread(parent)
 {

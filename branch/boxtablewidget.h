@@ -2,7 +2,7 @@
 #define BOXTABLEWIDGET_H
 
 #include <QWidget>
-#include "common.h"
+#include "common/common.h"
 #include <QTableWidgetItem>
 
 #include <QScrollBar>

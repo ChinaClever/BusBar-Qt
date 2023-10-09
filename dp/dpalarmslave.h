@@ -2,7 +2,7 @@
 #define DPALARMSLAVE_H
 
 #include <QObject>
-#include "common.h"
+#include "common/common.h"
 
 class DpAlarmSlave : public QThread
 {

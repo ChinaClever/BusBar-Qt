@@ -2,7 +2,7 @@
 #define DPTGTHREAD_H
 
 #include <QObject>
-#include "common.h"
+#include "common/common.h"
 
 class DpTgThread : public QThread
 {

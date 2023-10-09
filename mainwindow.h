@@ -49,19 +49,12 @@ protected slots:
 
 private slots:
     void on_homeBtn_clicked();
-
     void on_lineBtn_clicked();
-
     void on_branchBtn_clicked();
-
     void on_logBtn_clicked();
-
     void on_setBtn_clicked();
-
     void on_alarmBtn_clicked();
-
     void on_comboBox_currentIndexChanged(int index);
-
     void on_timeBtn_clicked();
 
 private:

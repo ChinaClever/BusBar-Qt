@@ -2,7 +2,7 @@
 #include "ui_boxtablewidget.h"
 #include "box/boxdlg.h"
 #include "interfacechangesig.h"
-#include "beepthread.h"
+#include "common/beep/beepthread.h"
 
 BoxTableWidget::BoxTableWidget(QWidget *parent) :
     QWidget(parent),

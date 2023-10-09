@@ -1,7 +1,7 @@
 #ifndef SETLOOPPOWERWID_H
 #define SETLOOPPOWERWID_H
 
-#include "comtablewid.h"
+#include "common/comtablewid.h"
 #include "setthreshold/setthresholddlg.h"
 
 class SetLoopPowerWid : public ComTableWid

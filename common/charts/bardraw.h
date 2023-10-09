@@ -1,7 +1,7 @@
 #ifndef BARDRAW_H
 #define BARDRAW_H
 
-#include "qcustomplot.h"
+#include "common/qcustomplot.h"
 
 class BarDraw : public QWidget
 {

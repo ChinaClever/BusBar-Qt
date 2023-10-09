@@ -2,7 +2,7 @@
 #define PASSORDSETTINGDLG_H
 
 #include <QDialog>
-#include "common.h"
+#include "common/common.h"
 
 namespace Ui {
 class PassordSettingDlg;

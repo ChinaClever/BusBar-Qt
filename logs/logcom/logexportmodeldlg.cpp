@@ -8,7 +8,7 @@
 #include "logexportmodeldlg.h"
 #include "ui_logexportmodeldlg.h"
 #include "logcalendardlg.h"
-#include "common.h"
+#include "common/common.h"
 #include <QFileDialog>
 
 sExcelExportStr *gExcelExportStr = new sExcelExportStr();

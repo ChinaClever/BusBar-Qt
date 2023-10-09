@@ -2,7 +2,7 @@
 #define RTUTHREAD_H
 
 #include <QThread>
-#include "common.h"
+#include "common/common.h"
 #include "serialport/serial_trans.h"
 #include "rtu485/rtu_recv.h"
 

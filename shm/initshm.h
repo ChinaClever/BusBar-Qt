@@ -2,7 +2,7 @@
 #define INITSHM_H
 
 #include <QObject>
-#include "common.h"
+#include "common/common.h"
 
 class InitShm : public QThread
 {

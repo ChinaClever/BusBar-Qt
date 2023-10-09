@@ -2,7 +2,7 @@
 #define SETNAMESWID_H
 
 #include <QWidget>
-#include "common.h"
+#include "common/common.h"
 #include "setshm.h"
 #include <QTableWidgetItem>
 #include "setnamedlg.h"

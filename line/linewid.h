@@ -5,7 +5,7 @@
 #include <QHBoxLayout>
 #include <QTimer>
 #include "linetotalwid.h"
-#include "customdialplot.h"
+#include "common/customdialplot/customdialplot.h"
 #include "linetable.h"
 
 namespace Ui {

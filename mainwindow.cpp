@@ -4,7 +4,7 @@
 #include "dpthread.h"
 #include "currentalarmsdlg.h"
 #include "interfacechangesig.h"
-#include "beepthread.h"
+#include "common/beep/beepthread.h"
 #include "datetime/timesettingdlg.h"
 //#include "snmp/snmpthread.h"
 #include "mbs/mb_core.h"
@@ -64,7 +64,9 @@ void MainWindow::initSerial()
 #endif
 #endif
 
-    Mb_Core::build(this);
+    Mb_Core::build(this);//////
+
+
 //    thr = new ThirdThread(this);
 //    thr->init(SERIAL_COM5);
 
@@ -87,6 +89,16 @@ void MainWindow::timeoutDone()
     setBusName(mIndex);
     for(int i = 0; i<BUS_NUM; ++i)
         updateBusName(i);
+    //////
+    ///
+    ///
+    //
+//    count++;
+//    if(count>50)
+//    {
+//        QScreen *screen = QGuiApplication::primaryScreen();
+//        screen->grabWindow(0).save(QString("/home/root/pic/screensshot%1.png").arg(count));
+//    }
 }
 
 void MainWindow::updateBusName(int index)

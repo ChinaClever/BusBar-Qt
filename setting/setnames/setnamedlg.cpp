@@ -1,6 +1,6 @@
 #include "setnamedlg.h"
 #include "ui_setnamedlg.h"
-#include "common.h"
+#include "common/common.h"
 #include "setshm.h"
 #include "setthreshold/setnetcmd.h"
 

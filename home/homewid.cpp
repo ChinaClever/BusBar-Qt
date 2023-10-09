@@ -1,7 +1,7 @@
 #include "homewid.h"
 #include "ui_homewid.h"
 #include "interfacechangesig.h"
-#include "beepthread.h"
+#include "common/beep/beepthread.h"
 
 HomeWid::HomeWid(QWidget *parent) :
     QWidget(parent),

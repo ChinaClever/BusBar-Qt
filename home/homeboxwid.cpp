@@ -2,7 +2,7 @@
 #include "ui_homeboxwid.h"
 #include "box/boxdlg.h"
 #include "interfacechangesig.h"
-#include "beepthread.h"
+#include "common/beep/beepthread.h"
 
 HomeBoxWid::HomeBoxWid(QWidget *parent) :
     QWidget(parent),

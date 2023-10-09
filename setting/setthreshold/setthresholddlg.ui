@@ -247,7 +247,7 @@ border-radius:15px
     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="mindoubleSpinBox">
+  <widget class="MyDoubleSpinBox" name="mindoubleSpinBox">
    <property name="geometry">
     <rect>
      <x>110</x>
@@ -293,7 +293,7 @@ border-radius:15px
     <double>0.010000000000000</double>
    </property>
   </widget>
-  <widget class="QDoubleSpinBox" name="maxdoubleSpinBox">
+  <widget class="MyDoubleSpinBox" name="maxdoubleSpinBox">
    <property name="geometry">
     <rect>
      <x>340</x>
@@ -344,7 +344,12 @@ border-radius:15px
   <customwidget>
    <class>MyLabel</class>
    <extends>QLabel</extends>
-   <header location="global">setthreshold/mylabel.h</header>
+   <header>setthreshold/mylabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MyDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header location="global">common/mydoublespinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

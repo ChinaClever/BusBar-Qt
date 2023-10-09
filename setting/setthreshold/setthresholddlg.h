@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "setshm.h"
+#include "common/mydoublespinbox.h"
 
 namespace Ui {
 class SetThresholdDlg;

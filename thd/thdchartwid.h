@@ -1,7 +1,7 @@
 #ifndef THDCHARTWID_H
 #define THDCHARTWID_H
 
-#include "barcharts.h"
+#include "common/charts//barcharts.h"
 
 class ThdChartWid : public QWidget
 {

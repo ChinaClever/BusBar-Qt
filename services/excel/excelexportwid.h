@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "txtexportlogthread.h"
-#include "common.h"
+#include "common/common.h"
 
 namespace Ui {
 class ExcelExportWid;

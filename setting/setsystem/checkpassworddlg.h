@@ -3,8 +3,8 @@
 
 #include <QDialog>
 #include <QHBoxLayout>
-#include "common.h"
-#include "keyboard/mynumberkeyboardwid.h"
+#include "common/common.h"
+#include "common/keyboard/mynumberkeyboardwid.h"
 
 namespace Ui {
 class CheckPasswordDlg;

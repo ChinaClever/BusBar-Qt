@@ -2,7 +2,7 @@
 #define IPSETTINGDLG_H
 
 #include <QWidget>
-#include "common.h"
+#include "common/common.h"
 #include "net/udp/sent/udpheartbeat.h"
 #define IP1 "192.168.1.163"
 

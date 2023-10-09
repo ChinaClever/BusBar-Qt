@@ -7,9 +7,12 @@ include(modbus/modbusbase.pri)
 
 INCLUDEPATH += $$PWD
 
-HEADERS += \	
+HEADERS +=\
+    $$PWD/extendedlineedit.h\
     $$PWD/common.h \
     $$PWD/msgbox.h \
+    $$PWD/mydoublespinbox.h \
+    $$PWD/myspinbox.h \
     $$PWD/sysconfigfile.h \
     $$PWD/datapacket.h \
     $$PWD/qcustomplot.h \
@@ -17,9 +20,12 @@ HEADERS += \
     $$PWD/comtablewid.h
     #$$PWD/permissions.h
 	
-SOURCES += \	
+SOURCES +=\
+    $$PWD/extendedlineedit.cpp\
     $$PWD/common.cpp \
     $$PWD/msgbox.cpp \
+    $$PWD/mydoublespinbox.cpp \
+    $$PWD/myspinbox.cpp \
     $$PWD/sysconfigfile.cpp \
     $$PWD/datapacket.cpp \
     $$PWD/qcustomplot.cpp \

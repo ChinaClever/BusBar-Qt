@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <QDateTime>
 #include <QDebug>
-#include "common.h"
+#include "common/common.h"
 //#include "netsettingdlg.h"
 #include "othersettingdlg.h"
 //#include "modedlg.h"

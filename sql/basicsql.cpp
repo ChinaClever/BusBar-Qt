@@ -7,7 +7,7 @@
  *      Author: Lzy
  */
 #include "basicsql.h"
-#include "common.h"
+#include "common/common.h"
 
 
 BasicSql::BasicSql(QObject *parent) :

@@ -4,7 +4,7 @@
 #include <QThread>
 #include "serialport/serial_trans.h"
 #include "rtu485/rtu_recv.h"
-#include "common.h"
+#include "common/common.h"
 #include "rtuthread.h"
 
 

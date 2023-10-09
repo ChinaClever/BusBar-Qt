@@ -135,7 +135,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="rateCurSpin">
+      <widget class="MySpinBox" name="rateCurSpin">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -183,7 +183,7 @@ border-radius:15px
 }</string>
        </property>
        <property name="suffix">
-        <string/>
+        <string>A</string>
        </property>
        <property name="prefix">
         <string/>
@@ -233,7 +233,7 @@ border-radius:15px
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="boxNumSpin">
+      <widget class="MySpinBox" name="boxNumSpin">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
          <horstretch>0</horstretch>
@@ -289,7 +289,7 @@ QSpinBox{
 }</string>
        </property>
        <property name="suffix">
-        <string/>
+        <string>个</string>
        </property>
        <property name="prefix">
         <string/>
@@ -355,6 +355,13 @@ border-radius:15px
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>MySpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>common/myspinbox.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

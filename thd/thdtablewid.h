@@ -1,7 +1,7 @@
 #ifndef THDTABLEWID_H
 #define THDTABLEWID_H
 
-#include "comtablewid.h"
+#include "common/comtablewid.h"
 
 class ThdTableWid : public ComTableWid
 {

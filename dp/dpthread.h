@@ -2,7 +2,7 @@
 #define DPTHREAD_H
 
 #include <QThread>
-#include "common.h"
+#include "common/common.h"
 #include "dpalarmthread.h"
 #include "dpeleslavethread.h"
 #include "dpalarmslave.h"

@@ -1,7 +1,7 @@
 #ifndef SETLOOPWID_H
 #define SETLOOPWID_H
 
-#include "comtablewid.h"
+#include "common/comtablewid.h"
 #include "setline/setlinetem.h"
 
 class SetLoopWid : public ComTableWid

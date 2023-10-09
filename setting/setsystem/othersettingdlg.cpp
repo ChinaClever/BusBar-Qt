@@ -1,6 +1,6 @@
 #include "othersettingdlg.h"
 #include "ui_othersettingdlg.h"
-#include "common.h"
+#include "common/common.h"
 #include "datetime/timesettingdlg.h"
 #include "serialport/serial_portset.h"
 

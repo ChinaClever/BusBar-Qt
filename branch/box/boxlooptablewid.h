@@ -2,7 +2,7 @@
 #define BOXLOOPTABLEWID_H
 
 #include <QWidget>
-#include "common.h"
+#include "common/common.h"
 #include <QScrollBar>
 #include <QPropertyAnimation>
 #include <QDateTime>

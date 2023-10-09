@@ -2,7 +2,7 @@
 #define LINETABLE_H
 
 #include "lineroadwid.h"
-#include "comtablewid.h"
+#include "common/comtablewid.h"
 
 class LineTable : public ComTableWid
 {
