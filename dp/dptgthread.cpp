@@ -13,7 +13,7 @@ DpTgThread::DpTgThread(QObject *parent) : QThread(parent)
     shm = get_share_mem(); // 获取共享内存
 
     timer = new QTimer(this);
-    timer->start(3*1000);
+    timer->start(3*1000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
 }
 

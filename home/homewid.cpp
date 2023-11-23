@@ -26,7 +26,7 @@ void HomeWid::initFun()
     mMaxNum = mBusData->boxNum;
 
     timer = new QTimer(this);
-    timer->start(2*1000);
+    timer->start(2*1000+ rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone())); //实时更新
     //刷新信号（id）
     connect(InterfaceChangeSig::get(), SIGNAL(typeSig(int)), this,SLOT(interfaceChangedSlot(int)));
@@ -72,8 +72,8 @@ void HomeWid::interfaceChangedSlot(int id)
 void HomeWid::timeoutDone()
 {
     if(isRun) { //节省CPU的考虑
-        ui->curLcd->display(mBusData->box[0].tgBox.cur/COM_RATE_CUR); //A
-        ui->powLcd->display(mBusData->box[0].tgBox.pow/COM_RATE_POW); //W
+//        ui->curLcd->display(mBusData->box[0].tgBox.cur/COM_RATE_CUR); //A
+//        ui->powLcd->display(mBusData->box[0].tgBox.pow/COM_RATE_POW); //W
 
         //------------[交直流区分]-------------------By_MW 2018.3.30
         QString name;

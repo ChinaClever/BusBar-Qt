@@ -337,7 +337,7 @@ static int rtu_start_recv_some_alarm_data(uchar *ptr, Rtu_recv *msg)
         msg->env[i].tem.min = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
         msg->env[i].tem.max = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     }
-    msg->reCur.salarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->reCur.smax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->zeroLineCur.smin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->zeroLineCur.smax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->totalPow.imin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
@@ -410,7 +410,7 @@ static int rtu_plug_recv_loop_data(uchar *ptr, Rtu_recv *msg , int index)
     p->apPow += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;// 读取低16位视在功率
 
     p->pf = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    p->sw = (*ptr) * 256 + *(ptr+1) - 1; ptr+=2;len+=2;
+    p->sw = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
 
     p->ele = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->ele  <<= 16; // 左移16位
@@ -537,10 +537,8 @@ bool rtu_recv_packetV3(uchar *buf, int len, Rtu_recv *pkt)
             ptr += rtu_start_recv_some_alarm_data(ptr , pkt);
             for(int i = 0 ; i < RTU_LINE_NUM ; ++i) // 读取滤波 数据
                 ptr += rtu_start_recv_last_alarm_data(ptr , pkt , i);
-            int state = 1;
-            if( pkt->breaker == 1 ) state = 0;
             for(int i = 0 ; i < RTU_LINE_NUM ; ++i)
-                pkt->data[i].sw = state;// 更新始端箱断路器状态
+                pkt->data[i].sw = pkt->breaker;// 更新始端箱断路器状态
             pkt->lineNum = 3;
         }
         else{//插接箱

@@ -30,8 +30,14 @@
      <x>420</x>
      <y>450</y>
      <width>89</width>
-     <height>25</height>
+     <height>40</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>40</height>
+    </size>
    </property>
    <property name="text">
     <string>Ib</string>
@@ -55,9 +61,15 @@
     <rect>
      <x>20</x>
      <y>450</y>
-     <width>89</width>
-     <height>25</height>
+     <width>91</width>
+     <height>40</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>40</height>
+    </size>
    </property>
    <property name="text">
     <string>Ua</string>
@@ -69,8 +81,14 @@
      <x>520</x>
      <y>450</y>
      <width>89</width>
-     <height>25</height>
+     <height>40</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>40</height>
+    </size>
    </property>
    <property name="text">
     <string>Ic</string>
@@ -82,8 +100,14 @@
      <x>120</x>
      <y>450</y>
      <width>89</width>
-     <height>25</height>
+     <height>40</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>40</height>
+    </size>
    </property>
    <property name="text">
     <string>Ub</string>
@@ -95,8 +119,14 @@
      <x>320</x>
      <y>450</y>
      <width>89</width>
-     <height>25</height>
+     <height>40</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>40</height>
+    </size>
    </property>
    <property name="text">
     <string>Ia</string>
@@ -121,8 +151,14 @@
      <x>220</x>
      <y>450</y>
      <width>89</width>
-     <height>25</height>
+     <height>40</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>40</height>
+    </size>
    </property>
    <property name="text">
     <string>Uc</string>
@@ -160,8 +196,14 @@
      <x>880</x>
      <y>450</y>
      <width>81</width>
-     <height>31</height>
+     <height>40</height>
     </rect>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>40</height>
+    </size>
    </property>
    <property name="text">
     <string>退出</string>

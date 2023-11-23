@@ -53,6 +53,7 @@ struct Rtu_Sent_Uint_V3 {
 ushort rtu_crc(uchar *buf, int len);
 int rtu_sent_buff(uchar addr, uchar *buf , uint len = RTU_SENT_LEN_V30);
 int rtu_sent_buff(uchar addr, ushort reg, uint len, uchar *buf);
+int rtu_sent_ucharV3_buff(uchar addr, ushort reg, uint num,  uint val , uchar *buf);
 int rtu_sent_ushortV3_buff(uchar addr, ushort reg, uint num,  uint val1, uint val2 , uchar *buf);
 int rtu_sent_uintV3_buff(uchar addr, ushort reg, uint num,  uint val1, uint val2,uchar *buf);
 #endif // RTU_SENT_H

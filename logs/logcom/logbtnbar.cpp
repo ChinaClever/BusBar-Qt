@@ -66,9 +66,12 @@ void LogBtnBar::on_exportBtn_clicked()
 void LogBtnBar::on_clearBtn_clicked()
 {
     BeepThread::bulid()->beep();
-    QuMsgBox box(this, tr("确认清空数据?"));
-    if(box.Exec())
+
+    QuMsgBox box(NULL, tr("确认清空数据?"));
+    bool ret = box.Exec();
+    if(ret){
         emit clearSig();
+    }
 }
 
 void LogBtnBar::on_comboBox_currentIndexChanged(int index)

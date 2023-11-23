@@ -29,6 +29,7 @@ SetThread *SetThread::bulid(QObject *parent)
 void SetThread::workDown()
 {
     if(mItems.size()) {
+        gReadWriteflag = 2;
         sThresholdItem item = mItems.first();
         //bool ret = mNetCmd->send(item);
         //if(!ret) mRtuCmd->send(item);//V2.5
@@ -47,6 +48,7 @@ void SetThread::workDown()
         mSetShm->setItem(item);
         mItems.removeFirst();
         sleep(1);
+        gReadWriteflag = 1;
     }
 }
 

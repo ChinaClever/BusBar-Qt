@@ -21,7 +21,7 @@ SetLineTem::SetLineTem(QWidget *parent, bool flag) :
         hideWid();
     }
     timer = new QTimer(this);
-    timer->start(2000);
+    timer->start(2000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
 }
 

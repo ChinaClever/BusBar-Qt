@@ -15,23 +15,26 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
     sBoxData *dev = &(data->box[index]);
     if(dev->offLine > 0){
         vshort vs; //initFucRegs();
-        vs << dev->proNum <<dev->version << dev->dc << dev->curSpecification << dev->workMode; // 通讯协议版本
+        ushort dc = 0;
+        if( dev->dc ) dc = 0;
+        else dc = 1;
+        vs << dev->proNum <<dev->version << dc << dev->curSpecification << dev->workMode; // 通讯协议版本
         vs << dev->baudRate << dev->buzzerStatus << dev->alarmTime << dev->lps << dev->iOF;
         vs << dev->isd << dev->shuntRelease << dev->reState << dev->lpsAlarm;
-        vs << 0 << 0 << 0 << 0;
+        vs << 0 <<  0 << 0 << 0 << 0;
 
         sObjData *p = &(dev->data);
         for(int i = 0 ; i < START_LINE_NUM ; ++i) // 读取相 数据
         {
             vs << p->lineVol.value[i];
-            vs << p->lineVol.alarm[i];
+            vs << p->lineVol.upalarm[i];
             vs << p->vol.value[i];
-            vs << p->vol.alarm[i];
+            vs << p->vol.upalarm[i];
             vs << p->cur.value[i];
-            vs << p->cur.alarm[i];
+            vs << p->cur.upalarm[i];
             vs << (p->pow.value[i] >> 16);
             vs << (p->pow.value[i] & 0xffff);
-            vs << p->pow.alarm[i];
+            vs << p->pow.upalarm[i];
             vs << (p->reactivePower[i] >> 16);
             vs << (p->reactivePower[i] & 0xffff);
             vs << (p->apPow[i] >> 16);
@@ -43,12 +46,12 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
         }
         vs << (dev->totalApPow >> 16) << (dev->totalApPow & 0xffff);
         vs << (dev->totalPow.ivalue >> 16) << (dev->totalPow.ivalue & 0xffff);
-        vs << dev->totalPow.ialarm << dev->reCur.svalue << dev->reCur.salarm;
-        vs << dev->zeroLineCur.svalue << dev->zeroLineCur.salarm;
+        vs << dev->totalPow.ialarm << dev->reCur.svalue << dev->reCur.supalarm;
+        vs << dev->zeroLineCur.svalue << dev->zeroLineCur.supalarm;
         vs << dev->volUnbalance << dev->curUnbalance << dev->data.sw[0];
-        vs << dev->rate.svalue << dev->rate.salarm;
+        vs << dev->rate.svalue << dev->rate.supalarm;
         for(int i = 0 ;  i < SENSOR_NUM ; i++){
-            vs << dev->env.tem.value[i] << dev->env.tem.alarm[i];
+            vs << dev->env.tem.value[i] << dev->env.tem.upalarm[i];
         }
         for(int k = 0 ; k < START_LINE_NUM ; k++){
             for(int i = 0 ;  i < HARMONIC_NUM ; i++){
@@ -76,7 +79,7 @@ void Mb_Object::upMasterDevRange(sBusData *data , int bus, int index)
         for(int i = 0 ;  i < SENSOR_NUM ; i++){
             vs << dev->env.tem.min[i] << dev->env.tem.max[i];
         }
-        vs << dev->reCur.salarm;
+        vs << dev->reCur.smax;
         vs << dev->zeroLineCur.smin << dev->zeroLineCur.smax;
         vs << (dev->totalPow.imin >> 16) << (dev->totalPow.imin & 0xffff);
         vs << (dev->totalPow.imax >> 16) << (dev->totalPow.imax & 0xffff);
@@ -110,10 +113,10 @@ void Mb_Object::upSlaveDevInfo(sBusData *data ,int bus, int index)
         for(int i = 0 ; i < LOOP_NUM_MAX ; i++)
         {
             if( i < dev->loopNum ){
-                vs << p->vol.value[i] << p->vol.alarm[i];
-                vs << p->cur.value[i] << p->cur.alarm[i];
+                vs << p->vol.value[i] << p->vol.upalarm[i];
+                vs << p->cur.value[i] << p->cur.upalarm[i];
                 vs << ( p->pow.value[i] >> 16 ) << ( p->pow.value[i] & 0xffff);
-                vs << p->pow.alarm[i];
+                vs << p->pow.upalarm[i];
                 vs << ( p->apPow[i] >> 16 ) << ( p->apPow[i] & 0xffff);
                 vs << ( p->reactivePower[i] >> 16 ) << ( p->reactivePower[i] & 0xffff);
                 vs << p->pf[i] << p->sw[i];
@@ -133,15 +136,15 @@ void Mb_Object::upSlaveDevInfo(sBusData *data ,int bus, int index)
         vs << dev->data.curThd[0] << dev->data.curThd[1] << dev->data.curThd[2];
         vs << dev->data.pl[0] << dev->data.pl[1] << dev->data.pl[2];
         for(int i = 0 ;  i < SENSOR_NUM ; i++){
-            vs << dev->env.tem.value[i] << dev->env.tem.alarm[i];
+            vs << dev->env.tem.value[i] << dev->env.tem.upalarm[i];
         }
-        setRegs(MbSlaveReg_Factory+10000*bus+1000*index, vs);
+        setRegs(MbSlaveReg_Factory+10000*bus+500*index, vs);
     }else{//clear
         vshort vs; //initFucRegs();
         for(int i = 0 ;  i < MbSlaveReg_Range ; i++){
             vs << 0;
         }
-        setRegs(MbSlaveReg_Factory+10000*bus+1000*index, vs);
+        setRegs(MbSlaveReg_Factory+10000*bus+500*index, vs);
     }
 }
 
@@ -166,13 +169,13 @@ void Mb_Object::upSlaveDevRange(sBusData *data , int bus, int index)
                 vs << 0  << 0;
             }
         }
-        setRegs(MbSlaveReg_Range+10000*bus-+1000*index, vs);
+        setRegs(MbSlaveReg_Range+10000*bus+500*index, vs);
     }else{//clear
         vshort vs; //initFucRegs();
         for(int i = MbSlaveReg_Range ;  i <= MbSlaveReg_End ; i++){
             vs << 0;
         }
-        setRegs(MbSlaveReg_Range+10000*bus+1000*index, vs);
+        setRegs(MbSlaveReg_Range+10000*bus+500*index, vs);
     }
 }
 

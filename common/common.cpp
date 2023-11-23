@@ -183,7 +183,8 @@ int getBoxNum(int index)
     if(ret)
     {
         QString strGroup = QString("Line%1").arg(index+1);
-        boxNum = sys_configFile_readInt("boxNum",strGroup);
+        ret = sys_configFile_contains("boxNum",strGroup);
+        if(ret) boxNum = sys_configFile_readInt("boxNum",strGroup);
         sys_configFile_close();
     } 
     return boxNum;

@@ -70,8 +70,11 @@ QuMsgBox::QuMsgBox(QWidget *parent,QString strContext) : QMessageBox(parent)
 
     cancelBut->setFocus();
     confirmBut->setFocus();
+    confirmBut->setStyleSheet("QPushButton{font-size:8pt;font-family:'Ubuntu';}");
+    cancelBut->setStyleSheet("QPushButton{font-size:8pt;font-family:'Ubuntu';}");
 
-    setStyleSheet( "QPushButton:hover{background-color:rgb(91, 237, 238);}" );
+    setStyleSheet("QLabel{font-size:8pt;font-family:'Ubuntu';}"
+                  "QPushButton:hover{background-color:rgb(91, 237, 238);}" );
 }
 
 QuMsgBox::~QuMsgBox()

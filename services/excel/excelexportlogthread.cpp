@@ -63,7 +63,6 @@ void ExcelExportLogThread::exportMsg(QList<QStringList> &list)
     for(int i = 0 ; i < strList.size() ; i++){
          if(i == strList.size() - 2)str = strList.at(i);
     }
-    qDebug() << str;
     QString cstr = QString("mount | grep %1").arg(str);
     int ans = system(cstr.toLatin1());
     if(ans < 0) {

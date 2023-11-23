@@ -62,6 +62,7 @@ typedef struct _sDataUnit {
     ushort min[LINE_NUM_MAX]; // 最小值
     ushort max[LINE_NUM_MAX]; // 最大值
     uchar alarm[LINE_NUM_MAX]; // 告警值 0表示未告警  1表示已告警 2表示已记录
+    uchar upalarm[LINE_NUM_MAX]; // 读取告警值
 
     ushort crMin[LINE_NUM_MAX]; // 临界最小值
     ushort crMax[LINE_NUM_MAX]; // 临界最大值
@@ -76,6 +77,7 @@ struct sRtuUshortUnit {
     ushort scrMin; // 临界最小值
     ushort scrMax; // 临界最大值
     uchar salarm;
+    uchar supalarm;
     uchar scrAlarm; // 临界告警值
 };
 
@@ -88,6 +90,7 @@ struct sRtuULLintUnit {
     unsigned long long icrMax; // 临界最大值
 
     uchar ialarm;
+    uchar iupalarm;
     uchar icrAlarm; // 临界告警值
 };
 
@@ -99,6 +102,7 @@ typedef struct _sDataPowUnit {
     uint min[LINE_NUM_MAX]; // 最小值
     uint max[LINE_NUM_MAX]; // 最大值
     uchar alarm[LINE_NUM_MAX]; // 告警值 0表示未告警  1表示已告警 2表示已记录
+    uchar upalarm[LINE_NUM_MAX]; // 读取告警值
 
     uint crMin[LINE_NUM_MAX]; // 临界最小值
     uint crMax[LINE_NUM_MAX]; // 临界最大值
@@ -374,6 +378,8 @@ enum  sSetStartType{
     ,SetStartAlarmTime       = 8           //2-5
     ,SetStartBreaker         = 9           //0:没有 1:正常 2:损坏
     ,SetStartLps             = 10           //0:没有 1:正常 2:损坏
+    ,SetStartRelease         = 11           //0:没有 1:有
+    ,SetStartControlRelease  = 14           //0:没有 1:有
 
     ,StartTemperatureMIN_1   = 284           //温度上限
     ,StartTemperatureMAX_1   = 285           //温度下限

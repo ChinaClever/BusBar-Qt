@@ -128,6 +128,40 @@ int rtu_sent_buff(uchar addr, ushort reg, uint len, uchar *buf)
   * 出口参数：ptr -> 缓冲区
   * 返回值：打包后的长度
   */
+static int rtu_sent_packet_uchar_V3(Rtu_Sent_Ushort_V3 *pkt, uchar *ptr)
+{
+    uchar *buf = ptr;
+    *(ptr++) = pkt->addr;  /*地址码*/
+    *(ptr++) = pkt->fn; /*功能码*/
+
+    /*填入寄存器首地址*/
+    *(ptr++) = ((pkt->reg) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->reg); /*低8位*/
+
+    /*填入寄存器个数*/
+    *(ptr++) = ((pkt->num) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->num); /*低8位*/
+
+    *(ptr++) = pkt->num * 2;
+
+    /*填入数据1*/
+    *(ptr++) = ((pkt->val1) >> 8); /*高8位*/
+    *(ptr++) = (0xff)&(pkt->val1); /*低8位*/
+
+    /*填入CRC*/
+    pkt->crc = rtu_crc(buf, 9);
+    *(ptr++) = (0xff)&(pkt->crc); /*低8位*/
+    *(ptr++) = ((pkt->crc) >> 8); /*高8位*/
+
+    return 11;
+}
+
+/**
+  * 功　能：发送数据打包
+  * 入口参数：pkt -> 发送结构体
+  * 出口参数：ptr -> 缓冲区
+  * 返回值：打包后的长度
+  */
 static int rtu_sent_packet_ushort_V3(Rtu_Sent_Ushort_V3 *pkt, uchar *ptr)
 {
     uchar *buf = ptr;
@@ -158,6 +192,20 @@ static int rtu_sent_packet_ushort_V3(Rtu_Sent_Ushort_V3 *pkt, uchar *ptr)
     *(ptr++) = ((pkt->crc) >> 8); /*高8位*/
 
     return 13;
+}
+
+int rtu_sent_ucharV3_buff(uchar addr, ushort reg, uint num,  uint val , uchar *buf)
+{
+    static Rtu_Sent_Ushort_V3 msg;
+    static QMutex mutex; // 互拆锁
+    QMutexLocker locker(&mutex);
+
+    msg.addr = addr;
+    msg.fn   = 0x10;
+    msg.reg  = reg;
+    msg.num  = num;
+    msg.val1 = val;
+    return rtu_sent_packet_uchar_V3(&msg, buf);
 }
 
 int rtu_sent_ushortV3_buff(uchar addr, ushort reg, uint num,  uint val1, uint val2 , uchar *buf)

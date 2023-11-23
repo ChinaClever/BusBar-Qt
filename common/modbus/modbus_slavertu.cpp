@@ -21,5 +21,6 @@ bool Modbus_SlaveRtu::connectRtu(const sModbusSetting &cfg)
     if(ret) initModbusSerial(cfg);
     if(ret) setAddress(cfg.addrRtu);
     if(ret) ret = connectDevice();
+    system("stty -F /dev/ttymxc2 min 8");//每次重新连接都需要初始化
     return ret;
 }

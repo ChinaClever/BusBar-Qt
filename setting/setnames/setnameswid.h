@@ -7,9 +7,9 @@
 #include <QTableWidgetItem>
 #include "setnamedlg.h"
 
-#include <QScrollBar>
-#include <QPropertyAnimation>
-#include <QDateTime>
+//#include <QScrollBar>
+//#include <QPropertyAnimation>
+//#include <QDateTime>
 
 
 namespace Ui {
@@ -36,8 +36,8 @@ protected:
     void checkBus();
     void setName(int row, int column);
     void setTableItem(int row, int column);
-    void initScrollArea();
-    bool eventFilter(QObject *obj, QEvent *event);
+//    void initScrollArea();
+//    bool eventFilter(QObject *obj, QEvent *event);
 
 private slots:
     void on_saveBtn_clicked();
@@ -54,8 +54,8 @@ private:
     SetShm *mSetShm;
     sBusData *mPacket ;
     QTimer* mTimer;
-    QScrollBar *m_scrollBarV;
-    QScrollBar *m_scrollBarH;
+//    QScrollBar *m_scrollBarV;
+//    QScrollBar *m_scrollBarH;
     bool isRun;
 };
 

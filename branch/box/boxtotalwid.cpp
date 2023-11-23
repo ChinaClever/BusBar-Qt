@@ -8,7 +8,7 @@ BoxTotalWid::BoxTotalWid(QWidget *parent) :
     ui->setupUi(this);
 
     timer = new QTimer(this);
-    timer->start(2000);
+    timer->start(2000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
     //ui->AllWid->hide(); //隐藏和 y_MW_2018.4.23
     initWid();

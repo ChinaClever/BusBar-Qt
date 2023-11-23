@@ -29,7 +29,7 @@ void LineWid::initFun()
 
     isRun = false;
     timer = new QTimer(this);
-    timer->start(3*1000);
+    timer->start(3*1000 + rand()%100);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
 }
 

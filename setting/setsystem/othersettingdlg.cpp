@@ -110,7 +110,7 @@ void OtherSettingDlg::on_updateBtn_clicked()
         if(!ret) ret = update_fun("sda1");
         if(!ret) ret = update_fun("sda2");
         if(!ret)
-            CriticalMsgBox box(this, tr("升级文件未找到！\n 请插入U盘，把升级文件放入busbar目录下!"));
+            CriticalMsgBox box(this, tr("升级文件未找到！\n 请插入U盘，把升级文件放入upgrade目录下!"));
     }
 }
 

@@ -1,6 +1,6 @@
 #include "setrtucmd.h"
 #include "rtuthread.h"
-extern RtuThread *rtu[4];
+extern RtuThread *rtu[5];
 
 SetRtuCmd::SetRtuCmd(QObject *parent) : QThread(parent)
 {
@@ -32,6 +32,8 @@ void SetRtuCmd::sendRegV3(int reg, sThresholdItem &item)
 {
     if(item.type == 4)
         sendDataUintV3(item.bus, item.box, reg, item.min , item.max);
+    else if(item.type == 11 || item.type == 14 )
+        sendDataUcharV3(item.bus, item.box, reg, item.min);
     else
         sendDataUshortV3(item.bus, item.box, reg, item.min , item.max);
 }
@@ -44,6 +46,11 @@ void SetRtuCmd::sendDataUintV3(int busID, int addr, ushort reg, uint val1, uint 
 void SetRtuCmd::sendDataUshortV3(int busID, int addr, ushort reg, uint val1, uint val2)
 {
     if(rtu[busID]) rtu[busID]->sendDataUshortV3(addr, reg, val1 , val2);
+}
+
+void SetRtuCmd::sendDataUcharV3(int busID, int addr, ushort reg, uint val)
+{
+    if(rtu[busID]) rtu[busID]->sendDataUcharV3(addr, reg, val);
 }
 
 void SetRtuCmd::send(sThresholdItem &item)
@@ -73,6 +80,8 @@ void SetRtuCmd::sendStartV3(sThresholdItem &item)
     case 3: reg = StartTemperatureMIN_1 + item.num*2; break;
     case 4: reg = StartPowerMIN_L1_1 + item.num*10;break;
     case 5: reg = StartSetHzMIN ; break;
+    case 11: reg = SetStartRelease ; break;
+    case 14: reg = SetStartControlRelease ; break;
     }
     sendRegV3(reg, item);
 }

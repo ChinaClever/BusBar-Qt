@@ -13,7 +13,7 @@ LineTable::LineTable(QWidget *parent) : ComTableWid(parent)
 
 void LineTable::initWid()
 {
-    QString title = tr("");
+    QString title = tr("谐波含量");
     QStringList header;
     header << "L" << tr("负载率(%)") << tr("电压谐波含量(%)") << tr("电流谐波含量(%)");
     initTableWid(header, 3, title);

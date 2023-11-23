@@ -8,7 +8,7 @@ SetLoopWid::SetLoopWid(QWidget *parent) : ComTableWid(parent)
     initWid();
 
     timer = new QTimer(this);
-    timer->start(2000);
+    timer->start(2000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
 }
 

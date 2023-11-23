@@ -22,7 +22,7 @@ LocalNetSettingDlg::~LocalNetSettingDlg()
 void LocalNetSettingDlg::on_Net1Btn_clicked()
 {
     if(!m_netDlgOpen1){
-        m_net2Dlg->initData(1);
+        m_net1Dlg->initData(1);
         m_net1Dlg->setWindowModality(Qt::NonModal);
         m_net1Dlg->show();
         m_net1Dlg->move(0,0);

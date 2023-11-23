@@ -77,7 +77,7 @@ RESOURCES += \
 #LIBS += -lts
 #LIBS += -lpthread
 
-target.path = /opt
+target.path = /home/root
 INSTALLS += target
 
 DISTFILES += \

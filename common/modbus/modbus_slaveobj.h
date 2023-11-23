@@ -1,6 +1,10 @@
 #ifndef MODBUS_SLAVEOBJ_H
 #define MODBUS_SLAVEOBJ_H
 
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <termios.h>
 #include "modbus_mastertcp.h"
 enum eMbMasterRegs {
     MbMasterReg_Factory   =   0,     // 生产厂家

@@ -11,7 +11,7 @@ SetLineItem::SetLineItem(QWidget *parent, bool flag) :
     mPacket = get_share_mem();
 
     timer = new QTimer(this);
-    timer->start(2000);
+    timer->start(2000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
     connect(ui->curBar,SIGNAL(clicked()),this,SLOT(curBarClicked()));
     if(mFlag)

@@ -3,9 +3,9 @@
 
 #include <QWidget>
 #include "common/common.h"
-#include <QScrollBar>
-#include <QPropertyAnimation>
-#include <QDateTime>
+//#include <QScrollBar>
+//#include <QPropertyAnimation>
+//#include <QDateTime>
 
 namespace Ui {
 class BoxLoopTableWid;
@@ -45,8 +45,8 @@ protected:
     void setEle(int id, int column);
     void setTemp(int id, int column);
     void updateData();
-    void initScrollArea();
-    bool eventFilter(QObject *obj, QEvent *event);
+//    void initScrollArea();
+//    bool eventFilter(QObject *obj, QEvent *event);
 
 public slots:
     void timeoutDone();
@@ -60,8 +60,8 @@ private:
     sObjData *mData;
     sEnvData *mEnvData;
     char mDc;
-    QScrollBar *m_scrollBarV;
-    QScrollBar *m_scrollBarH;
+//    QScrollBar *m_scrollBarV;
+//    QScrollBar *m_scrollBarH;
 };
 
 #endif // BOXLOOPTABLEWID_H

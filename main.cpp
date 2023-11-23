@@ -18,7 +18,13 @@ bool appendFile(const QString &msg)
 
 int main(int argc, char *argv[])
 {
+//    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
+    QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg , false);
+    if(QString::fromUtf8(argv[1]) == "d"){
+        QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg , true);
+    }
     QApplication a(argc, argv);
+
     frmInput::Instance()->Init("bottom" , "black" , 10 , 10);
     frmInput::Instance()->hide();
     //appendFile("monitor");

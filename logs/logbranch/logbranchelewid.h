@@ -5,9 +5,9 @@
 #include "logcom/logbtnbar.h"
 #include "sqltablemodel.h"
 
-#include <QScrollBar>
-#include <QPropertyAnimation>
-#include <QDateTime>
+//#include <QScrollBar>
+//#include <QPropertyAnimation>
+//#include <QDateTime>
 
 namespace Ui {
 class LogBranchEleWid;
@@ -26,8 +26,8 @@ protected:
     QString getTableName(int id);
     bool refreshTable(const QString &table);
     void updateColumnHidden();
-    void initScrollArea();
-    bool eventFilter(QObject *obj, QEvent *event);
+//    void initScrollArea();
+//    bool eventFilter(QObject *obj, QEvent *event);
 
 
 public slots:
@@ -48,8 +48,8 @@ private:
     QString m_table;
     QStringList mHeadList;
     int mCount;
-    QScrollBar *m_scrollBarV;
-    QScrollBar *m_scrollBarH;
+//    QScrollBar *m_scrollBarV;
+//    QScrollBar *m_scrollBarH;
 };
 
 #endif // LOGBRANCHELEWID_H

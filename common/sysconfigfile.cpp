@@ -75,6 +75,19 @@ int sys_configFile_readInt(QString strParameterName, QString strGroup)
     return nParameter;
 }
 
+/**
+ * 功 能：判断配置文件键是否存在
+ * 开发人员：Lzy     2016 - 七夕
+ */
+bool sys_configFile_contains(QString strParameterName, QString strGroup)
+{
+    bool ret = false;
+    strParameterName = "/" + strGroup + "/" + strParameterName;
+    ret = pConfigIni->contains(strParameterName);
+
+    return ret;
+}
+
 
 /**
  * 功 能：读浮点形串配置文件

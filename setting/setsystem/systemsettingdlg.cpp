@@ -31,6 +31,7 @@ void SystemSettingDlg::initWid()
 //    ui->tabWidget->addTab(mNetWid,str);
     str = tr("其他参数设置");
     ui->tabWidget->addTab(mOtherWid,str);
+    ui->tabWidget->setStyleSheet("QTabBar::tab{height:50px; width: 150px;}");
 }
 
 

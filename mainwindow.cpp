@@ -15,6 +15,7 @@ ThirdThread *thr = NULL;
 //SnmpThread *snmp= NULL;
 extern int get_alarm_len();
 int gVerflag = 2;
+int gReadWriteflag = 1;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -65,14 +66,8 @@ void MainWindow::initSerial()
 #endif
 
     Mb_Core::build(this);//////
-
-
-//    thr = new ThirdThread(this);
-//    thr->init(SERIAL_COM5);
-
-//    snmp = new SnmpThread(this);
-//    snmp->init(1);
-//    connect(SetThread::bulid() , SIGNAL(sendSetSnmpSig(sThresholdItem *)) , snmp , SLOT(recvSendSetSlot(sThresholdItem* )));
+//    rtu[4] = new RtuThread(this);
+//    rtu[4]->init(SERIAL_COM5, 1);
 }
 
 void MainWindow::updateTime()

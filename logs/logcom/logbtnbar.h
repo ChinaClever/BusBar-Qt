@@ -29,11 +29,8 @@ signals:
 private slots:
     void on_dateBtn_clicked();
     void on_queryBtn_clicked();
-
     void on_exportBtn_clicked();
-
     void on_clearBtn_clicked();
-
     void on_comboBox_currentIndexChanged(int index);
 
 private:

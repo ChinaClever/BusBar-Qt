@@ -142,8 +142,6 @@ void SetThresholdDlg::set(sThresholdItem &item)
     if( item.type == 3){
         ui->mindoubleSpinBox->hide();
         ui->maxdoubleSpinBox->hide();
-        /*item.min = unit->min[item.num] / rate;
-        item.max = unit->max[item.num] / rate;*/
         item.min = unit->min[item.num];
         item.max = unit->max[item.num];
     }else if( item.type <= 2 ){

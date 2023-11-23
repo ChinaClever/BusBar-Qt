@@ -43,7 +43,7 @@
     <string>取消</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="maxBox">
+  <widget class="MySpinBox" name="maxBox">
    <property name="geometry">
     <rect>
      <x>339</x>
@@ -126,7 +126,7 @@ border-radius:15px
     <string>保存</string>
    </property>
   </widget>
-  <widget class="QSpinBox" name="minBox">
+  <widget class="MySpinBox" name="minBox">
    <property name="geometry">
     <rect>
      <x>110</x>
@@ -349,7 +349,12 @@ border-radius:15px
   <customwidget>
    <class>MyDoubleSpinBox</class>
    <extends>QDoubleSpinBox</extends>
-   <header location="global">common/mydoublespinbox.h</header>
+   <header>common/mydoublespinbox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MySpinBox</class>
+   <extends>QSpinBox</extends>
+   <header location="global">common/myspinbox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

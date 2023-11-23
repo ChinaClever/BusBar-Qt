@@ -40,6 +40,8 @@ void BoxDlg::initWid(int bus, int box)
     mLineWid = new BoxLoopTableWid(ui->tabWidget);
     mLineWid->initLine(bus, box);
     ui->tabWidget->addTab(mLineWid, tr("各回路信息"));
+    ui->tabWidget->setStyleSheet("QTabBar::tab{height:50px; width: 150px;}");
+    ui->tabWidget->setTabShape(QTabWidget::Triangular);
 }
 
 void BoxDlg::on_pushButton_clicked()

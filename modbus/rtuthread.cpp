@@ -156,6 +156,18 @@ int RtuThread::sendDataUshortV3(int addr, ushort reg, uint val1 , uint val2)
     return -1;
 }
 
+int RtuThread::sendDataUcharV3(int addr, ushort reg, uint val)
+{
+    sBoxData *box = &(mBusData->box[addr]); //共享内存
+    if( box->offLine > 0 ){ //在线
+        //打包数据
+        uchar *buf = mBuf;
+        int rtn = rtu_sent_ucharV3_buff(addr+1, reg, 1 , val , buf); // 把数据打包成通讯格式的数据
+        return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
+    }
+    return -1;
+}
+
 int RtuThread::sendData(uchar *pBuff, int nCount, int msec)
 {
     return mSerial->sendData(pBuff, nCount, msec);
@@ -244,9 +256,12 @@ void RtuThread::thdData(Rtu_recv *pkt)
 void RtuThread::loopDataV3(sBoxData *box, Rtu_recv *pkt)
 {
     sObjData *loop = &(box->data);
-    box->loopNum = loop->lineNum = pkt->lineNum;
+    if(pkt->lineNum == 3)
+        box->loopNum = loop->lineNum = pkt->lineNum;
+    else
+        box->loopNum = pkt->lineNum;
 
-    for(int i=0; i<loop->lineNum; i++)
+    for(int i=0; i<pkt->lineNum; i++)
     {
         RtuRecvLine *data = &(pkt->data[i]);
         loopObjDataV3(loop, i, data);
@@ -258,18 +273,22 @@ void RtuThread::loopObjDataV3(sObjData *loop, int id, RtuRecvLine *data)
     loop->lineVol.value[id] = data->lineVol.svalue;
     loop->lineVol.crMin[id] = loop->lineVol.min[id] = data->lineVol.smin;
     loop->lineVol.crMax[id] = loop->lineVol.max[id] = data->lineVol.smax;
+    loop->lineVol.upalarm[id] = data->lineVol.salarm;
 
     loop->vol.value[id] = data->vol.svalue;
     loop->vol.crMin[id] = loop->vol.min[id] = data->vol.smin;
     loop->vol.crMax[id] = loop->vol.max[id] = data->vol.smax;
+    loop->vol.upalarm[id] = data->vol.salarm;
 
     loop->cur.value[id] = data->cur.svalue;
     loop->cur.crMin[id] = loop->cur.min[id] = data->cur.smin;
     loop->cur.crMax[id] = loop->cur.max[id] = data->cur.smax;
+    loop->cur.upalarm[id] = data->cur.salarm;
 
     loop->pow.value[id] = data->pow.ivalue;
     loop->pow.crMin[id] = loop->pow.min[id] = data->pow.imin;
     loop->pow.crMax[id] = loop->pow.max[id] = data->pow.imax;
+    loop->pow.upalarm[id] = data->pow.ialarm;
     loop->ele[id] = data->ele;
     loop->pf[id] = data->pf;
     loop->sw[id] = data->sw;
@@ -280,6 +299,16 @@ void RtuThread::loopObjDataV3(sObjData *loop, int id, RtuRecvLine *data)
     //loop->wave[id] = data->wave;
 }
 
+void RtuThread::envDataV3(sEnvData *env, Rtu_recv *pkt)
+{
+    for(int i=0; i<SENSOR_NUM; ++i)
+    {
+        env->tem.value[i] = pkt->env[i].tem.value;
+        env->tem.crMin[i] = env->tem.min[i] = pkt->env[i].tem.min;
+        env->tem.crMax[i] = env->tem.max[i] = pkt->env[i].tem.max;
+        env->tem.upalarm[i] = pkt->env[i].tem.alarm;
+    }
+}
 
 void RtuThread::thdDataV3(Rtu_recv *pkt)
 {
@@ -488,12 +517,13 @@ void RtuThread::BusTransDataV3()
 {
     for(int i=0; i<=mBusData->boxNum; ++i)
     {
+        if(gReadWriteflag == 2) continue;
         int ret = transDataV3(i);
         if( ret == 0 ) {
-            msleep(900);//900
+            msleep(900+rand()%500);//900
             transDataV3(i);
         }
-        msleep(750);//750
+        msleep(750+rand()%500);//750
     }
 }
 
@@ -581,12 +611,13 @@ int RtuThread::transDataV3(int addr)
             if(addr+1 == pkt->addr) { //回收地址和发送地址同
                 box->boxOffLineAlarm = 1;
                 offLine = 4;
-                loopData(box, pkt); //更新数据
-                envData(&(box->env), pkt);
+                loopDataV3(box, pkt); //更新数据
+                envDataV3(&(box->env), pkt);
                 initData(box, pkt);
                 box->rate.svalue = pkt->rate.svalue;
                 box->rate.smin = pkt->rate.smin;
                 box->rate.smax = pkt->rate.smax;
+                box->rate.supalarm = pkt->rate.salarm;
                 box->reCur.svalue = pkt->reCur.svalue;
                 box->reCur.smin = pkt->reCur.smin;
                 box->reCur.smax = pkt->reCur.smax;
@@ -596,9 +627,11 @@ int RtuThread::transDataV3(int addr)
                 box->volUnbalance = pkt->volUnbalance;
                 box->curUnbalance = pkt->curUnbalance;
 
-                box->data.totalPow.value[0] = pkt->totalPow.ivalue;
-                box->data.totalPow.min[0] = pkt->totalPow.imin;
-                box->data.totalPow.max[0] = pkt->totalPow.imax;
+                box->totalApPow = pkt->totalApPow;
+                box->totalPow.ivalue = pkt->totalPow.ivalue;
+                box->totalPow.imin = pkt->totalPow.imin;
+                box->totalPow.imax = pkt->totalPow.imax;
+                box->totalPow.iupalarm=  pkt->totalPow.ialarm;
                 thdDataV3(pkt);
             }
 

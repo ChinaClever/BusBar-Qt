@@ -5,6 +5,7 @@
  */
 #include "mb_setting.h"
 #include "mb_core.h"
+#include "setthreshold/setthread.h"
 
 
 Mb_Setting::Mb_Setting(QObject *parent) : Mb_Object{parent}
@@ -79,13 +80,13 @@ void Mb_Setting::restoreFactoryDefaults()
 
 void Mb_Setting::registerRecvSlot(int address, ushort value)
 {
-//    if(address < 6100) startSet(address, value);
-//    else if(address < 6150) line_setting(address, value);
-//    else if(address < 6300) loop_setting(address, value);
-//    else if(address < 6900) output_setting(address, value);
-//    else if(address < 7000) output_ctrl(address, value);
-//    else if(address < 7050) env_setting(address, value);
-//    else if(address < 7160) group_setting(address, value);
-//    else if(address == 8001) restoreFactoryDefaults();
-//    if(address > MbReg_Setting) Set_Core::bulid()->writeAlarm();
+//    sThresholdItem item;
+//    qDebug()<<"address "<<address <<"value "<<value;
+//    item.type = address % 10000;
+//    item.bus = address / 10000;
+//    item.box = 0;
+//    item.num = 0;
+//    item.min = value;
+//    SetThread::bulid()->append(item);
+//
 }

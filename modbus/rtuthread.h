@@ -8,7 +8,7 @@
 
 #define RTU_BUF_SIZE 1024
 extern int gVerflag;//1代表一期 2代表二期
-
+extern int gReadWriteflag;
 class RtuThread : public QThread
 {
     Q_OBJECT
@@ -22,6 +22,7 @@ public:
     int sendData(uchar *pBuff, int nCount, int msec); //发送数据
     int sendDataUintV3(int addr, ushort reg, uint val1 , uint val2);
     int sendDataUshortV3(int addr, ushort reg, uint val1 , uint val2);
+    int sendDataUcharV3(int addr, ushort reg, uint val);
     
 signals:    
     
@@ -35,6 +36,7 @@ protected:
     void loopObjDataV3(sObjData *loop, int id, RtuRecvLine *data);
 
     void envData(sEnvData *env, Rtu_recv *pkt);
+    void envDataV3(sEnvData *env, Rtu_recv *pkt);
     void initData(sBoxData *box, Rtu_recv *pkt);
     void setBoxNum(ushort num);
     void thdData(Rtu_recv *pkt);

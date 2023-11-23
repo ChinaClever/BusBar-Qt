@@ -11,7 +11,7 @@ SetLoopPowerWid::SetLoopPowerWid(QWidget *parent): ComTableWid(parent)
     gridLayout->addWidget(this);
 
     timer = new QTimer(this);
-    timer->start(2000);
+    timer->start(2000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
 }
 

@@ -51,7 +51,7 @@ DpAlarmSlave::DpAlarmSlave(QObject *parent) : QThread(parent)
     shm = get_share_mem(); // 获取共享内存
 
     timer = new QTimer(this);
-    timer->start(5*1000);
+    timer->start(5*1000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
 }
 
@@ -86,7 +86,9 @@ void DpAlarmSlave::saveMsg(const QString &typeStr, const QString &str)
 
 void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, sDataUnit &unit, double rate, const QString &sym)
 {
-    for(int i=0; i<3; ++i)
+    int line = START_LINE_NUM;
+    if(sym.contains("°C")) line = SENSOR_NUM;
+    for(int i=0; i<line; ++i)
     {
         QString str=msg, tempStr = typeStr;
         if(unit.alarm[i])
@@ -291,6 +293,13 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
             mAlarmStr << tr("插接箱：%1 已离线").arg(box.boxName);
             saveMsg(tempStr,str);
             box.boxOffLineAlarm = 3;
+        }else if(box.boxOffLineAlarm == 3){
+            QString tempStr ,str;
+            tempStr = tr("离线告警");
+            str += shm->data[mBusId].busName+tr("插接箱离线")+tr("插接箱：%1 已离线").arg(box.boxName);
+            mAlarmStr << shm->data[mBusId].busName;
+            mAlarmStr << tr("插接箱离线");
+            mAlarmStr << tr("插接箱：%1 已离线").arg(box.boxName);
         }
     }
 }
@@ -356,6 +365,12 @@ void DpAlarmSlave::busAlarm(int id)
             str += shm->data[mBusId].busName+tr("始端箱离线");
             saveMsg(tempStr,str);
             busBox->boxOffLineAlarm = 3;
+        }else if(busBox->boxOffLineAlarm == 3){
+            mAlarmStr << shm->data[mBusId].busName;
+            mAlarmStr << tr("始端箱离线");
+            QString tempStr ,str;
+            tempStr = tr("离线告警");
+            str += shm->data[mBusId].busName+tr("始端箱离线");
         }
     }
 
