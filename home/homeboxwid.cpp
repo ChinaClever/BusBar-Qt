@@ -14,7 +14,7 @@ HomeBoxWid::HomeBoxWid(QWidget *parent) :
 
     isRun = true;
     timer = new QTimer(this);
-    timer->start(1500 + rand()%500); //防止所有对象同时申请刷新
+    timer->start(2000 + rand()%500); //防止所有对象同时申请刷新
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
     connect(InterfaceChangeSig::get(), SIGNAL(typeSig(int)), this,SLOT(interfaceChangedSlot(int)));
 }
@@ -31,7 +31,7 @@ void HomeBoxWid::initFun(int base, int id)
     mBoxNum = shm->data[mBusID].boxNum;
     mData = &(shm->data[mBusID].box[mID]);
     ui->titleLab->setText(QString::number(mID));
-    updateData();
+    //updateData();
 }
 
 void HomeBoxWid::interfaceChangedSlot(int id)
@@ -48,7 +48,8 @@ void HomeBoxWid::busChangeSlot(int id)
     mBusID = id;
     sDataPacket *shm = get_share_mem();
     mData = &(shm->data[id].box[mID]);
-    updateData();
+    mData->firsttime = false;
+    //updateData();
 }
 
 /**
@@ -92,13 +93,21 @@ void HomeBoxWid::updateAlarmIcon(QLabel *lab,int volAlarm, int curALarm, int env
 void HomeBoxWid::updateAlarmStatus()
 {
     if(mData->offLine > 0) {
-        updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-        updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-        updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+        if(!mData->firsttime || mData->preoffLine == 0){
+            mData->firsttime = true;
+            mData->preoffLine = mData->offLine;
+            updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+        }
     } else { // 离线
-        setBackgroundImage(ui->iconLab_1, "boxoffine");
-        setBackgroundImage(ui->iconLab_2, "boxoffine");
-        setBackgroundImage(ui->iconLab_3, "boxoffine");
+        if(!mData->firsttime || mData->preoffLine > 0){
+            mData->firsttime = true;
+            mData->preoffLine = mData->offLine;
+            setBackgroundImage(ui->iconLab_1, "boxoffine");
+            setBackgroundImage(ui->iconLab_2, "boxoffine");
+            setBackgroundImage(ui->iconLab_3, "boxoffine");
+        }
     }
 
     bool hidden = false;
@@ -109,7 +118,7 @@ void HomeBoxWid::updateAlarmStatus()
 void HomeBoxWid::timeoutDone()
 {
     if(isRun) {
-        updateData();
+        //updateData();//hide()
         updateAlarmStatus();
     }
 }

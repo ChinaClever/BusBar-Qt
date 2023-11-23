@@ -145,6 +145,8 @@ typedef struct _sEnvData {
  * 插接箱数据结构体：包括最多三个插接位，插接箱名称
  */
 typedef struct _sBoxData {
+    bool firsttime;
+    char preoffLine; // 前一个离线标识
     char offLine; // 离线标识
     uchar loopNum; // 回路数量
     uchar version;
