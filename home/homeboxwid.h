@@ -20,6 +20,8 @@ public:
 
     void initFun(int base, int id);
     void setBaseNum(int base);
+    void updateUpAndDownAlarmStatus();
+
 protected:
     void updateData();
     void updateAlarmStatus();
@@ -27,8 +29,10 @@ protected:
     void initWid();
     void setBackgroundImage(QLabel *lab,QString name);
 
+
 public slots:
     void busChangeSlot(int id);
+
 
 private slots:
     void timeoutDone();

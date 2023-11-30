@@ -35,8 +35,6 @@ void DpAlarmThread::timeoutDone()
     }
 }
 
-
-
 void DpAlarmThread::alarmDataUnit(sDataUnit &unit, int lineNum, bool cr)
 {
     for(int i=0; i<lineNum; ++i)
@@ -117,6 +115,21 @@ char DpAlarmThread::alarmFlag(sDataPowUnit &unit, int line, bool cr)
     return flag;
 }
 
+void DpAlarmThread::alarmOtherDataUnit(sRtuUshortUnit& box , uchar &alram)
+{
+    if((box.svalue < box.smin) || (box.svalue > box.smax))
+    {
+        if(alram == 0)
+            alram = 1;
+        else
+            alram = 2;
+        box.salarm = 1;
+    } else{
+        alram= 0;
+        box.salarm = 0;
+    }
+}
+
 void DpAlarmThread::boxAlarm(sBoxData &box)
 {
     if(box.offLine > 0) {
@@ -139,17 +152,11 @@ void DpAlarmThread::boxAlarm(sBoxData &box)
         alarmDataUnit(box.env.tem, lineNum);
         box.boxEnvAlarm =  alarmFlag(box.env.tem, lineNum);
 
-        if((box.rate.svalue < box.rate.smin) || (box.rate.svalue > box.rate.smax))
-        {
-            if(box.HzAlarm == 0)
-                box.HzAlarm = 1;
-            else
-                box.HzAlarm = 2;
-        } else
-            box.HzAlarm = 0;
+        alarmOtherDataUnit(box.rate , box.HzAlarm);
+        alarmOtherDataUnit(box.zeroLineCur , box.zeroLineAlarm);
 
         box.boxOffLineAlarm = 1;
-        box.boxAlarm = box.boxCurAlarm + box.boxVolAlarm + box.boxEnvAlarm + box.boxPowerAlarm + box.HzAlarm;
+        box.boxAlarm = box.boxCurAlarm + box.boxVolAlarm + box.boxEnvAlarm + box.boxPowerAlarm + box.HzAlarm + box.zeroLineAlarm;
     } else {
         if(box.boxOffLineAlarm == 1) box.boxOffLineAlarm = 2;
         box.boxAlarm = 0;

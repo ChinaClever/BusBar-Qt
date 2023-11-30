@@ -465,6 +465,16 @@ static int rtu_plug_recv_loop_alarm_data(uchar *ptr, Rtu_recv *msg , int index)
     return len; //3.0.0版本
 }
 
+static int rtu_plug_recv_zero_data(uchar *ptr, Rtu_recv *msg)
+{
+    uint len = 0;
+    msg->zeroLineCur.svalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->zeroLineCur.salarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->zeroLineCur.smin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->zeroLineCur.smax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    return len;
+}
+
 static int rtu_recv_rate(uchar *ptr , ushort *cur , ushort *min , ushort *max)
 {
     *cur = (*ptr) * 256 + *(ptr+1); ptr+=2;
@@ -553,6 +563,7 @@ bool rtu_recv_packetV3(uchar *buf, int len, Rtu_recv *pkt)
                 ptr += rtu_plug_recv_env_alarm_data(ptr , pkt , i);
             for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop alarm数据
                 ptr += rtu_plug_recv_loop_alarm_data(ptr , pkt , i);
+            ptr += rtu_plug_recv_zero_data(ptr , pkt);
 
         }
         pkt->crc = (buf[RTU_SENT_LEN_V30*2+6-1]*256) + buf[RTU_SENT_LEN_V30*2+6-2]; // RTU_SENT_LEN_V23*2+5

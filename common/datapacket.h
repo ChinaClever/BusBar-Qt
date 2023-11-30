@@ -183,6 +183,7 @@ typedef struct _sBoxData {
     uchar lps; // 防雷开关
     uchar lpsAlarm;//防雷开关告警值 0表示未告警 1表示已告警 2表示已记录
     uchar HzAlarm;//频率告警值 0表示未告警 1表示已告警 2表示已记录
+    uchar zeroLineAlarm;//零线电流告警值 0表示未告警 1表示已告警 2表示已记录
 
     uint zeroCur;//零线电流
     uint volUnbalance;//电压三相不平衡
@@ -535,6 +536,8 @@ enum  sSetPlugType{
     ,PlugPowerMIN_L9_2       = 242           //功率下限
     ,PlugPowerMAX_L9_1       = 243           //功率上限
     ,PlugPowerMAX_L9_2       = 244           //功率上限
+    ,PlugZeroLineMIN         = 247           //零线电流下限
+    ,PlugZeroLineMAX         = 248           //零线电流上限
 
 };
 

@@ -14,16 +14,16 @@ SetLineItem::SetLineItem(QWidget *parent, bool flag) :
     timer->start(2000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
     connect(ui->curBar,SIGNAL(clicked()),this,SLOT(curBarClicked()));
-    if(mFlag)
-        connect(ui->volBar,SIGNAL(clicked()),this,SLOT(volBarClicked()));
-    else
+    connect(ui->volBar,SIGNAL(clicked()),this,SLOT(volBarClicked()));
+    if(!mFlag)
     {
+        ui->label_1->hide();
         ui->label_2->hide();
-        ui->label_14->hide();
-        ui->volBar->hide();
-        ui->volLab->hide();
+        ui->label_14->setText(tr("中性电流"));
+//        ui->volBar->hide();
+//        ui->volLab->hide();
         ui->label_11->setText(tr("频率"));
-        ui->nameLab->hide();
+        ui->nameLab->setText(tr("其他"));
     }
 }
 
@@ -58,40 +58,51 @@ void SetLineItem::updateWidget(int bus, int line)
     sObjData  *objData = &(busData->box[0].data);
 //    ui->curLab->setText(QString::number(objData ->cur.value[line]/COM_RATE_CUR,'f', 1)+"A");
 //    ui->volLab->setText(QString::number(objData ->vol.value[line]/COM_RATE_VOL,'f', 0)+"V");
-    if(mFlag)
+    if(mFlag){
         ui->curLab->setText(QString::number(objData ->cur.value[line]/COM_RATE_CUR,'f', 2)+"A");
-    else
-        ui->curLab->setText(QString::number(busData->box[0].rate.svalue/10.0,'f',1)+"Hz");
-    ui->volLab->setText(QString::number(objData->vol.value[line]/COM_RATE_VOL,'f', 1)+"V");
+        ui->volLab->setText(QString::number(objData->vol.value[line]/COM_RATE_VOL,'f', 1)+"V");
+    }
+    else{
+        ui->curLab->setText(QString::number(busData->box[0].rate.svalue/COM_RATE_FREQUENCY,'f',1)+"Hz");
+        ui->volLab->setText(QString::number(busData->box[0].zeroLineCur.svalue/COM_RATE_VOL,'f', 2)+"A");
+        ui->nameLab->hide();
+    }
+
     ui->nameLab->setText(str+ QString::number(mLine+1));
 
     if(mFlag){
         setProgressbarValue(ui->curBar,&(objData->cur),line);
+        setProgressbarValue(ui->volBar,&(objData->vol),line);
         setLabeColor(ui->curLab , objData->cur.alarm[line], 0);
         setLabeColor(ui->volLab , objData->vol.alarm[line], 0);
     }
     else{
-        int max = busData->box[0].rate.smax;
-        int min = busData->box[0].rate.smin;
-        int value = busData->box[0].rate.svalue;
-        if(max > 0 && min > 0 && max > min && value >= min && value < max)
-        {
-            int ret = ((value-min)*100.0/(max-min));
-            if(ret > 100) ret = 100;
-            ui->curBar->setValue(ret);
-        }else
-            ui->curBar->setValue(0);
-
-        int alarm = busData->box[0].HzAlarm;
-        if(alarm >= 1)
-            setProcessBarColor(ui->curBar,"red"); //告警
-        else
-            setProcessBarColor(ui->curBar,"green"); //正常
-        setLabeColor(ui->curLab , alarm, 0);
+        setProgressbarOtherValue(ui->curBar , &(busData->box[0].rate));
+        setProgressbarOtherValue(ui->volBar , &(busData->box[0].zeroLineCur));
+        setLabeColor(ui->curLab , busData->box[0].rate.salarm, 0);
+        setLabeColor(ui->volLab , busData->box[0].zeroLineCur.salarm, 0);
     }
-    setProgressbarValue(ui->volBar,&(objData->vol),line);
 }
 
+void SetLineItem::setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *data)
+{
+    int max = data->smax;
+    int min = data->smin;
+    int value = data->svalue;
+    if(max > 0 && min > 0 && max > min && value >= min && value < max)
+    {
+        int ret = ((value-min)*100.0/(max-min));
+        if(ret > 100) ret = 100;
+        bar->setValue(ret);
+    }else
+        bar->setValue(0);
+
+    int alarm = data->salarm;
+    if(alarm >= 1)
+        setProcessBarColor(bar,"red"); //告警
+    else
+        setProcessBarColor(bar,"green"); //正常
+}
 
 void SetLineItem::setProgressbarValue(QProgressBar *bar, sDataUnit *data, int index)
 {
@@ -151,7 +162,10 @@ void SetLineItem::volBarClicked()
     item.bus = mBus;
     item.box = 0;
     item.num = mLine;
-    item.type = 1;
+    if(mFlag)
+        item.type = 1;
+    else
+        item.type = 8;
 
     SetThresholdDlg dlg(this);
     dlg.move(0,0);

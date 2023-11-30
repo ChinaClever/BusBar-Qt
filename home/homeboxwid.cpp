@@ -123,6 +123,26 @@ void HomeBoxWid::timeoutDone()
     }
 }
 
+/**
+ * @brief 更新告警图片
+ */
+void HomeBoxWid::updateUpAndDownAlarmStatus()
+{
+    if(mData->offLine > 0) {
+        updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+        updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+        updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+    } else { // 离线
+        setBackgroundImage(ui->iconLab_1, "boxoffine");
+        setBackgroundImage(ui->iconLab_2, "boxoffine");
+        setBackgroundImage(ui->iconLab_3, "boxoffine");
+    }
+
+    bool hidden = false;
+    if(mID > mBoxNum) hidden = true;
+    this->setHidden(hidden);
+}
+
 void HomeBoxWid::on_pushButton_clicked()
 {
     BeepThread::bulid()->beep();

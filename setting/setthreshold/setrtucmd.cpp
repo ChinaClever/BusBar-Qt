@@ -94,6 +94,7 @@ void SetRtuCmd::sendPlugV3(sThresholdItem &item)
     case 2: reg = PlugCurrentMIN_L1 + item.num*8; /*item.max*=100; item.min*=100;*/break;
     case 3: reg = PlugTemperatureMIN_1 + item.num*2; break;
     case 4: reg = PlugPowerMIN_L1_1 + item.num*8;break;
+    case 8: reg = PlugZeroLineMIN;break;
     }
     sendRegV3(reg, item);
 }

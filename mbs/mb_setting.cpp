@@ -11,6 +11,11 @@
 Mb_Setting::Mb_Setting(QObject *parent) : Mb_Object{parent}
 {
     connect(this, &Modbus_SlaveObj::registerDataSig, this, &Mb_Setting::registerRecvSlot);
+    QDateTime t = QDateTime::currentDateTime();
+    for(int i = 0 ; i < BUS_NUM ; i++){
+        mPreTime[i] = t;
+        mCount[i] = 0;
+    }
 }
 
 void Mb_Setting::mbSetUpdate()
@@ -20,10 +25,10 @@ void Mb_Setting::mbSetUpdate()
 
 void Mb_Setting::upSetData()
 {
-//    vshort vs;
-//    vs << Mb_Core::modbusCfg.addrRtu;
-//    vs << mDevData->cfg.param.buzzerSw;
-//    setRegs(MbReg_Setting+1, vs);
+    //    vshort vs;
+    //    vs << Mb_Core::modbusCfg.addrRtu;
+    //    vs << mDevData->cfg.param.buzzerSw;
+    //    setRegs(MbReg_Setting+1, vs);
 
     //qint64 timestamp = QDateTime::currentSecsSinceEpoch();
     //vs << timestamp/0xffff; vs << timestamp%0xffff;
@@ -34,59 +39,71 @@ void Mb_Setting::upSetData()
 
 void Mb_Setting::addrSet(ushort &v)
 {
-//    Cfg_Com::bulid()->writeCfg("addr", v, "modbus");
-//    Mb_Core::modbusCfg.addrRtu = v; setAddress(v);
-//    mDevData->cfg.param.modbusRtuAddr = v;
-//    cout << "modbus set addr OK" << v;
+    //    Cfg_Com::bulid()->writeCfg("addr", v, "modbus");
+    //    Mb_Core::modbusCfg.addrRtu = v; setAddress(v);
+    //    mDevData->cfg.param.modbusRtuAddr = v;
+    //    cout << "modbus set addr OK" << v;
 }
 
 void Mb_Setting::buzzerSw(ushort &v)
 {
-//    mDevData->cfg.param.buzzerSw = v;
-//    cout << "modbus set Buzzer switch OK" << v;
-//    Cfg_Core::bulid()->devParamWrite("buzzerSw", v, "devParams");
+    //    mDevData->cfg.param.buzzerSw = v;
+    //    cout << "modbus set Buzzer switch OK" << v;
+    //    Cfg_Core::bulid()->devParamWrite("buzzerSw", v, "devParams");
 }
 
 
 void Mb_Setting::startSet(ushort addr, ushort &value)
 {
     switch (addr) {
-//    case MbReg_SetAddr: addrSet(value); break;
-//    case MbReg_SetBuzzer: buzzerSw(value); break;
-//    case MbReg_SetEle: break;
-    //case MbReg_SetTime: case MbReg_SetTime+1: timeSet(addr, value); break;
+        //    case MbReg_SetAddr: addrSet(value); break;
+        //    case MbReg_SetBuzzer: buzzerSw(value); break;
+        //    case MbReg_SetEle: break;
+        //case MbReg_SetTime: case MbReg_SetTime+1: timeSet(addr, value); break;
     }
 }
 
 
 void Mb_Setting::timeSet(ushort addr, ushort &value)
 {
-//    static uint t = 0;
-//    if(addr%2) {
-//        t = value << 16;
-//    } else {
-//        t += value;
-//        QDateTime dt = QDateTime::fromTime_t(t);
-//        QString str = dt.toString("yyyy-MM-dd hh:mm:ss");
-//        App_Core::bulid()->ntp_time(str); //cout << str;
-//    }
+    //    static uint t = 0;
+    //    if(addr%2) {
+    //        t = value << 16;
+    //    } else {
+    //        t += value;
+    //        QDateTime dt = QDateTime::fromTime_t(t);
+    //        QString str = dt.toString("yyyy-MM-dd hh:mm:ss");
+    //        App_Core::bulid()->ntp_time(str); //cout << str;
+    //    }
 }
 
 
 void Mb_Setting::restoreFactoryDefaults()
 {
-//    Set_Core::bulid()->factoryRestore();
+    //    Set_Core::bulid()->factoryRestore();
 }
 
 void Mb_Setting::registerRecvSlot(int address, ushort value)
 {
-//    sThresholdItem item;
-//    qDebug()<<"address "<<address <<"value "<<value;
-//    item.type = address % 10000;
-//    item.bus = address / 10000;
-//    item.box = 0;
-//    item.num = 0;
-//    item.min = value;
-//    SetThread::bulid()->append(item);
-//
+    QDateTime t = QDateTime::currentDateTime();
+    int index = address / 10000;
+    if(index < BUS_NUM && address % 10000 == 14) {
+        if(mPreTime[index].secsTo(t) < 10){
+            if(mCount[index] == 0) {mCount[index]++;mPreTime[index] = t;}
+            else{
+                sThresholdItem item;
+                qDebug()<<"address "<<address <<"value "<<value;
+                item.type = address % 10000;
+                item.bus = index;
+                item.box = 0;
+                item.num = 0;
+                item.min = value;
+                mCount[index] = 0;
+                SetThread::bulid()->append(item);
+            }
+        }else{
+            mCount[index] = 0;
+            mPreTime[index] = t;
+        }
+    }
 }

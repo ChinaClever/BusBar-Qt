@@ -10,9 +10,11 @@ enum eMbMasterRegs {
     MbMasterReg_Factory   =   0,     // 生产厂家
     MbMasterReg_Range     = 284,
     MbMasterReg_End     = 330,
+    MbMasterReg_Last     = 500,      // 不包含
     MbSlaveReg_Factory    =   0,
     MbSlaveReg_Range      =   165,
-    MbSlaveReg_End     = 244,
+    MbSlaveReg_End     = 248,
+    MbSlaveReg_Last     = 500,       // 不包含
 };
 
 class Modbus_SlaveObj : public Modbus_Object

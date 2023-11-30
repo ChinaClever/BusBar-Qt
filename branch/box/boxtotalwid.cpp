@@ -41,32 +41,40 @@ void BoxTotalWid::updateAll()
     QString str = "";
     ui->label_6->setText(str);
     ui->volH->setText(str);
+
+    str = tr("中性电流");
     ui->curH->setText(str);
-    ui->tEleH->setText(str);
 
     str = tr("总有功功率");
-    ui->tApPowH->setText(str);
+    ui->tPowH->setText(str);
 
     str = tr("零线温度");
-    ui->tPfH->setText(str);
-    str = "---";
-    ui->tPowH->setText(str);
     ui->temH->setText(str);
+
+    str = "---";
+    ui->tApPowH->setText(str);
+    ui->tPfH->setText(str);
+    ui->tEleH->setText(str);
+
     if( mBox && mBox->offLine ){
         if(mBox->data.totalPow.value[0] == 0 )
             str = QString::number(0, 'f', 2)+"kW";
         else
             str = QString::number(mBox->data.totalPow.value[0]/COM_RATE_POW, 'f', 3)+"kW";
-        ui->tPowH->setText(str);
+        ui->tPfH->setText(str);
 
         if(mEnvData){
             sDataUnit *unit = &(mEnvData->tem);
             if(unit){
                 str =  QString::number(unit->value[3]/COM_RATE_TEM) + "°C";
-                ui->temH->setText(str);
-                setLabeColor(ui->temH, unit->alarm[3], unit->crAlarm[3]);
+                ui->tEleH->setText(str);
+                setLabeColor(ui->tEleH, unit->alarm[3], unit->crAlarm[3]);
             }
         }
+
+        str = QString::number(mBox->zeroLineCur.svalue/COM_RATE_CUR, 'f', 2)+"A";
+        ui->tApPowH->setText(str);
+        setLabeColor(ui->tEleH, mBox->zeroLineCur.salarm, mBox->zeroLineCur.scrAlarm);
     }
 }
 
@@ -75,17 +83,20 @@ void BoxTotalWid::initWid()
     QString str = "";
     ui->label_6->setText(str);
     ui->volH->setText(str);
+
+    str = tr("中性电流");
     ui->curH->setText(str);
-    ui->tEleH->setText(str);
 
     str = tr("总有功功率");
-    ui->tApPowH->setText(str);
+    ui->tPowH->setText(str);
 
     str = tr("零线温度");
-    ui->tPfH->setText(str);
-    str = "---";
-    ui->tPowH->setText(str);
     ui->temH->setText(str);
+
+    str = "---";
+    ui->tApPowH->setText(str);
+    ui->tPfH->setText(str);
+    ui->tEleH->setText(str);
 }
 
 

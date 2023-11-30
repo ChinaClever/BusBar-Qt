@@ -169,6 +169,8 @@ void Mb_Object::upSlaveDevRange(sBusData *data , int bus, int index)
                 vs << 0  << 0;
             }
         }
+        vs << dev->zeroLineCur.svalue<<dev->zeroLineCur.supalarm;
+        vs << dev->zeroLineCur.smin<<dev->zeroLineCur.smax;
         setRegs(MbSlaveReg_Range+10000*bus+500*index, vs);
     }else{//clear
         vshort vs; //initFucRegs();

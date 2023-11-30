@@ -22,6 +22,7 @@ void SetLoopWid::initWid()
     if(mDc){ //交流9个
         for(int i = 0; i < LINE_NUM; ++i)
             header << QString((char)('A' + i%3))+ QString("%1").arg(i/3 + 1);
+        header << QString("中性电流");
     }else{ //直流4个
         for(int i = 0; i < 4; i++)
             header << "D" + QString("%1").arg(i + 1);
@@ -65,6 +66,9 @@ int SetLoopWid::updateDev(sBoxData *dev, int row)
             setItemColor(row, i+1, unit->alarm[i]);
         }
 
+        QString str = QString::number(dev->zeroLineCur.svalue / COM_RATE_CUR,'f', 2) + "A";
+        setItemColor(row, LINE_NUM, dev->zeroLineCur.salarm);
+        setTableItem(row, LINE_NUM, str);
         setTableRow(row, list);
     }
 
@@ -100,12 +104,14 @@ void SetLoopWid::itemClicked(QTableWidgetItem *it)
     int column = it->column();
     if(column > 0)
     {
+
         BeepThread::bulid()->beep();
         sThresholdItem item;
         item.bus = mBus;
         item.box = it->row()+1;
         item.num = column-1;
-        item.type = 2;
+        if(column == LINE_NUM)item.type = 8;
+        else item.type = 2;
 
         SetThresholdDlg dlg(this);
         dlg.move(0,0);

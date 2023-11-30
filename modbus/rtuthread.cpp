@@ -621,9 +621,12 @@ int RtuThread::transDataV3(int addr)
                 box->reCur.svalue = pkt->reCur.svalue;
                 box->reCur.smin = pkt->reCur.smin;
                 box->reCur.smax = pkt->reCur.smax;
+
                 box->zeroLineCur.svalue = pkt->zeroLineCur.svalue;
+                box->zeroLineCur.supalarm = pkt->zeroLineCur.salarm;
                 box->zeroLineCur.smin = pkt->zeroLineCur.smin;
                 box->zeroLineCur.smax = pkt->zeroLineCur.smax;
+
                 box->volUnbalance = pkt->volUnbalance;
                 box->curUnbalance = pkt->curUnbalance;
 

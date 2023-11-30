@@ -21,6 +21,9 @@ private:
     void datetimeSet(ushort addr, ushort &value);
     void restoreFactoryDefaults();
 
+    QDateTime mPreTime[BUS_NUM];
+    int mCount[BUS_NUM];
+
 private slots:
     //void rcvDataSlot(int address, vshort values);
     void registerRecvSlot(int address,ushort value);

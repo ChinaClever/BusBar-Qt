@@ -282,6 +282,21 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
                 QString msg = tr("插接箱：%1，温度").arg(box.boxName);
                 unitAlarm(typeStr, msg, box.env.tem, COM_RATE_TEM, "°C");
             }
+
+            if( box.zeroLineAlarm == 1) {
+                box.zeroLineAlarm = 2;
+                QString typeStr = tr("插接箱中性电流");
+                QString str = tr("插接箱：%1").arg(box.boxName);
+                QString tempStr = typeStr + tr("告警");
+                str += tr(" 当前值：%2%3, 最小值：%4%5, 最大值：%6%7")
+                           .arg(QString::number(box.zeroLineCur.svalue/COM_RATE_CUR,'f',2)).arg("A")
+                           .arg(QString::number(box.zeroLineCur.smin/COM_RATE_CUR,'f',2)).arg("A")
+                        .arg(QString::number(box.zeroLineCur.smax/COM_RATE_CUR,'f',2)).arg("A");
+                saveMsg( typeStr , str );
+                mAlarmStr << box.boxName;
+                mAlarmStr << tempStr;
+                mAlarmStr << str;
+            }
         }
     } else {
         if(box.boxOffLineAlarm == 2){
@@ -350,6 +365,20 @@ void DpAlarmSlave::busAlarm(int id)
                            .arg(QString::number(busBox->rate.svalue/COM_RATE_FREQUENCY,'f',1)).arg("Hz")
                            .arg(QString::number(busBox->rate.smin/COM_RATE_FREQUENCY,'f',1)).arg("Hz")
                         .arg(QString::number(busBox->rate.smax/COM_RATE_FREQUENCY,'f',1)).arg("Hz");
+                saveMsg( typeStr , str );
+                mAlarmStr << shm->data[mBusId].busName;
+                mAlarmStr << tempStr;
+                mAlarmStr << str;
+            }
+            if( busBox->zeroLineAlarm == 1) {
+                busBox->zeroLineAlarm = 2;
+                QString typeStr = tr("主路中性电流");
+                QString str = tr("母线：%1").arg(bus->busName);
+                QString tempStr = typeStr + tr("告警");
+                str += tr(" 当前值：%2%3, 最小值：%4%5, 最大值：%6%7")
+                           .arg(QString::number(busBox->zeroLineCur.svalue/COM_RATE_CUR,'f',2)).arg("A")
+                           .arg(QString::number(busBox->zeroLineCur.smin/COM_RATE_CUR,'f',2)).arg("A")
+                        .arg(QString::number(busBox->zeroLineCur.smax/COM_RATE_CUR,'f',2)).arg("A");
                 saveMsg( typeStr , str );
                 mAlarmStr << shm->data[mBusId].busName;
                 mAlarmStr << tempStr;

@@ -66,8 +66,6 @@ void MainWindow::initSerial()
 #endif
 
     Mb_Core::build(this);//////
-//    rtu[4] = new RtuThread(this);
-//    rtu[4]->init(SERIAL_COM5, 1);
 }
 
 void MainWindow::updateTime()
@@ -118,7 +116,7 @@ void MainWindow::setBusName(int index)
     sBusData *busData = &(shm->data[index]);
     double rateCur = busData->box[0].ratedCur/COM_RATE_CUR;
     ui->ratedLab->setText(QString::number(rateCur));
-    ui->ratedLab->setText("V3.0.0");
+    ui->ratedLab->setText("V3.0.2");
 }
 
 void MainWindow::checkAlarm()
