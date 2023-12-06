@@ -775,7 +775,7 @@ border-bottom:2px solid rgb(228,228,228);
        </font>
       </property>
       <property name="text">
-       <string>V 0.0</string>
+       <string>V 0.0.0</string>
       </property>
      </widget>
     </item>

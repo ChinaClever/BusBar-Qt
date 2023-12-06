@@ -214,7 +214,8 @@ bool BoxLoopTableWid::checkTable()
 
 #if 1
     int size = mData->lineNum;
-    if(size < 0 || size > 9) {
+    if((size < 0 )|| (size > 9))
+    {
         mData->lineNum = size = 3;
     }
 #else

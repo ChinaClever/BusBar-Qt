@@ -94,8 +94,10 @@ void HomeWid::timeoutDone()
 
 void HomeWid::setBoxBaseNum()
 {
-    for(int i=0; i<10; ++i)
+    for(int i=0; i<10; ++i){
         mBoxWid[i]->initFun(mBaseNum, i);
+        mBoxWid[i]->updateUpAndDownAlarmStatus();
+    }
     BeepThread::bulid()->beep();
 }
 

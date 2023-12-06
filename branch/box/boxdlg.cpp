@@ -24,7 +24,7 @@ void BoxDlg::initBox(int bus, int box)
     QString name(mData->boxName);
     ui->titleLab->setText(name);
 
-    QString version = QString("V%1.%2").arg(mData->version/10).arg(mData->version%10);
+    QString version = QString("V%1.%2.%3").arg(mData->version/100).arg(mData->version/10%10).arg(mData->version%10);
     if(mData->offLine)
     ui->version->setText(version);
 

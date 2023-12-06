@@ -101,7 +101,7 @@ void LineWid::timeoutDone()
 
 
         //------[版本号]------------
-        QString version = QString("V%1.%2").arg(mData->box[0].version/10).arg(mData->box[0].version%10);
+        QString version = QString("V%1.%2.%3").arg(mData->box[0].version/100).arg(mData->box[0].version/10%10).arg(mData->box[0].version%10);
         ui->version->setText(version);
 
         //        updateTotalWid();

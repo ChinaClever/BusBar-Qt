@@ -85,7 +85,7 @@ void MainWindow::timeoutDone()
     for(int i = 0; i<BUS_NUM; ++i)
         updateBusName(i);
     //////
-    ///
+    ///截图功能
     ///
     //
 //    count++;

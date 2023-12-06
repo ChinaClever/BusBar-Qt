@@ -190,7 +190,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>0.0</string>
+    <string>V0.0.0</string>
    </property>
   </widget>
   <widget class="QTabWidget" name="tabWidget">

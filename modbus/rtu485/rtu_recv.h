@@ -58,7 +58,7 @@ struct Rtu_recv {
     uchar addr; // 表示从机地址码
     uchar fn; // 表示功能码
     ushort len; // 表示数据字节数
-    uchar version;// 表示版本
+    ushort version;// 表示版本
     uchar curSpecification;// 表示电流规格
     uchar workMode;// 0表示始端箱和插接箱主从模式 1表示始端箱Modbus模式
     uchar baudRate;// 表示波特率
