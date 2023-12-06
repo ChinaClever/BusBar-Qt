@@ -19,7 +19,7 @@ SetLineItem::SetLineItem(QWidget *parent, bool flag) :
     {
         ui->label_1->hide();
         ui->label_2->hide();
-        ui->label_14->setText(tr("中性电流"));
+        ui->label_14->setText(tr("零线电流"));
 //        ui->volBar->hide();
 //        ui->volLab->hide();
         ui->label_11->setText(tr("频率"));

@@ -256,10 +256,8 @@ void RtuThread::thdData(Rtu_recv *pkt)
 void RtuThread::loopDataV3(sBoxData *box, Rtu_recv *pkt)
 {
     sObjData *loop = &(box->data);
-    if(pkt->lineNum == 3)
-        box->loopNum = loop->lineNum = pkt->lineNum;
-    else
-        box->loopNum = pkt->lineNum;
+    box->loopNum = pkt->lineNum;
+    loop->lineNum = pkt->lineNum;
 
     for(int i=0; i<pkt->lineNum; i++)
     {

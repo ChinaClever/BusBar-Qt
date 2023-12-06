@@ -149,7 +149,7 @@ typedef struct _sBoxData {
     char preoffLine; // 前一个离线标识
     char offLine; // 离线标识
     uchar loopNum; // 回路数量
-    uchar version;
+    ushort version;
     char protocol;// 协议区分标志位
     uchar curSpecification;// 表示电流规格
     uchar workMode;// 0表示始端箱和插接箱主从模式 1表示始端箱Modbus模式

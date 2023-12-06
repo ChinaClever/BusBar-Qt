@@ -109,7 +109,7 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
     case 3: str = tr("温度"); break;
     case 4: str = tr("功率"); break;
     case 5: str = tr("频率"); break;
-    case 8: str = tr("中性电流"); break;
+    case 8: str = tr("零线电流"); break;
     }
 
     sBoxData *dev = &(share_mem_get()->data[item.bus].box[item.box]); //获取共享内存

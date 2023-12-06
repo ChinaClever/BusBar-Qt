@@ -22,7 +22,7 @@ void SetLoopWid::initWid()
     if(mDc){ //交流9个
         for(int i = 0; i < LINE_NUM; ++i)
             header << QString((char)('A' + i%3))+ QString("%1").arg(i/3 + 1);
-        header << QString("中性电流");
+        header << QString("零线电流");
     }else{ //直流4个
         for(int i = 0; i < 4; i++)
             header << "D" + QString("%1").arg(i + 1);

@@ -42,7 +42,7 @@ void BoxTotalWid::updateAll()
     ui->label_6->setText(str);
     ui->volH->setText(str);
 
-    str = tr("中性电流");
+    str = tr("零线电流");
     ui->curH->setText(str);
 
     str = tr("总有功功率");
@@ -84,7 +84,7 @@ void BoxTotalWid::initWid()
     ui->label_6->setText(str);
     ui->volH->setText(str);
 
-    str = tr("中性电流");
+    str = tr("零线电流");
     ui->curH->setText(str);
 
     str = tr("总有功功率");

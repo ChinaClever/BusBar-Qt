@@ -82,7 +82,7 @@ color: rgb(255, 255, 255);</string>
           </font>
          </property>
          <property name="text">
-          <string>PowerFlex 2</string>
+          <string>Powerflex Data Center Busbar</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
