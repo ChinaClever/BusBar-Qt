@@ -28,6 +28,11 @@ void InitShm::initThresholdUnit(int id, sDataUnit &unit, int max)
     unit.crMax[id] = max;
 }
 
+void InitShm::initThresholdPowUnit(int id, sDataPowUnit &unit, int max)
+{
+    unit.max[id] = max;
+    unit.crMax[id] = max;
+}
 
 void InitShm::initBoxThreshold()
 {    
@@ -39,7 +44,7 @@ void InitShm::initBoxThreshold()
             sBoxData *box = &(busData->box[j]); //插接葙
             for(int k=0; k<LINE_NUM_MAX; ++k) //三相
             {
-                initThresholdUnit(k, box->data.cur, 3200);
+                initThresholdPowUnit(k, box->data.cur, 3200);
                 initThresholdUnit(k, box->data.vol, 2750);//480
             }
 
@@ -59,7 +64,7 @@ void InitShm::initBusThreshold()
         for(int k=0; k<3; ++k)
         {
             initThresholdUnit( k, bus->data.vol, 2750);//275
-            initThresholdUnit( k, bus->data.cur, 60000);//600
+            initThresholdPowUnit( k, bus->data.cur, 60000);//600
             initThresholdUnit( k, bus->env.tem, 99);
         }
     }

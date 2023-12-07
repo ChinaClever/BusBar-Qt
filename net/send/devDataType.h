@@ -25,9 +25,22 @@ typedef struct
 
 typedef struct
 {
+    uint		*value; // 当前值
+
+    uint 		*min; //最小值
+    uint 		*max; //最大值
+    uchar 		*alarm; // 告警状态
+
+    uint 		*crMin; //临界最小值
+    uint 		*crMax; //临界最大值
+    uchar 		*crAlarm; //临界告警状态
+}_devDataPowUnit;
+
+typedef struct
+{
     ushort 		len; // 长度
     _devDataUnit		vol; // 电流
-    _devDataUnit 		cur; //电压
+    _devDataPowUnit 		cur; //电压
 
     uint 		*pow; // 功率
     uint 		*ele; // 电能

@@ -28,7 +28,7 @@ struct RtuUintUnit {
 
 struct RtuRecvLine {
     RtuUshortUnit vol; // 电压
-    RtuUshortUnit cur; // 电流
+    RtuUintUnit cur; // 电流
     RtuUshortUnit lineVol; // 线电压
     RtuUintUnit pow; //有功功率
     uint apPow; // 视在功率
@@ -64,6 +64,7 @@ struct Rtu_recv {
     uchar baudRate;// 表示波特率
     uchar iOF;// 表示iOF触点
     uchar alarmTime;// 表示告警滤波2-5
+    uchar boxType;// 表示插接箱类型
     uchar shuntRelease;// 表示分励脱扣
     uchar lps; // 防雷开关
     uchar lpsState; // 防雷开关
@@ -75,7 +76,7 @@ struct Rtu_recv {
     RtuRecvEnv  env[RTU_TH_NUM];
     RtuUintUnit totalPow; //总有功功率
     RtuUshortUnit reCur;//剩余电流
-    RtuUshortUnit zeroLineCur;//零线电流
+    RtuUintUnit zeroLineCur;//零线电流
     RtuUshortUnit rate;//频率
     ushort volThd[RTU_THD_NUM][40];
     ushort curThd[RTU_THD_NUM][40];

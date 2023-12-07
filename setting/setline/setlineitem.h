@@ -23,6 +23,7 @@ public:
 protected:
     void updateWidget(int bus, int line);
     void setProgressbarValue(QProgressBar *bar, sDataUnit *data, int index);
+    void setProgressbarPowValue(QProgressBar *bar, sDataPowUnit *data, int index);
     void setProcessBarColor(QProgressBar *bar, QString color);
     void setLabeColor(QLabel *label, int alarm, int crAlarm);
 

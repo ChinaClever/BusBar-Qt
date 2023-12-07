@@ -55,7 +55,7 @@ int SetLoopWid::updateDev(sBoxData *dev, int row)
         QStringList list;
         list << dev->boxName;
 
-        sDataUnit *unit = &(dev->data.cur);
+        sDataPowUnit *unit = &(dev->data.cur);
         int line = dev->data.lineNum;
         for(int i=0; i<line; ++i)
         {

@@ -318,7 +318,7 @@ void BoxLoopTableWid::setSw(int id, int column)
 void BoxLoopTableWid::setCur(int id, int column)
 {
     QString str = "---";
-    sDataUnit *unit = &(mData->cur);
+    sDataPowUnit *unit = &(mData->cur);
 
     double value = unit->value[id] / COM_RATE_CUR;
     if(value >= 0)

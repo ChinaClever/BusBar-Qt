@@ -184,9 +184,9 @@ void RtuThread::loopObjData(sObjData *loop, int id, RtuRecvLine *data)
     loop->vol.crMin[id] = loop->vol.min[id] = data->vol.smin;
     loop->vol.crMax[id] = loop->vol.max[id] = data->vol.smax;
 
-    loop->cur.value[id] = data->cur.svalue;
-    loop->cur.crMin[id] = loop->cur.min[id] = data->cur.smin;
-    loop->cur.crMax[id] = loop->cur.max[id] = data->cur.smax;
+    loop->cur.value[id] = data->cur.ivalue;
+    loop->cur.crMin[id] = loop->cur.min[id] = data->cur.imin;
+    loop->cur.crMax[id] = loop->cur.max[id] = data->cur.imax;
 
     loop->pow.value[id] = data->pow.ivalue;
     loop->pow.crMin[id] = loop->pow.min[id] = data->pow.imin;
@@ -277,10 +277,10 @@ void RtuThread::loopObjDataV3(sObjData *loop, int id, RtuRecvLine *data)
     loop->vol.crMax[id] = loop->vol.max[id] = data->vol.smax;
     loop->vol.upalarm[id] = data->vol.salarm;
 
-    loop->cur.value[id] = data->cur.svalue;
-    loop->cur.crMin[id] = loop->cur.min[id] = data->cur.smin;
-    loop->cur.crMax[id] = loop->cur.max[id] = data->cur.smax;
-    loop->cur.upalarm[id] = data->cur.salarm;
+    loop->cur.value[id] = data->cur.ivalue;
+    loop->cur.crMin[id] = loop->cur.min[id] = data->cur.imin;
+    loop->cur.crMax[id] = loop->cur.max[id] = data->cur.imax;
+    loop->cur.upalarm[id] = data->cur.ialarm;
 
     loop->pow.value[id] = data->pow.ivalue;
     loop->pow.crMin[id] = loop->pow.min[id] = data->pow.imin;
@@ -618,9 +618,9 @@ int RtuThread::transDataV3(int addr)
                 box->reCur.svalue = pkt->reCur.svalue;
                 box->reCur.smin = pkt->reCur.smin;
                 box->reCur.smax = pkt->reCur.smax;
-                box->zeroLineCur.svalue = pkt->zeroLineCur.svalue;
-                box->zeroLineCur.smin = pkt->zeroLineCur.smin;
-                box->zeroLineCur.smax = pkt->zeroLineCur.smax;
+                box->zeroLineCur.ivalue = pkt->zeroLineCur.ivalue;
+                box->zeroLineCur.imin = pkt->zeroLineCur.imin;
+                box->zeroLineCur.imax = pkt->zeroLineCur.imax;
                 box->volUnbalance = pkt->volUnbalance;
                 box->curUnbalance = pkt->curUnbalance;
 

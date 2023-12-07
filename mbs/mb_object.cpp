@@ -47,7 +47,7 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
         vs << (dev->totalApPow >> 16) << (dev->totalApPow & 0xffff);
         vs << (dev->totalPow.ivalue >> 16) << (dev->totalPow.ivalue & 0xffff);
         vs << dev->totalPow.ialarm << dev->reCur.svalue << dev->reCur.supalarm;
-        vs << dev->zeroLineCur.svalue << dev->zeroLineCur.supalarm;
+        vs << dev->zeroLineCur.ivalue << dev->zeroLineCur.iupalarm;
         vs << dev->volUnbalance << dev->curUnbalance << dev->data.sw[0];
         vs << dev->rate.svalue << dev->rate.supalarm;
         for(int i = 0 ;  i < SENSOR_NUM ; i++){
@@ -80,7 +80,7 @@ void Mb_Object::upMasterDevRange(sBusData *data , int bus, int index)
             vs << dev->env.tem.min[i] << dev->env.tem.max[i];
         }
         vs << dev->reCur.smax;
-        vs << dev->zeroLineCur.smin << dev->zeroLineCur.smax;
+        vs << dev->zeroLineCur.imin << dev->zeroLineCur.imax;
         vs << (dev->totalPow.imin >> 16) << (dev->totalPow.imin & 0xffff);
         vs << (dev->totalPow.imax >> 16) << (dev->totalPow.imax & 0xffff);
         vs << dev->rate.smin << dev->rate.smax;

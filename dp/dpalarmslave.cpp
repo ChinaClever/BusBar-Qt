@@ -262,7 +262,7 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
             QString typeStr = tr("回路电流");
             if(box.boxCurAlarm) {
                 QString msg = tr("插接箱：%1，").arg(box.boxName);
-                unitAlarmVA(box, typeStr, msg, box.data.cur, COM_RATE_CUR, "A");
+                unitAlarmW(box, typeStr, msg, box.data.cur, COM_RATE_CUR, "A");
             }
 
             typeStr = tr("回路电压");

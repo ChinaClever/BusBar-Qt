@@ -45,7 +45,7 @@ typedef struct _sTgObjData {
 
 typedef struct _sLineTgObjData {
     ushort vol[3]; // 电压
-    ushort cur[3];  // 电流
+    uint cur[3];  // 电流
 
     uint pow[3]; // 功率
     uint ele[3]; // 电能
@@ -115,7 +115,7 @@ typedef struct _sDataPowUnit {
 typedef struct _sObjData {
     int lineNum; //相数
     sDataUnit vol; // 电压
-    sDataUnit cur;  // 电流
+    sDataPowUnit cur;  // 电流
     sDataUnit lineVol;  // 线电压
 
     sDataPowUnit pow; // 功率
@@ -177,7 +177,7 @@ typedef struct _sBoxData {
     int ratedCur; // 额定电流
     sRtuUshortUnit rate;//新频率
     sRtuUshortUnit reCur;//剩余电流
-    sRtuUshortUnit zeroLineCur;//零线电流
+    sRtuULLintUnit zeroLineCur;//零线电流
     sRtuULLintUnit totalPow; //总有功功率
     char dc; // 交直流标志位
     uchar lps; // 防雷开关

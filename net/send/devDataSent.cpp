@@ -137,7 +137,7 @@ static void sent_unit(_devDataUnit *unit, int len, uchar *buf, dev_data_packet *
     /* 发送当前值 */
     msg->fn[1] = fc + fn++;
     msg->data = buf;
-    msg->len = shortToChar(unit->value,len,buf);
+    msg->len = shortToChar(unit->value,len,buf);//intToChar
     sent_packet(msg);
 
     /*发送最小值*/
@@ -175,6 +175,51 @@ static void sent_unit(_devDataUnit *unit, int len, uchar *buf, dev_data_packet *
     sent_packet(msg);
 }
 
+static void sent_powunit(_devDataPowUnit *unit, int len, uchar *buf, dev_data_packet *msg)
+{
+    int fn=1, fc = msg->fn[1];
+
+    /* 发送当前值 */
+    msg->fn[1] = fc + fn++;
+    msg->data = buf;
+    msg->len = intToChar(unit->value,len,buf);//intToChar
+    sent_packet(msg);
+
+    /*发送最小值*/
+    msg->fn[1] = fc + fn++;
+    msg->len = intToChar(unit->min,len,buf);
+    sent_packet(msg);
+
+    /*发送最大值*/
+    msg->fn[1] = fc + fn++;
+    msg->len = intToChar(unit->max,len,buf);
+    sent_packet(msg);
+
+    /*发送告警*/
+    msg->fn[1] = fc + fn++;
+    msg->len = len;
+    msg->data = unit->alarm;
+    sent_packet(msg);
+
+    /*发送临界最小值*/
+    msg->fn[1] = fc + fn++;
+    msg->data = buf;
+    msg->len = intToChar(unit->crMin,len,buf);
+    sent_packet(msg);
+
+    /*发送临界最大值*/
+    msg->fn[1] = fc + fn++;
+    msg->data = buf;
+    msg->len = intToChar(unit->crMax,len,buf);
+    sent_packet(msg);
+
+    /*发送临界告警*/
+    msg->fn[1] = fc + fn++;
+    msg->len = len;
+    msg->data = unit->crAlarm;
+    sent_packet(msg);
+}
+
 /**
  * 功 能：发送数据对象 包括电流、电压、功率、电能、功率因素等
  */
@@ -185,7 +230,7 @@ static void sent_object(_devDataObj *obj, uchar *buf, dev_data_packet *msg)
     /*电流*/
     fn += 1;
     msg->fn[1] = fn << 4;
-    sent_unit(&(obj->cur), len, buf, msg);
+    sent_powunit(&(obj->cur), len, buf, msg);
 
     /*电压*/
     fn += 1;
@@ -336,13 +381,28 @@ void init_Unit(_devDataUnit *unit, sDataUnit *cUnit)
 }
 
 /**
+ * 初始化数据  Unit，
+ */
+void init_PowUnit(_devDataPowUnit *unit, sDataPowUnit *cUnit)
+{
+    unit->value = cUnit->value;
+    unit->max = cUnit->max;
+    unit->min = cUnit->min;
+    unit->alarm = cUnit->alarm;
+
+    unit->crMin = cUnit->crMin;
+    unit->crMax = cUnit->crMax;
+    unit->crAlarm = cUnit->crAlarm;
+}
+
+/**
  * 数据初始化  -- 相
  */
 void init_dataLoop(_devDataObj *ptr, sObjData *obj)
 {
     ptr->len = obj->lineNum;
     init_Unit(&(ptr->vol), &(obj->vol));
-    init_Unit(&(ptr->cur), &(obj->cur));
+    init_PowUnit(&(ptr->cur), &(obj->cur));
 
     ptr->sw    = obj->sw;   //开关状态
     ptr->pow   = obj->pow.value;  // 功率

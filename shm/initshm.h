@@ -17,6 +17,7 @@ protected:
     void initBoxNum();
 
     void initThresholdUnit(int id, sDataUnit &unit, int max);
+    void initThresholdPowUnit(int id, sDataPowUnit &unit, int max);
     void initBoxThreshold();
     void initBusThreshold();
     void initThreshold();

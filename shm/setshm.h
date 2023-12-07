@@ -29,6 +29,7 @@ public:
 
 protected:
     void setThresholdUnit(int id, sThresholdItem &item, sDataUnit &unit);
+    void setThresholdPowUnit(int id, sThresholdItem &item, sDataPowUnit &unit);
     void saveItem(sThresholdItem &item); // 单一设置
 
     void setVolAll(sThresholdItem &item); // 设置成有主路电压

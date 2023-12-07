@@ -134,7 +134,7 @@ void SetThresholdDlg::set(sThresholdItem &item)
         unitPower = &(obj->pow);
     switch (item.type) {
     case 1: unit = &(obj->vol); /*rate = 10;*/ break;
-    case 2: unit = &(obj->cur); /*rate = 100;*/  break;//rate = 10; break;
+    case 2: unitPower = &(obj->cur); /*rate = 100;*/  break;//rate = 10; break;
     case 3: unit = &(busData->box[item.box].env.tem);break;
     case 4: unitPower = &(obj->pow);break;
     case 5: rate = 10;break;
@@ -144,11 +144,16 @@ void SetThresholdDlg::set(sThresholdItem &item)
         ui->maxdoubleSpinBox->hide();
         item.min = unit->min[item.num];
         item.max = unit->max[item.num];
-    }else if( item.type <= 2 ){
+    }else if( item.type == 1){
         ui->minBox->hide();
-        ui->maxBox->hide();
+        ui->minBox->hide();
         item.min = unit->min[item.num];
         item.max = unit->max[item.num];
+    }else if( item.type == 2 ){
+        ui->minBox->hide();
+        ui->maxBox->hide();
+        item.min = unitPower->min[item.num];
+        item.max = unitPower->max[item.num];
     }else if( item.type == 4 ){
         ui->minBox->hide();
         ui->maxBox->hide();

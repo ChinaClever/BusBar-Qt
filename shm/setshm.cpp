@@ -13,6 +13,14 @@ void SetShm::setThresholdUnit(int id, sThresholdItem &item, sDataUnit &unit)
     unit.crMax[id] = item.crmax;
 }
 
+void SetShm::setThresholdPowUnit(int id, sThresholdItem &item, sDataPowUnit &unit)
+{
+    unit.min[id] = item.min;
+    unit.max[id] = item.max;
+    unit.crMin[id] = item.crmin;
+    unit.crMax[id] = item.crmax;
+}
+
 void SetShm::setVolAll(sThresholdItem &item)
 {
     for(int i=0; i<BUS_NUM; ++i)
@@ -22,7 +30,7 @@ void SetShm::setVolAll(sThresholdItem &item)
         {
             sBoxData *box = &(busData->box[j]);
             for(int k=0; k<LINE_NUM; ++k) {
-                setThresholdUnit( k, item, box->data.cur);
+                setThresholdPowUnit( k, item, box->data.cur);
             }
         }
     }
@@ -37,7 +45,7 @@ void SetShm::setLoopCurAll(sThresholdItem &item)
         {
             sBoxData *box = &(busData->box[j]);
             for(int k=0; k<LINE_NUM; ++k) {
-                setThresholdUnit( k, item, box->data.cur);
+                setThresholdPowUnit( k, item, box->data.cur);
             }
         }
     }
@@ -49,7 +57,7 @@ void SetShm::setLineCurAll(sThresholdItem &item)
     {
         sBoxData *bus = &(shm->data[i].box[0]);
         for(int k=0; k<LINE_NUM; ++k)
-            setThresholdUnit(k, item, bus->data.cur);
+            setThresholdPowUnit(k, item, bus->data.cur);
     }
 }
 
@@ -81,6 +89,7 @@ void SetShm::setLoopTempAll(sThresholdItem &item)
 void SetShm::saveItem(sThresholdItem &item)
 {
     sDataUnit *unit=NULL;
+    sDataPowUnit *unitpow=NULL;
 
     sBusData *bus = &(shm->data[item.bus]);
     sBoxData *box = &(bus->box[item.box]);
@@ -91,7 +100,7 @@ void SetShm::saveItem(sThresholdItem &item)
         break;
 
     case 2:
-        unit = &(box->data.cur);
+        unitpow = &(box->data.cur);
         break;
 
     case 3:
@@ -101,6 +110,9 @@ void SetShm::saveItem(sThresholdItem &item)
 
     if(unit) {
         setThresholdUnit(item.num, item, (*unit));
+    }
+    if(unitpow) {
+        setThresholdPowUnit(item.num, item, (*unitpow));
     }
 
 }

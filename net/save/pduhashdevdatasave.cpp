@@ -82,7 +82,8 @@ static void pdu_hash_objData(sObjData *obj,pdu_dev_data *data)
         return;
 
     case PDU_CMD_CUR: // 电流
-        pdu_hash_unitData(&(obj->cur), data);
+        sizeBit = 4;
+        iPtr = obj->cur.value;
         break;
 
     case PDU_CMD_VOL: // 电压

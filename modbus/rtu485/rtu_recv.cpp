@@ -82,7 +82,7 @@ static int rtu_recv_head(uchar *ptr,  Rtu_recv *pkt)
 static int rtu_recv_data(uchar *ptr, RtuRecvLine *msg)
 {
     msg->vol.svalue =  (*ptr) * 256 + *(ptr+1);  ptr += 2; // 读取电压
-    msg->cur.svalue =  (*ptr) * 256 + *(ptr+1);  ptr += 2; // 读取电流
+    msg->cur.ivalue =  (*ptr) * 256 + *(ptr+1);  ptr += 2; // 读取电流
     msg->pow.ivalue =  (*ptr) * 256 + *(ptr+1);  ptr += 2; // 读取功率
     msg->ele =  (*ptr) * 256 + *(ptr+1);  ptr += 2; // 读取电能高8位
     msg->ele <<= 16; // 左移8位
@@ -90,14 +90,14 @@ static int rtu_recv_data(uchar *ptr, RtuRecvLine *msg)
 
     msg->vol.smax =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
     msg->vol.smin =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
-    msg->cur.smax =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
-    msg->cur.smin =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
+    msg->cur.imax =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
+    msg->cur.imin =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
 
     msg->wave =  (*ptr) * 256 + *(ptr+1);  ptr += 2;    // 谐波值
     msg->pf =  *(ptr++);// 功率因数
     msg->sw =  *(ptr++);// 开关状态
 
-    msg->apPow = msg->vol.svalue * msg->cur.svalue / 10.0; // 视在功率
+    msg->apPow = msg->vol.svalue * msg->cur.ivalue / 10.0; // 视在功率
 
     return 22;   ////============ 加上开关，功率因数之后，是为14
 }
@@ -114,9 +114,9 @@ static int rtu_recv_new_data(uchar *ptr, RtuRecvLine *msg)
     msg->vol.smax  =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
     msg->vol.smin =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
 
-    msg->cur.svalue =  (*ptr) * 256 + *(ptr+1);  ptr += 2; // 读取电流
-    msg->cur.smax =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
-    msg->cur.smin =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
+    msg->cur.ivalue =  (*ptr) * 256 + *(ptr+1);  ptr += 2; // 读取电流
+    msg->cur.imax =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
+    msg->cur.imin =  (*ptr) * 256 + *(ptr+1);  ptr += 2;
 
     msg->pow.ivalue =  (*ptr) * 256 + *(ptr+1);  ptr += 2; // 读取高16位功率
     msg->pow.ivalue <<= 16; // 左移16位
@@ -144,7 +144,7 @@ static int rtu_recv_new_data(uchar *ptr, RtuRecvLine *msg)
     msg->sw =  *(ptr++);// 开关状态
 
     unsigned long long vol = msg->vol.svalue;
-    unsigned long long cur = msg->cur.svalue;
+    unsigned long long cur = msg->cur.ivalue;
     msg->apPow = vol * cur / 1000.0; // 视在功率
 
     //return 30;   ////============ 加上开关，功率因数之后，是为14
@@ -214,7 +214,7 @@ static int rtu_recv_new_thd(uchar *ptr, Rtu_recv *msg)
     for(int i=0; i<3; ++i) msg->pl[i] = *(ptr++);
     msg->volUnbalance = *(ptr++);
     msg->curUnbalance = *(ptr++);
-    msg->zeroLineCur.svalue = *(ptr) * 256 + *(ptr+1); ptr+=2;
+    msg->zeroLineCur.ivalue = *(ptr) * 256 + *(ptr+1); ptr+=2;
 
     if( msg->addr == 1 ) msg->lps = *(ptr++);// 防雷开关
     else ptr++;
@@ -266,8 +266,11 @@ static int rtu_start_recv_line_data(uchar *ptr, Rtu_recv *msg , int index)
     p->lineVol.salarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->vol.svalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->vol.salarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    p->cur.svalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    p->cur.salarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.ivalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.ivalue <<= 16;
+    p->cur.ivalue += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+
+    p->cur.ialarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->pow.ivalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->pow.ivalue  <<= 16; // 左移16位
     p->pow.ivalue += (*ptr) * 256 + *(ptr+1);  ptr+=2; len+=2;// 读取低16位有功功率
@@ -299,8 +302,10 @@ static int rtu_start_recv_other_data(uchar *ptr, Rtu_recv *msg)
     msg->totalPow.ialarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->reCur.svalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->reCur.salarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    msg->zeroLineCur.svalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    msg->zeroLineCur.salarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->zeroLineCur.ivalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->zeroLineCur.ivalue  <<= 16; // 左移16位
+    msg->zeroLineCur.ivalue += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->zeroLineCur.ialarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->volUnbalance = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->curUnbalance = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->breaker = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
@@ -338,8 +343,8 @@ static int rtu_start_recv_some_alarm_data(uchar *ptr, Rtu_recv *msg)
         msg->env[i].tem.max = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     }
     msg->reCur.smax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    msg->zeroLineCur.smin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    msg->zeroLineCur.smax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->zeroLineCur.imin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->zeroLineCur.imax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->totalPow.imin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->totalPow.imin  <<= 16; // 左移16位
     msg->totalPow.imin  += (*ptr) * 256 + *(ptr+1);  ptr+=2; len+=2;
@@ -359,8 +364,12 @@ static int rtu_start_recv_last_alarm_data(uchar *ptr, Rtu_recv *msg, int index)
     p->lineVol.smax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->vol.smin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->vol.smax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    p->cur.smin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    p->cur.smax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imin <<= 16;
+    p->cur.imin += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imax <<= 16;
+    p->cur.imax += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->pow.imin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->pow.imin <<= 16; // 左移16位
     p->pow.imin += (*ptr) * 256 + *(ptr+1);  ptr += 2; len+=2;// 读取低16位有功功率最小值
@@ -382,6 +391,7 @@ static int rtu_plug_recv_init(uchar *ptr, Rtu_recv *msg)
     msg->iOF = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[iOF触点]
     msg->buzzerStatus = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[蜂鸣器]
     msg->alarmTime = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->boxType = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
 
     return len; //3.0.0版本
 }
@@ -392,8 +402,8 @@ static int rtu_plug_recv_loop_data(uchar *ptr, Rtu_recv *msg , int index)
     uint len = 0;
     p->vol.svalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->vol.salarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    p->cur.svalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    p->cur.salarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.ivalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.ialarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
 
     p->pow.ivalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->pow.ivalue  <<= 16; // 左移16位
@@ -452,8 +462,8 @@ static int rtu_plug_recv_loop_alarm_data(uchar *ptr, Rtu_recv *msg , int index)
     uint len = 0;
     p->vol.smin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->vol.smax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    p->cur.smin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    p->cur.smax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
 
     p->pow.imin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     p->pow.imin  <<= 16;
@@ -526,16 +536,18 @@ bool rtu_recv_packetV3(uchar *buf, int len, Rtu_recv *pkt)
         ptr += rtu_recv_head(ptr, pkt); //指针偏移0
         if( pkt->addr == 0x01 ){//始端箱
             ptr += rtu_start_recv_init(ptr , pkt);
-            ptr += 5*2;//保留
-            for(int i = 0 ; i < RTU_LINE_NUM ; ++i) // 读取相 数据
-                ptr += rtu_start_recv_line_data(ptr , pkt , i);
-            ptr += rtu_start_recv_other_data(ptr , pkt);
+            ptr += (40-14)*2;//保留
             for(int i = 0 ; i < RTU_TH_NUM ; ++i) // 读取温度 数据
                 ptr += rtu_start_recv_env_data(ptr , pkt , i);
+            ptr += rtu_start_recv_other_data(ptr , pkt);
+            ptr += (90-63)*2;//保留
+
+            for(int i = 0 ; i < RTU_LINE_NUM ; ++i) // 读取相 数据
+                ptr += rtu_start_recv_line_data(ptr , pkt , i);
             for(int i = 0 ; i < RTU_LINE_NUM ; ++i) // 读取滤波 数据
                 ptr += rtu_start_recv_thd_data(ptr , pkt , i);
             ptr += rtu_start_recv_some_alarm_data(ptr , pkt);
-            for(int i = 0 ; i < RTU_LINE_NUM ; ++i) // 读取滤波 数据
+            for(int i = 0 ; i < RTU_LINE_NUM ; ++i) // 读取阈值数据
                 ptr += rtu_start_recv_last_alarm_data(ptr , pkt , i);
             for(int i = 0 ; i < RTU_LINE_NUM ; ++i)
                 pkt->data[i].sw = pkt->breaker;// 更新始端箱断路器状态
@@ -543,7 +555,7 @@ bool rtu_recv_packetV3(uchar *buf, int len, Rtu_recv *pkt)
         }
         else{//插接箱
             ptr += rtu_plug_recv_init(ptr , pkt);
-            ptr += 8*2;//保留
+            ptr += (16-9)*2;//保留
             for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop 数据
                 ptr += rtu_plug_recv_loop_data(ptr , pkt , i);
             ptr += rtu_plug_recv_thd_pl_data(ptr , pkt);

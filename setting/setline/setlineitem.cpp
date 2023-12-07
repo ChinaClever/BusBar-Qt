@@ -66,7 +66,7 @@ void SetLineItem::updateWidget(int bus, int line)
     ui->nameLab->setText(str+ QString::number(mLine+1));
 
     if(mFlag){
-        setProgressbarValue(ui->curBar,&(objData->cur),line);
+        setProgressbarPowValue(ui->curBar,&(objData->cur),line);
         setLabeColor(ui->curLab , objData->cur.alarm[line], 0);
         setLabeColor(ui->volLab , objData->vol.alarm[line], 0);
     }
@@ -94,6 +94,29 @@ void SetLineItem::updateWidget(int bus, int line)
 
 
 void SetLineItem::setProgressbarValue(QProgressBar *bar, sDataUnit *data, int index)
+{
+    int max = data->max[index];
+    int min = data->min[index];
+    if(max - min > 0)
+    {
+        double value = data->value[index]*1.0;
+        int ret = (value - min)*100/(max - min);
+        bar->setValue(ret);
+    }else
+        bar->setValue(0);
+
+    int cirAlarm = data->crAlarm[index];
+    int alarm = data->alarm[index];
+    if(alarm >= 1)
+        setProcessBarColor(bar,"red"); //告警
+    else if(cirAlarm == 1)
+        setProcessBarColor(bar,"yellow"); //预警
+    else
+        setProcessBarColor(bar,"green"); //正常
+
+}
+
+void SetLineItem::setProgressbarPowValue(QProgressBar *bar, sDataPowUnit *data, int index)
 {
     int max = data->max[index];
     int min = data->min[index];
