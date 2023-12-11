@@ -59,9 +59,9 @@ void SetLineItem::updateWidget(int bus, int line)
 //    ui->curLab->setText(QString::number(objData ->cur.value[line]/COM_RATE_CUR,'f', 1)+"A");
 //    ui->volLab->setText(QString::number(objData ->vol.value[line]/COM_RATE_VOL,'f', 0)+"V");
     if(mFlag)
-        ui->curLab->setText(QString::number(objData ->cur.value[line]/COM_RATE_CUR,'f', 2)+"A");
+        ui->curLab->setText(QString::number(objData ->cur.value[line]/COM_RATE_CUR,'f', 3)+"A");
     else
-        ui->curLab->setText(QString::number(busData->box[0].rate.svalue/10.0,'f',1)+"Hz");
+        ui->curLab->setText(QString::number(busData->box[0].rate.svalue/COM_RATE_VOL,'f',1)+"Hz");
     ui->volLab->setText(QString::number(objData->vol.value[line]/COM_RATE_VOL,'f', 1)+"V");
     ui->nameLab->setText(str+ QString::number(mLine+1));
 

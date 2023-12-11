@@ -290,7 +290,6 @@ void BoxLoopTableWid::setVol(int id, int column)
 
     double value = unit->value[id] / COM_RATE_VOL;
     if(value >= 0)
-//        str = QString::number(value) + "V";
         str = QString::number(value , 'f' , 1) + "V";
 
     setTableItem(id, column, str);
@@ -322,8 +321,7 @@ void BoxLoopTableWid::setCur(int id, int column)
 
     double value = unit->value[id] / COM_RATE_CUR;
     if(value >= 0)
-//        str = QString::number(value, 'f', 1) + "A";
-        str = QString::number(value, 'f', 2) + "A";
+        str = QString::number(value, 'f', 3) + "A";
     setTableItem(id, column, str);
     setAlarmStatus(id, column,unit->alarm[id], unit->crAlarm[id]);
 }
@@ -334,7 +332,6 @@ void BoxLoopTableWid::setPow(int id, int column)
 
     double value = mData->pow.value[id] / COM_RATE_POW;
     if(value >= 0)
-//        str = QString::number(value, 'f', 3) + "kW";
         str = QString::number(value, 'f', 3) + "kW";
     setTableItem(id, column, str);
     setAlarmStatus(id, column,mData->pow.alarm[id], mData->pow.crAlarm[id]);
@@ -346,7 +343,6 @@ void BoxLoopTableWid::setRePow(int id, int column)
 
     double value = mData->reactivePower[id] / COM_RATE_POW;
     if(value >= 0)
-//        str = QString::number(value, 'f', 3) + "kW";
         str = QString::number(value, 'f', 3) + "kVar";
     setTableItem(id, column, str);
 }

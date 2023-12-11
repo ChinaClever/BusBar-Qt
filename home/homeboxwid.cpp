@@ -58,7 +58,7 @@ void HomeBoxWid::busChangeSlot(int id)
 void HomeBoxWid::updateData()
 {
     QPalette pe;
-    QString str =  QString::number(mData->tgBox.cur/COM_RATE_CUR,'f',1) + "A";
+    QString str =  QString::number(mData->tgBox.cur/COM_RATE_CUR,'f',3) + "A";
     if(mData->offLine > 0)   // 在线
     {
         if(mData->boxCurAlarm == 2)

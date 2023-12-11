@@ -116,7 +116,7 @@ void BoxTotalWid::updateData()
             volLab[i]->setText(str);
 
 //            str= QString::number(mLineTgBox->cur[i]/COM_RATE_CUR, 'f', 1) + "A";
-            str= QString::number(mLineTgBox->cur[i]/COM_RATE_CUR, 'f', 2) + "A";
+            str= QString::number(mLineTgBox->cur[i]/COM_RATE_CUR, 'f', 3) + "A";
             curLab[i]->setText(str);
 
 //            str= QString::number(mBox->data.pl[i]/COM_RATE_VOL, 'f', 1) ;

@@ -530,7 +530,7 @@ bool rtu_recv_packet(uchar *buf, int len, Rtu_recv *pkt)
 bool rtu_recv_packetV3(uchar *buf, int len, Rtu_recv *pkt)
 {
     bool ret = false;
-    int rtn = rtu_recv_len(buf, len , RTU_SENT_LEN_V30*2+6);  //判断回收的数据是否完全
+    int rtn = rtu_recv_len(buf, len , RTU_SENT_LEN_V303*2+6);  //判断回收的数据是否完全
     if(rtn == 0) {
         uchar *ptr=buf;
         ptr += rtu_recv_head(ptr, pkt); //指针偏移0
@@ -567,7 +567,7 @@ bool rtu_recv_packetV3(uchar *buf, int len, Rtu_recv *pkt)
                 ptr += rtu_plug_recv_loop_alarm_data(ptr , pkt , i);
 
         }
-        pkt->crc = (buf[RTU_SENT_LEN_V30*2+6-1]*256) + buf[RTU_SENT_LEN_V30*2+6-2]; // RTU_SENT_LEN_V23*2+5
+        pkt->crc = (buf[RTU_SENT_LEN_V303*2+6-1]*256) + buf[RTU_SENT_LEN_V303*2+6-2]; // RTU_SENT_LEN_V23*2+5
         ret = rtu_recv_crc(buf, len, pkt); //校验码
     }
     return ret;

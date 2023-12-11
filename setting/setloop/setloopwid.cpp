@@ -61,7 +61,7 @@ int SetLoopWid::updateDev(sBoxData *dev, int row)
         {
             double value = unit->value[i] / COM_RATE_CUR;
             //            list << QString::number(value,'f', 1) + "A";
-            list << QString::number(value,'f', 2) + "A";
+            list << QString::number(value,'f', 3) + "A";
             setItemColor(row, i+1, unit->alarm[i]);
         }
 

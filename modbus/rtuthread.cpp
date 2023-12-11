@@ -539,6 +539,7 @@ void RtuThread::initData(sBoxData *box, Rtu_recv *pkt)
     box->iOF = pkt->iOF;
     box->isd = pkt->isd;
     box->reState = pkt->reState;
+    box->boxType = pkt->boxType;
 }
 
 void RtuThread::readLocalTemHum()

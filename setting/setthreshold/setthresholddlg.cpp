@@ -46,11 +46,11 @@ void SetThresholdDlg::initSpinBox(sThresholdItem &item)
             }
             ui->mindoubleSpinBox->setMaximum(range);
             ui->maxdoubleSpinBox->setMaximum(range);
-            ui->mindoubleSpinBox->setSingleStep(0.01);
-            ui->maxdoubleSpinBox->setSingleStep(0.01);
+            ui->mindoubleSpinBox->setSingleStep(0.001);
+            ui->maxdoubleSpinBox->setSingleStep(0.001);
 
-            ui->mindoubleSpinBox->setDecimals(2);
-            ui->maxdoubleSpinBox->setDecimals(2);
+            ui->mindoubleSpinBox->setDecimals(3);
+            ui->maxdoubleSpinBox->setDecimals(3);
             ui->mindoubleSpinBox->setValue(item.min/COM_RATE_CUR);
             ui->maxdoubleSpinBox->setValue(item.max/COM_RATE_CUR);
             ui->mindoubleSpinBox->setSuffix(str);

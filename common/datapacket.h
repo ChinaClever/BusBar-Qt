@@ -161,6 +161,7 @@ typedef struct _sBoxData {
     uchar proNum;//项目编号 0：标准 1：定制
     uchar buzzerStatus;//蜂鸣器
     uchar reState;
+    uchar boxType;
     unsigned long long totalApPow;//   总视在功率
 
     sObjData data; // 回路数据
@@ -383,59 +384,66 @@ enum  sSetStartType{
     ,SetStartRelease         = 11           //0:没有 1:有
     ,SetStartControlRelease  = 14           //0:没有 1:有
 
-    ,StartTemperatureMIN_1   = 284           //温度上限
-    ,StartTemperatureMAX_1   = 285           //温度下限
-    ,StartTemperatureMIN_2   = 286
-    ,StartTemperatureMAX_2   = 287
-    ,StartTemperatureMIN_3   = 288
-    ,StartTemperatureMAX_3   = 289
-    ,StartTemperatureMIN_4   = 290
-    ,StartTemperatureMAX_4   = 291
+    ,StartTemperatureMIN_1   = 420           //温度上限
+    ,StartTemperatureMAX_1   = 421           //温度下限
+    ,StartTemperatureMIN_2   = 422
+    ,StartTemperatureMAX_2   = 423
+    ,StartTemperatureMIN_3   = 424
+    ,StartTemperatureMAX_3   = 425
+    ,StartTemperatureMIN_4   = 426
+    ,StartTemperatureMAX_4   = 427
 
-    ,StartReCurAlarm         = 292
-    ,StartZoneCurMIN         = 293
-    ,StartZoneCurMAX         = 294
+    ,StartReCurAlarm         = 428
 
-    ,StartTotalPowMIN_1      = 295
-    ,StartTotalPowMIN_2      = 296
-    ,StartTotalPowMAX_1      = 297
-    ,StartTotalPowMAX_2      = 298
+    ,StartZoneCurMAX_1       = 429
+    ,StartZoneCurMAX_2       = 430
 
-    ,StartSetHzMIN           = 299
-    ,StartSetHzMAX           = 300
+    ,StartTotalPowMIN_1      = 431
+    ,StartTotalPowMIN_2      = 432
+    ,StartTotalPowMAX_1      = 433
+    ,StartTotalPowMAX_2      = 434
 
-    ,StartLineVoltageMIN_L1  = 301           //线电压下限
-    ,StartLineVoltageMAX_L1  = 302           //线电压上限
-    ,StartVoltageMIN_L1      = 303           //电压下限
-    ,StartVoltageMAX_L1      = 304           //电压上限
-    ,StartCurrentMIN_L1      = 305           //电流下限
-    ,StartCurrentMAX_L1      = 306           //电流上限
-    ,StartPowerMIN_L1_1      = 307           //功率下限
-    ,StartPowerMIN_L1_2      = 308           //功率下限
-    ,StartPowerMAX_L1_1      = 309           //功率上限
-    ,StartPowerMAX_L1_2      = 310           //功率上限
+    ,StartSetHzMIN           = 435
+    ,StartSetHzMAX           = 436
 
-    ,StartLineVoltageMIN_L2  = 311           //电压下限
-    ,StartLineVoltageMAX_L2  = 312           //电压上限
-    ,StartVoltageMIN_L2      = 313           //电压下限
-    ,StartVoltageMAX_L2      = 314           //电压上限
-    ,StartCurrentMIN_L2      = 315           //电流下限
-    ,StartCurrentMAX_L2      = 316           //电流上限
-    ,StartPowerMIN_L2_1      = 317           //功率下限
-    ,StartPowerMIN_L2_2      = 318           //功率下限
-    ,StartPowerMAX_L2_1      = 319           //功率上限
-    ,StartPowerMAX_L2_2      = 320           //功率上限
+    ,StartLineVoltageMIN_L1  = 437           //线电压下限
+    ,StartLineVoltageMAX_L1  = 438          //线电压上限
+    ,StartVoltageMIN_L1      = 439           //电压下限
+    ,StartVoltageMAX_L1      = 440           //电压上限
+    ,StartCurrentMIN_L1_1      = 441           //电流下限
+    ,StartCurrentMIN_L1_2      = 442           //电流下限
+    ,StartCurrentMAX_L1_1      = 443           //电流上限
+    ,StartCurrentMAX_L1_2      = 444           //电流上限
+    ,StartPowerMIN_L1_1      = 445           //功率下限
+    ,StartPowerMIN_L1_2      = 446           //功率下限
+    ,StartPowerMAX_L1_1      = 447           //功率上限
+    ,StartPowerMAX_L1_2      = 448           //功率上限
 
-    ,StartLineVoltageMIN_L3  = 321           //电压下限
-    ,StartLineVoltageMAX_L3  = 322           //电压上限
-    ,StartVoltageMIN_L3      = 323           //电压下限
-    ,StartVoltageMAX_L3      = 324           //电压上限
-    ,StartCurrentMIN_L3      = 325           //电流下限
-    ,StartCurrentMAX_L3      = 326           //电流上限
-    ,StartPowerMIN_L3_1      = 327           //功率下限
-    ,StartPowerMIN_L3_2      = 328           //功率下限
-    ,StartPowerMAX_L3_1      = 329           //功率上限
-    ,StartPowerMAX_L3_2      = 330           //功率上限
+    ,StartLineVoltageMIN_L2  = 449           //电压下限
+    ,StartLineVoltageMAX_L2  = 450           //电压上限
+    ,StartVoltageMIN_L2      = 451           //电压下限
+    ,StartVoltageMAX_L2      = 452           //电压上限
+    ,StartCurrentMIN_L2_1      = 453           //电流下限
+    ,StartCurrentMIN_L2_2      = 454           //电流下限
+    ,StartCurrentMAX_L2_1      = 455           //电流上限
+    ,StartCurrentMAX_L2_2      = 456           //电流上限
+    ,StartPowerMIN_L2_1      = 457           //功率下限
+    ,StartPowerMIN_L2_2      = 458           //功率下限
+    ,StartPowerMAX_L2_1      = 459           //功率上限
+    ,StartPowerMAX_L2_2      = 460           //功率上限
+
+    ,StartLineVoltageMIN_L3  = 461           //电压下限
+    ,StartLineVoltageMAX_L3  = 462           //电压上限
+    ,StartVoltageMIN_L3      = 463           //电压下限
+    ,StartVoltageMAX_L3      = 464           //电压上限
+    ,StartCurrentMIN_L3_1      = 465           //电流下限
+    ,StartCurrentMIN_L3_2      = 466           //电流下限
+    ,StartCurrentMAX_L3_1      = 467           //电流上限
+    ,StartCurrentMAX_L3_2      = 468           //电流上限
+    ,StartPowerMIN_L3_1      = 469           //功率下限
+    ,StartPowerMIN_L3_2      = 470           //功率下限
+    ,StartPowerMAX_L3_1      = 471           //功率上限
+    ,StartPowerMAX_L3_2      = 472           //功率上限
 
 };
 

@@ -288,7 +288,7 @@ void BoxTableWidget::setCur(int id, int line, int column)
         double value = unit->cur[line] / COM_RATE_CUR;
         if(value >= 0)
             //            str = QString::number(value, 'f', 1) + "A";
-            str = QString::number(value, 'f', 2) + "A";
+            str = QString::number(value, 'f', 3) + "A";
     }
     setTableItem(id, column, str);
 }

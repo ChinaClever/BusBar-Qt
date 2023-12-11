@@ -93,12 +93,12 @@ void LineRoadWid::updateWid(int id)
     updateAlarmStatus(ui->volLab, mData->vol);
 
 //    str =  QString::number(mData->cur.value[id]/COM_RATE_CUR,'f',1) + "A";
-    str =  QString::number(mData->cur.value[id]/COM_RATE_CUR,'f',2) + "A";
+    str =  QString::number(mData->cur.value[id]/COM_RATE_CUR,'f',3) + "A";
     ui->curLab->setText(str);
     updateAlarmStatus(ui->curLab, mData->cur);
 
     //str =  QString::number(mData->cur.max[id]/COM_RATE_CUR,'f',1) + "A";
-    str =  QString::number(mData->cur.max[id]/COM_RATE_CUR,'f',2) + "A";
+    str =  QString::number(mData->cur.max[id]/COM_RATE_CUR,'f',3) + "A";
     ui->maxCur->setText(str);
 
     //str =  QString::number(mData->pow[id]/COM_RATE_POW,'f',3) + "kW";

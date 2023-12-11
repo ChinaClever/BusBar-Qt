@@ -115,10 +115,7 @@ void MainWindow::setBusName(int index)
 
     mIndex = index;
 
-    sBusData *busData = &(shm->data[index]);
-    double rateCur = busData->box[0].ratedCur/COM_RATE_CUR;
-    ui->ratedLab->setText(QString::number(rateCur));
-    ui->ratedLab->setText("V3.0.0");
+    ui->ratedLab->setText("V3.0.3");
 }
 
 void MainWindow::checkAlarm()

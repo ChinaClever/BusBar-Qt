@@ -8,8 +8,8 @@
 #include "modbus_mastertcp.h"
 enum eMbMasterRegs {
     MbMasterReg_Factory   =   0,     // 生产厂家
-    MbMasterReg_Range     = 284,
-    MbMasterReg_End     = 330,
+    MbMasterReg_Range     = 420,
+    MbMasterReg_End     = 472,
     MbSlaveReg_Factory    =   0,
     MbSlaveReg_Range      =   165,
     MbSlaveReg_End     = 244,
