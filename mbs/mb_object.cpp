@@ -21,7 +21,17 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
         vs << dev->proNum <<dev->version << dc << dev->curSpecification << dev->workMode; // 通讯协议版本
         vs << dev->baudRate << dev->buzzerStatus << dev->alarmTime << dev->lps << dev->iOF;
         vs << dev->isd << dev->shuntRelease << dev->reState << dev->lpsAlarm;
-        vs << 0 <<  0 << 0 << 0 << 0;
+        for(int i = 0 ; i < 40-14 ; i++) vs << 0 ;
+        for(int i = 0 ;  i < SENSOR_NUM ; i++){
+            vs << dev->env.tem.value[i] << dev->env.tem.upalarm[i];
+        }
+        vs << (dev->totalApPow >> 16) << (dev->totalApPow & 0xffff);
+        vs << (dev->totalPow.ivalue >> 16) << (dev->totalPow.ivalue & 0xffff);
+        vs << dev->totalPow.ialarm << dev->reCur.svalue << dev->reCur.supalarm;
+        vs << dev->zeroLineCur.ivalue << dev->zeroLineCur.iupalarm;
+        vs << dev->volUnbalance << dev->curUnbalance << dev->data.sw[0];
+        vs << dev->rate.svalue << dev->rate.supalarm;
+        for(int i = 0 ; i < 90-63 ; i++) vs << 0 ;
 
         sObjData *p = &(dev->data);
         for(int i = 0 ; i < START_LINE_NUM ; ++i) // 读取相 数据
@@ -30,7 +40,8 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
             vs << p->lineVol.upalarm[i];
             vs << p->vol.value[i];
             vs << p->vol.upalarm[i];
-            vs << p->cur.value[i];
+            vs << (p->cur.value[i] >> 16);
+            vs << (p->cur.value[i] & 0xffff);
             vs << p->cur.upalarm[i];
             vs << (p->pow.value[i] >> 16);
             vs << (p->pow.value[i] & 0xffff);
@@ -44,15 +55,7 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
             vs << (p->ele[i] & 0xffff);
             vs << p->pl[i];
         }
-        vs << (dev->totalApPow >> 16) << (dev->totalApPow & 0xffff);
-        vs << (dev->totalPow.ivalue >> 16) << (dev->totalPow.ivalue & 0xffff);
-        vs << dev->totalPow.ialarm << dev->reCur.svalue << dev->reCur.supalarm;
-        vs << dev->zeroLineCur.ivalue << dev->zeroLineCur.iupalarm;
-        vs << dev->volUnbalance << dev->curUnbalance << dev->data.sw[0];
-        vs << dev->rate.svalue << dev->rate.supalarm;
-        for(int i = 0 ;  i < SENSOR_NUM ; i++){
-            vs << dev->env.tem.value[i] << dev->env.tem.upalarm[i];
-        }
+
         for(int k = 0 ; k < START_LINE_NUM ; k++){
             for(int i = 0 ;  i < HARMONIC_NUM ; i++){
                 vs << data->thdData.volThd[k][i];
@@ -80,14 +83,15 @@ void Mb_Object::upMasterDevRange(sBusData *data , int bus, int index)
             vs << dev->env.tem.min[i] << dev->env.tem.max[i];
         }
         vs << dev->reCur.smax;
-        vs << dev->zeroLineCur.imin << dev->zeroLineCur.imax;
+        vs << (dev->zeroLineCur.imax >> 16) << (dev->zeroLineCur.imax & 0xffff);
         vs << (dev->totalPow.imin >> 16) << (dev->totalPow.imin & 0xffff);
         vs << (dev->totalPow.imax >> 16) << (dev->totalPow.imax & 0xffff);
         vs << dev->rate.smin << dev->rate.smax;
         for(int i = 0 ; i < START_LINE_NUM ; i++){
             vs << dev->data.lineVol.min[i] << dev->data.lineVol.max[i];
             vs << dev->data.vol.min[i] << dev->data.vol.max[i];
-            vs << dev->data.cur.min[i] << dev->data.cur.max[i];
+            vs << (dev->data.cur.min[i] >> 16)  << (dev->data.cur.min[i] & 0xffff);
+            vs << (dev->data.cur.max[i] >> 16)  << (dev->data.cur.max[i] & 0xffff);
             vs << (dev->data.pow.min[i] >> 16)  << (dev->data.pow.min[i] & 0xffff);
             vs << (dev->data.pow.max[i] >> 16)  << (dev->data.pow.max[i] & 0xffff);
         }

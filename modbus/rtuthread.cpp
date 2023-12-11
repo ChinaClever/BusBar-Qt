@@ -175,7 +175,8 @@ int RtuThread::sendData(uchar *pBuff, int nCount, int msec)
 
 void RtuThread::setBoxNum(ushort num)
 {
-    sendData(0, 0x1040, num, false);
+    //sendData(0, 0x1040, num, false);
+    sendDataUcharV3(0, 30 , num);
 }
 
 void RtuThread::loopObjData(sObjData *loop, int id, RtuRecvLine *data)
@@ -659,13 +660,13 @@ void RtuThread::run()
     {
 #if( SI_RTUWIFI == 0)
         if(gVerflag == 1){
+            BusTransData();
+        }else if(gVerflag == 2){
             ushort num = gBoxArray[mId];
             if(num) {
                 setBoxNum(num);
                 gBoxArray[mId] = 0;
             }
-            BusTransData();
-        }else if(gVerflag == 2){
             BusTransDataV3();
         }
         else
