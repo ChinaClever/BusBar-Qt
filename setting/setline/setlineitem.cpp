@@ -64,7 +64,7 @@ void SetLineItem::updateWidget(int bus, int line)
     }
     else{
         ui->curLab->setText(QString::number(busData->box[0].rate.svalue/COM_RATE_FREQUENCY,'f',1)+"Hz");
-        ui->volLab->setText(QString::number(busData->box[0].zeroLineCur.svalue/COM_RATE_VOL,'f', 2)+"A");
+        ui->volLab->setText(QString::number(busData->box[0].zeroLineCur.svalue/COM_RATE_CUR,'f', 2)+"A");
         ui->nameLab->hide();
     }
 
@@ -89,7 +89,7 @@ void SetLineItem::setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *da
     int max = data->smax;
     int min = data->smin;
     int value = data->svalue;
-    if(max > 0 && min > 0 && max > min && value >= min && value < max)
+    if(max > 0 && min >= 0 && max > min && value >= min && value < max)
     {
         int ret = ((value-min)*100.0/(max-min));
         if(ret > 100) ret = 100;

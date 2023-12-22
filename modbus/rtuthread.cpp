@@ -382,7 +382,7 @@ int RtuThread::transData(int addr)
         bool ret = rtu_recv_packet(buf, rtn, pkt); // 解析数据 data - len - it
         if(ret) {
             if(addr+1 == pkt->addr) { //回收地址和发送地址同
-                offLine = 4;
+                offLine = 20;
                 loopData(box, pkt); //更新数据
                 envData(&(box->env), pkt);
                 box->rate.svalue = pkt->rate.svalue;
@@ -527,7 +527,7 @@ void RtuThread::BusTransDataV3()
 
 void RtuThread::initData(sBoxData *box, Rtu_recv *pkt)
 {
-    box->dc = pkt->dc;
+    box->dc = 1;
     box->version = pkt->version;
     box->lps = pkt->lps;
     box->lpsAlarm = pkt->lpsState;

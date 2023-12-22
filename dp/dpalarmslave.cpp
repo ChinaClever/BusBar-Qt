@@ -370,6 +370,17 @@ void DpAlarmSlave::busAlarm(int id)
                 mAlarmStr << tempStr;
                 mAlarmStr << str;
             }
+            if( busBox->lpsLogAlarm == 1) {
+                busBox->lpsLogAlarm = 2;
+                QString typeStr = tr("主路防雷");
+                QString str = tr("母线：%1").arg(bus->busName);
+                QString tempStr = typeStr + tr("告警");
+                str += tr("损坏");
+                saveMsg( typeStr , str );
+                mAlarmStr << shm->data[mBusId].busName;
+                mAlarmStr << tempStr;
+                mAlarmStr << str;
+            }
             if( busBox->zeroLineAlarm == 1) {
                 busBox->zeroLineAlarm = 2;
                 QString typeStr = tr("主路零线电流");

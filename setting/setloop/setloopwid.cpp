@@ -67,8 +67,8 @@ int SetLoopWid::updateDev(sBoxData *dev, int row)
         }
 
         QString str = QString::number(dev->zeroLineCur.svalue / COM_RATE_CUR,'f', 2) + "A";
-        setItemColor(row, LINE_NUM, dev->zeroLineCur.salarm);
-        setTableItem(row, LINE_NUM, str);
+        setItemColor(row, LINE_NUM+1, dev->zeroLineCur.salarm);
+        setTableItem(row, LINE_NUM+1, str);
         setTableRow(row, list);
     }
 
@@ -110,7 +110,7 @@ void SetLoopWid::itemClicked(QTableWidgetItem *it)
         item.bus = mBus;
         item.box = it->row()+1;
         item.num = column-1;
-        if(column == LINE_NUM)item.type = 8;
+        if(column == LINE_NUM+1)item.type = 8;
         else item.type = 2;
 
         SetThresholdDlg dlg(this);

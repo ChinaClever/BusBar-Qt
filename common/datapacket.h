@@ -181,7 +181,8 @@ typedef struct _sBoxData {
     sRtuULLintUnit totalPow; //总有功功率
     char dc; // 交直流标志位
     uchar lps; // 防雷开关
-    uchar lpsAlarm;//防雷开关告警值 0表示未告警 1表示已告警 2表示已记录
+    uchar lpsLogAlarm;//防雷开关告警值 0表示未告警 1表示已告警 2表示已记录
+    uchar lpsAlarm;//防雷开关告警值 0表示没有 1表示正常 2表示损坏
     uchar HzAlarm;//频率告警值 0表示未告警 1表示已告警 2表示已记录
     uchar zeroLineAlarm;//零线电流告警值 0表示未告警 1表示已告警 2表示已记录
 

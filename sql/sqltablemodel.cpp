@@ -17,7 +17,7 @@ SqlTableModel::SqlTableModel(QWidget *parent) :
     DbDevName* db = DbDevName::bulid();
     model = new QSqlTableModel(this, db->mDb);
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    model->setSort(0, Qt::AscendingOrder); //选择按照 第一列 排序
+    model->setSort(0, Qt::DescendingOrder); //选择按照 第一列 排序
 }
 
 void SqlTableModel::setHeaders(QStringList &head)
@@ -74,6 +74,7 @@ bool SqlTableModel::removeRow(int curRow)
 void SqlTableModel::queryFilter(QString str)
 {
     model->setFilter(str); //进行筛选
+    model->setSort(0, Qt::DescendingOrder); //选择按照 第一列 排序
     model->select(); //显示结果
 }
 
@@ -84,6 +85,7 @@ void SqlTableModel::queryFilter(QString str)
 bool SqlTableModel::refreshTable(const QString &name)
 {
     model->setTable(name); //重新关联表
+    model->setSort(0, Qt::DescendingOrder); //选择按照 第一列 排序
     model->select(); //这样才能再次显示整个表的内容
 
     QString tableName = model->tableName();

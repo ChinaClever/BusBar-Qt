@@ -74,7 +74,7 @@ void BoxTotalWid::updateAll()
 
         str = QString::number(mBox->zeroLineCur.svalue/COM_RATE_CUR, 'f', 2)+"A";
         ui->tApPowH->setText(str);
-        setLabeColor(ui->tEleH, mBox->zeroLineCur.salarm, mBox->zeroLineCur.scrAlarm);
+        setLabeColor(ui->tApPowH, mBox->zeroLineCur.salarm, mBox->zeroLineCur.scrAlarm);
     }
 }
 

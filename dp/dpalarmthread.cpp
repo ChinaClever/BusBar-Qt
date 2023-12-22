@@ -155,8 +155,14 @@ void DpAlarmThread::boxAlarm(sBoxData &box)
         alarmOtherDataUnit(box.rate , box.HzAlarm);
         alarmOtherDataUnit(box.zeroLineCur , box.zeroLineAlarm);
 
+        if(box.lpsAlarm == 2 && box.lpsLogAlarm == 0){
+            box.lpsLogAlarm = 1;
+        }else if(box.lpsAlarm == 0 || box.lpsAlarm == 1){
+            box.lpsLogAlarm = 0;
+        }
+
         box.boxOffLineAlarm = 1;
-        box.boxAlarm = box.boxCurAlarm + box.boxVolAlarm + box.boxEnvAlarm + box.boxPowerAlarm + box.HzAlarm + box.zeroLineAlarm;
+        box.boxAlarm = box.boxCurAlarm + box.boxVolAlarm + box.boxEnvAlarm + box.boxPowerAlarm + box.HzAlarm + box.zeroLineAlarm+box.lpsLogAlarm;
     } else {
         if(box.boxOffLineAlarm == 1) box.boxOffLineAlarm = 2;
         box.boxAlarm = 0;

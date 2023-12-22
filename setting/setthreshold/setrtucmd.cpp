@@ -80,6 +80,7 @@ void SetRtuCmd::sendStartV3(sThresholdItem &item)
     case 3: reg = StartTemperatureMIN_1 + item.num*2; break;
     case 4: reg = StartPowerMIN_L1_1 + item.num*10;break;
     case 5: reg = StartSetHzMIN ; break;
+    case 8: reg = StartZoneCurMIN ; break;
     case 11: reg = SetStartRelease ; break;
     case 14: reg = SetStartControlRelease ; break;
     }

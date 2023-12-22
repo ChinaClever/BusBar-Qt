@@ -74,12 +74,12 @@ void HomeBoxWid::updateData()
     ui->curLab->setPalette(pe);
 }
 
-void HomeBoxWid::updateAlarmIcon(QLabel *lab,int volAlarm, int curALarm, int envALarm , int powAlarm)
+void HomeBoxWid::updateAlarmIcon(QLabel *lab,int volAlarm, int curALarm, int envALarm , int powAlarm, int zeroLineAlarm)
 {
     QString str;
-    if(volAlarm == 2 || curALarm == 2 || envALarm == 2 || powAlarm == 2 ) {
+    if(volAlarm == 2 || curALarm == 2 || envALarm == 2 || powAlarm == 2 || zeroLineAlarm == 2) {
         str = "boxalarm";
-    } else if(volAlarm == 1 || curALarm == 1 || envALarm == 1 || powAlarm == 1 ) {
+    } else if(volAlarm == 1 || curALarm == 1 || envALarm == 1 || powAlarm == 1 || zeroLineAlarm == 1) {
         str = "boxciralarm";
     } else {
         str = "boxonline";
@@ -96,9 +96,9 @@ void HomeBoxWid::updateAlarmStatus()
         if(!mData->firsttime || mData->preoffLine == 0){
             mData->firsttime = true;
             mData->preoffLine = mData->offLine;
-            updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-            updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-            updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm, mData->zeroLineAlarm);
+            updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm, mData->zeroLineAlarm);
+            updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm, mData->zeroLineAlarm);
         }
     } else { // 离线
         if(!mData->firsttime || mData->preoffLine > 0){
@@ -129,9 +129,9 @@ void HomeBoxWid::timeoutDone()
 void HomeBoxWid::updateUpAndDownAlarmStatus()
 {
     if(mData->offLine > 0) {
-        updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-        updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-        updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+        updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm , mData->zeroLineAlarm);
+        updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm , mData->zeroLineAlarm);
+        updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm , mData->zeroLineAlarm);
     } else { // 离线
         setBackgroundImage(ui->iconLab_1, "boxoffine");
         setBackgroundImage(ui->iconLab_2, "boxoffine");
