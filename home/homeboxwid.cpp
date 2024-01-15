@@ -93,9 +93,11 @@ void HomeBoxWid::updateAlarmIcon(QLabel *lab,int volAlarm, int curALarm, int env
 void HomeBoxWid::updateAlarmStatus()
 {
     if(mData->offLine > 0) {
-        if(!mData->firsttime || mData->preoffLine == 0){
+        uchar alarm = mData->boxAlarm + mData->boxCurAlarm + mData->boxEnvAlarm + mData->boxPowerAlarm;
+        if(!mData->firsttime || mData->preoffLine == 0 || mData->prealarm != alarm){
             mData->firsttime = true;
             mData->preoffLine = mData->offLine;
+            mData->prealarm = alarm;
             updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
             updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
             updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);

@@ -355,6 +355,31 @@ void DpAlarmSlave::busAlarm(int id)
                 mAlarmStr << tempStr;
                 mAlarmStr << str;
             }
+            if( busBox->lpsLogAlarm == 1) {
+                busBox->lpsLogAlarm = 2;
+                QString typeStr = tr("主路防雷");
+                QString str = tr("母线：%1").arg(bus->busName);
+                QString tempStr = typeStr + tr("告警");
+                str += tr("损坏");
+                saveMsg( typeStr , str );
+                mAlarmStr << shm->data[mBusId].busName;
+                mAlarmStr << tempStr;
+                mAlarmStr << str;
+            }
+            if( busBox->zeroLineAlarm == 1) {
+                busBox->zeroLineAlarm = 2;
+                QString typeStr = tr("主路零线电流");
+                QString str = tr("母线：%1").arg(bus->busName);
+                QString tempStr = typeStr + tr("告警");
+                str += tr(" 当前值：%2%3, 最小值：%4%5, 最大值：%6%7")
+                           .arg(QString::number(busBox->zeroLineCur.svalue/COM_RATE_CUR,'f',2)).arg("A")
+                           .arg(QString::number(busBox->zeroLineCur.smin/COM_RATE_CUR,'f',2)).arg("A")
+                        .arg(QString::number(busBox->zeroLineCur.smax/COM_RATE_CUR,'f',2)).arg("A");
+                saveMsg( typeStr , str );
+                mAlarmStr << shm->data[mBusId].busName;
+                mAlarmStr << tempStr;
+                mAlarmStr << str;
+            }
         }
     }else{
         if(busBox->boxOffLineAlarm == 2){

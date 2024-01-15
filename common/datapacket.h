@@ -147,6 +147,7 @@ typedef struct _sEnvData {
 typedef struct _sBoxData {
     bool firsttime;
     char preoffLine; // 前一个离线标识
+    char prealarm; // 前一个告警状态
     char offLine; // 离线标识
     uchar loopNum; // 回路数量
     ushort version;
@@ -183,6 +184,8 @@ typedef struct _sBoxData {
     uchar lps; // 防雷开关
     uchar lpsAlarm;//防雷开关告警值 0表示未告警 1表示已告警 2表示已记录
     uchar HzAlarm;//频率告警值 0表示未告警 1表示已告警 2表示已记录
+    uchar lpsLogAlarm;//防雷告警值 0表示未告警 1表示已告警 2表示已记录
+    uchar zeroLineAlarm;//零线电流告警值 0表示未告警 1表示已告警 2表示已记录
 
     uint zeroCur;//零线电流
     uint volUnbalance;//电压三相不平衡
