@@ -91,15 +91,15 @@ void Mb_Core::run()
 {
     static uint cnt = 0;
     bool ret = true;
-    if(cnt++ %2)
-    {
+//    if(cnt++ %2)
+//    {
         ret = mRtu->isConnectedModbus();
         if(ret) mRtu->mbUpdates();
-    }
-    else
-    {
-        ret = mTcp->isConnectedModbus();
-        if(ret) mTcp->mbUpdates();
-    }
+//    }
+//    else
+//    {
+//        ret = mTcp->isConnectedModbus();
+//        if(ret) mTcp->mbUpdates();
+//    }
 }
 

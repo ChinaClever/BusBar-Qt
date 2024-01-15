@@ -121,8 +121,6 @@ void DpAlarmThread::alarmOtherDataUnit(sRtuUshortUnit& box , uchar &alram)
     {
         if(alram == 0)
             alram = 1;
-        else
-            alram = 2;
         box.salarm = 1;
     } else{
         alram= 0;

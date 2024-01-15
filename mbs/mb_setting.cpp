@@ -88,7 +88,8 @@ void Mb_Setting::registerRecvSlot(int address, ushort value)
     QDateTime t = QDateTime::currentDateTime();
     int index = address / 10000;
     if(index < BUS_NUM && address % 10000 == 14) {
-        if(mPreTime[index].secsTo(t) < 10){
+        //qDebug()<<"mPreTime[index] "<<mPreTime[index] <<"t "<<t;
+        if(mPreTime[index].secsTo(t) < 10*60){
             if(mCount[index] == 0) {mCount[index]++;mPreTime[index] = t;}
             else{
                 sThresholdItem item;

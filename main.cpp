@@ -19,7 +19,7 @@ bool appendFile(const QString &msg)
 int main(int argc, char *argv[])
 {
 //    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
-    QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg , false);
+    QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg , true);
     if(QString::fromUtf8(argv[1]) == "d"){
         QLoggingCategory::defaultCategory()->setEnabled(QtDebugMsg , true);
     }

@@ -147,6 +147,7 @@ typedef struct _sEnvData {
 typedef struct _sBoxData {
     bool firsttime;
     char preoffLine; // 前一个离线标识
+    char prealarm; // 前一个告警状态
     char offLine; // 离线标识
     uchar loopNum; // 回路数量
     ushort version;
