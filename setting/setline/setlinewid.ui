@@ -30,7 +30,7 @@
      <x>0</x>
      <y>0</y>
      <width>821</width>
-     <height>61</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -38,6 +38,12 @@
    </property>
    <layout class="QHBoxLayout" name="horizontalLayout_2">
     <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -162,40 +168,52 @@ color: rgb(0,0,0);</string>
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>69</y>
+     <y>30</y>
      <width>811</width>
      <height>91</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QWidget" name="widget_2" native="true">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>165</y>
+     <y>130</y>
      <width>811</width>
      <height>91</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QWidget" name="widget_3" native="true">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>265</y>
+     <y>230</y>
      <width>811</width>
      <height>91</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
   </widget>
   <widget class="QWidget" name="widget_4" native="true">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>365</y>
+     <y>330</y>
      <width>811</width>
-     <height>61</height>
+     <height>91</height>
     </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
    </property>
   </widget>
  </widget>

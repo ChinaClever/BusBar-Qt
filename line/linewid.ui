@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1024</width>
-    <height>427</height>
+    <height>441</height>
    </rect>
   </property>
   <property name="font">
@@ -40,7 +40,7 @@
      <x>10</x>
      <y>259</y>
      <width>1001</width>
-     <height>161</height>
+     <height>181</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -402,8 +402,14 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="label">
       <property name="minimumSize">
        <size>
-        <width>68</width>
+        <width>30</width>
         <height>18</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>50</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="font">
@@ -447,8 +453,14 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="label_10">
       <property name="minimumSize">
        <size>
-        <width>20</width>
+        <width>50</width>
         <height>18</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>30</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="font">
@@ -460,7 +472,7 @@ border-bottom:2px solid rgb(228,228,228);
        </font>
       </property>
       <property name="text">
-       <string>防雷:</string>
+       <string>零线电流:</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -468,11 +480,17 @@ border-bottom:2px solid rgb(228,228,228);
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="lpsLab">
+     <widget class="QLabel" name="zeroLineLab">
       <property name="minimumSize">
        <size>
-        <width>68</width>
+        <width>40</width>
         <height>18</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>40</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="font">
@@ -482,6 +500,32 @@ border-bottom:2px solid rgb(228,228,228);
         <italic>false</italic>
         <bold>false</bold>
        </font>
+      </property>
+      <property name="text">
+       <string>---</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="label_17">
+      <property name="text">
+       <string>防雷：</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QLabel" name="lpStateLab">
+      <property name="minimumSize">
+       <size>
+        <width>40</width>
+        <height>18</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>40</width>
+        <height>16777215</height>
+       </size>
       </property>
       <property name="text">
        <string>---</string>
@@ -516,8 +560,14 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="temA">
       <property name="minimumSize">
        <size>
-        <width>30</width>
+        <width>25</width>
         <height>18</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>25</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="font">
@@ -561,8 +611,14 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="temB">
       <property name="minimumSize">
        <size>
-        <width>30</width>
+        <width>25</width>
         <height>18</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>25</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="font">
@@ -606,8 +662,14 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="temC">
       <property name="minimumSize">
        <size>
-        <width>30</width>
+        <width>25</width>
         <height>18</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>25</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="font">
@@ -651,8 +713,14 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="temD">
       <property name="minimumSize">
        <size>
-        <width>30</width>
+        <width>25</width>
         <height>18</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>25</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="font">
@@ -696,7 +764,7 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="totalPowLab">
       <property name="minimumSize">
        <size>
-        <width>30</width>
+        <width>70</width>
         <height>18</height>
        </size>
       </property>
@@ -775,7 +843,7 @@ border-bottom:2px solid rgb(228,228,228);
        </font>
       </property>
       <property name="text">
-       <string>V 0.0.0</string>
+       <string>V 0.0</string>
       </property>
      </widget>
     </item>

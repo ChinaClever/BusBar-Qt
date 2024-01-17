@@ -256,7 +256,8 @@ void RtuThread::thdData(Rtu_recv *pkt)
 void RtuThread::loopDataV3(sBoxData *box, Rtu_recv *pkt)
 {
     sObjData *loop = &(box->data);
-    box->loopNum = loop->lineNum = pkt->lineNum;
+    box->loopNum = pkt->lineNum;
+    loop->lineNum = pkt->lineNum;
 
     for(int i=0; i<pkt->lineNum; i++)
     {
@@ -526,7 +527,7 @@ void RtuThread::BusTransDataV3()
 
 void RtuThread::initData(sBoxData *box, Rtu_recv *pkt)
 {
-    box->dc = pkt->dc;
+    box->dc = 1;
     box->version = pkt->version;
     box->lps = pkt->lps;
     box->lpsAlarm = pkt->lpsState;
@@ -619,6 +620,7 @@ int RtuThread::transDataV3(int addr)
                 box->reCur.smin = pkt->reCur.smin;
                 box->reCur.smax = pkt->reCur.smax;
                 box->zeroLineCur.svalue = pkt->zeroLineCur.svalue;
+                box->zeroLineCur.supalarm = pkt->zeroLineCur.salarm;
                 box->zeroLineCur.smin = pkt->zeroLineCur.smin;
                 box->zeroLineCur.smax = pkt->zeroLineCur.smax;
                 box->volUnbalance = pkt->volUnbalance;

@@ -40,6 +40,7 @@ void SetThresholdDlg::initSpinBox(sThresholdItem &item)
         }
         break;
     case 2:
+    case 8:
             {
             if(!item.box){
                 str = "A"; range = 650;
@@ -108,6 +109,7 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
     case 3: str = tr("温度"); break;
     case 4: str = tr("功率"); break;
     case 5: str = tr("频率"); break;
+    case 8: str = tr("零线电流"); break;
     }
 
     sBoxData *dev = &(share_mem_get()->data[item.bus].box[item.box]); //获取共享内存
@@ -128,6 +130,7 @@ void SetThresholdDlg::set(sThresholdItem &item)
 
     sDataUnit  *unit = NULL;
     sDataPowUnit  *unitPower = NULL;
+    sRtuUshortUnit *unitZero = NULL;
     if( item.type <= 3)
         unit = &(busData->box[item.box].env.tem);
     else if(item.type == 4)
@@ -138,7 +141,9 @@ void SetThresholdDlg::set(sThresholdItem &item)
     case 3: unit = &(busData->box[item.box].env.tem);break;
     case 4: unitPower = &(obj->pow);break;
     case 5: rate = 10;break;
+    case 8: unitZero = &(busData->box[item.box].zeroLineCur); /*rate = 100;*/  break;//rate = 10; break;
     }
+    ui->label_2->show();
     if( item.type == 3){
         ui->mindoubleSpinBox->hide();
         ui->maxdoubleSpinBox->hide();
@@ -154,6 +159,13 @@ void SetThresholdDlg::set(sThresholdItem &item)
         ui->maxBox->hide();
         item.min = unitPower->min[item.num];
         item.max = unitPower->max[item.num];
+    }else if( item.type == 8 ){
+        ui->label_2->hide();
+        ui->mindoubleSpinBox->hide();
+        ui->minBox->hide();
+        ui->maxBox->hide();
+        item.min = unitZero->smin;
+        item.max = unitZero->smax;
     }else{
         ui->minBox->hide();
         ui->maxBox->hide();
@@ -178,7 +190,7 @@ bool SetThresholdDlg::checkData()
     }else if(mItem.type == 1){
         min = ui->mindoubleSpinBox->value()*COM_RATE_VOL;
         max = ui->maxdoubleSpinBox->value()*COM_RATE_VOL;
-    }else if(mItem.type == 2){
+    }else if(mItem.type == 2 || mItem.type == 8){
         min = ui->mindoubleSpinBox->value()*COM_RATE_CUR;
         max = ui->maxdoubleSpinBox->value()*COM_RATE_CUR;
     }else if(mItem.type == 5){

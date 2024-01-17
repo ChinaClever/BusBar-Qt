@@ -21,6 +21,7 @@ public:
     void initFun(int base, int id);
     void setBaseNum(int base);
     void updateUpAndDownAlarmStatus();
+
 protected:
     void updateData();
     void updateAlarmStatus();
