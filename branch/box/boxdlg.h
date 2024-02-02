@@ -4,7 +4,7 @@
 #include <QDialog>
 #include "boxtotalwid.h"
 #include "boxlooptablewid.h"
-
+#include "temwid.h"
 namespace Ui {
 class BoxDlg;
 }
@@ -29,6 +29,7 @@ private:
     BoxTotalWid *mTotalWid;
     BoxLoopTableWid *mLineWid;
     sBoxData *mData;
+    TemWid *mTemWid;
 };
 
 #endif // BOXDLG_H

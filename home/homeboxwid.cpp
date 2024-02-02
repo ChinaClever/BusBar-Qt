@@ -86,6 +86,47 @@ void HomeBoxWid::updateAlarmIcon(QLabel *lab,int volAlarm, int curALarm, int env
     }
     setBackgroundImage(lab,str);
 }
+/**
+ * @brief 更新告警图片+温度
+ */
+void HomeBoxWid::updateStatus()
+{
+    if(mData->offLine > 0) {
+        if(!mData->firsttime || mData->preoffLine == 0){
+            if(mData->boxType)//盒子类型：0-插接箱；1-温度模块
+            {
+                mData->firsttime = true;
+                mData->preoffLine = mData->offLine;
+                updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            }else{
+                mData->firsttime = true;
+                mData->preoffLine = mData->offLine;
+                updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+                updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+                updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            }
+        }
+    } else { // 离线
+        if(!mData->firsttime || mData->preoffLine > 0){
+            if(mData->boxType)
+            {
+                mData->firsttime = true;
+                mData->preoffLine = mData->offLine;
+                setBackgroundImage(ui->iconLab_2, "boxoffine");
+            }else{
+                mData->firsttime = true;
+                mData->preoffLine = mData->offLine;
+                setBackgroundImage(ui->iconLab_1, "boxoffine");
+                setBackgroundImage(ui->iconLab_2, "boxoffine");
+                setBackgroundImage(ui->iconLab_3, "boxoffine");
+            }
+        }
+    }
+
+    bool hidden = false;
+    if(mID > mBoxNum) hidden = true;
+    this->setHidden(hidden);
+}
 
 /**
  * @brief 更新告警图片
@@ -119,7 +160,8 @@ void HomeBoxWid::timeoutDone()
 {
     if(isRun) {
         //updateData();//hide()
-        updateAlarmStatus();
+        //updateAlarmStatus();
+        updateStatus();
     }
 }
 
@@ -147,9 +189,13 @@ void HomeBoxWid::updateUpAndDownAlarmStatus()
 void HomeBoxWid::on_pushButton_clicked()
 {
     BeepThread::bulid()->beep();
-    BoxDlg dlg(0);
-    dlg.initBox(mBusID, mID);
-    dlg.exec();
+    if(mData->boxType){//温度
+        //显示四个温度
+    }else{
+        BoxDlg dlg(0);
+        dlg.initBox(mBusID, mID);
+        dlg.exec();
+    }
 }
 
 void HomeBoxWid::initWid()

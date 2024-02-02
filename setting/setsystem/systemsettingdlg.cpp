@@ -23,6 +23,7 @@ void SystemSettingDlg::initWid()
 //    mNetWid = new NetSettingDlg(this);
     mOtherWid = new OtherSettingDlg(this);
 //    mModeWid = new ModeDlg(this);
+    // 串口信息mSerialPort = new
     QString str = tr("本地IP设置");
     ui->tabWidget->addTab(mLocaNetSettingWid,str);
 //    str = tr("切换模式");

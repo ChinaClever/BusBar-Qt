@@ -161,7 +161,7 @@ typedef struct _sBoxData {
     uchar proNum;//项目编号 0：标准 1：定制
     uchar buzzerStatus;//蜂鸣器
     uchar reState;
-    uchar boxType;
+    uchar boxType;//盒子类型：0-插接箱，1-温度模块
     unsigned long long totalApPow;//   总视在功率
 
     sObjData data; // 回路数据
