@@ -7,7 +7,7 @@ Serialdata::Serialdata(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setStyleSheet(BTN_FOCUS_BACK_COLOR);
-    QTimer::singleShot(10,this,SLOT(initFunSLot())); //延时初始化
+//    QTimer::singleShot(10,this,SLOT(initFunSLot())); //延时初始化
 }
 
 Serialdata::~Serialdata()
@@ -18,10 +18,11 @@ void Serialdata::initWid()
 {
     sDataPacket *shm = get_share_mem();
     mData = &(shm->data[0].box[0]);//始端箱
-    ui->baud_comboBox->currentText(mData->baudRate);
-
+    ui->baudEdit->setText(QString::number(mData->baudRate));
 }
 void Serialdata::initFunSLot()
 {
     initWid();
 }
+
+

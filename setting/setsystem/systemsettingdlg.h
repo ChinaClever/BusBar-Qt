@@ -10,7 +10,7 @@
 #include "othersettingdlg.h"
 //#include "modedlg.h"
 #include "localnetsettingdlg.h"
-
+#include "serialdata.h"
 namespace Ui {
 class SystemSettingDlg;
 }
@@ -34,6 +34,7 @@ private:
     OtherSettingDlg *mOtherWid;
 //    IpSettingDlg *mIpWid;
 //    ModeDlg *mModeWid;
+    Serialdata *mSerialPort;
     LocalNetSettingDlg *mLocaNetSettingWid;
 };
 

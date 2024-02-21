@@ -20,6 +20,7 @@ private:
 
 private slots:
     void initFunSLot();
+
 private:
     Ui::Serialdata *ui;
     sBoxData *mData;

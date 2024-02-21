@@ -189,13 +189,10 @@ void HomeBoxWid::updateUpAndDownAlarmStatus()
 void HomeBoxWid::on_pushButton_clicked()
 {
     BeepThread::bulid()->beep();
-    if(mData->boxType){//温度
-        //显示四个温度
-    }else{
-        BoxDlg dlg(0);
-        dlg.initBox(mBusID, mID);
-        dlg.exec();
-    }
+
+    BoxDlg dlg(0);
+    dlg.initBox(mBusID, mID);
+    dlg.exec();
 }
 
 void HomeBoxWid::initWid()

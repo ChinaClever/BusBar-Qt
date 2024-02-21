@@ -29,6 +29,8 @@ void BoxDlg::initBox(int bus, int box)
     ui->version->setText(version);
     if(mData->boxType){//温度模块显示温度
         mTemWid = new TemWid(ui->tabWidget);
+        mTemWid->initFun(bus, box);
+        ui->tabWidget->addTab(mTemWid, tr("温度模块"));
     }else{
         initWid(bus, box);//插接箱
     }

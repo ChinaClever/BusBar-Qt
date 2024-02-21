@@ -11,6 +11,7 @@ class TemWid : public ComTableWid
 public:
     explicit TemWid(QWidget *parent = nullptr);
     void setBus(int bus) {mBus=bus;}
+    void initFun(int bus, int box);
 
 protected slots:
     void timeoutDone();
@@ -18,13 +19,14 @@ protected slots:
 protected:
     void initWid();
     void checkBus(int index);
-    int updateDev(sBoxData *dev, int row);
     void updateData();
 
 private:
     int mBus;
     sBusData *mPacket ;
     QTimer* timer;
+    sEnvData *mEnvData;
+    sBoxData *mBox;
 };
 
 #endif // TEMWID_H

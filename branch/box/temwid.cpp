@@ -24,31 +24,17 @@ void TemWid::initWid()
 
     initTableWid(header, 1, title);
 }
-
+void TemWid::initFun(int bus, int box)
+{
+    sDataPacket *shm = get_share_mem();
+    mBox = &(shm->data[bus].box[box]);
+    mEnvData = &(shm->data[bus].box[box].env);
+    updateData();
+}
 void TemWid::checkBus(int index)
 {
     mPacket = &(get_share_mem()->data[index]);
     clearTable();
-}
-
-int TemWid::updateDev(sBoxData *dev, int row)
-{
-    if(dev->offLine)
-    {
-        QStringList list;
-        list << dev->boxName;
-
-        sDataUnit *unit = &(dev->env.tem);
-        for(int i=0; i<SENSOR_NUM; ++i)
-        {
-            double value = unit->value[i] / COM_RATE_TEM;
-            list <<  QString::number(value) + "℃";
-            setItemColor(row, i+1, unit->alarm[i]);
-        }
-        setTableRow(row, list);
-    }
-
-    return ++row;
 }
 
 /**
@@ -56,15 +42,26 @@ int TemWid::updateDev(sBoxData *dev, int row)
  */
 void TemWid::updateData()
 {
-    int row = 0;
-
-    for(int i=1; i<=mPacket->boxNum; ++i)
+    QString str = "---";
+    if(mBox->offLine)
     {
-        sBoxData *box = &(mPacket->box[i]);
-        row = updateDev(box, row);
-    }
+        QStringList list;
+        list << mBox->boxName;
 
-    checkTableRow(row);
+        sDataUnit *unit = &(mEnvData->tem);
+        for(int i=0; i<SENSOR_NUM; ++i)
+        {
+            double value = unit->value[i] / COM_RATE_TEM;
+            str = QString::number(value) + "℃";
+            list <<  str;
+//          setItemColor(row, i+1, unit->alarm[i]);
+        }
+    }else{
+        QStringList list;
+        list << str;
+
+        for(int i=0; i<SENSOR_NUM; ++i) list <<  str;
+    }
 }
 
 void TemWid::timeoutDone()

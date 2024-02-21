@@ -14,28 +14,14 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="1" colspan="2">
-    <widget class="QComboBox" name="baud_comboBox">
+   <item row="1" column="2">
+    <widget class="QLineEdit" name="dataEdit">
      <property name="enabled">
       <bool>false</bool>
      </property>
-     <item>
-      <property name="text">
-       <string>9600</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="1" column="1" colspan="2">
-    <widget class="QComboBox" name="databits_comboBox">
-     <property name="enabled">
-      <bool>false</bool>
+     <property name="text">
+      <string>8</string>
      </property>
-     <item>
-      <property name="text">
-       <string>8</string>
-      </property>
-     </item>
     </widget>
    </item>
    <item row="1" column="0">
@@ -48,6 +34,29 @@
      </property>
      <property name="text">
       <string>数据位：</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLineEdit" name="checkEdit">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="text">
+      <string>无</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="checkbitsLab">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+       <italic>true</italic>
+      </font>
+     </property>
+     <property name="text">
+      <string>校验位：</string>
      </property>
     </widget>
    </item>
@@ -67,28 +76,13 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1" colspan="2">
-    <widget class="QComboBox" name="checkbits_comboBox">
+   <item row="3" column="2">
+    <widget class="QLineEdit" name="stopEdit">
      <property name="enabled">
       <bool>false</bool>
      </property>
-     <item>
-      <property name="text">
-       <string>无</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="checkbitsLab">
-     <property name="font">
-      <font>
-       <pointsize>12</pointsize>
-       <italic>true</italic>
-      </font>
-     </property>
      <property name="text">
-      <string>校验位：</string>
+      <string>1</string>
      </property>
     </widget>
    </item>
@@ -105,16 +99,11 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="1" colspan="2">
-    <widget class="QComboBox" name="stopbitss_comboBox">
+   <item row="0" column="2">
+    <widget class="QLineEdit" name="baudEdit">
      <property name="enabled">
       <bool>false</bool>
      </property>
-     <item>
-      <property name="text">
-       <string>1</string>
-      </property>
-     </item>
     </widget>
    </item>
   </layout>
