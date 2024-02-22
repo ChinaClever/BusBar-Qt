@@ -157,7 +157,16 @@ void MainWindow::initFunSLot()
     ui->comboBox->setItemIcon(1 , icon);
     ui->comboBox->setItemIcon(2 , icon);
     ui->comboBox->setItemIcon(3 , icon);
+    QTimer::singleShot(7750,this,SLOT(initNetSLot())); //延时初始化
 }
+
+void MainWindow::initNetSLot()
+{
+    mServer = new Server(this);
+    mServer->setMaxPendingConnections(2);
+    mServer->listen(QHostAddress::AnyIPv4, 22223);
+}
+
 
 void MainWindow::initWidget()
 {

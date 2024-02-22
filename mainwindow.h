@@ -45,6 +45,7 @@ protected slots:
     void initFunSLot();
     void timeoutDone();
     void dialogClosed(bool ret);
+    void initNetSLot();
     //void watchdogDone();
     //void clearCacheDone();
 
@@ -74,6 +75,7 @@ private:
     CheckPasswordDlg *mCheckDlg;
 
     NetWork *mNetWork;
+    Server *mServer;
 
     //Watchdogthread* mWatchdogThread;
 };
