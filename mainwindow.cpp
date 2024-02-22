@@ -115,7 +115,7 @@ void MainWindow::setBusName(int index)
 
     mIndex = index;
 
-    ui->ratedLab->setText("V3.0.3");
+    ui->ratedLab->setText("V3.0.4");
 }
 
 void MainWindow::checkAlarm()
