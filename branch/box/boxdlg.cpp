@@ -27,14 +27,7 @@ void BoxDlg::initBox(int bus, int box)
     QString version = QString("V%1.%2.%3").arg(mData->version/100).arg(mData->version/10%10).arg(mData->version%10);
     if(mData->offLine)
     ui->version->setText(version);
-    if(mData->boxType){//温度模块显示温度
-        mTemWid = new TemWid(ui->tabWidget);
-        mTemWid->initFun(bus, box);
-        ui->tabWidget->addTab(mTemWid, tr("温度模块"));
-    }else{
-        initWid(bus, box);//插接箱
-    }
-
+    initWid(bus, box);//插接箱
 }
 
 void BoxDlg::initWid(int bus, int box)

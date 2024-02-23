@@ -1,32 +1,26 @@
 #ifndef TEMWID_H
 #define TEMWID_H
 
-#include "setshm.h"
-#include "common/mydoublespinbox.h"
-#include "common/comtablewid.h"
+#include <QDialog>
+#include "temmain.h"
 
-class TemWid : public ComTableWid
+namespace Ui {
+class TemWid;
+}
+
+class TemWid : public QDialog
 {
     Q_OBJECT
+
 public:
-    explicit TemWid(QWidget *parent = nullptr);
-    void setBus(int bus) {mBus=bus;}
-    void initFun(int bus, int box);
-
-protected slots:
-    void timeoutDone();
-
-protected:
-    void initWid();
-    void checkBus(int index);
-    void updateData();
-
+    explicit TemWid(QWidget *parent = 0);
+    ~TemWid();
+    void updateWid(int bus, int box);
+private slots:
+    void on_pushButton_clicked();
 private:
-    int mBus;
-    sBusData *mPacket ;
-    QTimer* timer;
-    sEnvData *mEnvData;
-    sBoxData *mBox;
+    Ui::TemWid *ui;
+    TemMain *mTemMain;
+    sBoxData *mData;
 };
-
 #endif // TEMWID_H

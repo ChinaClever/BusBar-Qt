@@ -2,6 +2,7 @@
 INCLUDEPATH += $$PWD
 
 HEADERS += \
+    $$PWD/box/temmain.h \
     $$PWD/box/temwid.h \
     $$PWD/branchwid.h \
     $$PWD/boxtablewidget.h \
@@ -13,6 +14,7 @@ HEADERS += \
    
 	
 SOURCES += \
+    $$PWD/box/temmain.cpp \
     $$PWD/box/temwid.cpp \
     $$PWD/branchwid.cpp \
     $$PWD/boxtablewidget.cpp \
@@ -23,6 +25,7 @@ SOURCES += \
     
 
 FORMS += \
+    $$PWD/box/temwid.ui \
     $$PWD/branchwid.ui \
     $$PWD/boxtablewidget.ui \
     $$PWD/box/boxdlg.ui \
