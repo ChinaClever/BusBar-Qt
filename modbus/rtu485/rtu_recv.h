@@ -97,6 +97,6 @@ struct Rtu_recv {
 };
 
 bool rtu_recv_packet(uchar *buf, int len, Rtu_recv *pkt);
-bool rtu_recv_packetV3(uchar *buf, int len, Rtu_recv *pkt);
+bool rtu_recv_packetV3(int addr, uchar *buf, int len, Rtu_recv *pkt);
 
 #endif // RTU_RECV_H

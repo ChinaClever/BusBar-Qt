@@ -18,7 +18,7 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
         ushort dc = 0;
         if( dev->dc ) dc = 0;
         else dc = 1;
-        vs << dev->proNum <<dev->version << dc << dev->curSpecification << dev->workMode; // 通讯协议版本
+        vs << dev->proNum <<dev->version << dc << dev->curSpecification << 1; // 通讯协议版本
         vs << dev->baudRate << dev->buzzerStatus << dev->alarmTime << dev->lps << dev->iOF;
         vs << dev->isd << dev->shuntRelease << dev->reState << dev->lpsAlarm;
         for(int i = 0 ; i < 40-14 ; i++) vs << 0 ;
@@ -28,7 +28,7 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
         vs << (dev->totalApPow >> 16) << (dev->totalApPow & 0xffff);
         vs << (dev->totalPow.ivalue >> 16) << (dev->totalPow.ivalue & 0xffff);
         vs << dev->totalPow.ialarm << dev->reCur.svalue << dev->reCur.supalarm;
-        vs << dev->zeroLineCur.ivalue << dev->zeroLineCur.iupalarm;
+        vs << (dev->zeroLineCur.ivalue >> 16)<< (dev->zeroLineCur.ivalue & 0xffff) << dev->zeroLineCur.iupalarm;
         vs << dev->volUnbalance << dev->curUnbalance << dev->data.sw[0];
         vs << dev->rate.svalue << dev->rate.supalarm;
         for(int i = 0 ; i < 90-63 ; i++) vs << 0 ;
@@ -54,16 +54,15 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
             vs << (p->ele[i]>> 16);
             vs << (p->ele[i] & 0xffff);
             vs << p->pl[i];
+            for(int j = 0 ;  j < HARMONIC_NUM ; j++){
+                vs << data->thdData.volThd[i][j];
+            }
+            for(int j = 0 ;  j < HARMONIC_NUM ; j++){
+                vs << data->thdData.curThd[i][j];
+            }
+            for(int j = 0 ; j < 200-172 ; j++) vs << 0 ;
         }
 
-        for(int k = 0 ; k < START_LINE_NUM ; k++){
-            for(int i = 0 ;  i < HARMONIC_NUM ; i++){
-                vs << data->thdData.volThd[k][i];
-            }
-            for(int i = 0 ;  i < HARMONIC_NUM ; i++){
-                vs << data->thdData.curThd[k][i];
-            }
-        }
         setRegs(MbMasterReg_Factory+10000*bus, vs);
     }else{//clear
         vshort vs; //initFucRegs();

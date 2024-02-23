@@ -586,7 +586,7 @@ int RtuThread::transDataV3(int addr)
     sBoxData *box = &(mBusData->box[addr]); //共享内存
     readLocalTemHum();
 
-    int rtn = rtu_sent_buff(addr+1,buf); // 把数据打包成通讯格式的数据
+    int rtn = rtu_sent_buff(addr+1,buf,addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303); // 把数据打包成通讯格式的数据
 //        QByteArray sendarray;
 //        QString sendstrArray;
 //        sendarray.append((char *)buf, rtn);
@@ -605,7 +605,7 @@ int RtuThread::transDataV3(int addr)
 //        qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
 
     if(rtn > 0) {
-        bool ret = rtu_recv_packetV3(buf, rtn, pkt); // 解析数据 data - len - it
+        bool ret = rtu_recv_packetV3(addr ,buf, rtn, pkt); // 解析数据 data - len - it
         if(ret) {
             if(addr+1 == pkt->addr) { //回收地址和发送地址同
                 box->boxOffLineAlarm = 1;

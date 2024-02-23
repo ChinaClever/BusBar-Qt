@@ -243,7 +243,8 @@ static int rtu_start_recv_init(uchar *ptr, Rtu_recv *msg)
     if( msg->dc ) msg->dc = 0;
     else msg->dc = 1;
     msg->curSpecification = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[电流规格]
-    msg->workMode = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[始端箱的工作模式]
+    ptr+=2;len+=2;//[地址码]
+//    msg->workMode = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[始端箱的工作模式]
     msg->baudRate = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[波特率]
     msg->buzzerStatus = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[蜂鸣器]
     msg->alarmTime = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
@@ -527,10 +528,10 @@ bool rtu_recv_packet(uchar *buf, int len, Rtu_recv *pkt)
 }
 
 
-bool rtu_recv_packetV3(uchar *buf, int len, Rtu_recv *pkt)
+bool rtu_recv_packetV3(int addr ,uchar *buf, int len, Rtu_recv *pkt)
 {
     bool ret = false;
-    int rtn = rtu_recv_len(buf, len , RTU_SENT_LEN_V303*2+6);  //判断回收的数据是否完全
+    int rtn = rtu_recv_len(buf, len , (addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303)*2+6);  //判断回收的数据是否完全
     if(rtn == 0) {
         uchar *ptr=buf;
         ptr += rtu_recv_head(ptr, pkt); //指针偏移0
@@ -543,9 +544,11 @@ bool rtu_recv_packetV3(uchar *buf, int len, Rtu_recv *pkt)
             ptr += (90-63)*2;//保留
 
             for(int i = 0 ; i < RTU_LINE_NUM ; ++i) // 读取相 数据
+            {
                 ptr += rtu_start_recv_line_data(ptr , pkt , i);
-            for(int i = 0 ; i < RTU_LINE_NUM ; ++i) // 读取滤波 数据
                 ptr += rtu_start_recv_thd_data(ptr , pkt , i);
+                ptr += (200 - 172)*2;
+            }
             ptr += rtu_start_recv_some_alarm_data(ptr , pkt);
             for(int i = 0 ; i < RTU_LINE_NUM ; ++i) // 读取阈值数据
                 ptr += rtu_start_recv_last_alarm_data(ptr , pkt , i);
@@ -567,7 +570,7 @@ bool rtu_recv_packetV3(uchar *buf, int len, Rtu_recv *pkt)
                 ptr += rtu_plug_recv_loop_alarm_data(ptr , pkt , i);
 
         }
-        pkt->crc = (buf[RTU_SENT_LEN_V303*2+6-1]*256) + buf[RTU_SENT_LEN_V303*2+6-2]; // RTU_SENT_LEN_V23*2+5
+        pkt->crc = (buf[(addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303)*2+6-1]*256) + buf[(addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303)*2+6-2]; // RTU_SENT_LEN_V23*2+5
         ret = rtu_recv_crc(buf, len, pkt); //校验码
     }
     return ret;
