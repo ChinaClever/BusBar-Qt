@@ -110,7 +110,6 @@ void HomeBoxWid::updateStatus()
         }
     } else { // 离线
         if(!mData->firsttime || mData->preoffLine > 0){
-            mData->boxType = 1;
             if(mData->boxType)//测温模块
             {
                 mData->firsttime = true;
