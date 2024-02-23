@@ -6,6 +6,7 @@ HEADERS += \
     $$PWD/setloop/setpowmain.h \
     $$PWD/setsystem/localnetsettingdlg.h \
     #$$PWD/setsystem/modedlg.h \
+    $$PWD/setsystem/serialdata.h \
     $$PWD/setsystem/systemsettingdlg.h \
     $$PWD/setsystem/netsettingdlg.h \
     $$PWD/setsystem/othersettingdlg.h \
@@ -38,6 +39,7 @@ SOURCES += \
     $$PWD/setloop/setpowmain.cpp \
     $$PWD/setsystem/localnetsettingdlg.cpp \
     #$$PWD/setsystem/modedlg.cpp \
+    $$PWD/setsystem/serialdata.cpp \
     $$PWD/setsystem/systemsettingdlg.cpp \
     $$PWD/setsystem/netsettingdlg.cpp \
     $$PWD/setsystem/othersettingdlg.cpp \
@@ -68,6 +70,7 @@ FORMS += \
     $$PWD/setloop/setpowmain.ui \
     $$PWD/setsystem/localnetsettingdlg.ui \
     #$$PWD/setsystem/modedlg.ui \
+    $$PWD/setsystem/serialdata.ui \
     $$PWD/setsystem/systemsettingdlg.ui \
     $$PWD/setsystem/netsettingdlg.ui \
     $$PWD/setsystem/othersettingdlg.ui \

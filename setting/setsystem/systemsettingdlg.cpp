@@ -23,6 +23,7 @@ void SystemSettingDlg::initWid()
 //    mNetWid = new NetSettingDlg(this);
     mOtherWid = new OtherSettingDlg(this);
 //    mModeWid = new ModeDlg(this);
+    mSerialdata = new Serialdata(this);
     QString str = tr("本地IP设置");
     ui->tabWidget->addTab(mLocaNetSettingWid,str);
 //    str = tr("切换模式");
@@ -31,6 +32,8 @@ void SystemSettingDlg::initWid()
 //    ui->tabWidget->addTab(mNetWid,str);
     str = tr("其他参数设置");
     ui->tabWidget->addTab(mOtherWid,str);
+    str = tr("串口信息");
+    ui->tabWidget->addTab(mSerialdata,str);
     ui->tabWidget->setStyleSheet("QTabBar::tab{height:50px; width: 150px;}");
 }
 
