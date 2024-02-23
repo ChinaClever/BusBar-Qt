@@ -110,8 +110,7 @@ void HomeBoxWid::updateStatus()
         }
     } else { // 离线
         if(!mData->firsttime || mData->preoffLine > 0){
-            mData->boxType = 1;
-            if(mData->boxType)
+            if(mData->boxType)//测温模块
             {
                 mData->firsttime = true;
                 mData->preoffLine = mData->offLine;
@@ -195,10 +194,16 @@ void HomeBoxWid::updateUpAndDownAlarmStatus()
 void HomeBoxWid::on_pushButton_clicked()
 {
     BeepThread::bulid()->beep();
-
-    BoxDlg dlg(0);
-    dlg.initBox(mBusID, mID);
-    dlg.exec();
+    if(mData->boxType)//测温模块
+    {
+        TemWid mTemWid(0);
+        mTemWid.updateWid(mBusID, mID);
+        mTemWid.exec();
+    }else{
+        BoxDlg dlg(0);
+        dlg.initBox(mBusID, mID);
+        dlg.exec();
+    }
 }
 
 void HomeBoxWid::initWid()

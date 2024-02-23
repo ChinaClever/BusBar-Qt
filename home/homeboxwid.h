@@ -5,7 +5,7 @@
 #include <QPalette>
 #include <QPixmap>
 #include "common/common.h"
-
+#include "box/temwid.h"
 namespace Ui {
 class HomeBoxWid;
 }

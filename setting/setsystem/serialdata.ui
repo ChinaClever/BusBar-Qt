@@ -2,45 +2,35 @@
 <ui version="4.0">
  <class>Serialdata</class>
  <widget class="QWidget" name="Serialdata">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>300</height>
+    <width>349</width>
+    <height>329</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QLineEdit" name="dataEdit">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>100</y>
-     <width>142</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>8</string>
-   </property>
-  </widget>
+  <property name="styleSheet">
+   <string notr="true">QGroupBox{border:2px solid black;};</string>
+  </property>
   <widget class="QLabel" name="databitsLab">
    <property name="geometry">
     <rect>
      <x>40</x>
      <y>100</y>
-     <width>64</width>
+     <width>71</width>
      <height>24</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>12</pointsize>
+     <pointsize>16</pointsize>
      <italic>true</italic>
     </font>
    </property>
@@ -48,34 +38,18 @@
     <string>数据位：</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="checkEdit">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>160</y>
-     <width>142</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>无</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="checkbitsLab">
    <property name="geometry">
     <rect>
      <x>40</x>
      <y>160</y>
-     <width>64</width>
+     <width>71</width>
      <height>24</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>12</pointsize>
+     <pointsize>16</pointsize>
      <italic>true</italic>
     </font>
    </property>
@@ -91,13 +65,13 @@
     <rect>
      <x>40</x>
      <y>40</y>
-     <width>64</width>
+     <width>71</width>
      <height>24</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>12</pointsize>
+     <pointsize>16</pointsize>
      <italic>true</italic>
     </font>
    </property>
@@ -105,34 +79,18 @@
     <string>波特率：</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="stopEdit">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>220</y>
-     <width>142</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>1</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="stopbitsLab">
    <property name="geometry">
     <rect>
      <x>40</x>
      <y>220</y>
-     <width>64</width>
+     <width>71</width>
      <height>24</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <pointsize>12</pointsize>
+     <pointsize>16</pointsize>
      <italic>true</italic>
     </font>
    </property>
@@ -146,14 +104,146 @@
    </property>
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>130</x>
      <y>40</y>
-     <width>142</width>
-     <height>25</height>
+     <width>169</width>
+     <height>30</height>
     </rect>
    </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+     <italic>true</italic>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit{
+border:2px solid rgb(15,80,232);
+border-radius:15px
+}</string>
+   </property>
    <property name="text">
-    <string>115200</string>
+    <string>  115200</string>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="dataEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>100</y>
+     <width>169</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+     <italic>true</italic>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit{
+border:2px solid rgb(15,80,232);
+border-radius:15px
+}</string>
+   </property>
+   <property name="text">
+    <string>    8</string>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="checkEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>160</y>
+     <width>169</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+     <italic>true</italic>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit{
+border:2px solid rgb(15,80,232);
+border-radius:15px
+}</string>
+   </property>
+   <property name="text">
+    <string>    无</string>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="stopEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>220</y>
+     <width>169</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>30</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>14</pointsize>
+     <italic>true</italic>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QLineEdit{
+border:2px solid rgb(15,80,232);
+border-radius:15px
+}</string>
+   </property>
+   <property name="text">
+    <string>   1</string>
+   </property>
+   <property name="readOnly">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

@@ -5,7 +5,6 @@
 #include "sysconfigfile.h"
 #include "datapacket.h"
 #include "common/beep/beepthread.h"
-
 //const QColor gray(174,225,254);//空设备,原为灰色，现为天蓝色
 //const QColor green(97,202,40);//正常
 //const QColor orange(255,0,0);//告警，原为橘红，现为红色
