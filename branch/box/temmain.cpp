@@ -17,7 +17,7 @@ void TemMain::initWid()
 {
     QString title = tr("温度模块");
     QStringList header;
-//    header<< tr("名称");
+
 
     for(int i=0; i<SENSOR_NUM; ++i)
         header << tr("温度") + QString::number(i+1);
@@ -46,19 +46,14 @@ void TemMain::updateData()
     QStringList list;
     if(mBox->offLine)
     {
-//        list << mBox->boxName;
-
         sDataUnit *unit = &(mEnvData->tem);
         for(int i=0; i<SENSOR_NUM; ++i)
         {
             double value = unit->value[i] / COM_RATE_TEM;
             str = QString::number(value) + "℃";
             list <<  str;
-//          setItemColor(row, i+1, unit->alarm[i]);
         }
     }else{
-//        list << mBox->boxName;
-
         for(int i=0; i<SENSOR_NUM; ++i) list <<  str;
     }
     setTableRow(0, list);
