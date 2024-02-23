@@ -15,9 +15,9 @@ TemMain::TemMain(QWidget *parent) : ComTableWid(parent)
 
 void TemMain::initWid()
 {
-    QString title = tr("温度");
+    QString title = tr("温度模块");
     QStringList header;
-    header<< tr("名称");
+//    header<< tr("名称");
 
     for(int i=0; i<SENSOR_NUM; ++i)
         header << tr("温度") + QString::number(i+1);
@@ -46,7 +46,7 @@ void TemMain::updateData()
     QStringList list;
     if(mBox->offLine)
     {
-        list << mBox->boxName;
+//        list << mBox->boxName;
 
         sDataUnit *unit = &(mEnvData->tem);
         for(int i=0; i<SENSOR_NUM; ++i)
@@ -57,7 +57,7 @@ void TemMain::updateData()
 //          setItemColor(row, i+1, unit->alarm[i]);
         }
     }else{
-        list << mBox->boxName;
+//        list << mBox->boxName;
 
         for(int i=0; i<SENSOR_NUM; ++i) list <<  str;
     }

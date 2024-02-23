@@ -354,9 +354,18 @@ void BoxTableWidget::getItem(QTableWidgetItem*)
     disconnect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(getItem(QTableWidgetItem*)));
     BeepThread::bulid()->beep();
     int row = ui->tableWidget->currentRow();
+    sDataPacket *shm = get_share_mem();
+    mData = &(shm->data[mBusID].box[row+1]);
+    if(mData->boxType)//测温模块
+    {
+        TemWid mTemWid(0);
+        mTemWid.updateWid(mBusID, row+1);
+        mTemWid.exec();
+    }else{
+        BoxDlg dlg(0);
+        dlg.initBox(mBusID, row+1);
+        dlg.exec();
+    }
 
-    BoxDlg dlg(0);
-    dlg.initBox(mBusID, row+1);
-    dlg.exec();
     connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(getItem(QTableWidgetItem*)));
 }

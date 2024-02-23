@@ -4,7 +4,7 @@
 #include <QWidget>
 #include "common/common.h"
 #include <QTableWidgetItem>
-
+#include "box/temwid.h"
 //#include <QScrollBar>
 //#include <QPropertyAnimation>
 //#include <QDateTime>
@@ -56,6 +56,7 @@ private:
     sBusData *mBoxData;
     QTimer *timer;
     bool isRun;
+    sBoxData *mData;
 //    QScrollBar *m_scrollBarV;
 //    QScrollBar *m_scrollBarH;
 };
