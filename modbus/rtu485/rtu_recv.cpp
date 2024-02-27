@@ -240,8 +240,7 @@ static int rtu_start_recv_init(uchar *ptr, Rtu_recv *msg)
     msg->proNum = (*ptr) * 256 + *(ptr+1); ptr+=2; len+=2;// 项目ID
     msg->version = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;// 软件版本
     msg->dc = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[交直流]
-    if( msg->dc ) msg->dc = 0;
-    else msg->dc = 1;
+    msg->dc = 1;
     msg->curSpecification = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[电流规格]
     ptr+=2;len+=2;//[地址码]
 //    msg->workMode = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[始端箱的工作模式]
@@ -393,6 +392,7 @@ static int rtu_plug_recv_init(uchar *ptr, Rtu_recv *msg)
     msg->buzzerStatus = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[蜂鸣器]
     msg->alarmTime = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->boxType = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->dc = 1;
 
     return len; //3.0.0版本
 }

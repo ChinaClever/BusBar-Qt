@@ -10,6 +10,7 @@
 #include <QMultiHash>
 
 static ushort gBoxArray[4] = {0, 0, 0, 0};
+static uchar gAutoSetFlag[4] = {0, 0, 0, 0};
 
 void set_box_num(int id, int num)
 {
@@ -343,7 +344,7 @@ int RtuThread::transData(int addr)
     sBoxData *box = &(mBusData->box[addr]); //共享内存
 
     int rtn = rtu_sent_buff(addr+1 , buf , RTU_SENT_LEN_V25); // 把数据打包成通讯格式的数据
-    #if (SI_RTUWIFI==1)
+#if (SI_RTUWIFI==1)
     rtn = mSerial->transmit_p(buf, rtn, buf); // 传输数据，发送同时接收
     static int preaddr = -1;
     if(rtn == 0)
@@ -358,25 +359,25 @@ int RtuThread::transData(int addr)
         box->offLine = 0;
         return -1;
     }
-    #elif(SI_RTUWIFI==0)
-//    QByteArray sendarray;
-//    QString sendstrArray;
-//    sendarray.append((char *)buf, rtn);
-//    sendstrArray = sendarray.toHex(); // 十六进制
-//    for(int i=0; i<sendarray.size(); ++i)
-//        sendstrArray.insert(2+3*i, " "); // 插入空格
-//    qDebug()<<"  send:" << sendstrArray;
-//    qDebug()<< "rtn  "<<rtn;
+#elif(SI_RTUWIFI==0)
+    //    QByteArray sendarray;
+    //    QString sendstrArray;
+    //    sendarray.append((char *)buf, rtn);
+    //    sendstrArray = sendarray.toHex(); // 十六进制
+    //    for(int i=0; i<sendarray.size(); ++i)
+    //        sendstrArray.insert(2+3*i, " "); // 插入空格
+    //    qDebug()<<"  send:" << sendstrArray;
+    //    qDebug()<< "rtn  "<<rtn;
     rtn = mSerial->transmit(buf, rtn, buf); // 传输数据，发送同时接收
-    #endif
+#endif
 
-//    QByteArray array;
-//    QString strArray;
-//    array.append((char *)buf, rtn);
-//    strArray = array.toHex(); // 十六进制
-//    for(int i=0; i<array.size(); ++i)
-//        strArray.insert(2+3*i, " "); // 插入空格
-//    qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
+    //    QByteArray array;
+    //    QString strArray;
+    //    array.append((char *)buf, rtn);
+    //    strArray = array.toHex(); // 十六进制
+    //    for(int i=0; i<array.size(); ++i)
+    //        strArray.insert(2+3*i, " "); // 插入空格
+    //    qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
 
     if(rtn > 0) {
         bool ret = rtu_recv_packet(buf, rtn, pkt); // 解析数据 data - len - it
@@ -516,6 +517,7 @@ void RtuThread::BusTransDataV3()
     for(int i=0; i<=mBusData->boxNum; ++i)
     {
         if(gReadWriteflag == 2) continue;
+        if(gAutoSetFlag[this->mId] == 1) break;
         int ret = transDataV3(i);
         if( ret == 0 ) {
             msleep(900+rand()%500);//900
@@ -587,22 +589,22 @@ int RtuThread::transDataV3(int addr)
     readLocalTemHum();
 
     int rtn = rtu_sent_buff(addr+1,buf,addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303); // 把数据打包成通讯格式的数据
-//        QByteArray sendarray;
-//        QString sendstrArray;
-//        sendarray.append((char *)buf, rtn);
-//        sendstrArray = sendarray.toHex(); // 十六进制
-//        for(int i=0; i<sendarray.size(); ++i)
-//            sendstrArray.insert(2+3*i, " "); // 插入空格
-//        qDebug()<<"  send:" << sendstrArray;
-//        qDebug()<< "rtn  "<<rtn;
+    //        QByteArray sendarray;
+    //        QString sendstrArray;
+    //        sendarray.append((char *)buf, rtn);
+    //        sendstrArray = sendarray.toHex(); // 十六进制
+    //        for(int i=0; i<sendarray.size(); ++i)
+    //            sendstrArray.insert(2+3*i, " "); // 插入空格
+    //        qDebug()<<"  send:" << sendstrArray;
+    //        qDebug()<< "rtn  "<<rtn;
     rtn = mSerial->transmitV3(buf, rtn, buf); // 传输数据，发送同时接收
-//        QByteArray array;
-//        QString strArray;
-//        array.append((char *)buf, rtn);
-//        strArray = array.toHex(); // 十六进制
-//        for(int i=0; i<array.size(); ++i)
-//            strArray.insert(2+3*i, " "); // 插入空格
-//        qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
+    //        QByteArray array;
+    //        QString strArray;
+    //        array.append((char *)buf, rtn);
+    //        strArray = array.toHex(); // 十六进制
+    //        for(int i=0; i<array.size(); ++i)
+    //            strArray.insert(2+3*i, " "); // 插入空格
+    //        qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
 
     if(rtn > 0) {
         bool ret = rtu_recv_packetV3(addr ,buf, rtn, pkt); // 解析数据 data - len - it
@@ -653,6 +655,56 @@ int RtuThread::transDataV3(int addr)
     return offLine;
 }
 
+void RtuThread::autoSetAddress()
+{
+    static uchar buffer[11]={0x01, 0x10 , 0x00 , 0x1F , 0x00, 0x01 , 0x02 , 0x00 ,0x01 , 0x65 , 0xFF};
+    buffer[8] = 0x01;//打开自动设置地址模式
+    ushort cr = rtu_crc(buffer, sizeof(buffer)-2);
+    buffer[sizeof(buffer)-2] = (0xff)&(cr); /*低8位*/
+    buffer[sizeof(buffer)-1] = ((cr) >> 8); /*高8位*/
+    int rtn = mSerial->sendData(buffer, sizeof(buffer));//打开自动设置地址模式
+    //hexToStr((char*)buffer , rtn);
+    sleep(2);
+    uchar recvbuffer[1024];
+    memset(recvbuffer,0,sizeof(recvbuffer));
+    rtn = mSerial->recvData(recvbuffer,10);
+    //hexToStr((char*)recvbuffer , rtn , " recv1 ");
+    if(rtn > 0){
+        static uchar buffer1[13]={0x01, 0x6A , 0x12 , 0x22 , 0x06, 0x00 , 0x00 , 0x00 ,0x00 , 0x00 , 0x00 , 0x10 , 0xe7};
+        buffer1[2] = getBoxNum(mId);
+        ushort crc = rtu_crc(buffer1, sizeof(buffer1)-2);
+        buffer1[sizeof(buffer1)-2] = (0xff)&(crc); /*低8位*/
+        buffer1[sizeof(buffer1)-1] = ((crc) >> 8); /*高8位*/
+        rtn = mSerial->sendData(buffer1, sizeof(buffer1));
+        //hexToStr((char*)buffer1 , rtn);
+        int count = 50;
+        while(count--){
+            memset(recvbuffer,0,sizeof(recvbuffer));
+            rtn = mSerial->recvData(recvbuffer,10);
+            QByteArray array2;
+            QString strArray2;
+            array2.append((char *)recvbuffer, rtn);
+            strArray2 = array2.toHex(); // 十六进制
+            for(int i=0; i<array2.size(); ++i)
+                strArray2.insert(2+3*i, " "); // 插入空格
+            //qDebug()<< "rtn  "<<rtn<<"  recv2:" << strArray2;
+            if(rtn == 8 && strArray2.contains("ff 7b"))
+                emit sendNumAndIndexSig(mId , recvbuffer[5]);
+            if(recvbuffer[0]==0x01 && recvbuffer[1]==0x6a){ emit sendDelaySig(mId);break;}
+            if(recvbuffer[5] == 0xCC || recvbuffer[5] == getBoxNum(mId)+2) break;
+        }
+    }
+    buffer[8] = 0x00;//关闭自动设置地址模式
+    cr = rtu_crc(buffer, sizeof(buffer)-2);
+    buffer[sizeof(buffer)-2] = (0xff)&(cr); /*低8位*/
+    buffer[sizeof(buffer)-1] = ((cr) >> 8); /*高8位*/
+    rtn = mSerial->sendData(buffer, sizeof(buffer));
+    //hexToStr((char*)buffer , rtn);
+    memset(recvbuffer,0,sizeof(recvbuffer));
+    rtn = mSerial->recvData(recvbuffer,10);
+    //hexToStr((char*)recvbuffer , rtn , " close recv2 ");
+}
+
 void RtuThread::run()
 {
     isRun = true;
@@ -667,7 +719,12 @@ void RtuThread::run()
                 setBoxNum(num);
                 gBoxArray[mId] = 0;
             }
-            BusTransDataV3();
+            if(gAutoSetFlag[this->mId] == 0)
+                BusTransDataV3();
+            else if(gAutoSetFlag[this->mId] == 1){
+                autoSetAddress();
+                gAutoSetFlag[this->mId] = 0;
+            }
         }
         else
             sleep(1000);
@@ -680,7 +737,7 @@ void RtuThread::run()
             if(mBusData->boxNum && !mChList.at(k-1).isEmpty())
             {
                 if(mRecoder != k)
-                ChangeBusCh(mChList.at(k-1).toInt(),k-1);//切换频道
+                    ChangeBusCh(mChList.at(k-1).toInt(),k-1);//切换频道
                 mRecoder = k;
 
                 ushort num = gBoxArray[k-1];
@@ -696,3 +753,15 @@ void RtuThread::run()
 
     }
 }
+
+void RtuThread::autoSetBusSlot(int index)
+{
+    switch(index){
+    case 1:gAutoSetFlag[mId] = 1;break;
+    case 2:gAutoSetFlag[mId] = 1;break;
+    case 3:gAutoSetFlag[mId] = 1;break;
+    case 4:gAutoSetFlag[mId] = 1;break;
+    default:break;
+    }
+}
+

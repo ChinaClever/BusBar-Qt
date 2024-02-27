@@ -43,6 +43,7 @@ QString getPassword();
 int getBoxNum(int index);
 int getRateCur(int index);
 void mdelay(int msec);
+void hexToStr(char * buf , int rtn, QString str=" send");
 
 sDataPacket *get_share_mem();
 

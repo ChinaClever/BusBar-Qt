@@ -50,18 +50,30 @@ void MainWindow::initSerial()
 {
     rtu[0] = new RtuThread(this);
     rtu[0]->init(SERIAL_COM1, 1); //只操作母线1
+    connect(mSettingWid->mSystemDlg->mAutoSetAddress,SIGNAL(autoSetBus1Sig(int)), rtu[0] , SLOT(autoSetBusSlot(int)));
+    connect(rtu[0],SIGNAL(sendNumAndIndexSig(int,int)),mSettingWid->mSystemDlg->mAutoSetAddress,SLOT(getNumAndIndexSlot(int,int)));
+    connect(rtu[0],SIGNAL(sendDelaySig(int)),mSettingWid->mSystemDlg->mAutoSetAddress,SLOT(getDelaySlot(int)));
 #if (SI_RTUWIFI==0)
 #if BUS_NUM > 1
     rtu[1] = new RtuThread(this);
     rtu[1]->init(SERIAL_COM2, 2);
+    connect(mSettingWid->mSystemDlg->mAutoSetAddress,SIGNAL(autoSetBus2Sig(int)), rtu[1] , SLOT(autoSetBusSlot(int)));
+    connect(rtu[1],SIGNAL(sendNumAndIndexSig(int,int)),mSettingWid->mSystemDlg->mAutoSetAddress,SLOT(getNumAndIndexSlot(int,int)));
+    connect(rtu[1],SIGNAL(sendDelaySig(int)),mSettingWid->mSystemDlg->mAutoSetAddress,SLOT(getDelaySlot(int)));
 #endif
 #if BUS_NUM > 2
     rtu[2] = new RtuThread(this);
     rtu[2]->init(SERIAL_COM3, 3);
+    connect(mSettingWid->mSystemDlg->mAutoSetAddress,SIGNAL(autoSetBus3Sig(int)), rtu[2] , SLOT(autoSetBusSlot(int)));
+    connect(rtu[2],SIGNAL(sendNumAndIndexSig(int,int)),mSettingWid->mSystemDlg->mAutoSetAddress,SLOT(getNumAndIndexSlot(int,int)));
+    connect(rtu[2],SIGNAL(sendDelaySig(int)),mSettingWid->mSystemDlg->mAutoSetAddress,SLOT(getDelaySlot(int)));
 #endif
 #if BUS_NUM > 3
     rtu[3] = new RtuThread(this);
     rtu[3]->init(SERIAL_COM4, 4);
+    connect(mSettingWid->mSystemDlg->mAutoSetAddress,SIGNAL(autoSetBus4Sig(int)), rtu[3] , SLOT(autoSetBusSlot(int)));
+    connect(rtu[3],SIGNAL(sendNumAndIndexSig(int,int)),mSettingWid->mSystemDlg->mAutoSetAddress,SLOT(getNumAndIndexSlot(int,int)));
+    connect(rtu[3],SIGNAL(sendDelaySig(int)),mSettingWid->mSystemDlg->mAutoSetAddress,SLOT(getDelaySlot(int)));
 #endif
 #endif
 

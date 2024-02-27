@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "common/common.h"
+#include "box/temwid.h"
 #include <QTableWidgetItem>
 
 //#include <QScrollBar>

@@ -203,4 +203,13 @@ int getRateCur(int index)
     return rateCur;
 }
 
-
+void hexToStr(char * buf , int rtn , QString str)
+{
+    QByteArray array;
+    QString strArray;
+    array.append(buf, rtn);
+    strArray = array.toHex(); // 十六进制
+    for(int i=0; i<array.size(); ++i)
+        strArray.insert(2+3*i, " "); // 插入空格
+    qDebug()<<str << strArray<<"rtn  "<<rtn;
+}

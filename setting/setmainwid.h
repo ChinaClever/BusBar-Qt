@@ -18,6 +18,7 @@ class SetMainWid : public QWidget
 public:
     explicit SetMainWid(QWidget *parent = 0);
     ~SetMainWid();
+    SystemSettingDlg *mSystemDlg;
 
 private:
     void initWidget();
@@ -48,7 +49,7 @@ private:
     SetLineWid *mSetLineWid;
     SetLoopWid *mSetLoopWid;
     SetPowMain *mSetPowerMainWid;
-    SystemSettingDlg *mSystemDlg;
+
 };
 
 #endif // SETMAINWID_H

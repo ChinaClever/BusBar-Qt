@@ -11,6 +11,7 @@
 //#include "modedlg.h"
 #include "localnetsettingdlg.h"
 #include "serialdata.h"
+#include "autosetaddress.h"
 namespace Ui {
 class SystemSettingDlg;
 }
@@ -22,6 +23,7 @@ class SystemSettingDlg : public QWidget
 public:
     explicit SystemSettingDlg(QWidget *parent = 0);
     ~SystemSettingDlg();
+    AutoSetAddress *mAutoSetAddress;
     #if (SI_RTUWIFI == 1)
 signals:
     void busChangedSig(int);

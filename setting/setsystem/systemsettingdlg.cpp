@@ -25,6 +25,8 @@ void SystemSettingDlg::initWid()
 //    mModeWid = new ModeDlg(this);
     mSerialPort = new Serialdata(this);
 
+    mAutoSetAddress = new AutoSetAddress(this);
+
     QString str = tr("本地IP设置");
     ui->tabWidget->addTab(mLocaNetSettingWid,str);
 //    str = tr("切换模式");
@@ -35,6 +37,8 @@ void SystemSettingDlg::initWid()
     ui->tabWidget->addTab(mOtherWid,str);
     str = tr("串口信息");
     ui->tabWidget->addTab(mSerialPort,str);
+    str = tr("自动分配地址");
+    ui->tabWidget->addTab(mAutoSetAddress,str);
     ui->tabWidget->setStyleSheet("QTabBar::tab{height:50px; width: 150px;}");
 }
 

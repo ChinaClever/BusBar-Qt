@@ -23,8 +23,13 @@ public:
     int sendDataUintV3(int addr, ushort reg, uint val1 , uint val2);
     int sendDataUshortV3(int addr, ushort reg, uint val1 , uint val2);
     int sendDataUcharV3(int addr, ushort reg, uint val);
-    
-signals:    
+
+public slots:
+    void autoSetBusSlot(int index);
+
+signals:
+    void sendNumAndIndexSig(int index , int curnum);
+    void sendDelaySig(int index);
     
 protected:
     void run();
@@ -46,6 +51,7 @@ protected:
     int transDataV3(int addr);
     void BusTransDataV3();
     void readLocalTemHum();
+    void autoSetAddress();
 
     #if (SI_RTUWIFI==1)
     void ChangeBusCh(int ch, int index);
