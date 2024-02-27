@@ -80,7 +80,7 @@ void AutoSetAddress::getNumAndIndexSlot(int index , int curnum)
         setProgressbarPowValue(ui->progressBar , num , index);
         mCurBoxNum[0] = num;
         if(num > 2){
-            ui->statuslab1->setText(QString(tr("设置地址%1成功")).arg(num-2));
+            ui->statuslab1->setText(QString(tr("设置地址%1成功")).arg(num-1));
         }
     }break;
     case 2:
@@ -88,7 +88,7 @@ void AutoSetAddress::getNumAndIndexSlot(int index , int curnum)
         setProgressbarPowValue(ui->progressBar_2 , num , index);
         mCurBoxNum[1] = num;
         if(num > 2){
-            ui->statuslab2->setText(QString(tr("设置地址%1成功")).arg(num-2));
+            ui->statuslab2->setText(QString(tr("设置地址%1成功")).arg(num-1));
         }
     }break;
     case 3:
@@ -96,7 +96,7 @@ void AutoSetAddress::getNumAndIndexSlot(int index , int curnum)
         setProgressbarPowValue(ui->progressBar_3 , num , index);
         mCurBoxNum[2] = num;
         if(num > 2){
-            ui->statuslab3->setText(QString(tr("设置地址%1成功")).arg(num-2));
+            ui->statuslab3->setText(QString(tr("设置地址%1成功")).arg(num-1));
         }
     }break;
     case 4:
@@ -104,7 +104,7 @@ void AutoSetAddress::getNumAndIndexSlot(int index , int curnum)
         setProgressbarPowValue(ui->progressBar_4 , num , index);
         mCurBoxNum[3] = num;
         if(num > 2){
-            ui->statuslab4->setText(QString(tr("设置地址%1成功")).arg(num-2));
+            ui->statuslab4->setText(QString(tr("设置地址%1成功")).arg(num-1));
         }
     }break;
     }
@@ -121,7 +121,7 @@ void AutoSetAddress::getDelaySlot(int index)
         if(mCurBoxNum[0] == 0){
             ui->statuslab1->setText(QString(tr("始端箱未发出命令")));
         }else if(mCurBoxNum[0] >= 2 && mCurBoxNum[0] <= 20 ){
-            ui->statuslab1->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[0]-1));
+            ui->statuslab1->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[0]));
         }
         mCurBoxNum[0] = 0;
     }break;
@@ -131,7 +131,7 @@ void AutoSetAddress::getDelaySlot(int index)
         if(mCurBoxNum[1] == 0){
             ui->statuslab2->setText(QString(tr("始端箱未发出命令")));
         }else if(mCurBoxNum[1] >= 2 && mCurBoxNum[1] <= 20 ){
-            ui->statuslab2->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[1]-1));
+            ui->statuslab2->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[1]));
         }
         mCurBoxNum[1] = 0;
     }break;
@@ -141,7 +141,7 @@ void AutoSetAddress::getDelaySlot(int index)
         if(mCurBoxNum[2] == 0){
             ui->statuslab3->setText(QString(tr("始端箱未发出命令")));
         }else if(mCurBoxNum[2] >= 2 && mCurBoxNum[2] <= 20 ){
-            ui->statuslab3->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[2]-1));
+            ui->statuslab3->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[2]));
         }
         mCurBoxNum[2] = 0;
     }break;
@@ -151,7 +151,7 @@ void AutoSetAddress::getDelaySlot(int index)
         if(mCurBoxNum[3] == 0){
             ui->statuslab4->setText(QString(tr("始端箱未发出命令")));
         }else if(mCurBoxNum[3] >= 2 && mCurBoxNum[3] <= 20 ){
-            ui->statuslab4->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[3]-1));
+            ui->statuslab4->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[3]));
         }
         mCurBoxNum[3] = 0;
     }break;
