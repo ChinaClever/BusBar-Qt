@@ -139,7 +139,9 @@ int RtuThread::sendDataUintV3(int addr, ushort reg, uint val1 , uint val2)
     if( box->offLine > 0 ){ //在线
         //打包数据
         uchar *buf = mBuf;
-        int rtn = rtu_sent_uintV3_buff(addr+1, reg, 4 , val1 , val2, buf); // 把数据打包成通讯格式的数据
+        int rtn = 0;
+        if(addr == 0 && reg == StartZoneCurMAX_1) rtn = rtu_sent_single_uintV3_buff(addr+1, reg, 2 , val2 , buf); // 把数据打包成通讯格式的数据
+        else rtn = rtu_sent_uintV3_buff(addr+1, reg, 4 , val1 , val2, buf); // 把数据打包成通讯格式的数据
         return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
     }
     return -1;
@@ -663,12 +665,13 @@ void RtuThread::autoSetAddress()
     buffer[sizeof(buffer)-2] = (0xff)&(cr); /*低8位*/
     buffer[sizeof(buffer)-1] = ((cr) >> 8); /*高8位*/
     int rtn = mSerial->sendData(buffer, sizeof(buffer));//打开自动设置地址模式
-    //hexToStr((char*)buffer , rtn);
+//    hexToStr((char*)buffer , rtn);
     sleep(2);
     uchar recvbuffer[1024];
     memset(recvbuffer,0,sizeof(recvbuffer));
     rtn = mSerial->recvData(recvbuffer,10);
-    //hexToStr((char*)recvbuffer , rtn , " recv1 ");
+//    hexToStr((char*)recvbuffer , rtn , " recv1 ");
+    int count = 50;
     if(rtn > 0){
         static uchar buffer1[13]={0x01, 0x6A , 0x12 , 0x22 , 0x06, 0x00 , 0x00 , 0x00 ,0x00 , 0x00 , 0x00 , 0x10 , 0xe7};
         buffer1[2] = getBoxNum(mId);
@@ -676,8 +679,7 @@ void RtuThread::autoSetAddress()
         buffer1[sizeof(buffer1)-2] = (0xff)&(crc); /*低8位*/
         buffer1[sizeof(buffer1)-1] = ((crc) >> 8); /*高8位*/
         rtn = mSerial->sendData(buffer1, sizeof(buffer1));
-        //hexToStr((char*)buffer1 , rtn);
-        int count = 50;
+//        hexToStr((char*)buffer1 , rtn);
         while(count--){
             memset(recvbuffer,0,sizeof(recvbuffer));
             rtn = mSerial->recvData(recvbuffer,10);
@@ -687,22 +689,23 @@ void RtuThread::autoSetAddress()
             strArray2 = array2.toHex(); // 十六进制
             for(int i=0; i<array2.size(); ++i)
                 strArray2.insert(2+3*i, " "); // 插入空格
-            //qDebug()<< "rtn  "<<rtn<<"  recv2:" << strArray2;
-            if(rtn == 8 && strArray2.contains("ff 7b"))
-                emit sendNumAndIndexSig(mId , recvbuffer[5]);
+//            qDebug()<< "rtn  "<<rtn<<"  recv2:" << strArray2;
+            if(rtn % 8 == 0 && strArray2.contains("ff 7b"))emit sendNumAndIndexSig(mId , recvbuffer[5]);
             if(recvbuffer[0]==0x01 && recvbuffer[1]==0x6a){ emit sendDelaySig(mId);break;}
-            if(recvbuffer[5] == 0xCC || recvbuffer[5] == getBoxNum(mId)+2) break;
+            if(recvbuffer[5] == getBoxNum(mId)+2) break;
+            if(recvbuffer[5] == 0xCC){count=-1;break;}
         }
     }
+    if(count == -1)emit sendDelaySig(mId);
     buffer[8] = 0x00;//关闭自动设置地址模式
     cr = rtu_crc(buffer, sizeof(buffer)-2);
     buffer[sizeof(buffer)-2] = (0xff)&(cr); /*低8位*/
     buffer[sizeof(buffer)-1] = ((cr) >> 8); /*高8位*/
     rtn = mSerial->sendData(buffer, sizeof(buffer));
-    //hexToStr((char*)buffer , rtn);
+//    hexToStr((char*)buffer , rtn);
     memset(recvbuffer,0,sizeof(recvbuffer));
     rtn = mSerial->recvData(recvbuffer,10);
-    //hexToStr((char*)recvbuffer , rtn , " close recv2 ");
+//    hexToStr((char*)recvbuffer , rtn , " close recv2 ");
 }
 
 void RtuThread::run()

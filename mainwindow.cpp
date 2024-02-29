@@ -127,7 +127,7 @@ void MainWindow::setBusName(int index)
 
     mIndex = index;
 
-    ui->ratedLab->setText("V3.0.4");
+    ui->ratedLab->setText("V3.0.4_T02/29");
 }
 
 void MainWindow::checkAlarm()
@@ -138,6 +138,13 @@ void MainWindow::checkAlarm()
     } else {
         ui->alarmBtn->setVisible(false);
     }
+}
+
+void MainWindow::initNetSLot()
+{
+    mServer = new Server(this);
+    mServer->setMaxPendingConnections(2);
+    mServer->listen(QHostAddress::AnyIPv4, 22223);
 }
 
 void MainWindow::initFunSLot()
@@ -156,6 +163,7 @@ void MainWindow::initFunSLot()
 
     mCheckDlg = new CheckPasswordDlg(this);
     connect(mCheckDlg,SIGNAL(dialogClosed(bool)),this,SLOT(dialogClosed(bool)));
+    QTimer::singleShot(7750,this,SLOT(initNetSLot())); //延时初始化
 
     ui->comboBox->setEnabled(false);
     QPixmap pix(1,60);

@@ -22,7 +22,7 @@ void MySocket::sendData(int id, const char *data , int len)
 
 void MySocket::recvData(void)
 {
-    QString ip = peerAddress().toString().remove(0, 7);
+    QString ip = peerAddress().toString();
     QByteArray data = readAll();
 
     emit dataReady(ip, data);

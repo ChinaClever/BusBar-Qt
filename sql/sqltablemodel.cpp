@@ -17,7 +17,7 @@ SqlTableModel::SqlTableModel(QWidget *parent) :
     DbDevName* db = DbDevName::bulid();
     model = new QSqlTableModel(this, db->mDb);
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    model->setSort(0, Qt::AscendingOrder); //选择按照 第一列 排序
+    model->setSort(0, Qt::DescendingOrder); //选择按照 第一列 排序 //选择按照 第一列 排序
 }
 
 void SqlTableModel::setHeaders(QStringList &head)

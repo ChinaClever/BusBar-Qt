@@ -117,6 +117,19 @@ char DpAlarmThread::alarmFlag(sDataPowUnit &unit, int line, bool cr)
     return flag;
 }
 
+void DpAlarmThread::alarmOtherDataUnit(sRtuULLintUnit& box , uchar &alram)
+{
+    if((box.ivalue < box.imin) || (box.ivalue > box.imax))
+    {
+        if(alram == 0)
+            alram = 1;
+        box.ialarm = 1;
+    } else{
+        alram= 0;
+        box.ialarm = 0;
+    }
+}
+
 void DpAlarmThread::boxAlarm(sBoxData &box)
 {
     if(box.offLine > 0) {
@@ -147,9 +160,16 @@ void DpAlarmThread::boxAlarm(sBoxData &box)
                 box.HzAlarm = 2;
         } else
             box.HzAlarm = 0;
+        alarmOtherDataUnit(box.zeroLineCur , box.zeroLineAlarm);
+
+        if(box.lpsAlarm == 2 && box.lpsLogAlarm == 0){
+            box.lpsLogAlarm = 1;
+        }else if(box.lpsAlarm == 0 || box.lpsAlarm == 1){
+            box.lpsLogAlarm = 0;
+        }
 
         box.boxOffLineAlarm = 1;
-        box.boxAlarm = box.boxCurAlarm + box.boxVolAlarm + box.boxEnvAlarm + box.boxPowerAlarm + box.HzAlarm;
+        box.boxAlarm = box.boxCurAlarm + box.boxVolAlarm + box.boxEnvAlarm + box.boxPowerAlarm + box.HzAlarm + box.zeroLineAlarm;
     } else {
         if(box.boxOffLineAlarm == 1) box.boxOffLineAlarm = 2;
         box.boxAlarm = 0;

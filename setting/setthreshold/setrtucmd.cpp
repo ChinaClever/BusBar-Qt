@@ -30,7 +30,7 @@ void SetRtuCmd::sendReg(int reg, sThresholdItem &item)
 
 void SetRtuCmd::sendRegV3(int reg, sThresholdItem &item)
 {
-    if(item.type == 4 || (item.box == 0 && item.type == 2))
+    if(item.type == 4 || (item.box == 0 && item.type == 2) || (item.box == 0 && item.type == 8))
         sendDataUintV3(item.bus, item.box, reg, item.min , item.max);
     else if(item.type == 11 || item.type == 14 )
         sendDataUcharV3(item.bus, item.box, reg, item.min);
@@ -80,6 +80,7 @@ void SetRtuCmd::sendStartV3(sThresholdItem &item)
     case 3: reg = StartTemperatureMIN_1 + item.num*2; break;
     case 4: reg = StartPowerMIN_L1_1 + item.num*12;break;
     case 5: reg = StartSetHzMIN ; break;
+    case 8: reg = StartZoneCurMAX_1 ; break;
     case 11: reg = SetStartRelease ; break;
     case 14: reg = SetStartControlRelease ; break;
     }

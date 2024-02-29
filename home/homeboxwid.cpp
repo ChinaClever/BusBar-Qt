@@ -92,16 +92,21 @@ void HomeBoxWid::updateAlarmIcon(QLabel *lab,int volAlarm, int curALarm, int env
 void HomeBoxWid::updateStatus()
 {
     if(mData->offLine > 0) {
-        if(!mData->firsttime || mData->preoffLine == 0){
+        uchar alarm = mData->boxAlarm + mData->boxCurAlarm + mData->boxEnvAlarm + mData->boxPowerAlarm;
+        if(!mData->firsttime || mData->preoffLine == 0 || mData->prealarm != alarm || mData->boxType != mData->preboxType){
             if(mData->boxType)//盒子类型：0-插接箱；1-温度模块
             {
                 mData->firsttime = true;
                 mData->preoffLine = mData->offLine;
+                mData->prealarm = alarm;
+                mData->preboxType = mData->boxType;
                 ui->iconLab_1->hide();ui->iconLab_3->hide();
                 updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
             }else{
                 mData->firsttime = true;
                 mData->preoffLine = mData->offLine;
+                mData->prealarm = alarm;
+                mData->preboxType = mData->boxType;
                 ui->iconLab_1->show();ui->iconLab_3->show();
                 updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
                 updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
@@ -109,16 +114,18 @@ void HomeBoxWid::updateStatus()
             }
         }
     } else { // 离线
-        if(!mData->firsttime || mData->preoffLine > 0){
+        if(!mData->firsttime || mData->preoffLine > 0 || mData->boxType != mData->preboxType){
             if(mData->boxType)//测温模块
             {
                 mData->firsttime = true;
                 mData->preoffLine = mData->offLine;
+                mData->preboxType = mData->boxType;
                 ui->iconLab_1->hide();ui->iconLab_3->hide();
                 setBackgroundImage(ui->iconLab_2, "boxoffine");
             }else{
                 mData->firsttime = true;
                 mData->preoffLine = mData->offLine;
+                mData->preboxType = mData->boxType;
                 ui->iconLab_1->show();ui->iconLab_3->show();
                 setBackgroundImage(ui->iconLab_1, "boxoffine");
                 setBackgroundImage(ui->iconLab_2, "boxoffine");

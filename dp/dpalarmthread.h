@@ -18,6 +18,7 @@ protected:
     char alarmFlag(sDataUnit &unit, int line, bool cr=false);
     void alarmDataUnit(sDataPowUnit &unit, int lineNum, bool cr=false);
     char alarmFlag(sDataPowUnit &unit, int line, bool cr=false);
+    void alarmOtherDataUnit(sRtuULLintUnit& box , uchar &alram);
 
     void boxAlarm(sBoxData &box);
     void busAlarm(sBusData &bus);

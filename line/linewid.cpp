@@ -52,8 +52,8 @@ void LineWid::initWid()
         connect(this, SIGNAL(busChangedSig(int)), line, SLOT(busChangeSlot(int)));
     }
 
-    ui->lpsLab->hide();
-    ui->label_10->hide();
+//    ui->lpsLab->hide();
+//    ui->label_10->hide();
 }
 
 
@@ -71,23 +71,40 @@ void LineWid::timeoutDone()
     if(isRun) {
         QString str;
         if(mData->box[0].dc){ //交流
-            str= QString::number(mData->box[0].rate.svalue/10.0,'f',1) + "Hz";
+            str = QString::number(mData->box[0].rate.svalue/10.0,'f',1) + "Hz";
             ui->rateLab->setText(str); //频率
             ui->label->setText("频率：");
 
             ui->thdBtn->setHidden(false);
             ui->widget->setHidden(false);
             mLineTable->updateData(mData->box[0]);
-            ui->lpsLab->setText(mData->box[0].lps==0?"正常":"损坏");
+            ui->zeroLineLab->setText(QString::number(mData->box[0].zeroLineCur.ivalue/COM_RATE_CUR,'f',3) + "A");
             QPalette pa;
-            if(mData->box[0].lps==1)
+            if(mData->box[0].zeroLineAlarm==1 || mData->box[0].zeroLineAlarm==2)
             {
                 pa.setColor(QPalette::WindowText, Qt::red);
-                ui->lpsLab->setPalette(pa);
+                ui->zeroLineLab->setPalette(pa);
             }
             else {
                 pa.setColor(QPalette::WindowText, Qt::black);
-                ui->lpsLab->setPalette(pa);
+                ui->zeroLineLab->setPalette(pa);
+            }
+
+            ui->lpStateLab->setText(tr("---"));
+            if(mData->box[0].lpsAlarm==2&&mData->box[0].offLine)
+            {
+                ui->lpStateLab->setText(tr("损坏"));
+                pa.setColor(QPalette::WindowText, Qt::red);
+                ui->lpStateLab->setPalette(pa);
+            }else if(mData->box[0].lpsAlarm==1&&mData->box[0].offLine){
+                ui->lpStateLab->setText(tr("正常"));
+                pa.setColor(QPalette::WindowText, Qt::black);
+                ui->lpStateLab->setPalette(pa);
+            }
+            else {
+                ui->lpStateLab->setText(tr("---"));
+                pa.setColor(QPalette::WindowText, Qt::black);
+                ui->lpStateLab->setPalette(pa);
             }
             updateTem();
         }else{
