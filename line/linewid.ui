@@ -393,7 +393,7 @@ border-bottom:2px solid rgb(228,228,228);
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>1011</width>
+     <width>1016</width>
      <height>42</height>
     </rect>
    </property>
@@ -459,7 +459,7 @@ border-bottom:2px solid rgb(228,228,228);
       </property>
       <property name="maximumSize">
        <size>
-        <width>30</width>
+        <width>50</width>
         <height>16777215</height>
        </size>
       </property>
@@ -483,13 +483,13 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="zeroLineLab">
       <property name="minimumSize">
        <size>
-        <width>40</width>
+        <width>50</width>
         <height>18</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>40</width>
+        <width>50</width>
         <height>16777215</height>
        </size>
       </property>
