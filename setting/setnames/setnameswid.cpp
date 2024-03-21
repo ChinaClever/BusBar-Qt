@@ -154,8 +154,8 @@ void SetNamesWid::initTableWidget()
 
 //    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 //    ui->tableWidget->verticalHeader()->setDefaultSectionSize(45);
-//    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
-//    ui->tableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{height:35px;}");
+    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
+    ui->tableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{height:35px;}");
     //    ui->tableWidget->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
     connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
 }

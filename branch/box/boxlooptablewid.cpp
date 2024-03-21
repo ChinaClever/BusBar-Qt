@@ -143,7 +143,7 @@ void BoxLoopTableWid::initTableWidget()
     ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); //关闭横向滑条
-
+    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
 
 
 

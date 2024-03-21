@@ -142,7 +142,7 @@ void BoxTableWidget::initTableWidget()
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 //    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 //    ui->tableWidget->verticalHeader()->setDefaultSectionSize(45);
-//    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
+    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
 
     connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(getItem(QTableWidgetItem*)));
     // ui->tableWidget->setColumnHidden(0, true); // 隐藏母线名称

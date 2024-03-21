@@ -5,7 +5,7 @@
 #include <QTableWidget>
 #include "common.h"
 
-//#include <QScrollBar>
+#include <QScrollBar>
 //#include <QPropertyAnimation>
 //#include <QDateTime>
 

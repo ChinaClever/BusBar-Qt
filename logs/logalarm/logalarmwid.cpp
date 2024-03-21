@@ -128,8 +128,8 @@ void LogAlarmWid::initFunSLot()
 
 //    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 //    ui->tableView->verticalHeader()->setDefaultSectionSize(45);
-//    ui->tableView->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
-//    ui->tableView->horizontalScrollBar()->setStyleSheet("QScrollBar{height:35px;}");
+    ui->tableView->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
+    ui->tableView->horizontalScrollBar()->setStyleSheet("QScrollBar{height:35px;}");
 
     initBtnBar(); // 切换
     initTableSlot(0);

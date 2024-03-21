@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include "common/common.h"
-//#include <QScrollBar>
+#include <QScrollBar>
 //#include <QPropertyAnimation>
 //#include <QDateTime>
 

@@ -6,7 +6,7 @@
 #include "box/temwid.h"
 #include <QTableWidgetItem>
 #include "box/temwid.h"
-//#include <QScrollBar>
+#include <QScrollBar>
 //#include <QPropertyAnimation>
 //#include <QDateTime>
 

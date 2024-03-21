@@ -5,7 +5,7 @@
 #include "logcom/logbtnbar.h"
 #include "sqltablemodel.h"
 
-//#include <QScrollBar>
+#include <QScrollBar>
 //#include <QPropertyAnimation>
 //#include <QDateTime>
 

@@ -136,6 +136,8 @@ void ComTableWid::initTableWidget(QStringList &header, const QString &title)
 //        ui->tableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{height:35px;}");
 //    }
 
+    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
+    ui->tableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{height:35px;}");
     connect(ui->tableWidget,SIGNAL(itemDoubleClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
     connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemClicked(QTableWidgetItem*)));
     // ui->tableWidget->setColumnHidden(0, true);

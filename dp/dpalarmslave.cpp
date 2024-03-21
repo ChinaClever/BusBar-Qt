@@ -341,8 +341,7 @@ void DpAlarmSlave::busAlarm(int id)
                 unitAlarm(typeStr, msg, busBox->data.pow, COM_RATE_POW , "kW");
             }
 
-            if( busBox->HzAlarm == 1) {
-                busBox->HzAlarm = 2;
+            if( busBox->HzAlarm ) {
                 QString typeStr = tr("主路频率");
                 QString str = tr("母线：%1").arg(bus->busName);
                 QString tempStr = typeStr + tr("告警");
@@ -350,24 +349,29 @@ void DpAlarmSlave::busAlarm(int id)
                            .arg(QString::number(busBox->rate.svalue/COM_RATE_FREQUENCY,'f',1)).arg("Hz")
                            .arg(QString::number(busBox->rate.smin/COM_RATE_FREQUENCY,'f',1)).arg("Hz")
                         .arg(QString::number(busBox->rate.smax/COM_RATE_FREQUENCY,'f',1)).arg("Hz");
-                saveMsg( typeStr , str );
+                if(busBox->HzAlarm  == 1){
+                    busBox->HzAlarm = 2;
+                    saveMsg( typeStr , str );
+                }
                 mAlarmStr << shm->data[mBusId].busName;
                 mAlarmStr << tempStr;
                 mAlarmStr << str;
             }
-            if( busBox->lpsLogAlarm == 1) {
-                busBox->lpsLogAlarm = 2;
+            if( busBox->lpsLogAlarm ) {
                 QString typeStr = tr("主路防雷");
                 QString str = tr("母线：%1").arg(bus->busName);
                 QString tempStr = typeStr + tr("告警");
                 str += tr("损坏");
-                saveMsg( typeStr , str );
+                if(busBox->lpsLogAlarm == 1){
+                    busBox->lpsLogAlarm = 2;
+                    saveMsg( typeStr , str );
+                }
                 mAlarmStr << shm->data[mBusId].busName;
                 mAlarmStr << tempStr;
                 mAlarmStr << str;
             }
-            if( busBox->zeroLineAlarm == 1) {
-                busBox->zeroLineAlarm = 2;
+            if( busBox->zeroLineAlarm ) {
+
                 QString typeStr = tr("主路零线电流");
                 QString str = tr("母线：%1").arg(bus->busName);
                 QString tempStr = typeStr + tr("告警");
@@ -375,7 +379,10 @@ void DpAlarmSlave::busAlarm(int id)
                            .arg(QString::number(busBox->zeroLineCur.ivalue/COM_RATE_CUR,'f',3)).arg("A")
                            .arg(QString::number(busBox->zeroLineCur.imin/COM_RATE_CUR,'f',3)).arg("A")
                         .arg(QString::number(busBox->zeroLineCur.imax/COM_RATE_CUR,'f',3)).arg("A");
-                saveMsg( typeStr , str );
+                if(busBox->zeroLineAlarm == 1){
+                    busBox->zeroLineAlarm = 2;
+                    saveMsg( typeStr , str );
+                }
                 mAlarmStr << shm->data[mBusId].busName;
                 mAlarmStr << tempStr;
                 mAlarmStr << str;

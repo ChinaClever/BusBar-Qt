@@ -7,7 +7,7 @@
 #include <QTableWidgetItem>
 #include "setnamedlg.h"
 
-//#include <QScrollBar>
+#include <QScrollBar>
 //#include <QPropertyAnimation>
 //#include <QDateTime>
 
