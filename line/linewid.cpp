@@ -172,14 +172,14 @@ void LineWid::updateTem()
             temLab[i]->setText(QString::number(unit.value[i]/COM_RATE_TEM) + "°C");
             updateAlarmStatus(temLab[i],unit,i);
         }
-        if(mData->box[0].data.totalPow.value == 0 )
+        if(mData->box[0].totalPow.ivalue == 0 )
             str = QString::number(0, 'f', 2)+"kW";
         else
-            str = QString::number(mData->box[0].data.totalPow.value[0]/COM_RATE_POW, 'f', 3)+"kW";
+            str = QString::number(mData->box[0].totalPow.ivalue/COM_RATE_POW, 'f', 3)+"kW";
         ui->totalPowLab->setText(str);
         setLabeColor(ui->rateLab , mData->box[0].HzAlarm , 0);
         int flag = 0;
-        if(mData->box[0].data.totalPow.value[0] < mData->box[0].data.totalPow.min[0] || mData->box[0].data.totalPow.value[0] > mData->box[0].data.totalPow.max[0] )
+        if(mData->box[0].totalPow.ivalue < mData->box[0].totalPow.imin || mData->box[0].totalPow.ivalue > mData->box[0].totalPow.imax )
         {
             flag = 2;
         }

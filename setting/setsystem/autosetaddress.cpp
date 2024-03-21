@@ -24,32 +24,52 @@ AutoSetAddress::~AutoSetAddress()
 
 void AutoSetAddress::on_autoSet1Btn_clicked()
 {
-    ui->autoSet1Btn->setEnabled(false);
-    ui->progressBar->setValue(0);
-    emit autoSetBus1Sig(1);
+    QString str = tr("是否确定自动分配第1条母线串口地址?");
+    QuMsgBox box(this, str);
+    bool ret = box.Exec();
+    if(ret){
+        ui->autoSet1Btn->setEnabled(false);
+        ui->progressBar->setValue(0);
+        emit autoSetBus1Sig(1);
+    }
 }
 
 
 void AutoSetAddress::on_autoSet2Btn_clicked()
 {
-    ui->autoSet2Btn->setEnabled(false);
-    ui->progressBar_2->setValue(0);
-    emit autoSetBus2Sig(2);
+    QString str = tr("是否确定自动分配第2条母线串口地址?");
+    QuMsgBox box(this, str);
+    bool ret = box.Exec();
+    if(ret){
+        ui->autoSet2Btn->setEnabled(false);
+        ui->progressBar_2->setValue(0);
+        emit autoSetBus2Sig(2);
+    }
 }
 
 void AutoSetAddress::on_autoSet3Btn_clicked()
 {
-    ui->autoSet3Btn->setEnabled(false);
-    ui->progressBar_3->setValue(0);
-    emit autoSetBus3Sig(3);
+    QString str = tr("是否确定自动分配第3条母线串口地址?");
+    QuMsgBox box(this, str);
+    bool ret = box.Exec();
+    if(ret){
+        ui->autoSet3Btn->setEnabled(false);
+        ui->progressBar_3->setValue(0);
+        emit autoSetBus3Sig(3);
+    }
 }
 
 
 void AutoSetAddress::on_autoSet4Btn_clicked()
 {
-    ui->autoSet4Btn->setEnabled(false);
-    ui->progressBar_4->setValue(0);
-    emit autoSetBus4Sig(4);
+    QString str = tr("是否确定自动分配第4条母线串口地址?");
+    QuMsgBox box(this, str);
+    bool ret = box.Exec();
+    if(ret){
+        ui->autoSet4Btn->setEnabled(false);
+        ui->progressBar_4->setValue(0);
+        emit autoSetBus4Sig(4);
+    }
 }
 
 void AutoSetAddress::setProgressbarPowValue(QProgressBar *bar,int value, int index)
@@ -116,7 +136,7 @@ void AutoSetAddress::getNumAndIndexSlot(int index , int curnum)
             ui->statuslab1->setText(QString(tr("设置地址%1成功")).arg(num-1));
             QPalette pa;
             pa.setColor(QPalette::WindowText, Qt::black);
-            ui->statuslab4->setPalette(pa);
+            ui->statuslab1->setPalette(pa);
         }
     }break;
     case 2:
@@ -127,7 +147,7 @@ void AutoSetAddress::getNumAndIndexSlot(int index , int curnum)
             ui->statuslab2->setText(QString(tr("设置地址%1成功")).arg(num-1));
             QPalette pa;
             pa.setColor(QPalette::WindowText, Qt::black);
-            ui->statuslab4->setPalette(pa);
+            ui->statuslab2->setPalette(pa);
         }
     }break;
     case 3:
@@ -138,7 +158,7 @@ void AutoSetAddress::getNumAndIndexSlot(int index , int curnum)
             ui->statuslab3->setText(QString(tr("设置地址%1成功")).arg(num-1));
             QPalette pa;
             pa.setColor(QPalette::WindowText, Qt::black);
-            ui->statuslab4->setPalette(pa);
+            ui->statuslab3->setPalette(pa);
         }
     }break;
     case 4:

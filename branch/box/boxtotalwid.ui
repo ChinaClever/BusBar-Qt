@@ -1072,13 +1072,13 @@
        <widget class="QLabel" name="label">
         <property name="minimumSize">
          <size>
-          <width>50</width>
+          <width>30</width>
           <height>25</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>50</width>
+          <width>30</width>
           <height>16777215</height>
          </size>
         </property>
@@ -1183,13 +1183,13 @@
        <widget class="QLabel" name="label_9">
         <property name="minimumSize">
          <size>
-          <width>95</width>
+          <width>90</width>
           <height>25</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>95</width>
+          <width>90</width>
           <height>16777215</height>
          </size>
         </property>
@@ -1205,13 +1205,13 @@
        <widget class="QLabel" name="label_10">
         <property name="minimumSize">
          <size>
-          <width>100</width>
+          <width>90</width>
           <height>25</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>100</width>
+          <width>90</width>
           <height>16777215</height>
          </size>
         </property>
@@ -1227,13 +1227,13 @@
        <widget class="QLabel" name="label_15">
         <property name="minimumSize">
          <size>
-          <width>80</width>
+          <width>85</width>
           <height>25</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>80</width>
+          <width>85</width>
           <height>16777215</height>
          </size>
         </property>
@@ -1271,13 +1271,13 @@
        <widget class="QLabel" name="label_12">
         <property name="minimumSize">
          <size>
-          <width>60</width>
+          <width>70</width>
           <height>25</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>60</width>
+          <width>70</width>
           <height>16777215</height>
          </size>
         </property>

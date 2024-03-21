@@ -160,6 +160,13 @@ void DpAlarmThread::boxAlarm(sBoxData &box)
                 box.HzAlarm = 2;
         } else
             box.HzAlarm = 0;
+        if((box.totalPow.ivalue < box.totalPow.imin) || (box.totalPow.ivalue > box.totalPow.imax))
+        {
+            if(box.totalPowAlarm == 0)
+                box.totalPowAlarm = 1;
+            else
+                box.totalPowAlarm = 2;
+        }else box.totalPowAlarm = 0;
         alarmOtherDataUnit(box.zeroLineCur , box.zeroLineAlarm);
 
         if(box.lpsAlarm == 2 && box.lpsLogAlarm == 0){

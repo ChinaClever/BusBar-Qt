@@ -43,7 +43,7 @@ void SetThresholdDlg::initSpinBox(sThresholdItem &item)
     case 8:
             {
             if(!item.box){
-                str = "A"; range = 650;
+                str = "A"; range = 1200;
             }
             ui->mindoubleSpinBox->setMaximum(range);
             ui->maxdoubleSpinBox->setMaximum(range);

@@ -188,6 +188,7 @@ typedef struct _sBoxData {
     uchar HzAlarm;//频率告警值 0表示未告警 1表示已告警 2表示已记录
     uchar lpsLogAlarm;//防雷告警值 0表示未告警 1表示已告警 2表示已记录
     uchar zeroLineAlarm;//零线电流告警值 0表示未告警 1表示已告警 2表示已记录
+    uchar totalPowAlarm;//总功率告警值 0表示未告警 1表示已告警 2表示已记录
 
     uint zeroCur;//零线电流
     uint volUnbalance;//电压三相不平衡

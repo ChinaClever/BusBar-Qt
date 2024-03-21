@@ -77,6 +77,7 @@ private:
     NetWork *mNetWork;
     Server *mServer;
 
+    //int count;
     //Watchdogthread* mWatchdogThread;
 };
 

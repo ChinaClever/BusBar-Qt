@@ -53,8 +53,10 @@ void BoxTotalWid::updateAll()
     ui->tPowH->setText(str);
     ui->temH->setText(str);
     if( mBox && mBox->offLine ){
-        if(mBox->data.totalPow.value[0] == 0 )
-            str = QString::number(0, 'f', 2)+"kW";
+        if(mBox->data.totalPow.value[0] == 0 ){
+            for(int i = 0 ; i < 3 ; ++i) mBox->data.totalPow.value[0] += mLineTgBox->pow[i];
+            str = QString::number(mBox->data.totalPow.value[0]/COM_RATE_POW, 'f', 2)+"kW";
+        }
         else
             str = QString::number(mBox->data.totalPow.value[0]/COM_RATE_POW, 'f', 3)+"kW";
         ui->tPowH->setText(str);
@@ -131,7 +133,7 @@ void BoxTotalWid::updateData()
             powLab[i]->setText(str);
 
 //            str =  QString::number(mLineTgBox->apPow[i]/COM_RATE_POW, 'f', 3) + "kVA";
-            str =  QString::number(mLineTgBox->apPow[i]/(COM_RATE_POW*100), 'f', 3) + "kVA";
+            str =  QString::number(mLineTgBox->apPow[i]/(COM_RATE_POW*1000), 'f', 3) + "kVA";
             tApPowLab[i]->setText(str);
 
             str =  QString::number(mLineTgBox->reactivePower[i]/(COM_RATE_POW), 'f', 3) + "kVar";
@@ -141,7 +143,7 @@ void BoxTotalWid::updateData()
                 str = QString::number(0, 'f', 2);
             else
             {
-                double pf = (mLineTgBox->pow[i]*100.0)/(mLineTgBox->apPow[i]);
+                double pf = (mLineTgBox->pow[i]*1000.0)/(mLineTgBox->apPow[i]);
                 if( pf > 0.99 ) str = "0.99";
                 else str =  QString::number(pf, 'f', 2);
             }

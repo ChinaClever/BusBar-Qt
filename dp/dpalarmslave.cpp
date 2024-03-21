@@ -289,7 +289,7 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
             tempStr = tr("离线告警");
             str += shm->data[mBusId].busName+tr("插接箱离线")+tr("插接箱：%1 已离线").arg(box.boxName);
             mAlarmStr << shm->data[mBusId].busName;
-            mAlarmStr << tr("插接箱离线");
+            mAlarmStr << tempStr;
             mAlarmStr << tr("插接箱：%1 已离线").arg(box.boxName);
             saveMsg(tempStr,str);
             box.boxOffLineAlarm = 3;
@@ -298,7 +298,7 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
             tempStr = tr("离线告警");
             str += shm->data[mBusId].busName+tr("插接箱离线")+tr("插接箱：%1 已离线").arg(box.boxName);
             mAlarmStr << shm->data[mBusId].busName;
-            mAlarmStr << tr("插接箱离线");
+            mAlarmStr << tempStr;
             mAlarmStr << tr("插接箱：%1 已离线").arg(box.boxName);
         }
     }
@@ -357,6 +357,22 @@ void DpAlarmSlave::busAlarm(int id)
                 mAlarmStr << tempStr;
                 mAlarmStr << str;
             }
+            if( busBox->totalPowAlarm ) {
+                QString typeStr = tr("主路总功率");
+                QString str = tr("母线：%1").arg(bus->busName);
+                QString tempStr = typeStr + tr("告警");
+                str += tr(" 当前值：%2%3, 最小值：%4%5, 最大值：%6%7")
+                           .arg(QString::number(busBox->totalPow.ivalue/COM_RATE_POW,'f',3)).arg("kW")
+                           .arg(QString::number(busBox->rate.smin/COM_RATE_FREQUENCY,'f',3)).arg("kW")
+                        .arg(QString::number(busBox->rate.smax/COM_RATE_FREQUENCY,'f',3)).arg("kW");
+                if(busBox->totalPowAlarm == 1){
+                    busBox->totalPowAlarm = 2;
+                    saveMsg( typeStr , str );
+                }
+                mAlarmStr << shm->data[mBusId].busName;
+                mAlarmStr << tempStr;
+                mAlarmStr << str;
+            }
             if( busBox->lpsLogAlarm ) {
                 QString typeStr = tr("主路防雷");
                 QString str = tr("母线：%1").arg(bus->busName);
@@ -371,7 +387,6 @@ void DpAlarmSlave::busAlarm(int id)
                 mAlarmStr << str;
             }
             if( busBox->zeroLineAlarm ) {
-
                 QString typeStr = tr("主路零线电流");
                 QString str = tr("母线：%1").arg(bus->busName);
                 QString tempStr = typeStr + tr("告警");
@@ -391,17 +406,19 @@ void DpAlarmSlave::busAlarm(int id)
     }else{
         if(busBox->boxOffLineAlarm == 2){
             mAlarmStr << shm->data[mBusId].busName;
-            mAlarmStr << tr("始端箱离线");
             QString tempStr ,str;
             tempStr = tr("离线告警");
+            mAlarmStr << tempStr;
+            mAlarmStr << tr("始端箱离线");
             str += shm->data[mBusId].busName+tr("始端箱离线");
             saveMsg(tempStr,str);
             busBox->boxOffLineAlarm = 3;
         }else if(busBox->boxOffLineAlarm == 3){
             mAlarmStr << shm->data[mBusId].busName;
-            mAlarmStr << tr("始端箱离线");
             QString tempStr ,str;
             tempStr = tr("离线告警");
+            mAlarmStr << tempStr;
+            mAlarmStr << tr("始端箱离线");
             str += shm->data[mBusId].busName+tr("始端箱离线");
         }
     }

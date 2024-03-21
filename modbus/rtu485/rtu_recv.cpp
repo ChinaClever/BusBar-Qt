@@ -343,8 +343,10 @@ static int rtu_start_recv_some_alarm_data(uchar *ptr, Rtu_recv *msg)
         msg->env[i].tem.max = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     }
     msg->reCur.smax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    msg->zeroLineCur.imin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->zeroLineCur.imin = 0;
     msg->zeroLineCur.imax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->zeroLineCur.imax  <<= 16; // 左移16位
+    msg->zeroLineCur.imax  += (*ptr) * 256 + *(ptr+1);  ptr+=2; len+=2;
     msg->totalPow.imin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->totalPow.imin  <<= 16; // 左移16位
     msg->totalPow.imin  += (*ptr) * 256 + *(ptr+1);  ptr+=2; len+=2;

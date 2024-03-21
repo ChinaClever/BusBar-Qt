@@ -313,8 +313,8 @@ bool SetNamesWid::saveBusName()
         CriticalMsgBox box(this, tr("个数应应在0-18!!"));
         ret = false;
     }
-    if(ui->rateCurSpin->value() < 100 || ui->rateCurSpin->value() > 600){
-        CriticalMsgBox box(this, tr("额定电流应在100-600!!"));
+    if(ui->rateCurSpin->value() < 100 || ui->rateCurSpin->value() > 1200){
+        CriticalMsgBox box(this, tr("额定电流应在100-1200!!"));
         ret = false;
     }
     return ret;

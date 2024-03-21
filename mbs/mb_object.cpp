@@ -120,8 +120,8 @@ void Mb_Object::upSlaveDevInfo(sBusData *data ,int bus, int index)
                 vs << p->cur.value[i] << p->cur.upalarm[i];
                 vs << ( p->pow.value[i] >> 16 ) << ( p->pow.value[i] & 0xffff);
                 vs << p->pow.upalarm[i];
-                vs << ( p->apPow[i] >> 16 ) << ( p->apPow[i] & 0xffff);
                 vs << ( p->reactivePower[i] >> 16 ) << ( p->reactivePower[i] & 0xffff);
+                vs << ( p->apPow[i] >> 16 ) << ( p->apPow[i] & 0xffff);
                 vs << p->pf[i] << p->sw[i];
                 vs << ( p->ele[i] >> 16 ) << ( p->ele[i] & 0xffff);
             }else{
