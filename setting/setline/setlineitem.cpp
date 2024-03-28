@@ -67,7 +67,7 @@ void SetLineItem::updateWidget(int bus, int line)
         ui->volLab->setText(QString::number(busData->box[0].zeroLineCur.ivalue/COM_RATE_CUR,'f', 3)+"A");
         ui->nameLab->hide();
     }
-    ui->nameLab->setText(str+ QString::number(mLine+1));
+    ui->nameLab->setText(QString('A'+mLine));
 
     if(mFlag){
         setProgressbarPowValue(ui->curBar,&(objData->cur),line);

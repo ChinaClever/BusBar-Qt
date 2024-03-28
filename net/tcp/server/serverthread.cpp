@@ -30,10 +30,22 @@ void serverThread::run(void)
 
 void serverThread::recvDataSlot(const QString &ip, const QByteArray &data)
 {
+    //qDebug()<<"recv date "<<QString(data);
+    QDateTime t1 = QDateTime::fromString(QString(data) , "yyyy-MM-dd HH:mm:ss");
+
     QString command = QString("date -s \'%1\'")
                           .arg(QString(data));
     int ret = system(command.toLatin1().data());
     ret = system("hwclock -f /dev/rtc0 -w");
+
+    QDateTime t = QDateTime::currentDateTime();
+    if( qAbs(t.secsTo(t1)) <= 60 ){
+        m_socket->write((char*)"OK");
+        m_socket->flush();
+    }else{
+        m_socket->write((char*)"FAIL");
+        m_socket->flush();
+    }
 }
 
 void serverThread::disconnectToHost(void)

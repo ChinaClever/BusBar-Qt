@@ -695,8 +695,8 @@ void RtuThread::autoSetAddress()
             if(recvbuffer[5] == getBoxNum(mId)+2) break;
             if(recvbuffer[5] == 0xCC){count=-1;break;}
         }
-    }
-    if(count == -1)emit sendDelaySig(mId);
+    }else { emit sendDelaySig(mId); }
+    if(count == -1){ emit sendDelaySig(mId); }
     buffer[8] = 0x00;//关闭自动设置地址模式
     cr = rtu_crc(buffer, sizeof(buffer)-2);
     buffer[sizeof(buffer)-2] = (0xff)&(cr); /*低8位*/

@@ -95,7 +95,7 @@ QPushButton
     </rect>
    </property>
    <property name="focusPolicy">
-    <enum>Qt::StrongFocus</enum>
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">QSpinBox::up-button
@@ -181,7 +181,7 @@ QSpinBox::down-button
     </rect>
    </property>
    <property name="focusPolicy">
-    <enum>Qt::StrongFocus</enum>
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">QSpinBox::up-button
@@ -216,7 +216,7 @@ QSpinBox::down-button
     </rect>
    </property>
    <property name="focusPolicy">
-    <enum>Qt::StrongFocus</enum>
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">QSpinBox::up-button
@@ -283,7 +283,7 @@ QSpinBox::down-button
     </rect>
    </property>
    <property name="focusPolicy">
-    <enum>Qt::StrongFocus</enum>
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">QSpinBox::up-button
@@ -330,7 +330,7 @@ QSpinBox::down-button
     </size>
    </property>
    <property name="focusPolicy">
-    <enum>Qt::StrongFocus</enum>
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">QSpinBox::up-button
@@ -366,7 +366,7 @@ QSpinBox::down-button
     </rect>
    </property>
    <property name="focusPolicy">
-    <enum>Qt::StrongFocus</enum>
+    <enum>Qt::NoFocus</enum>
    </property>
    <property name="styleSheet">
     <string notr="true">QSpinBox::up-button
@@ -779,6 +779,9 @@ QSpinBox::down-button
      <width>16777215</width>
      <height>40</height>
     </size>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
    </property>
   </widget>
   <widget class="QPushButton" name="btn_0">

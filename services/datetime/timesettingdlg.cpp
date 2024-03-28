@@ -342,7 +342,7 @@ void TimeSettingDlg::on_quitBtn_clicked()
         com_setBackColour(tr("信息提示"),&msgBox);
         msgBox.setText(tr("\n您已修改时间，是否要放弃修改？\n"));
         msgBox.setStandardButtons (QMessageBox::Ok|QMessageBox::Cancel);
-        msgBox.setButtonText (QMessageBox::Ok,QString("确定"));
+        msgBox.setButtonText (QMessageBox::Ok,QString("确 定"));
         msgBox.setButtonText (QMessageBox::Cancel,QString("取 消"));
         msgBox.setDefaultButton(QMessageBox::Ok);
         int res = msgBox.exec();
@@ -364,17 +364,17 @@ void TimeSettingDlg::on_timeSet_but_clicked()
         int day_old = currentTime_old.date().day();
         int hour_old = currentTime_old.time().hour();
         int minute_old = currentTime_old.time().minute();
-        timeSetup();
         QMessageBox msgBox(this);
         com_setBackColour(tr("信息提示"),&msgBox);
         msgBox.setText(tr("\n您已修改时间，是否要修改？\n"));
         msgBox.setStandardButtons (QMessageBox::Ok|QMessageBox::Cancel);
-        msgBox.setButtonText (QMessageBox::Ok,QString("确定"));
+        msgBox.setButtonText (QMessageBox::Ok,QString("确 定"));
         msgBox.setButtonText (QMessageBox::Cancel,QString("取 消"));
         msgBox.setDefaultButton(QMessageBox::Ok);
         int res = msgBox.exec();
         if(res == QMessageBox::Ok)
         {
+            timeSetup();
             QString str;
             QDateTime currentTime_new = QDateTime::currentDateTime();
             int year_new = currentTime_new.date().year();
