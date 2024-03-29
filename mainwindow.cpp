@@ -16,6 +16,7 @@ ThirdThread *thr = NULL;
 extern int get_alarm_len();
 int gVerflag = 2;
 int gReadWriteflag = 1;
+int gLanguage = 1;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -129,7 +130,7 @@ void MainWindow::setBusName(int index)
     mIndex = index;
 
     //ui->ratedLab->setText("V3.0.4_T03/27");
-    ui->ratedLab->setText("V3.0.4");
+    ui->ratedLab->setText("V3.0.5");
 }
 
 void MainWindow::checkAlarm()
@@ -178,20 +179,21 @@ void MainWindow::initFunSLot()
     ui->comboBox->setItemIcon(3 , icon);
 }
 
+void MainWindow::initLanguage()
+{
+    bool ret = sys_configFile_open();
+    ret = sys_configFile_contains("language");
+    if(ret){
+        gLanguage = sys_configFile_readInt("language");
+    }else{
+        sys_configFile_write("language" , QString::number(gLanguage));
+    }
+    sys_configFile_close();
+}
+
 void MainWindow::initWidget()
 {
-//    bool ret = sys_configFile_open();
-//    if(ret)
-//    {
-//        int index = sys_configFile_readInt("readmode");
-//        if( 0 == index ){
-//            gVerflag = 2;
-//            sys_configFile_write("readmode" , QString::number(gVerflag));
-//        }else{
-//            gVerflag = index;
-//        }
-//    }
-//     sys_configFile_close();
+    initLanguage();
     //    set_background_color(ui->stackedWid,Qt::white);
     set_background_icon(ui->stackedWid,":/new/prefix1/image/background.png");
     initBackground(); //按钮图标

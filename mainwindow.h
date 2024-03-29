@@ -15,6 +15,7 @@
 
 extern int gVerflag;//1代表一期 2代表二期
 extern int gReadWriteflag;//1代表读 2代表写
+extern int gLanguage;//0代表中文 1代表英文
 namespace Ui {
 class MainWindow;
 }
@@ -38,6 +39,7 @@ protected:
     void setButtonClickedImage(QToolButton *button, QString name);
     void updateTime();
     void checkFile();
+    void initLanguage();
     //void seedWatchdog();
     //void clearCache();
 
