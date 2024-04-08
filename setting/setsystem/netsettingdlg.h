@@ -21,7 +21,7 @@ private slots:
 
 private:
     void initData();
-
+    void initLanguage();
 private:
     Ui::NetSettingDlg *ui;
 };

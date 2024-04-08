@@ -6,6 +6,8 @@ AutoSetAddress::AutoSetAddress(QWidget *parent) :
     ui(new Ui::AutoSetAddress)
 {
     ui->setupUi(this);
+    initLanguage();
+
     ui->progressBar->setValue(0);
     ui->progressBar_2->setValue(0);
     ui->progressBar_3->setValue(0);
@@ -21,10 +23,25 @@ AutoSetAddress::~AutoSetAddress()
 {
     delete ui;
 }
-
+void AutoSetAddress::initLanguage()
+{
+    if(gLanguage == 0){
+        ui->autoSet1Btn->setText("自动分配1");
+        ui->autoSet2Btn->setText("自动分配2");
+        ui->autoSet3Btn->setText("自动分配3");
+        ui->autoSet4Btn->setText("自动分配4");
+    }else{
+        ui->autoSet1Btn->setText("Automatic allocation 1");
+        ui->autoSet2Btn->setText("Automatic allocation 2");
+        ui->autoSet3Btn->setText("Automatic allocation 3");
+        ui->autoSet4Btn->setText("Automatic allocation 4");
+    }
+}
 void AutoSetAddress::on_autoSet1Btn_clicked()
 {
-    QString str = tr("是否确定自动分配第1条母线串口地址?");
+    QString str;
+    if(gLanguage == 0) str = tr("是否确定自动分配第1条母线串口地址?");
+    else str = tr("Are you sure to automatically allocate the serial port address of the first bus?");
     QuMsgBox box(this, str);
     bool ret = box.Exec();
     if(ret){
@@ -37,7 +54,9 @@ void AutoSetAddress::on_autoSet1Btn_clicked()
 
 void AutoSetAddress::on_autoSet2Btn_clicked()
 {
-    QString str = tr("是否确定自动分配第2条母线串口地址?");
+    QString str;
+    if(gLanguage == 0) str = tr("是否确定自动分配第2条母线串口地址?");
+    else str = tr("Are you sure to automatically allocate the serial port address of the second bus?");
     QuMsgBox box(this, str);
     bool ret = box.Exec();
     if(ret){
@@ -49,7 +68,9 @@ void AutoSetAddress::on_autoSet2Btn_clicked()
 
 void AutoSetAddress::on_autoSet3Btn_clicked()
 {
-    QString str = tr("是否确定自动分配第3条母线串口地址?");
+    QString str;
+    if(gLanguage == 0) str = tr("是否确定自动分配第3条母线串口地址?");
+    else str = tr("Are you sure to automatically allocate the serial port address of the third bus?");
     QuMsgBox box(this, str);
     bool ret = box.Exec();
     if(ret){
@@ -62,7 +83,9 @@ void AutoSetAddress::on_autoSet3Btn_clicked()
 
 void AutoSetAddress::on_autoSet4Btn_clicked()
 {
-    QString str = tr("是否确定自动分配第4条母线串口地址?");
+    QString str;
+    if(gLanguage == 0) str = tr("是否确定自动分配第4条母线串口地址?");
+    else str = tr("Are you sure to automatically allocate the serial port address of the 4th bus?");
     QuMsgBox box(this, str);
     bool ret = box.Exec();
     if(ret){
@@ -133,7 +156,8 @@ void AutoSetAddress::getNumAndIndexSlot(int index , int curnum)
         setProgressbarPowValue(ui->progressBar , num , index);
         mCurBoxNum[0] = num;
         if(num > 2){
-            ui->statuslab1->setText(QString(tr("设置地址%1成功")).arg(num-1));
+            if(gLanguage == 0) ui->statuslab1->setText(QString(tr("设置地址%1成功")).arg(num-1));
+            else ui->statuslab1->setText(QString(tr("Set address %1 successfully")).arg(num-1));
             QPalette pa;
             pa.setColor(QPalette::WindowText, Qt::black);
             ui->statuslab1->setPalette(pa);
@@ -144,7 +168,8 @@ void AutoSetAddress::getNumAndIndexSlot(int index , int curnum)
         setProgressbarPowValue(ui->progressBar_2 , num , index);
         mCurBoxNum[1] = num;
         if(num > 2){
-            ui->statuslab2->setText(QString(tr("设置地址%1成功")).arg(num-1));
+            if(gLanguage == 0) ui->statuslab2->setText(QString(tr("设置地址%1成功")).arg(num-1));
+            else ui->statuslab2->setText(QString(tr("Set address %1 successfully")).arg(num-1));
             QPalette pa;
             pa.setColor(QPalette::WindowText, Qt::black);
             ui->statuslab2->setPalette(pa);
@@ -155,7 +180,8 @@ void AutoSetAddress::getNumAndIndexSlot(int index , int curnum)
         setProgressbarPowValue(ui->progressBar_3 , num , index);
         mCurBoxNum[2] = num;
         if(num > 2){
-            ui->statuslab3->setText(QString(tr("设置地址%1成功")).arg(num-1));
+            if(gLanguage == 0) ui->statuslab3->setText(QString(tr("设置地址%1成功")).arg(num-1));
+            else ui->statuslab3->setText(QString(tr("Set address %1 successfully")).arg(num-1));
             QPalette pa;
             pa.setColor(QPalette::WindowText, Qt::black);
             ui->statuslab3->setPalette(pa);
@@ -166,7 +192,8 @@ void AutoSetAddress::getNumAndIndexSlot(int index , int curnum)
         setProgressbarPowValue(ui->progressBar_4 , num , index);
         mCurBoxNum[3] = num;
         if(num > 2){
-            ui->statuslab4->setText(QString(tr("设置地址%1成功")).arg(num-1));
+            if(gLanguage == 0) ui->statuslab4->setText(QString(tr("设置地址%1成功")).arg(num-1));
+            else ui->statuslab4->setText(QString(tr("Set address %1 successfully")).arg(num-1));
             QPalette pa;
             pa.setColor(QPalette::WindowText, Qt::black);
             ui->statuslab4->setPalette(pa);
@@ -184,9 +211,11 @@ void AutoSetAddress::getDelaySlot(int index)
     {
         setProcessBarColor(ui->progressBar , "red");
         if(mCurBoxNum[0] == 0){
-            ui->statuslab1->setText(QString(tr("始端箱未发出命令")));
+            if(gLanguage == 0) ui->statuslab1->setText(QString(tr("始端箱未发出命令")));
+            else ui->statuslab1->setText(QString(tr("The starting box did not issue a command")));
         }else if(mCurBoxNum[0] >= 2 && mCurBoxNum[0] <= 20 ){
-            ui->statuslab1->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[0]));
+            if(gLanguage == 0) ui->statuslab1->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[0]));
+            else ui->statuslab1->setText(QString(tr("Set address %1 failed")).arg(mCurBoxNum[0]));
         }
         ui->autoSet1Btn->setEnabled(true);
         QPalette pa;
@@ -198,9 +227,11 @@ void AutoSetAddress::getDelaySlot(int index)
     {
         setProcessBarColor(ui->progressBar_2 , "red");
         if(mCurBoxNum[1] == 0){
-            ui->statuslab2->setText(QString(tr("始端箱未发出命令")));
+            if(gLanguage == 0) ui->statuslab2->setText(QString(tr("始端箱未发出命令")));
+            else ui->statuslab2->setText(QString(tr("The starting box did not issue a command")));
         }else if(mCurBoxNum[1] >= 2 && mCurBoxNum[1] <= 20 ){
-            ui->statuslab2->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[1]));
+            if(gLanguage == 0) ui->statuslab2->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[1]));
+            else ui->statuslab2->setText(QString(tr("Set address %1 failed")).arg(mCurBoxNum[1]));
         }
         ui->autoSet2Btn->setEnabled(true);
         QPalette pa;
@@ -212,9 +243,11 @@ void AutoSetAddress::getDelaySlot(int index)
     {
         setProcessBarColor(ui->progressBar_3 , "red");
         if(mCurBoxNum[2] == 0){
-            ui->statuslab3->setText(QString(tr("始端箱未发出命令")));
+            if(gLanguage == 0) ui->statuslab3->setText(QString(tr("始端箱未发出命令")));
+            else ui->statuslab3->setText(QString(tr("The starting box did not issue a command")));
         }else if(mCurBoxNum[2] >= 2 && mCurBoxNum[2] <= 20 ){
-            ui->statuslab3->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[2]));
+            if(gLanguage == 0) ui->statuslab3->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[2]));
+            else ui->statuslab3->setText(QString(tr("Set address %1 failed")).arg(mCurBoxNum[2]));
         }
         ui->autoSet3Btn->setEnabled(true);
         QPalette pa;
@@ -226,9 +259,11 @@ void AutoSetAddress::getDelaySlot(int index)
     {
         setProcessBarColor(ui->progressBar_4 , "red");
         if(mCurBoxNum[3] == 0){
-            ui->statuslab4->setText(QString(tr("始端箱未发出命令")));
+            if(gLanguage == 0) ui->statuslab4->setText(QString(tr("始端箱未发出命令")));
+            else ui->statuslab4->setText(QString(tr("The starting box did not issue a command")));
         }else if(mCurBoxNum[3] >= 2 && mCurBoxNum[3] <= 20 ){
-            ui->statuslab4->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[3]));
+            if(gLanguage == 0) ui->statuslab4->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[3]));
+            else ui->statuslab4->setText(QString(tr("Set address %1 failed")).arg(mCurBoxNum[3]));
         }
         ui->autoSet4Btn->setEnabled(true);
         QPalette pa;

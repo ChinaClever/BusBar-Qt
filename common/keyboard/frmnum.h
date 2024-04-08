@@ -33,7 +33,7 @@ public:
 
     //初始化面板状态,包括字体大小
     void Init(QString style, int fontSize);
-
+    void initLanguage();
 protected:
     //事件过滤器,处理鼠标按下弹出输入法面板
     bool eventFilter(QObject *obj, QEvent *event);

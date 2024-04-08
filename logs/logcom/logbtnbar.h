@@ -18,7 +18,7 @@ class LogBtnBar : public QWidget
 public:
     explicit LogBtnBar(QWidget *parent = 0);
     ~LogBtnBar();
-
+    void initLanguage();
 signals:
     void refreshSig();
     void querySig(QString);

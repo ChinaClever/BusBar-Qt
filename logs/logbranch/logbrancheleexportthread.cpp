@@ -26,8 +26,9 @@ void LogBranchEleExportThread::initData(int busId)
 
 bool LogBranchEleExportThread::readDb()
 {
-    bool ret = true;
-    QString msg = tr("正在读取数据，请耐心等待!");
+    bool ret = true;QString msg ;
+    if(gLanguage == 0) msg = tr("正在读取数据，请耐心等待!");
+    else msg = tr("Reading data,please be patient and wait!");
     emit readDbSig(msg);
 
     QStringList heads;
@@ -53,15 +54,18 @@ bool LogBranchEleExportThread::readDb()
             mList << str;
 
             if(i%15 == 0) {
-                msg = tr("正在解析第%1条数据，请耐心等待!").arg(i+1);
+                if(gLanguage == 0) msg = tr("正在解析第%1条数据，请耐心等待!").arg(i+1);
+                else msg = tr("Parsing the %1 data,please be patient and wait!").arg(i+1);
                 emit readDbSig(msg);
                 msleep(10);
             }
         }
-        msg = tr("数据读取完成!!");
+        if(gLanguage == 0) msg = tr("数据读取完成!!");
+        else msg = tr("Data reading completed!!");
     } else {
         ret = false;
-        msg = tr("没有记录数据，无法导出!!");
+        if(gLanguage == 0) msg = tr("没有记录数据，无法导出!!");
+        else msg = tr("NO recorded data,unable to export!!");
     }
     emit readDbSig(msg);
 

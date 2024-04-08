@@ -18,7 +18,7 @@ public:
 
 protected:
     void updateData();
-
+    void initLangluage();
 public slots:
     void busChangeSlot(int id);
 

@@ -30,13 +30,26 @@ ChannelSettingDlg::ChannelSettingDlg(QWidget *parent) :
     ui(new Ui::ChannelSettingDlg)
 {
     ui->setupUi(this);
-
+    initLanguage();
     initData();
 }
 
 ChannelSettingDlg::~ChannelSettingDlg()
 {
     delete ui;
+}
+
+void ChannelSettingDlg::initLanguage()
+{
+    if(gLanguage == 0){
+        ui->groupBox->setTitle("无线设置");
+        ui->label_5->setText("当前频道");
+        ui->saveBtn->setText("保存");
+    }else{
+        ui->groupBox->setTitle("Wireless settigs");
+        ui->label_5->setText("Current channel");
+        ui->saveBtn->setText("Save");
+    }
 }
 
 void ChannelSettingDlg::initData()
@@ -108,7 +121,8 @@ bool ChannelSettingDlg::chCheck(int i, QLineEdit *edit)
             gBusHZMap[i] = str;
         } else {
             edit->setText(gBusHZMap[i]);
-            CriticalMsgBox box(this, tr("CH%1应该小于398HZ或者大于525HZ , 频道重复!").arg(i+1));
+            if(gLanguage == 0) CriticalMsgBox box(this, tr("CH%1应该小于398HZ或者大于525HZ , 频道重复!").arg(i+1));
+            else CriticalMsgBox box(this, tr("CH%1 should be less than 398Hz or greater than 525Hz, channel duplication!").arg(i+1));
             return false;
         }
     }

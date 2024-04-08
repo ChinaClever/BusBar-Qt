@@ -8,18 +8,19 @@ SetLineTem::SetLineTem(QWidget *parent, bool flag) :
     ui->setupUi(this);
     mFlag = flag;
     indexChanged(0);
-    if(mFlag){
-        ui->label->setText(tr("A相温度"));
-        ui->label_2->setText(tr("B相温度"));
-        ui->label_3->setText(tr("C相温度"));
-        ui->label_5->setText(tr("零线温度"));
-        showWid();
-    }else{
-        ui->label->setText(tr("A相功率"));
-        ui->label_2->setText(tr("B相功率"));
-        ui->label_3->setText(tr("C相功率"));
-        hideWid();
-    }
+    initLanguae();
+//    if(mFlag){
+//        ui->label->setText(tr("A相温度"));
+//        ui->label_2->setText(tr("B相温度"));
+//        ui->label_3->setText(tr("C相温度"));
+//        ui->label_5->setText(tr("零线温度"));
+//        showWid();
+//    }else{
+//        ui->label->setText(tr("A相功率"));
+//        ui->label_2->setText(tr("B相功率"));
+//        ui->label_3->setText(tr("C相功率"));
+//        hideWid();
+//    }
     timer = new QTimer(this);
     timer->start(2000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
@@ -29,11 +30,49 @@ SetLineTem::~SetLineTem()
 {
     delete ui;
 }
+void SetLineTem::initLanguae()
+{
+    if(gLanguage == 0){
+        ui->label_4->setText("始端箱:");
+        ui->label_5->setText("零线温度:");
+//        ui->label_6->setText(tr("环境参数:"));
+        ui->label_7->setText(tr("温度:"));
+        ui->label_8->setText("湿度:");
+        if(mFlag){
+            ui->label->setText(tr("A相温度:"));
+            ui->label_2->setText(tr("B相温度:"));
+            ui->label_3->setText(tr("C相温度:"));
+            showWid();
+        }else{
+            ui->label->setText(tr("A相功率:"));
+            ui->label_2->setText(tr("B相功率:"));
+            ui->label_3->setText(tr("C相功率:"));
+            hideWid();
+        }
+    }else{
+        ui->label_4->setText("Start box:");
+        ui->label_5->setText("Zero line\ntemperature:");
+//        ui->label_6->setText(tr("Environmental\nparameters:"));
+        ui->label_7->setText(tr("Temperature:"));
+        ui->label_8->setText("humidity:");
+        if(mFlag){
+            ui->label->setText(tr("A-phase\nTemperature:"));
+            ui->label_2->setText(tr("B-phase\nTemperature:"));
+            ui->label_3->setText(tr("C-phase\nTemperature:"));
+            showWid();
+        }else{
+            ui->label->setText(tr("A-phase\nPower:"));
+            ui->label_2->setText(tr("B-phase\nPower:"));
+            ui->label_3->setText(tr("C-phase\nPower:"));
+            hideWid();
+        }
+    }
+}
 
 void SetLineTem::showWid()
 {
     ui->label_5->show();
-    ui->label_6->show();
+//    ui->label_6->show();
     ui->label_7->show();
     ui->temlab->show();
     ui->humlab->show();
@@ -43,7 +82,7 @@ void SetLineTem::showWid()
 void SetLineTem::hideWid()
 {
     ui->label_5->hide();
-    ui->label_6->hide();
+//    ui->label_6->hide();
     ui->label_7->hide();
     ui->temlab->hide();
     ui->humlab->hide();

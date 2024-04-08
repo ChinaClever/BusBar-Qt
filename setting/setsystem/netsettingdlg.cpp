@@ -1,18 +1,37 @@
 #include "netsettingdlg.h"
 #include "ui_netsettingdlg.h"
+#include "datapacket.h"
 
 NetSettingDlg::NetSettingDlg(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::NetSettingDlg)
 {
     ui->setupUi(this);
-
+    initLanguage();
     initData();
 }
 
 NetSettingDlg::~NetSettingDlg()
 {
     delete ui;
+}
+
+void NetSettingDlg::initLanguage()
+{
+    if(gLanguage == 0){
+        ui->groupBox_4->setTitle("网络设置");
+        ui->label_5->setText("IP地址：");
+        ui->label_6->setText("子网掩码：");
+        ui->label_7->setText("默认网关：");
+        ui->label_8->setText("DNS：");
+        ui->pushButton_4->setText("保存");
+    }else{
+        ui->groupBox_4->setTitle("Network settings");
+        ui->label_5->setText("IP address:");
+        ui->label_6->setText("Subnet mask:");
+        ui->label_8->setText("DNS：");
+        ui->pushButton_4->setText("Save");
+    }
 }
 
 void NetSettingDlg::on_pushButton_4_clicked()

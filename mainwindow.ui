@@ -282,13 +282,14 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="maximumSize">
         <size>
-         <width>57</width>
+         <width>65</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
@@ -354,13 +355,14 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="maximumSize">
         <size>
-         <width>50</width>
+         <width>65</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
@@ -427,13 +429,14 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="maximumSize">
         <size>
-         <width>50</width>
+         <width>65</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
@@ -500,13 +503,14 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="maximumSize">
         <size>
-         <width>50</width>
+         <width>65</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
@@ -573,13 +577,14 @@ color: rgb(255, 255, 255);</string>
        </property>
        <property name="maximumSize">
         <size>
-         <width>50</width>
+         <width>65</width>
          <height>16777215</height>
         </size>
        </property>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <italic>false</italic>
          <bold>true</bold>
         </font>
        </property>
@@ -625,6 +630,7 @@ color: rgb(255, 255, 255);</string>
        <property name="font">
         <font>
          <pointsize>8</pointsize>
+         <bold>true</bold>
         </font>
        </property>
        <property name="styleSheet">

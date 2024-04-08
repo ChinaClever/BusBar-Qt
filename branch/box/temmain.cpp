@@ -15,12 +15,14 @@ TemMain::TemMain(QWidget *parent) : ComTableWid(parent)
 
 void TemMain::initWid()
 {
-    QString title = tr("温度模块");
+    QString title;
     QStringList header;
-
+    if(gLanguage == 0) title = tr("温度模块");
+    else title = tr("Temperature module");
 
     for(int i=0; i<SENSOR_NUM; ++i)
-        header << tr("温度") + QString::number(i+1);
+        if(gLanguage == 0) header << tr("温度") + QString::number(i+1);
+        else header << tr("Temperature") + QString::number(i+1);
 
     initTableWid(header, 1, title);
 }

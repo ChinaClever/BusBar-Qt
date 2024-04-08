@@ -15,7 +15,7 @@ class LocalNetSettingDlg : public QDialog
 public:
     explicit LocalNetSettingDlg(QWidget *parent = nullptr);
     ~LocalNetSettingDlg();
-
+    void initLanguage();
 private slots:
     void on_Net1Btn_clicked();
     void on_Net2Btn_clicked();

@@ -22,7 +22,7 @@ protected:
     void initWidget(void);
     bool dataCheck(void);
     void saveData(void);
-
+    void initLanguage();
 private slots:
     void on_saveBtn_clicked();
 

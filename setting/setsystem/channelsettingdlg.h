@@ -24,7 +24,7 @@ protected:
     void initData();
     bool chCheck(int i, QLineEdit *edit);
     bool repeatCheck(int index, QString str);
-
+    void initLanguage();
 private slots:
     void on_saveBtn_clicked();
 

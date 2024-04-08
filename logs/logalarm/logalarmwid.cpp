@@ -156,7 +156,8 @@ void LogAlarmWid::initTableSlot(int id)
     m_table = getTableName(id);
     this->refreshTable(m_table);
 
-    mHeadList << tr("编号") << tr("日期") << tr("时间") << tr("告警项目")<< tr("告警内容") ;
+    if(gLanguage == 0) mHeadList << tr("编号") << tr("日期") << tr("时间") << tr("告警项目")<< tr("告警内容") ;
+    else mHeadList << tr("NO.") << tr("Date") << tr("Time") << tr("Alarm items")<< tr("Alarm content") ;
     model->setHeaders(mHeadList);
 }
 
@@ -200,7 +201,9 @@ void LogAlarmWid::refreshSlot()
 
 void LogAlarmWid::doubleSlot(QModelIndex)
 {
-    QString str = tr("是否删除这条记录?");
+    QString str;
+    if(gLanguage == 0) str= tr("是否删除这条记录?");
+    else str= tr("Do you want to delete this record?");
     QuMsgBox box(this, str);
     bool ret = box.Exec();
     if(ret)

@@ -23,7 +23,7 @@ public:
 private:
     void initWidget();
     void setButtonColor(QPushButton *button);
-
+    void initLanguage();
 public slots:
     void busChangedSlot(int);
 

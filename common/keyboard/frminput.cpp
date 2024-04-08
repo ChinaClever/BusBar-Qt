@@ -1,6 +1,7 @@
 #include "frminput.h"
 #include "ui_frminput.h"
 #include "qdesktopwidget.h"
+#include "datapacket.h"
 
 frmInput *frmInput::_instance = 0;
 frmInput::frmInput(QWidget *parent) :
@@ -8,6 +9,7 @@ frmInput::frmInput(QWidget *parent) :
     ui(new Ui::frmInput)
 {
     ui->setupUi(this);
+    initLanguage();
     this->InitProperty();
     this->InitForm();
     this->ChangeStyle();
@@ -17,7 +19,16 @@ frmInput::~frmInput()
 {
     delete ui;
 }
-
+void frmInput::initLanguage()
+{
+    if(gLanguage == 0){
+        ui->btnSpace->setText("空格");
+        ui->btnClose->setText("关闭");
+    }else{
+        ui->btnSpace->setText("Space");
+        ui->btnClose->setText("Close");
+    }
+}
 void frmInput::Init(QString position, QString style, int btnFontSize, int labFontSize)
 {
     this->currentPosition = position;
@@ -472,8 +483,11 @@ void frmInput::changeType(QString type)
 {
     if (type == "max") {
         changeLetter(true);
-        ui->btnType->setText("大写");
-        ui->labInfo->setText("输入法--大写");
+        if(gLanguage == 0) {ui->btnType->setText("大写");
+            ui->labInfo->setText("输入法--大写");}
+        else {ui->btnType->setText("Capital");
+            ui->labInfo->setText("Input method--Uppercase");
+        }
         ui->btnOther12->setText("/");
         ui->btnOther14->setText(":");
         ui->btnOther17->setText(",");
@@ -481,8 +495,11 @@ void frmInput::changeType(QString type)
         ui->btnOther21->setText("\"");
     } else if (type == "min") {
         changeLetter(false);
-        ui->btnType->setText("小写");
-        ui->labInfo->setText("输入法--小写");
+        if(gLanguage == 0) {ui->btnType->setText("小写");
+            ui->labInfo->setText("输入法--小写");}
+        else {ui->btnType->setText("Lower case");
+            ui->labInfo->setText("Input method--Lowercase");
+        }
         ui->btnOther12->setText("/");
         ui->btnOther14->setText(":");
         ui->btnOther17->setText(",");
@@ -490,8 +507,10 @@ void frmInput::changeType(QString type)
         ui->btnOther21->setText("\"");
     } else {
         changeLetter(false);
-        ui->btnType->setText("中文");
-        ui->labInfo->setText("输入法--中文");
+        if(gLanguage == 0) {ui->btnType->setText("中文");
+            ui->labInfo->setText("输入法--中文");}
+        else {ui->btnType->setText("Chinese");
+            ui->labInfo->setText("Input method--Chinese");}
         ui->btnOther12->setText("。");
         ui->btnOther14->setText("：");
         ui->btnOther17->setText("，");

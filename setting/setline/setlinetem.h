@@ -23,6 +23,7 @@ protected:
     void setBtnColor(QPushButton *label, int alarm, int crAlarm);
     void showWid();
     void hideWid();
+    void initLanguae();
 
 protected slots:
     void timeoutDone();

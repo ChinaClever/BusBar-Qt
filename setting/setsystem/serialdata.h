@@ -13,6 +13,7 @@ class Serialdata : public QWidget
 public:
     explicit Serialdata(QWidget *parent = nullptr);
     ~Serialdata();
+    void initLanguage();
 private:
     Ui::Serialdata *ui;
 };

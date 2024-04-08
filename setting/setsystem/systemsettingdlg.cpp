@@ -27,19 +27,24 @@ void SystemSettingDlg::initWid()
 
     mAutoSetAddress = new AutoSetAddress(this);
 
-    QString str = tr("本地IP设置");
+    QString str;
+    if(gLanguage == 0) str = tr("本地IP设置");
+    else str = tr("Local IP settings");
     ui->tabWidget->addTab(mLocaNetSettingWid,str);
 //    str = tr("切换模式");
 //    ui->tabWidget->addTab(mModeWid,str);
 //    str = tr("网络设置");
 //    ui->tabWidget->addTab(mNetWid,str);
-    str = tr("其他参数设置");
+    if(gLanguage == 0) str = tr("其他参数设置");
+    else str = tr("Other parameter settings");
     ui->tabWidget->addTab(mOtherWid,str);
-    str = tr("串口信息");
+    if(gLanguage == 0) str = tr("串口信息");
+    else str = tr("Serial port information");
     ui->tabWidget->addTab(mSerialPort,str);
-    str = tr("自动分配地址");
+    if(gLanguage == 0) str = tr("自动分配地址");
+    else str = tr("Automatically assign addresses");
     ui->tabWidget->addTab(mAutoSetAddress,str);
-    ui->tabWidget->setStyleSheet("QTabBar::tab{height:50px; width: 150px;}");
+    ui->tabWidget->setStyleSheet("QTabBar::tab{height:50px; width: 200px;}");
 }
 
 

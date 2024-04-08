@@ -6,6 +6,8 @@ LocalNetSettingDlg::LocalNetSettingDlg(QWidget *parent) :
     ui(new Ui::LocalNetSettingDlg)
 {
     ui->setupUi(this);
+    initLanguage();
+
     m_netDlgOpen1 = false;
     m_netDlgOpen2 = false;
     m_net1Dlg = new IpSettingDlg(NULL,1);
@@ -19,6 +21,16 @@ LocalNetSettingDlg::~LocalNetSettingDlg()
     delete ui;
 }
 
+void LocalNetSettingDlg::initLanguage()
+{
+    if(gLanguage == 0){
+        ui->Net1Btn->setText("Net1设置");
+        ui->Net2Btn->setText("Net2设置");
+    }else{
+        ui->Net1Btn->setText("Net1 settings");
+        ui->Net2Btn->setText("Net2 settings");
+    }
+}
 void LocalNetSettingDlg::on_Net1Btn_clicked()
 {
     if(!m_netDlgOpen1){

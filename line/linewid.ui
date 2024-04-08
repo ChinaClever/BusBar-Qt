@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1024</width>
+    <width>1098</width>
     <height>441</height>
    </rect>
   </property>
@@ -246,7 +246,7 @@
         <widget class="QLabel" name="label_6">
          <property name="minimumSize">
           <size>
-           <width>100</width>
+           <width>105</width>
            <height>0</height>
           </size>
          </property>
@@ -393,7 +393,7 @@ border-bottom:2px solid rgb(228,228,228);
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>1016</width>
+     <width>1001</width>
      <height>42</height>
     </rect>
    </property>
@@ -402,13 +402,13 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="label">
       <property name="minimumSize">
        <size>
-        <width>30</width>
+        <width>64</width>
         <height>18</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>50</width>
+        <width>65</width>
         <height>16777215</height>
        </size>
       </property>
@@ -424,7 +424,7 @@ border-bottom:2px solid rgb(228,228,228);
        <string>频率:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -432,7 +432,7 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="rateLab">
       <property name="minimumSize">
        <size>
-        <width>40</width>
+        <width>35</width>
         <height>18</height>
        </size>
       </property>
@@ -446,6 +446,9 @@ border-bottom:2px solid rgb(228,228,228);
       </property>
       <property name="text">
        <string>---</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -475,7 +478,7 @@ border-bottom:2px solid rgb(228,228,228);
        <string>零线电流:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -483,13 +486,13 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="zeroLineLab">
       <property name="minimumSize">
        <size>
-        <width>50</width>
+        <width>36</width>
         <height>18</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>50</width>
+        <width>35</width>
         <height>16777215</height>
        </size>
       </property>
@@ -504,6 +507,9 @@ border-bottom:2px solid rgb(228,228,228);
       <property name="text">
        <string>---</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
     <item>
@@ -511,24 +517,30 @@ border-bottom:2px solid rgb(228,228,228);
       <property name="text">
        <string>防雷：</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
     <item>
      <widget class="QLabel" name="lpStateLab">
       <property name="minimumSize">
        <size>
-        <width>40</width>
+        <width>35</width>
         <height>18</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>40</width>
+        <width>35</width>
         <height>16777215</height>
        </size>
       </property>
       <property name="text">
        <string>---</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -536,7 +548,7 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="label_11">
       <property name="minimumSize">
        <size>
-        <width>50</width>
+        <width>68</width>
         <height>18</height>
        </size>
       </property>
@@ -552,7 +564,7 @@ border-bottom:2px solid rgb(228,228,228);
        <string>A相温度:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -581,13 +593,16 @@ border-bottom:2px solid rgb(228,228,228);
       <property name="text">
        <string>---</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
     <item>
      <widget class="QLabel" name="label_12">
       <property name="minimumSize">
        <size>
-        <width>50</width>
+        <width>68</width>
         <height>18</height>
        </size>
       </property>
@@ -603,7 +618,7 @@ border-bottom:2px solid rgb(228,228,228);
        <string>B相温度:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -632,13 +647,16 @@ border-bottom:2px solid rgb(228,228,228);
       <property name="text">
        <string>---</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
     <item>
      <widget class="QLabel" name="label_14">
       <property name="minimumSize">
        <size>
-        <width>50</width>
+        <width>68</width>
         <height>18</height>
        </size>
       </property>
@@ -654,7 +672,7 @@ border-bottom:2px solid rgb(228,228,228);
        <string>C相温度:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -683,13 +701,16 @@ border-bottom:2px solid rgb(228,228,228);
       <property name="text">
        <string>---</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
     <item>
      <widget class="QLabel" name="label_15">
       <property name="minimumSize">
        <size>
-        <width>55</width>
+        <width>68</width>
         <height>18</height>
        </size>
       </property>
@@ -705,7 +726,7 @@ border-bottom:2px solid rgb(228,228,228);
        <string>零线温度:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -734,6 +755,9 @@ border-bottom:2px solid rgb(228,228,228);
       <property name="text">
        <string>---</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
     <item>
@@ -756,7 +780,7 @@ border-bottom:2px solid rgb(228,228,228);
        <string>总有功功率:</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -764,8 +788,14 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="totalPowLab">
       <property name="minimumSize">
        <size>
-        <width>70</width>
+        <width>40</width>
         <height>18</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>45</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="font">
@@ -779,14 +809,23 @@ border-bottom:2px solid rgb(228,228,228);
       <property name="text">
        <string>---</string>
       </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
      </widget>
     </item>
     <item>
      <widget class="QPushButton" name="thdBtn">
       <property name="minimumSize">
        <size>
-        <width>100</width>
+        <width>70</width>
         <height>40</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>70</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="font">
@@ -806,7 +845,7 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="label_2">
       <property name="minimumSize">
        <size>
-        <width>50</width>
+        <width>48</width>
         <height>18</height>
        </size>
       </property>
@@ -822,7 +861,7 @@ border-bottom:2px solid rgb(228,228,228);
        <string>版本：</string>
       </property>
       <property name="alignment">
-       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <set>Qt::AlignCenter</set>
       </property>
      </widget>
     </item>
@@ -830,7 +869,7 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="version">
       <property name="minimumSize">
        <size>
-        <width>68</width>
+        <width>50</width>
         <height>18</height>
        </size>
       </property>

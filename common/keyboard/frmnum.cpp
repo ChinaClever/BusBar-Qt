@@ -1,6 +1,7 @@
 #include "frmnum.h"
 #include "ui_frmnum.h"
 #include "qdebug.h"
+#include "datapacket.h"
 
 frmNum *frmNum::_instance = 0;
 frmNum::frmNum(QWidget *parent) :
@@ -8,6 +9,7 @@ frmNum::frmNum(QWidget *parent) :
     ui(new Ui::frmNum)
 {
     ui->setupUi(this);
+    initLanguage();
     this->InitForm();
     this->InitProperty();
     this->ChangeStyle();
@@ -17,7 +19,18 @@ frmNum::~frmNum()
 {
     delete ui;
 }
-
+void frmNum::initLanguage()
+{
+    if(gLanguage == 0){
+        ui->btnSpace->setText("空格");
+        ui->btnClose->setText("关闭");
+        ui->btnEnter->setText("回车");
+    }else{
+        ui->btnSpace->setText("Space");
+        ui->btnClose->setText("Close");
+        ui->btnEnter->setText("Enter");
+    }
+}
 void frmNum::Init(QString style, int fontSize) {
     this->currentStyle = style;
     this->currentFontSize = fontSize;
