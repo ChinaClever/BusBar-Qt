@@ -169,6 +169,9 @@ bool LogAlarmWid::refreshTable(const QString &table)
         m_table = table;
         ui->tableView->sortByColumn(0, Qt::DescendingOrder); // 降序排列
         ui->tableView->setColumnHidden(0, true); //隐藏列
+        ui->tableView->setColumnWidth(1,90); //设置宽度
+        ui->tableView->setColumnWidth(2,85); //设置宽度
+        ui->tableView->setColumnWidth(3,120); //设置宽度
         ui->tableView->setColumnWidth(4,750); //设置宽度
     }
     return  ret;

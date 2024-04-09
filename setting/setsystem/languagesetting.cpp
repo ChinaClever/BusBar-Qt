@@ -25,6 +25,8 @@ Languagesetting::~Languagesetting()
 void Languagesetting::init()
 {
     ui->comboBox->setCurrentIndex(gLanguage);
+    if(gLanguage == 0) ui->comboBox->setItemText(0,"中文简体");
+    else ui->comboBox->setItemText(0,"Chinese");
 }
 void Languagesetting::on_pushButton_clicked()
 {
@@ -34,11 +36,10 @@ void Languagesetting::on_pushButton_clicked()
 void Languagesetting::on_pushButton_2_clicked()
 {
     bool ret = true;
-    gLanguage = ui->comboBox->currentIndex();
     if(gLanguage == 0) ret = MsgBox::question(this, tr("是否重启系统?"));
     else ret = MsgBox::question(this, tr("Do you want to restart the system?"));
     if(ret) {
-        sys_configFile_writeParam("language",QString::number(gLanguage));
+        sys_configFile_writeParam("language",QString::number(ui->comboBox->currentIndex()));
         system("reboot");
     }
 }

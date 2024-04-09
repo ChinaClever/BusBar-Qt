@@ -90,7 +90,6 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, sDataUnit &unit, do
     if(sym.contains("°C")) line = SENSOR_NUM;
     for(int i=0; i<line; ++i)
     {
-        unit.alarm[i] = 1;
         QString str=msg, tempStr = typeStr;
         if(unit.alarm[i])
         {
@@ -142,7 +141,6 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, sDataPowUnit &unit,
 {
     for(int i=0; i<3; ++i)
     {
-        unit.alarm[i] = 1;
         QString str=msg, tempStr = typeStr;
         if(unit.alarm[i])
         {
@@ -206,7 +204,6 @@ void DpAlarmSlave::unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg, sD
             alarmStr = "D" + QString("%1").arg(id+1);
         }
         //---------------------------------------------------
-        unit.alarm[i] = 1;
         QString str=msg, tempStr = typeStr;
         if(unit.alarm[i])
         {
@@ -270,7 +267,6 @@ void DpAlarmSlave::unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, sDa
             alarmStr = "D" + QString("%1").arg(id+1);
         }
         //---------------------------------------------------
-        unit.alarm[i] = 1;
         QString str=msg, tempStr = typeStr;
         if(unit.alarm[i])
         {
@@ -434,7 +430,6 @@ void DpAlarmSlave::busAlarm(int id)
         }
     }
     //--------------------------------------------------
-    busBox->offLine = 1;busBox->boxAlarm = 1;busBox->boxCurAlarm = 1;
     if(gLanguage == 0){
         if(busBox->offLine){
             if(busBox->boxAlarm) {
