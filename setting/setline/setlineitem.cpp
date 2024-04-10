@@ -19,11 +19,29 @@ SetLineItem::SetLineItem(QWidget *parent, bool flag) :
     {
         ui->label_1->hide();
         ui->label_2->hide();
-        ui->label_14->setText(tr("零线电流"));
-        //        ui->volBar->hide();
-        //        ui->volLab->hide();
-        ui->label_11->setText(tr("频率"));
-        ui->nameLab->setText(tr("其他"));
+        if(gLanguage == 0){
+            ui->label_14->setText(tr("零线电流"));
+            //        ui->volBar->hide();
+            //        ui->volLab->hide();
+            ui->label_11->setText(tr("频率"));
+            ui->nameLab->setText(tr("其他"));
+        }else{
+            ui->label_14->setText(tr("Zero line current"));
+            //        ui->volBar->hide();
+            //        ui->volLab->hide();
+            ui->label_11->setText(tr("Frequency"));
+            ui->nameLab->setText(tr("Other"));
+        }
+
+    }else{
+        if(gLanguage == 0){
+            ui->label_11->setText(tr("电流"));
+            ui->label_14->setText(tr("电压"));
+        }else{
+            ui->label_11->setText(tr("Current"));
+            ui->label_14->setText(tr("Voltage"));
+        }
+
     }
 }
 

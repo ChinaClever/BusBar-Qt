@@ -23,8 +23,11 @@ LogBtnBar::LogBtnBar(QWidget *parent) :
     ui->comboBox->setItemIcon(0 , icon);
     ui->comboBox->setItemIcon(1 , icon);
     ui->comboBox->setItemIcon(2 , icon);
-    com_setBackColour(tr("日志操作"),this);
+    if(gLanguage == 0) com_setBackColour(tr("日志操作"),this);
+    else com_setBackColour(tr("Log operation"),this);
     ui->dateEdit->setDate(QDate::currentDate());
+    initLanguage();
+
     connect(ui->refreshBtn, SIGNAL(clicked()),this,SIGNAL(refreshSig()));
     connect(LogSignal::get(), SIGNAL(logTypeSig(int)), ui->comboBox,SLOT(setCurrentIndex(int)));
 
@@ -47,7 +50,28 @@ void LogBtnBar::on_dateBtn_clicked()
     ui->dateEdit->setDate(dlg.getDate());
 }
 
-
+void LogBtnBar::initLanguage()
+{
+    if(gLanguage == 0){
+        ui->exportBtn->setText("导出");
+        ui->dateBtn->setText("时间选择");
+        ui->comboBox->setItemText(0,"主路电能");
+        ui->comboBox->setItemText(1,"支路电能");
+        ui->comboBox->setItemText(2,"告警日志");
+        ui->clearBtn->setText("清空");
+        ui->queryBtn->setText("查询");
+        ui->refreshBtn->setText("刷新");
+    }else{
+        ui->exportBtn->setText("Export");
+        ui->dateBtn->setText("Time selection");
+        ui->comboBox->setItemText(0,"Main\ncircuit power");
+        ui->comboBox->setItemText(1,"Branch power");
+        ui->comboBox->setItemText(2,"Alarm log");
+        ui->clearBtn->setText("Clear");
+        ui->queryBtn->setText("Inquire");
+        ui->refreshBtn->setText("Refresh");
+    }
+}
 void LogBtnBar::on_queryBtn_clicked()
 {
     BeepThread::bulid()->beep();
@@ -66,11 +90,18 @@ void LogBtnBar::on_exportBtn_clicked()
 void LogBtnBar::on_clearBtn_clicked()
 {
     BeepThread::bulid()->beep();
-
-    QuMsgBox box(NULL, tr("确认清空数据?"));
-    bool ret = box.Exec();
-    if(ret){
-        emit clearSig();
+    if(gLanguage == 0){
+        QuMsgBox box(NULL, tr("确认清空数据?"));
+        bool ret = box.Exec();
+        if(ret){
+            emit clearSig();
+        }
+    }else{
+        QuMsgBox box(NULL, tr("Confirm to clear data?"));
+        bool ret = box.Exec();
+        if(ret){
+            emit clearSig();
+        }
     }
 }
 

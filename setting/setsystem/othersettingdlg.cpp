@@ -20,7 +20,7 @@ OtherSettingDlg::OtherSettingDlg(QWidget *parent) :
     ui(new Ui::OtherSettingDlg)
 {
     ui->setupUi(this);
-
+    initLanguage();
     ui->timeSetBtn->setHidden(true);
 //    ui->updateBtn->setHidden(true);
 }
@@ -28,6 +28,23 @@ OtherSettingDlg::OtherSettingDlg(QWidget *parent) :
 OtherSettingDlg::~OtherSettingDlg()
 {
     delete ui;
+}
+
+void OtherSettingDlg::initLanguage()
+{
+    if(gLanguage == 0){
+        ui->pwdSetBtn->setText("密码修改");
+        ui->timeSetBtn->setText("时间修改");
+        ui->resetBtn->setText("系统重启");
+        ui->updateBtn->setText("软件升级");
+        ui->languageBtn->setText("语言设置");
+    }else{
+        ui->pwdSetBtn->setText("Password modifiction");
+        ui->timeSetBtn->setText("Time modification");
+        ui->resetBtn->setText("System restart");
+        ui->updateBtn->setText("Software upgrading");
+        ui->languageBtn->setText("Language settings");
+    }
 }
 
 static bool update_fun(const QString &str)
@@ -104,20 +121,32 @@ static bool update_fun(const QString &str)
 void OtherSettingDlg::on_updateBtn_clicked()
 {
     BeepThread::bulid()->beep();
-    QuMsgBox box(this, tr("是否升级系统?"));
-    if(box.Exec()) {
-        bool ret = update_fun("sda");
-        if(!ret) ret = update_fun("sda1");
-        if(!ret) ret = update_fun("sda2");
-        if(!ret)
-            CriticalMsgBox box(this, tr("升级文件未找到！\n 请插入U盘，把升级文件放入upgrade目录下!"));
+    if(gLanguage == 0) {
+        QuMsgBox box(this, tr("是否升级系统?"));
+        if(box.Exec()) {
+            bool ret = update_fun("sda");
+            if(!ret) ret = update_fun("sda1");
+            if(!ret) ret = update_fun("sda2");
+            if(!ret)
+                CriticalMsgBox box(this, tr("升级文件未找到！\n 请插入U盘，把升级文件放入upgrade目录下!"));
+        }
+    }else{
+        QuMsgBox box(this, tr("Whether to upgrade the system?"));
+        if(box.Exec()) {
+            bool ret = update_fun("sda");
+            if(!ret) ret = update_fun("sda1");
+            if(!ret) ret = update_fun("sda2");
+            if(!ret)
+                CriticalMsgBox box(this, tr("Upgrade file not found！\n Please insert a USB drive and place the upgrade files in the upgrade directory!"));
+        }
     }
 }
 
 void OtherSettingDlg::on_resetBtn_clicked()
 {
-    BeepThread::bulid()->beep();
-    bool ret = MsgBox::question(this, tr("是否重启系统?"));
+    BeepThread::bulid()->beep();bool ret;
+    if(gLanguage == 0) ret = MsgBox::question(this, tr("是否重启系统?"));
+    else ret = MsgBox::question(this, tr("Do you want to restart the system?"));
     if(ret) {
         system("reboot");
     }
@@ -137,3 +166,12 @@ void OtherSettingDlg::on_pwdSetBtn_clicked()
     passwordDlg->show();
     passwordDlg->move(0,0);
 }
+
+void OtherSettingDlg::on_languageBtn_clicked()
+{
+    BeepThread::bulid()->beep();
+    mlanguage = new Languagesetting(this);
+    mlanguage->show();
+    mlanguage->move(368,222);
+}
+

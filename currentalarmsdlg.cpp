@@ -7,7 +7,11 @@ CurrentAlarmsDlg::CurrentAlarmsDlg(QWidget *parent) :
     ui(new Ui::CurrentAlarmsDlg)
 {
     ui->setupUi(this);
-    com_setBackColour(tr("当前告警内容"),this);
+    if(gLanguage == 0) {com_setBackColour(tr("当前告警内容"),this);
+        ui->label->setText("当前告警信息"); ui->quitBtn->setText("退出");ui->refreshBtn->setText("刷新");}
+    else {com_setBackColour(tr("Current alarm content"),this);
+        ui->label->setText("Current alarm information"); ui->quitBtn->setText("Quit");ui->refreshBtn->setText("Refresh");}
+
 
     QTimer::singleShot(100,this,SLOT(on_refreshBtn_clicked())); //延时初始化
 //    initScrollArea(); // 开启滑动功能
@@ -112,14 +116,15 @@ void CurrentAlarmsDlg::initTableWidget()
     ui->tableWidget->setRowCount(0);        //设置行数/
 
     QStringList header;
-    header <<tr("母线名称")<<tr("告警类型") << tr("告警内容");
+    if(gLanguage == 0) header <<tr("母线名称")<<tr("告警类型") << tr("告警内容");
+    else header <<tr("Busbar name")<<tr("Alarm type") << tr("Alarm content");
     ui->tableWidget->setColumnCount(header.size());    //设置列数
     ui->tableWidget->setHorizontalHeaderLabels(header);
 
 //    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
       ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
 //    ui->tableWidget->setColumnHidden(0, true); // 隐藏母线名称
-      ui->tableWidget->setColumnWidth(1,180);
+      ui->tableWidget->setColumnWidth(1,200);
 }
 
 

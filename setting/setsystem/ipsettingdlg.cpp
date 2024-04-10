@@ -7,12 +7,36 @@ IpSettingDlg::IpSettingDlg(QWidget *parent, int index) :
 {
     ui->setupUi(this);
     this->m_index = index;
+    initLanguage();
     initData(index);
 }
 
 IpSettingDlg::~IpSettingDlg()
 {
     delete ui;
+}
+
+void IpSettingDlg::initLanguage()
+{
+    if(gLanguage == 0)
+    {
+        ui->groupBox->setTitle("Net1设置");
+        ui->label->setText("IP地址:");
+        ui->label_2->setText("子网掩码:");
+        ui->label_3->setText("网关:");
+        ui->label_4->setText("DNS:");
+        ui->saveBtn->setText("保存");
+        ui->cancelBtn->setText("取消");
+    }
+    else{
+        ui->groupBox->setTitle("Net1 settings");
+        ui->label->setText("IP Address:");
+        ui->label_2->setText("Subnet mask:");
+        ui->label_3->setText("Gateway:");
+        ui->label_4->setText("DNS:");
+        ui->saveBtn->setText("Save");
+        ui->cancelBtn->setText("Cancel");
+    }
 }
 
 QString IpSettingDlg::prefixToSubnetMask(int prefix)
@@ -48,10 +72,12 @@ int IpSettingDlg::subnetMaskToPrefix(const QString& subnetMask)
 void IpSettingDlg::initData(int index)
 {
     QString str = "10-static-eth0.network";
-    ui->groupBox->setTitle(tr("Net1网口设置"));
+    if(gLanguage == 0) ui->groupBox->setTitle(tr("Net1网口设置"));
+    else ui->groupBox->setTitle(tr("Net1 network port settings"));
     if( 2 == index ){
         str = "11-static-eth1.network";
-        ui->groupBox->setTitle(tr("Net2网口设置"));
+        if(gLanguage == 0) ui->groupBox->setTitle(tr("Net2网口设置"));
+        else ui->groupBox->setTitle(tr("Net2 network port settings"));
     }
     bool ret = sys_configNetFile_open(str);
     if(ret){
@@ -97,41 +123,52 @@ bool IpSettingDlg::ipCheck(const QString& isAddress)
 
 bool IpSettingDlg::check(const QString& ip , const QString& netmask ,const QString& gateway ,const QString& dns )
 {
-    QString str = tr("检查无误，是否进行修改？");
+    QString str;
+    if(gLanguage == 0) str= tr("检查无误，是否进行修改？");
+    else str= tr("Check for accuracy, do you want to modify it？");
     bool ret = true;
     if(ip.isEmpty()){
-        str = tr("ip地址不能为空 ");
+        if(gLanguage == 0) str = tr("ip地址不能为空 ");
+        else str = tr("IP address cannot be empty ");
         ret = false;
     }else{
         if(!ipCheck(ip)){
-            str = tr("ip地址不合法 ");
+            if(gLanguage == 0) str = tr("ip地址不合法 ");
+            else str = tr("IP address is illegal");
+
             ret = false;
         }
     }
     if(netmask.isEmpty()){
-        str += tr("子网掩码地址不能为空 ");
+        if(gLanguage == 0) str += tr("子网掩码地址不能为空 ");
+        else str += tr("The subnet mask address cannot be empty ");
         ret = false;
     }else{
         if(!ipSubnetMashValid(netmask)){
-            str += tr("子网掩码地址不合法 ");
+            if(gLanguage == 0) str += tr("子网掩码地址不合法 ");
+            else str += tr("The subnet mask address is illegal ");
             ret = false;
         }
     }
     if(gateway.isEmpty()){
-        str += tr("网关地址不能为空 ");
+        if(gLanguage == 0) str += tr("网关地址不能为空 ");
+        else str += tr("Gateway address cannot be empty ");
         ret = false;
     }else{
         if(!ipCheck(gateway)){
-            str += tr("网关地址不合法 ");
+            if(gLanguage == 0) str += tr("网关地址不合法 ");
+            else str += tr("Gateway address is illegal");
             ret = false;
         }
     }
     if(dns.isEmpty()){
-        str += tr("dns地址不能为空 ");
+        if(gLanguage == 0) str += tr("dns地址不能为空 ");
+        else str += tr("DNS address cannot be empty ");
         ret = false;
     }else{
         if(!ipCheck(dns)){
-            str += tr("dns地址不合法 ");
+            if(gLanguage == 0) str += tr("dns地址不合法 ");
+            else str += tr("DNS address is illegal");
             ret = false;
         }
     }

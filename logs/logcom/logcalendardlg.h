@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QDate>
 #include "beepthread.h"
+#include "datapacket.h"
+
 namespace Ui {
 class LogCalendarDlg;
 }
@@ -17,7 +19,7 @@ public:
     ~LogCalendarDlg();
 
     QDate getDate() {return mDate;}
-
+    void intLanguage();
 protected slots:
     void selectionChangedSLot();
 

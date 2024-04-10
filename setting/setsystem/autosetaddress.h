@@ -20,7 +20,7 @@ public:
 public slots:
     void getNumAndIndexSlot(int index , int curnum);
     void getDelaySlot(int index);
-
+    void initLanguage();
 private slots:
     void on_autoSet1Btn_clicked();
     void on_autoSet2Btn_clicked();

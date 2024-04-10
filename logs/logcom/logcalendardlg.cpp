@@ -13,8 +13,9 @@ LogCalendarDlg::LogCalendarDlg(QWidget *parent) :
     ui(new Ui::LogCalendarDlg)
 {
     ui->setupUi(this);
-    this->setWindowTitle(tr("日期选择"));
-
+    if(gLanguage == 0) this->setWindowTitle(tr("日期选择"));
+    else this->setWindowTitle(tr("Date selection"));
+    intLanguage();
     connect(ui->calendarWidget,SIGNAL(selectionChanged()),this, SLOT(selectionChangedSLot()));
     selectionChangedSLot();
 }
@@ -23,7 +24,20 @@ LogCalendarDlg::~LogCalendarDlg()
 {
     delete ui;
 }
-
+void LogCalendarDlg::intLanguage()
+{
+    if(gLanguage == 0){
+        ui->label->setText("时间选择");
+        ui->label_2->setText("选择时间:");
+        ui->pushButton->setText("确定");
+        ui->calendarWidget->setLocale(QLocale::Chinese);
+    }else{
+        ui->label->setText("Time selection");
+        ui->label_2->setText("Selection period:");
+        ui->pushButton->setText("Confirm");
+        ui->calendarWidget->setLocale(QLocale::English);
+    }
+}
 
 void LogCalendarDlg::selectionChangedSLot()
 {

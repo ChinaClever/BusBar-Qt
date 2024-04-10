@@ -23,7 +23,7 @@ private slots:
 
 private:
     bool checkJurisdiction();
-
+    void initLanguage();
 private:
     Ui::PassordSettingDlg *ui;
 };

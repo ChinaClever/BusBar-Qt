@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QTextCharFormat>
 #include "msgbox.h"
+#include "datapacket.h"
 //#include <QAndroidJniObject>
 //#include <QAndroidJniEnvironment>
 //#include <QtAndroid>
@@ -19,6 +20,7 @@ TimeSettingDlg::TimeSettingDlg(QWidget *parent) :
 {
     ui->setupUi(this);
 //    com_setBackColour(tr("时间设置"),this);
+    initLanguage();
 
     QDate date = QDate::currentDate();
     ui->yearSpin->setValue(date.year());
@@ -48,6 +50,46 @@ TimeSettingDlg::~TimeSettingDlg()
     delete ui;
 }
 
+void TimeSettingDlg::initLanguage()
+{
+    if(gLanguage == 0){
+        ui->label_11->setText("时间设置");
+        ui->yearBtn->setText("编辑");
+        ui->label_32->setText("年");
+        ui->monBtn->setText("编辑");
+        ui->label_33->setText("月");
+        ui->dayBtn->setText("编辑");
+        ui->label_34->setText("日");
+        ui->hourBtn->setText("编辑");
+        ui->label_35->setText("时");
+        ui->minBtn->setText("编辑");
+        ui->label_36->setText("分");
+        ui->secBtn->setText("编辑");
+        ui->label_37->setText("秒");
+        ui->label_7->setText("修改值");
+        ui->btn_enter->setText("输入");
+        ui->timeSet_but->setText("确定");
+        ui->quitBtn->setText("退出");
+    }else{
+        ui->label_11->setText("Time setting");
+        ui->yearBtn->setText("Edit");
+        ui->label_32->setText("year");
+        ui->monBtn->setText("Edit");
+        ui->label_33->setText("month");
+        ui->dayBtn->setText("Edit");
+        ui->label_34->setText("day");
+        ui->hourBtn->setText("Edit");
+        ui->label_35->setText("hour");
+        ui->minBtn->setText("Edit");
+        ui->label_36->setText("minute");
+        ui->secBtn->setText("Edit");
+        ui->label_37->setText("second");
+        ui->label_7->setText("Modify value");
+        ui->btn_enter->setText("Iuput");
+        ui->timeSet_but->setText("Confirm");
+        ui->quitBtn->setText("Quit");
+    }
+}
 
 
 /**
@@ -98,7 +140,8 @@ SHOWMESSAGEBOX:
     ui->monSpin->setValue(preMonth);
 
     //    QMessageBox::critical(this, tr("信息提示"),tr("日期设置不合法，请重新输入"));
-    CriticalMsgBox dlg(this, tr("日期设置不合法，请重新输入"));
+    if(gLanguage == 0) CriticalMsgBox dlg(this, tr("日期设置不合法，请重新输入"));
+    else CriticalMsgBox dlg(this, tr("The date setting is invalid, please re-enter it"));
 }
 
 /**
@@ -339,15 +382,27 @@ void TimeSettingDlg::on_quitBtn_clicked()
     if(ret)
     {
         QMessageBox msgBox(this);
-        com_setBackColour(tr("信息提示"),&msgBox);
-        msgBox.setText(tr("\n您已修改时间，是否要放弃修改？\n"));
-        msgBox.setStandardButtons (QMessageBox::Ok|QMessageBox::Cancel);
-        msgBox.setButtonText (QMessageBox::Ok,QString("确 定"));
-        msgBox.setButtonText (QMessageBox::Cancel,QString("取 消"));
-        msgBox.setDefaultButton(QMessageBox::Ok);
-        int res = msgBox.exec();
-        if(res == QMessageBox::Ok)
-            this->close();
+        if(gLanguage == 0){
+            com_setBackColour(tr("信息提示"),&msgBox);
+            msgBox.setText(tr("\n您已修改时间，是否要放弃修改？\n"));
+            msgBox.setStandardButtons (QMessageBox::Ok|QMessageBox::Cancel);
+            msgBox.setButtonText (QMessageBox::Ok,QString("确 定"));
+            msgBox.setButtonText (QMessageBox::Cancel,QString("取 消"));
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            int res = msgBox.exec();
+            if(res == QMessageBox::Ok)
+                this->close();
+        }else{
+            com_setBackColour(tr("Message notification"),&msgBox);
+            msgBox.setText(tr("\nYou have modified the time. Do you want to abandon the modification？\n"));
+            msgBox.setStandardButtons (QMessageBox::Ok|QMessageBox::Cancel);
+            msgBox.setButtonText (QMessageBox::Ok,QString("Confirm"));
+            msgBox.setButtonText (QMessageBox::Cancel,QString("Cancel"));
+            msgBox.setDefaultButton(QMessageBox::Ok);
+            int res = msgBox.exec();
+            if(res == QMessageBox::Ok)
+                this->close();
+        }
     }
     else
         this->close();
@@ -365,12 +420,21 @@ void TimeSettingDlg::on_timeSet_but_clicked()
         int hour_old = currentTime_old.time().hour();
         int minute_old = currentTime_old.time().minute();
         QMessageBox msgBox(this);
-        com_setBackColour(tr("信息提示"),&msgBox);
-        msgBox.setText(tr("\n您已修改时间，是否要修改？\n"));
-        msgBox.setStandardButtons (QMessageBox::Ok|QMessageBox::Cancel);
-        msgBox.setButtonText (QMessageBox::Ok,QString("确 定"));
-        msgBox.setButtonText (QMessageBox::Cancel,QString("取 消"));
-        msgBox.setDefaultButton(QMessageBox::Ok);
+        if(gLanguage == 0){
+            com_setBackColour(tr("Message notification"),&msgBox);
+            msgBox.setText(tr("\n您已修改时间，是否要修改？\n"));
+            msgBox.setStandardButtons (QMessageBox::Ok|QMessageBox::Cancel);
+            msgBox.setButtonText (QMessageBox::Ok,QString("确 定"));
+            msgBox.setButtonText (QMessageBox::Cancel,QString("取 消"));
+            msgBox.setDefaultButton(QMessageBox::Ok);
+        }else{
+            com_setBackColour(tr("信息提示"),&msgBox);
+            msgBox.setText(tr("\nYou have modified the time. Do you want to modify it？\n"));
+            msgBox.setStandardButtons (QMessageBox::Ok|QMessageBox::Cancel);
+            msgBox.setButtonText (QMessageBox::Ok,QString("Confirm"));
+            msgBox.setButtonText (QMessageBox::Cancel,QString("Cancel"));
+            msgBox.setDefaultButton(QMessageBox::Ok);
+        }
         int res = msgBox.exec();
         if(res == QMessageBox::Ok)
         {
@@ -386,9 +450,11 @@ void TimeSettingDlg::on_timeSet_but_clicked()
             if (year_old != year_new || month_old != month_new
                     || day_old != day_new || hour_old != hour_new
                     || minute_old != minute_new)  {
-                str = tr("时间设置成功");
+                if(gLanguage == 0) str = tr("时间设置成功");
+                else str = tr("Time set successfully");
             }  else {
-                str = tr("时间未修改");
+                if(gLanguage == 0) str = tr("时间未修改");
+                else str = tr("Time not modified");
             }
             //        QMessageBox::information(this,tr("信息提示"),str);
             InfoMsgBox dlg(this,str);

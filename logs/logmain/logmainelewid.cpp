@@ -155,7 +155,8 @@ void LogMainEleWid::initTableSlot(int id)
     m_table = getTableName(id);
     this->refreshTable(m_table);
 
-    mHeadList << tr("编号") << tr("日期") << tr("时间") << tr("A")<< tr("B") << tr("C") << tr("合相");
+    if(gLanguage == 0) mHeadList << tr("编号") << tr("日期") << tr("时间") << tr("A")<< tr("B") << tr("C") << tr("合相");
+    else mHeadList << tr("NO.") << tr("Date") << tr("Time") << tr("A")<< tr("B") << tr("C") << tr("Coniunction");
     model->setHeaders(mHeadList);
 }
 
@@ -202,7 +203,9 @@ void LogMainEleWid::refreshSlot()
 void LogMainEleWid::doubleSlot(QModelIndex)
 {
     BeepThread::bulid()->beep();
-    QString str = tr("是否删除这条记录?");
+    QString str;
+    if(gLanguage == 0) str = tr("是否删除这条记录?");
+    else str = tr("Do you want to delete this record?");
     QuMsgBox box(this, str);
     bool ret = box.Exec();
     if(ret)

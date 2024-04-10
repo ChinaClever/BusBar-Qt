@@ -16,7 +16,7 @@ ThirdThread *thr = NULL;
 extern int get_alarm_len();
 int gVerflag = 2;
 int gReadWriteflag = 1;
-int gLanguage = 1;
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -190,14 +190,29 @@ void MainWindow::initLanguage()
     }
     sys_configFile_close();
 }
-
+void MainWindow::initLable()
+{
+    if(gLanguage == 0){
+        ui->homeLabBtn->setText("主界面");
+        ui->lineLabBtn->setText("主路信息");
+        ui->branchLabBtn->setText("支路信息");
+        ui->logLabBtn->setText("数据记录");
+        ui->setLabBtn->setText("参数设置");
+    }else{
+        ui->homeLabBtn->setText("Main\ninterface");
+        ui->lineLabBtn->setText("Main rode\ninformation");
+        ui->branchLabBtn->setText("Branch\ninformation");
+        ui->logLabBtn->setText("Data\nrecord");
+        ui->setLabBtn->setText("Parameter\nsetting");
+    }
+}
 void MainWindow::initWidget()
 {
     initLanguage();
     //    set_background_color(ui->stackedWid,Qt::white);
     set_background_icon(ui->stackedWid,":/new/prefix1/image/background.png");
     initBackground(); //按钮图标
-
+    initLable();
     mHomeWid = new HomeWid(ui->stackedWid); //主界面
     ui->stackedWid->addWidget(mHomeWid);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), mHomeWid, SIGNAL(busChangedSig(int)));
@@ -314,8 +329,9 @@ void MainWindow::dialogClosed(bool ret)
         setButtonClickedImage(ui->setBtn,"setting_select");
         InterfaceChangeSig::get()->changeType(5);
     }
-    else
-        QMessageBox::information(this,"information","对不起，密码输入不正确，您不具备该权限！","确认");
+    else{
+        if(gLanguage == 0) QMessageBox::information(this,"information","对不起，密码输入不正确，您不具备该权限！","确认");
+        else QMessageBox::information(this,"information","Sorry,the passward entered is incorrect.You do not have the permission！","Confirm");}
     mCheckDlg->clear();
 }
 

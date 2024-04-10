@@ -23,7 +23,7 @@ public slots:
 
 protected:
     void initKey(void);
-
+    void initLanguage();
 private slots:
     void on_timeSet_but_clicked();
 

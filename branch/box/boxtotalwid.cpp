@@ -6,7 +6,7 @@ BoxTotalWid::BoxTotalWid(QWidget *parent) :
     ui(new Ui::BoxTotalWid)
 {
     ui->setupUi(this);
-
+    initlanguage();
     timer = new QTimer(this);
     timer->start(2000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
@@ -19,7 +19,34 @@ BoxTotalWid::~BoxTotalWid()
     delete ui;
 }
 
-
+void BoxTotalWid::initlanguage()
+{
+    if(gLanguage == 0){
+        ui->label->setText("输入");
+        ui->label_11->setText("电压(V)");
+        ui->label_4->setText("电流(A)");
+        ui->label_13->setText("负载率(%)");
+        ui->label_14->setText("电流\n谐波含量");
+        ui->label_9->setText("视在功率");
+        ui->label_10->setText("有功功率");
+        ui->label_7->setText("功率因数");
+        ui->label_12->setText("温度");
+        ui->label_8->setText("电能(kWh)");
+        ui->label_15->setText("无功功率");
+    }else{
+        ui->label->setText("Input");
+        ui->label_11->setText("Voltage(V)");
+        ui->label_4->setText("Current(A)");
+        ui->label_13->setText("Load rate(%)");
+        ui->label_14->setText("Current\nharmonic content");
+        ui->label_9->setText("Apparent power");
+        ui->label_10->setText("Active power");
+        ui->label_7->setText("Power factor");
+        ui->label_12->setText("Temperature");
+        ui->label_8->setText("Electric energy(kWh)");
+        ui->label_15->setText("Reactive power");
+    }
+}
 void BoxTotalWid::initFun(int bus, int box)
 {
     sDataPacket *shm = get_share_mem();
@@ -44,10 +71,12 @@ void BoxTotalWid::updateAll()
     ui->curH->setText(str);
     ui->tEleH->setText(str);
 
-    str = tr("总有功功率");
+    if(gLanguage == 0) str = tr("总有功功率");
+    else str = tr("Total active power");
     ui->tApPowH->setText(str);
 
-    str = tr("零线温度");
+    if(gLanguage == 0) str = tr("零线温度");
+    else str = tr("Zero line temperature");
     ui->tPfH->setText(str);
     str = "---";
     ui->tPowH->setText(str);
@@ -77,10 +106,12 @@ void BoxTotalWid::initWid()
     ui->curH->setText(str);
     ui->tEleH->setText(str);
 
-    str = tr("总有功功率");
+    if(gLanguage == 0) str = tr("总有功功率");
+    else str = tr("Total active power");
     ui->tApPowH->setText(str);
 
-    str = tr("零线温度");
+    if(gLanguage == 0) str = tr("零线温度");
+    else str = tr("Zero line temperature");
     ui->tPfH->setText(str);
     str = "---";
     ui->tPowH->setText(str);

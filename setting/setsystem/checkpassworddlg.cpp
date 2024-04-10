@@ -6,8 +6,13 @@ CheckPasswordDlg::CheckPasswordDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CheckPasswordDlg)
 {
-    ui->setupUi(this);    
-    com_setBackColour(tr("身份验证"), this);
+    ui->setupUi(this);
+    if(gLanguage == 0) {com_setBackColour(tr("身份验证"), this);
+        ui->lineEdit->setPlaceholderText("请输入系统密码确认权限");
+    }else{
+        com_setBackColour(tr("Authentication"), this);
+        ui->lineEdit->setPlaceholderText("Please enter the system password to confirm permissions");
+    }
 
     mNumberKeyboard = new MyNumberKeyboardWid(ui->widget_2);
     QHBoxLayout *layout = new QHBoxLayout(ui->widget_2);

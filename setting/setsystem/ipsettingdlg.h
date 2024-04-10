@@ -25,7 +25,7 @@ protected:
     QString prefixToSubnetMask(int prefix);
     int subnetMaskToPrefix(const QString& subnetMask);
     bool check(const QString& ip , const QString& netmask ,const QString& gateway ,const QString& dns );
-
+    void initLanguage();
 private slots:
     void on_saveBtn_clicked();
     void on_cancelBtn_clicked();

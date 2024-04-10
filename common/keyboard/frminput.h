@@ -38,7 +38,7 @@ public:
 
     //初始化面板状态,包括字体大小
     void Init(QString position, QString style, int btnFontSize, int labFontSize);
-
+    void initLanguage();
 protected:
     //事件过滤器,处理鼠标在汉字标签处单击操作
     bool eventFilter(QObject *obj, QEvent *event);

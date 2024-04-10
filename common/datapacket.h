@@ -28,7 +28,7 @@
 #define HARMONIC_NUM 32  // 谐波数量
 
 #define SRC_DATA_LEN_MAX 1024 //一包数据最长 —— 用于对接动环
-
+extern int gLanguage;//0代表中文 1代表英文
 /**
  * 统计数据结构体
  */
