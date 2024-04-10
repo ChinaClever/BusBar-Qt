@@ -222,7 +222,13 @@ typedef struct _sDataPacket
 {
     sBusData data[BUS_NUM];  // 四条母线数据
 }sDataPacket;
-
+struct sProgress
+{
+    QString addr;
+    QString datetime;
+    int bus_insert[BUS_NUM][BOX_NUM+1];
+    int bus_start;
+};
 
 
 /**
