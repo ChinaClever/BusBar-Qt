@@ -8,7 +8,6 @@ SetThresholdDlg::SetThresholdDlg(QWidget *parent) :
 {
     ui->setupUi(this);
     com_setBackColour(tr("阈值设置"),this);
-    ui->checkBox->hide();
     setWindowModality(Qt::WindowModal);
 }
 
@@ -223,7 +222,7 @@ void SetThresholdDlg::on_saveBtn_clicked()
     if(ret) {
         if(ui->checkBox->isChecked()) {
             if(mItem.box) mItem.box = 0xff;
-            else mItem.bus = 0xff;
+            //else mItem.bus = 0xff;
             SetThread::bulid()->append(mItem);//统一设置发两遍
         }
         SetThread::bulid()->append(mItem);
