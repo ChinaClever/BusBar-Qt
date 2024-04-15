@@ -22,12 +22,12 @@ public:
 
 protected:
     void updateWidget(int bus, int line);
-    void setProgressbarValue(QProgressBar *bar, sDataUnit *data, int index);
-    void setProgressbarPowValue(QProgressBar *bar, sDataPowUnit *data, int index);
+    void setProgressbarValue(QProgressBar *bar, sDataUnit *data, int index, uchar offline);
+    void setProgressbarPowValue(QProgressBar *bar, sDataPowUnit *data, int index, uchar offline);
     void setProcessBarColor(QProgressBar *bar, QString color);
     void setLabeColor(QLabel *label, int alarm, int crAlarm);
-    void setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *data);
-    void setProgressbarOtherValue(QProgressBar *bar, sRtuULLintUnit *data);
+    void setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *data, uchar offline);
+    void setProgressbarOtherValue(QProgressBar *bar, sRtuULLintUnit *data, uchar offline);
 
 protected slots:
     void timeoutDone();

@@ -35,11 +35,15 @@ void Languagesetting::on_pushButton_clicked()
 
 void Languagesetting::on_pushButton_2_clicked()
 {
-    bool ret = true;
-    if(gLanguage == 0) ret = MsgBox::question(this, tr("是否重启系统?"));
-    else ret = MsgBox::question(this, tr("Do you want to restart the system?"));
-    if(ret) {
-        sys_configFile_writeParam("language",QString::number(ui->comboBox->currentIndex()));
-        system("reboot");
+    if( gLanguage != ui->comboBox->currentIndex() ){
+        bool ret = true;
+        if(gLanguage == 0) ret = MsgBox::question(this, tr("是否重启系统?"));
+        else ret = MsgBox::question(this, tr("Do you want to restart the system?"));
+        if(ret) {
+            sys_configFile_writeParam("language",QString::number(ui->comboBox->currentIndex()));
+            system("reboot");
+        }
+    }else{
+        this->close();
     }
 }

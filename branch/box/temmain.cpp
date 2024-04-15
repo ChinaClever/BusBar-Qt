@@ -20,9 +20,15 @@ void TemMain::initWid()
     if(gLanguage == 0) title = tr("温度模块");
     else title = tr("Temperature module");
 
-    for(int i=0; i<SENSOR_NUM; ++i)
-        if(gLanguage == 0) header << tr("温度") + QString::number(i+1);
-        else header << tr("Temperature") + QString::number(i+1);
+    for(int i=0; i<SENSOR_NUM; ++i){
+        if( i <= 2 ){
+            if(gLanguage == 0) header << QString('A'+i) + tr("相温度");
+            else header << QString('A'+i)+ tr("-phase temperature") ;
+        }else{
+            if(gLanguage == 0) header << tr("零线温度");
+            else header << tr("Zero line temperature") ;
+        }
+    }
 
     initTableWid(header, 1, title);
 }

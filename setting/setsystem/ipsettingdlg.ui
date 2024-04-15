@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>510</width>
-    <height>170</height>
+    <height>244</height>
    </rect>
   </property>
   <property name="font">
@@ -197,7 +197,7 @@ border-radius:15px
           <property name="maximumSize">
            <size>
             <width>120</width>
-            <height>30</height>
+            <height>60</height>
            </size>
           </property>
           <property name="styleSheet">
@@ -222,7 +222,7 @@ border-radius:15px
           <property name="maximumSize">
            <size>
             <width>120</width>
-            <height>30</height>
+            <height>60</height>
            </size>
           </property>
           <property name="styleSheet">

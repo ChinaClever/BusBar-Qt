@@ -25,7 +25,7 @@ void Serialdata::initLanguage()
     }else{
         ui->baudLab->setText("Baud rate:");
         ui->databitsLab->setText("Data bits:");
-        ui->checkbitsLab->setText("Check bit:");
+        ui->checkbitsLab->setText("Parity bit:");
         ui->stopbitsLab->setText("stop bit");
         ui->checkbitsLab_2->setText("NONE");
     }

@@ -44,6 +44,7 @@ private:
     sBoxData *mData;
     QTimer *timer;
     bool isRun;
+    uchar mCount;
 };
 
 #endif // HOMEBOXWID_H

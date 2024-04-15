@@ -21,6 +21,8 @@ public slots:
     void getNumAndIndexSlot(int index , int curnum);
     void getDelaySlot(int index);
     void initLanguage();
+    void updateBusNameSlot(int index,QString &name);
+
 private slots:
     void on_autoSet1Btn_clicked();
     void on_autoSet2Btn_clicked();

@@ -30,6 +30,10 @@ signals:
     #endif
     void initWid();
 
+signals:
+    void updateBusNameSig(int index ,QString &name);
+
+
 private:
     Ui::SystemSettingDlg *ui;
 //    NetSettingDlg *mNetWid;

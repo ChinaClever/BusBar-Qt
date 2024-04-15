@@ -17,8 +17,6 @@ SetLineItem::SetLineItem(QWidget *parent, bool flag) :
     connect(ui->volBar,SIGNAL(clicked()),this,SLOT(volBarClicked()));
     if(!mFlag)
     {
-        ui->label_1->hide();
-        ui->label_2->hide();
         if(gLanguage == 0){
             ui->label_14->setText(tr("零线电流"));
             //        ui->volBar->hide();
@@ -65,6 +63,7 @@ void SetLineItem::updateWidget(int bus, int line)
     QString str = "L ";
     sBusData *busData = &(mPacket->data[bus]);
     int dc = busData->box[0].dc;
+    char offline = busData->box[0].offLine;
     if(!dc){
         int len = busData->box[0].rate.svalue ? busData->box[0].rate.svalue : 1;
         if(line>len) this->hide();
@@ -77,37 +76,37 @@ void SetLineItem::updateWidget(int bus, int line)
 //    ui->curLab->setText(QString::number(objData ->cur.value[line]/COM_RATE_CUR,'f', 1)+"A");
 //    ui->volLab->setText(QString::number(objData ->vol.value[line]/COM_RATE_VOL,'f', 0)+"V");
     if(mFlag){
-        ui->curLab->setText(QString::number(objData->cur.value[line]/COM_RATE_CUR,'f', 3)+"A");
-        ui->volLab->setText(QString::number(objData->vol.value[line]/COM_RATE_VOL,'f', 1)+"V");
+        ui->curLab->setText(QString::number(offline==0?0:objData->cur.value[line]/COM_RATE_CUR,'f', 3)+"A");
+        ui->volLab->setText(QString::number(offline==0?0:objData->vol.value[line]/COM_RATE_VOL,'f', 1)+"V");
     }
     else{
-        ui->curLab->setText(QString::number(busData->box[0].rate.svalue/COM_RATE_FREQUENCY,'f',1)+"Hz");
-        ui->volLab->setText(QString::number(busData->box[0].zeroLineCur.ivalue/COM_RATE_CUR,'f', 3)+"A");
+        ui->curLab->setText(QString::number(offline==0?0:busData->box[0].rate.svalue/COM_RATE_FREQUENCY,'f',1)+"Hz");
+        ui->volLab->setText(QString::number(offline==0?0:busData->box[0].zeroLineCur.ivalue/COM_RATE_CUR,'f', 3)+"A");
         ui->nameLab->hide();
     }
     ui->nameLab->setText(QString('A'+mLine));
 
     if(mFlag){
-        setProgressbarPowValue(ui->curBar,&(objData->cur),line);
+        setProgressbarPowValue(ui->curBar,&(objData->cur) , line , offline);
         setLabeColor(ui->curLab , objData->cur.alarm[line], 0);
-        setProgressbarValue(ui->volBar,&(objData->vol),line);
+        setProgressbarValue(ui->volBar,&(objData->vol) , line , offline);
         setLabeColor(ui->volLab , objData->vol.alarm[line], 0);
     }
     else{
-        setProgressbarOtherValue(ui->curBar , &(busData->box[0].rate));
-        setProgressbarOtherValue(ui->volBar , &(busData->box[0].zeroLineCur));
+        setProgressbarOtherValue(ui->curBar , &(busData->box[0].rate) , offline);
+        setProgressbarOtherValue(ui->volBar , &(busData->box[0].zeroLineCur) , offline);
         setLabeColor(ui->curLab , busData->box[0].rate.salarm, 0);
         setLabeColor(ui->volLab , busData->box[0].zeroLineCur.ialarm, 0);
     }
 }
 
 
-void SetLineItem::setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *data)
+void SetLineItem::setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *data , uchar offline)
 {
     int max = data->smax;
     int min = data->smin;
     int value = data->svalue;
-    if(max > 0 && min >= 0 && max > min && value >= min && value < max)
+    if(max > 0 && min >= 0 && max > min && value >= min && value < max && offline)
     {
         int ret = ((value-min)*100.0/(max-min));
         if(ret > 100) ret = 100;
@@ -122,12 +121,12 @@ void SetLineItem::setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *da
         setProcessBarColor(bar,"green"); //正常
 }
 
-void SetLineItem::setProgressbarOtherValue(QProgressBar *bar, sRtuULLintUnit *data)
+void SetLineItem::setProgressbarOtherValue(QProgressBar *bar, sRtuULLintUnit *data , uchar offline)
 {
     int max = data->imax;
     int min = data->imin;
     int value = data->ivalue;
-    if(max > 0 && min >= 0 && max > min && value >= min && value < max)
+    if(max > 0 && min >= 0 && max > min && value >= min && value < max && offline)
     {
         int ret = ((value-min)*100.0/(max-min));
         if(ret > 100) ret = 100;
@@ -142,11 +141,11 @@ void SetLineItem::setProgressbarOtherValue(QProgressBar *bar, sRtuULLintUnit *da
         setProcessBarColor(bar,"green"); //正常
 }
 
-void SetLineItem::setProgressbarValue(QProgressBar *bar, sDataUnit *data, int index)
+void SetLineItem::setProgressbarValue(QProgressBar *bar, sDataUnit *data, int index , uchar offline)
 {
     int max = data->max[index];
     int min = data->min[index];
-    if(max - min > 0)
+    if(max - min > 0 && offline)
     {
         double value = data->value[index]*1.0;
         int ret = (value - min)*100/(max - min);
@@ -165,11 +164,11 @@ void SetLineItem::setProgressbarValue(QProgressBar *bar, sDataUnit *data, int in
 
 }
 
-void SetLineItem::setProgressbarPowValue(QProgressBar *bar, sDataPowUnit *data, int index)
+void SetLineItem::setProgressbarPowValue(QProgressBar *bar, sDataPowUnit *data, int index , uchar offline)
 {
     int max = data->max[index];
     int min = data->min[index];
-    if(max - min > 0)
+    if(max - min > 0 && offline )
     {
         double value = data->value[index]*1.0;
         int ret = (value - min)*100/(max - min);

@@ -8,6 +8,8 @@ SetNamesWid::SetNamesWid(QWidget *parent) :
     ui(new Ui::SetNamesWid)
 {
     ui->setupUi(this);
+    ui->rateCurSpin->hide();
+    ui->label_2->hide();
     mIndex = 0;
     mSetShm = new SetShm;
     mSetNameDlg = new SetNameDlg(this);
@@ -116,6 +118,8 @@ void SetNamesWid::interfaceChangedSlot(int id)
 void SetNamesWid::initFunSLot()
 {
     indexChanged(mIndex);
+    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:30px;}");
+    ui->tableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{height:30px;}");
     mTimer = new QTimer(this);
     mTimer->start(3*1000);
     connect(mTimer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
@@ -160,8 +164,7 @@ void SetNamesWid::initTableWidget()
 
 //    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 //    ui->tableWidget->verticalHeader()->setDefaultSectionSize(45);
-    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
-    ui->tableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{height:35px;}");
+
     //    ui->tableWidget->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
     connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
 }
@@ -170,6 +173,7 @@ void SetNamesWid::initTableWidget()
 void SetNamesWid::clearWidget()
 {
     int row = ui->tableWidget->rowCount();
+    qDebug()<< " clearWidget "<<row;
     for(int i = 0 ; i < row ; i++)
         ui->tableWidget->removeRow(0);
 }
@@ -308,12 +312,19 @@ bool SetNamesWid::saveBusName()
     item.type = 1; // 名称类型 1 母线名称   2 插接箱名称  3 回路名称
     item.num = 0; // 编号
     QString name = ui->nameEdit->text();
-    if( (!name.isEmpty()) && (!(name.size() > NAME_LEN))) {
-        item.name = name;
-        mSetShm->setName(item);
+    if( (!name.isEmpty()) ) {
+        if(!(name.size() > NAME_LEN - 2)){
+            item.name = name;
+            mSetShm->setName(item);
+            emit updateBusNameSig(mIndex , name);
+        }else{
+            if(gLanguage == 0) CriticalMsgBox box(this, tr("母线名称不能超过30个字符保存失败!!"));
+            else CriticalMsgBox box(this, tr("Busbar name cannot exceed 30 characters, saving failed!!"));
+            ret = false;
+        }
     }else {
-        if(gLanguage == 0) CriticalMsgBox box(this, tr("母线名称保存失败!!"));
-        else CriticalMsgBox box(this, tr("Busbar name save failed!!"));
+        if(gLanguage == 0) CriticalMsgBox box(this, tr("母线名称不能为空保存失败!!"));
+        else CriticalMsgBox box(this, tr("Busbar name cannot be empty, saving failed!!"));
         ret = false;
     }
     if(ui->boxNumSpin->value() < 0 || ui->boxNumSpin->value() > 18){

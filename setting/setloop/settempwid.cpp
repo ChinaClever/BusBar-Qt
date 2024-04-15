@@ -17,12 +17,20 @@ SetTempWid::SetTempWid(QWidget *parent) : ComTableWid(parent)
 void SetTempWid::initWid()
 {
     QString title; QStringList header;
-    if(gLanguage == 0) {title = tr("温度");header<< tr("插接箱");
-        for(int i=0; i<SENSOR_NUM; ++i)
-            header << tr("温度") + QString::number(i+1);}
-    else {title = tr("Temperature");header<< tr("Plug box");
-        for(int i=0; i<SENSOR_NUM; ++i)
-            header << tr("Temperature") + QString::number(i+1);}
+    if(gLanguage == 0) {
+        title = tr("温度");header<< tr("插接箱");
+        for(int i=0; i<SENSOR_NUM; ++i){
+            if(i <= 2)header << QString('A'+i)+ tr("相温度");
+            else header << tr("零线温度");
+        }
+    }
+    else {
+        title = tr("Temperature");header<< tr("Plug box");
+        for(int i=0; i<SENSOR_NUM; ++i){
+            if(i <= 2) header << QString('A'+i)+ tr("-phase Temperature");
+            else header << tr("Zero line temperature");
+        }
+    }
 
     initTableWid(header, 1, title);
 }

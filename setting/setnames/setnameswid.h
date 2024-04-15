@@ -46,6 +46,9 @@ private slots:
     void timeoutDone();
     void interfaceChangedSlot(int id);
 
+signals:
+    void updateBusNameSig(int index ,QString &name);
+
 private:
     Ui::SetNamesWid *ui;
     SetNameDlg *mSetNameDlg;

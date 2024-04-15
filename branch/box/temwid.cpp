@@ -6,8 +6,8 @@ TemWid::TemWid(QWidget *parent) :
     ui(new Ui::TemWid)
 {
     ui->setupUi(this);
-    if(gLanguage == 0){com_setBackColour(tr("温度"), this); ui->label->setText("版本号：");}
-    else{com_setBackColour(tr("Temperature"), this); ui->label->setText("Version:");}
+    if(gLanguage == 0){com_setBackColour(tr("温度"), this); ui->label->setText("插接箱版本号：");}
+    else{com_setBackColour(tr("Temperature"), this); ui->label->setText("Plug box Version:");}
 }
 TemWid::~TemWid()
 {

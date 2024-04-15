@@ -20,7 +20,7 @@ protected:
     char alarmFlag(sDataPowUnit &unit, int line, bool cr=false);
     void alarmOtherDataUnit(sRtuULLintUnit& box , uchar &alram);
 
-    void boxAlarm(sBoxData &box);
+    void boxAlarm(sBoxData &box, int index);
     void busAlarm(sBusData &bus);
 
 protected slots:

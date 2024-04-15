@@ -16,7 +16,13 @@ AutoSetAddress::AutoSetAddress(QWidget *parent) :
     setProcessBarColor(ui->progressBar_2,"green");
     setProcessBarColor(ui->progressBar_3,"green");
     setProcessBarColor(ui->progressBar_4,"green");
-    for(int i = 0 ; i < 4 ; ++i) mCurBoxNum[i] = 0;
+    for(int i = 0 ; i < BUS_NUM ; ++i){
+        mCurBoxNum[i] = 0;
+        sDataPacket *shm = get_share_mem();
+        char *name = shm->data[i].busName;
+        QString str = name;
+        updateBusNameSlot(i , str);
+    }
 }
 
 AutoSetAddress::~AutoSetAddress()
@@ -271,5 +277,16 @@ void AutoSetAddress::getDelaySlot(int index)
         ui->statuslab4->setPalette(pa);
         mCurBoxNum[3] = 0;
     }break;
+    }
+}
+
+void AutoSetAddress::updateBusNameSlot(int index,QString &name)
+{
+    switch(index)
+    {
+        case 0: ui->buslab1->setText(name);break;
+        case 1: ui->buslab2->setText(name);break;
+        case 2: ui->buslab3->setText(name);break;
+        case 3: ui->buslab4->setText(name);break;
     }
 }

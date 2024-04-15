@@ -130,7 +130,7 @@ void DpAlarmThread::alarmOtherDataUnit(sRtuULLintUnit& box , uchar &alram)
     }
 }
 
-void DpAlarmThread::boxAlarm(sBoxData &box)
+void DpAlarmThread::boxAlarm(sBoxData &box , int index )
 {
     if(box.offLine > 0) {
         int lineNum = box.loopNum;
@@ -152,31 +152,39 @@ void DpAlarmThread::boxAlarm(sBoxData &box)
         alarmDataUnit(box.env.tem, lineNum);
         box.boxEnvAlarm =  alarmFlag(box.env.tem, lineNum);
 
-        if((box.rate.svalue < box.rate.smin) || (box.rate.svalue > box.rate.smax))
-        {
-            if(box.HzAlarm == 0)
-                box.HzAlarm = 1;
-            else
-                box.HzAlarm = 2;
-        } else
-            box.HzAlarm = 0;
-        if((box.totalPow.ivalue < box.totalPow.imin) || (box.totalPow.ivalue > box.totalPow.imax))
-        {
-            if(box.totalPowAlarm == 0)
-                box.totalPowAlarm = 1;
-            else
-                box.totalPowAlarm = 2;
-        }else box.totalPowAlarm = 0;
-        alarmOtherDataUnit(box.zeroLineCur , box.zeroLineAlarm);
+        if(index == 0){
+            if(box.data.sw[0] == 2 || box.data.sw[0] == 3){
+                if(box.data.swAlarm[0] == 0) box.data.swAlarm[0] = 1;
+            } else box.data.swAlarm[0] = 0;
 
-        if(box.lpsAlarm == 2 && box.lpsLogAlarm == 0){
-            box.lpsLogAlarm = 1;
-        }else if(box.lpsAlarm == 0 || box.lpsAlarm == 1){
-            box.lpsLogAlarm = 0;
+            if((box.rate.svalue < box.rate.smin) || (box.rate.svalue > box.rate.smax)){
+                if(box.HzAlarm == 0) box.HzAlarm = 1;
+            } else box.HzAlarm = 0;
+
+            if((box.totalPow.ivalue < box.totalPow.imin) || (box.totalPow.ivalue > box.totalPow.imax)){
+                if(box.totalPowAlarm == 0) box.totalPowAlarm = 1;
+            }else box.totalPowAlarm = 0;
+            alarmOtherDataUnit(box.zeroLineCur , box.zeroLineAlarm);
+
+            if(box.lpsAlarm == 2 && box.lpsLogAlarm == 0){
+                box.lpsLogAlarm = 1;
+            }else if(box.lpsAlarm == 0 || box.lpsAlarm == 1){
+                box.lpsLogAlarm = 0;
+            }
         }
 
         box.boxOffLineAlarm = 1;
         box.boxAlarm = box.boxCurAlarm + box.boxVolAlarm + box.boxEnvAlarm + box.boxPowerAlarm + box.HzAlarm + box.zeroLineAlarm;
+        if(index == 0){
+            box.boxAlarm += box.data.swAlarm[0];
+        }else{
+            for(int i  = 0 ; i < box.data.lineNum ; i++){
+                if(box.data.sw[i] == 2){
+                    if(box.data.swAlarm[i] == 0) box.data.swAlarm[i] = 1;
+                } else box.data.swAlarm[i] = 0;
+                box.boxAlarm += box.data.swAlarm[i];
+            }
+        }
     } else {
         if(box.boxOffLineAlarm == 1) box.boxOffLineAlarm = 2;
         box.boxAlarm = 0;
@@ -186,7 +194,7 @@ void DpAlarmThread::boxAlarm(sBoxData &box)
 void DpAlarmThread::busAlarm(sBusData &bus)
 {
     for(int i=0; i<=bus.boxNum; ++i) {
-        boxAlarm(bus.box[i]);
+        boxAlarm(bus.box[i] , i);
     }
 }
 

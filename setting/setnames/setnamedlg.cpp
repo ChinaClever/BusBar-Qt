@@ -81,10 +81,14 @@ void SetNameDlg::on_saveBtn_clicked()
 {
     QString str = ui->nameEdit->text();
     if(!str.isEmpty()) {
-        if(save())
-        {
-            BeepThread::bulid()->beep();
-            close();
+        if(!(str.size() > NAME_LEN - 2)){
+            if(save()){
+                BeepThread::bulid()->beep();
+                close();
+            }
+        } else {
+            if(gLanguage == 0) CriticalMsgBox box(this, tr("名称不能超过30个字符!!"));
+            else CriticalMsgBox box(this, tr("Name cannot be empty!!"));
         }
     } else {
         if(gLanguage == 0) CriticalMsgBox box(this, tr("名称不能为空!!"));

@@ -421,14 +421,14 @@ void TimeSettingDlg::on_timeSet_but_clicked()
         int minute_old = currentTime_old.time().minute();
         QMessageBox msgBox(this);
         if(gLanguage == 0){
-            com_setBackColour(tr("Message notification"),&msgBox);
+            com_setBackColour(tr("信息提示"),&msgBox);
             msgBox.setText(tr("\n您已修改时间，是否要修改？\n"));
             msgBox.setStandardButtons (QMessageBox::Ok|QMessageBox::Cancel);
             msgBox.setButtonText (QMessageBox::Ok,QString("确 定"));
             msgBox.setButtonText (QMessageBox::Cancel,QString("取 消"));
             msgBox.setDefaultButton(QMessageBox::Ok);
         }else{
-            com_setBackColour(tr("信息提示"),&msgBox);
+            com_setBackColour(tr("Message notification"),&msgBox);
             msgBox.setText(tr("\nYou have modified the time. Do you want to modify it？\n"));
             msgBox.setStandardButtons (QMessageBox::Ok|QMessageBox::Cancel);
             msgBox.setButtonText (QMessageBox::Ok,QString("Confirm"));

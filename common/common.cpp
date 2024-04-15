@@ -162,13 +162,31 @@ QString getPassword()
     QString passpord = "";
 
     bool ret = sys_configFile_open();  //打开配置文件
-    if(ret)
-    {
+    if(ret){
         passpord = sys_configFile_readStr("password");
         sys_configFile_close();
     }
 
     return passpord;
+}
+
+/**
+ * @brief resetPassword 置空系统密码
+ * @return
+ */
+bool resetPassword()
+{
+    bool ret = sys_configFile_open();  //打开配置文件
+    if(ret){
+        ret = sys_configFile_contains("password");
+        if(ret){
+            sys_configFile_writeParam("password" , "");
+        }
+
+        sys_configFile_close();
+    }
+
+    return ret;
 }
 
 /**

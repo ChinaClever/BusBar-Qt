@@ -28,15 +28,15 @@ void SystemSettingDlg::initWid()
     mAutoSetAddress = new AutoSetAddress(this);
 
     QString str;
-    if(gLanguage == 0) str = tr("本地IP设置");
-    else str = tr("Local IP settings");
+    if(gLanguage == 0) str = tr("网络设置");
+    else str = tr("Network settings");
     ui->tabWidget->addTab(mLocaNetSettingWid,str);
 //    str = tr("切换模式");
 //    ui->tabWidget->addTab(mModeWid,str);
 //    str = tr("网络设置");
 //    ui->tabWidget->addTab(mNetWid,str);
-    if(gLanguage == 0) str = tr("其他参数设置");
-    else str = tr("Other parameter settings");
+    if(gLanguage == 0) str = tr("系统信息设置");
+    else str = tr("System information settings");
     ui->tabWidget->addTab(mOtherWid,str);
     if(gLanguage == 0) str = tr("串口信息");
     else str = tr("Serial port information");
@@ -45,6 +45,7 @@ void SystemSettingDlg::initWid()
     else str = tr("Automatically assign addresses");
     ui->tabWidget->addTab(mAutoSetAddress,str);
     ui->tabWidget->setStyleSheet("QTabBar::tab{height:50px; width: 200px;}");
+    connect(this,SIGNAL(updateBusNameSig(int,QString&)),mAutoSetAddress , SLOT(updateBusNameSlot(int,QString&)));
 }
 
 

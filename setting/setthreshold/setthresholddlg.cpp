@@ -136,8 +136,9 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
         if(item.box == 0) nameStr = "始端箱";;
 
         QString busName = share_mem_get()->data[item.bus].busName;
-        QString title = tr("母线%1 %2 输入%3 %4设置").arg(busName).arg(nameStr).arg(item.num+1).arg(str);
-        if( item.type == 5 ) title = tr("母线%1 %2 %3设置").arg(busName).arg(nameStr).arg(str);
+        QString title = tr("母线%1 %2 %3相 %4设置").arg(busName).arg(nameStr).arg(QString('A'+item.num)).arg(str);
+        if( item.type == 5 || item.type == 8 ) title = tr("母线%1 %2 %3设置").arg(busName).arg(nameStr).arg(str);
+        if(item.type == 8) ui->label_3->setText(tr("超限告警值："));
         ui->titleLab->setText(title);
     }else{
         QString str;
@@ -155,8 +156,9 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
         if(item.box == 0) nameStr = "Start box";;
 
         QString busName = share_mem_get()->data[item.bus].busName;
-        QString title = tr("Busbar%1 %2 input%3 %4set").arg(busName).arg(nameStr).arg(item.num+1).arg(str);
-        if( item.type == 5 ) title = tr("Busbar%1 %2 %3set").arg(busName).arg(nameStr).arg(str);
+        QString title = tr("Busbar%1 %2 %3-phase %4set").arg(busName).arg(nameStr).arg(QString('A'+item.num)).arg(str);
+        if( item.type == 5 || item.type == 8 ) title = tr("Busbar%1 %2 %3set").arg(busName).arg(nameStr).arg(str);
+        if(item.type == 8) ui->label_3->setText("Over limit alarm value:");
         ui->titleLab->setText(title);
     }
 

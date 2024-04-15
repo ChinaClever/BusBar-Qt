@@ -13,7 +13,7 @@
 /**
  * 获取共享内存
  */
-int gLanguage = 1;
+int gLanguage = 0;
 sDataPacket *share_mem_get()
 {
     static sDataPacket *ptr = nullptr;

@@ -130,7 +130,7 @@ void MainWindow::setBusName(int index)
     mIndex = index;
 
     //ui->ratedLab->setText("V3.0.4_T03/27");
-    ui->ratedLab->setText("V3.0.5");
+    ui->ratedLab->setText("V3.0.5.001_T04/15");
 }
 
 void MainWindow::checkAlarm()
@@ -281,8 +281,9 @@ void MainWindow::on_setBtn_clicked()
 {
     if(ui->stackedWid->currentWidget() != mSettingWid) {
         BeepThread::bulid()->beep();
-        mCheckDlg->exec();
+        mCheckDlg->clear();
         mCheckDlg->move(0,0);
+        mCheckDlg->exec();
     }
 }
 
@@ -323,16 +324,15 @@ void MainWindow::initBackground()
 
 void MainWindow::dialogClosed(bool ret)
 {
-    if(ret)
-    {
+    if(ret){
         ui->stackedWid->setCurrentWidget(mSettingWid);
         setButtonClickedImage(ui->setBtn,"setting_select");
         InterfaceChangeSig::get()->changeType(5);
     }
     else{
         if(gLanguage == 0) QMessageBox::information(this,"information","对不起，密码输入不正确，您不具备该权限！","确认");
-        else QMessageBox::information(this,"information","Sorry,the passward entered is incorrect.You do not have the permission！","Confirm");}
-    mCheckDlg->clear();
+        else QMessageBox::information(this,"information","Sorry,the passward entered is incorrect.You do not have the permission！","Confirm");
+    }
 }
 
 void MainWindow::on_timeBtn_clicked()

@@ -393,7 +393,7 @@ border-bottom:2px solid rgb(228,228,228);
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>1001</width>
+     <width>1013</width>
      <height>42</height>
     </rect>
    </property>
@@ -561,7 +561,7 @@ border-bottom:2px solid rgb(228,228,228);
        </font>
       </property>
       <property name="text">
-       <string>A相温度:</string>
+       <string>断路器：</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -569,115 +569,7 @@ border-bottom:2px solid rgb(228,228,228);
      </widget>
     </item>
     <item>
-     <widget class="QLabel" name="temA">
-      <property name="minimumSize">
-       <size>
-        <width>25</width>
-        <height>18</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>25</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Ubuntu</family>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>---</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_12">
-      <property name="minimumSize">
-       <size>
-        <width>68</width>
-        <height>18</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Ubuntu</family>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>B相温度:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="temB">
-      <property name="minimumSize">
-       <size>
-        <width>25</width>
-        <height>18</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>25</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Ubuntu</family>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>---</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="label_14">
-      <property name="minimumSize">
-       <size>
-        <width>68</width>
-        <height>18</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Ubuntu</family>
-        <pointsize>8</pointsize>
-        <italic>false</italic>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>C相温度:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QLabel" name="temC">
+     <widget class="QLabel" name="breakLab">
       <property name="minimumSize">
        <size>
         <width>25</width>
@@ -794,7 +686,7 @@ border-bottom:2px solid rgb(228,228,228);
       </property>
       <property name="maximumSize">
        <size>
-        <width>45</width>
+        <width>60</width>
         <height>16777215</height>
        </size>
       </property>
