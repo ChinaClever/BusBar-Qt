@@ -349,7 +349,7 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
                         QString typeStr = tr("回路断路器");
                         QString str = tr("插接箱：%1").arg(box.boxName);
                         QString tempStr = typeStr + tr("告警");
-                        QString statueStr = QString(tr("第 %1 回路断开")).arg( i + 1 );
+                        QString statueStr = QString(tr(" 第 %1 回路断开")).arg( i + 1 );
                         str += statueStr;
                         if(box.data.swAlarm[i] == 1){
                             box.data.swAlarm[i]= 2;
@@ -394,7 +394,7 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
                         else if( i == 1 ) tempEn = "nd";
                         else if( i == 2 ) tempEn = "rd";
                         else tempEn = "th";
-                        QString statueStr = QString(tr("%1%2 loop disconnect")).arg( i + 1 ).arg(tempEn);
+                        QString statueStr = QString(tr(" %1%2 loop OFF")).arg( i + 1 ).arg(tempEn);
                         str += statueStr;
                         if(box.data.swAlarm[i] == 1){
                             box.data.swAlarm[i]= 2;
@@ -686,8 +686,8 @@ void DpAlarmSlave::busAlarm(int id)
                     QString str = tr("Busbar：%1").arg(bus->busName);
                     QString tempStr = typeStr + tr("Alarm");
                     QString statueStr = tr("");
-                    if(busBox->data.sw[0] == 2) statueStr = tr("Disconnect");
-                    else if(busBox->data.sw[0] == 3) statueStr = tr("Trip");
+                    if(busBox->data.sw[0] == 2) statueStr = tr("OFF");
+                    else if(busBox->data.sw[0] == 3) statueStr = tr("TRIP");
                     str += tr(" %1 ").arg(statueStr);
                     if(busBox->data.swAlarm[0] == 1){
                         busBox->data.swAlarm[0]= 2;

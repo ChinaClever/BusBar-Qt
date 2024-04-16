@@ -182,15 +182,15 @@ void LineWid::updateBreak()
     if(mData->box[0].data.sw[0]&&offline){
         if(mData->box[0].data.sw[0] == 1){
             if(gLanguage == 0)ui->breakLab->setText(tr("闭合"));
-            else ui->breakLab->setText(tr("Closure"));
+            else ui->breakLab->setText(tr("ON"));
             pa.setColor(QPalette::WindowText, Qt::black);
         }else if(mData->box[0].data.sw[0] == 2){
             if(gLanguage == 0)ui->breakLab->setText(tr("断开"));
-            else ui->breakLab->setText(tr("Disconnect"));
+            else ui->breakLab->setText(tr("OFF"));
             pa.setColor(QPalette::WindowText, Qt::red);
         }else if(mData->box[0].data.sw[0] == 3){
             if(gLanguage == 0)ui->breakLab->setText(tr("跳闸"));
-            else ui->breakLab->setText(tr("Trip"));
+            else ui->breakLab->setText(tr("TRIP"));
             pa.setColor(QPalette::WindowText, Qt::red);
         }
         ui->breakLab->setPalette(pa);

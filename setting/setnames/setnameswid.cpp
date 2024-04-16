@@ -118,8 +118,8 @@ void SetNamesWid::interfaceChangedSlot(int id)
 void SetNamesWid::initFunSLot()
 {
     indexChanged(mIndex);
-    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:30px;}");
-    ui->tableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{height:30px;}");
+//    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:30px;}");
+//    ui->tableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{height:30px;}");
     mTimer = new QTimer(this);
     mTimer->start(3*1000);
     connect(mTimer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
@@ -173,7 +173,6 @@ void SetNamesWid::initTableWidget()
 void SetNamesWid::clearWidget()
 {
     int row = ui->tableWidget->rowCount();
-    qDebug()<< " clearWidget "<<row;
     for(int i = 0 ; i < row ; i++)
         ui->tableWidget->removeRow(0);
 }

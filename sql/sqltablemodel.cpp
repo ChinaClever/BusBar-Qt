@@ -84,6 +84,7 @@ void SqlTableModel::queryFilter(QString str)
 bool SqlTableModel::refreshTable(const QString &name)
 {
     model->setTable(name); //重新关联表
+    model->setSort(0, Qt::DescendingOrder); //选择按照 第一列 排序 //选择按照 第一列 排序
     model->select(); //这样才能再次显示整个表的内容
 
     QString tableName = model->tableName();

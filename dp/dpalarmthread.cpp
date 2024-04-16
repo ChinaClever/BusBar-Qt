@@ -179,7 +179,7 @@ void DpAlarmThread::boxAlarm(sBoxData &box , int index )
             box.boxAlarm += box.data.swAlarm[0];
         }else{
             for(int i  = 0 ; i < box.data.lineNum ; i++){
-                if(box.data.sw[i] == 2){
+                if(box.data.sw[i] == 1){
                     if(box.data.swAlarm[i] == 0) box.data.swAlarm[i] = 1;
                 } else box.data.swAlarm[i] = 0;
                 box.boxAlarm += box.data.swAlarm[i];
