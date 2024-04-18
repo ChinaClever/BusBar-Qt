@@ -88,7 +88,7 @@ void SetNameDlg::on_saveBtn_clicked()
             }
         } else {
             if(gLanguage == 0) CriticalMsgBox box(this, tr("名称不能超过30个字符!!"));
-            else CriticalMsgBox box(this, tr("Name cannot be empty!!"));
+            else CriticalMsgBox box(this, tr("Name cannot exceed 30 characters!!"));
         }
     } else {
         if(gLanguage == 0) CriticalMsgBox box(this, tr("名称不能为空!!"));

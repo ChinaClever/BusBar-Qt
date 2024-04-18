@@ -133,7 +133,7 @@ void BoxTableWidget::initTableWidget()
 
     QStringList header;
     if(gLanguage == 0)header <<tr("插接箱") << tr("状态") << tr("A电流") << tr("A电能") << tr("B电流") << tr("B电能") << tr("C电流")   << tr("C电能");
-    else header <<tr("Plug box") << tr("State") << tr("A Current") << tr("A Electric energy") << tr("B Current") << tr("B Electric energy") << tr("C Current")   << tr("C Electric energy");
+    else header <<tr("Tap-off box") << tr("State") << tr("A Current") << tr("A Electric energy") << tr("B Current") << tr("B Electric energy") << tr("C Current")   << tr("C Electric energy");
     ui->tableWidget->setColumnCount(header.size());    //设置列数
     ui->tableWidget->setHorizontalHeaderLabels(header);
 
@@ -268,7 +268,7 @@ void BoxTableWidget::setAlarmStatus(int id, int column)
             item->setTextColor(QColor(Qt::red));
         } else  if((curAlarm == 1)  || (volAlarm == 1))  { // 预警
             if(gLanguage == 0)str = tr("预警");
-            else str = tr("Early warning");
+            else str = tr("Warning");
             item->setTextColor(QColor("#CD7E80"));
         } else {
             if(gLanguage == 0) str = tr("正常");

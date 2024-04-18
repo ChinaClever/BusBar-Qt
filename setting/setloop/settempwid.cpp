@@ -25,10 +25,10 @@ void SetTempWid::initWid()
         }
     }
     else {
-        title = tr("Temperature");header<< tr("Plug box");
+        title = tr("Temperature");header<< tr("Tap-off box");
         for(int i=0; i<SENSOR_NUM; ++i){
-            if(i <= 2) header << QString('A'+i)+ tr("-phase Temperature");
-            else header << tr("Zero line temperature");
+            if(i <= 2) header << QString(tr("Phase %1 temperature")).arg(QString('A'+i)) ;
+            else header << tr("Neutral line temperature");
         }
     }
 

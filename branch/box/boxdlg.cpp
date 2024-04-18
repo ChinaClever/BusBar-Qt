@@ -6,8 +6,8 @@ BoxDlg::BoxDlg(QWidget *parent) :
     ui(new Ui::BoxDlg)
 {
     ui->setupUi(this);
-    if(gLanguage == 0){com_setBackColour(tr("接插箱"), this);ui->label->setText("接插箱版本:");}
-    else {com_setBackColour(tr("Plug box"), this);ui->label->setText("Plug box Version:");}
+    if(gLanguage == 0){com_setBackColour(tr("插接箱"), this);ui->label->setText("接插箱版本:");}
+    else {com_setBackColour(tr("Tap-off box"), this);ui->label->setText("Tap-off box Version:");}
 //    set_background_icon(this,":/new/prefix1/image/dialog.png",QSize(815,400));
 //    this->setWindowFlags(Qt::WindowSystemMenuHint|Qt::WindowMinimizeButtonHint);// 打开注释时，Android不能全屏
 }
@@ -41,7 +41,7 @@ void BoxDlg::initWid(int bus, int box)
     mLineWid = new BoxLoopTableWid(ui->tabWidget);
     mLineWid->initLine(bus, box);
     if(gLanguage == 0) ui->tabWidget->addTab(mLineWid, tr("各回路信息"));
-    else ui->tabWidget->addTab(mLineWid, tr("Information about each circuit"));
+    else ui->tabWidget->addTab(mLineWid, tr("Information of each circuit"));
     ui->tabWidget->setStyleSheet("QTabBar::tab{height:50px; width: 200px;}");
     ui->tabWidget->setTabShape(QTabWidget::Triangular);
 }

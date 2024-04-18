@@ -72,11 +72,11 @@ void BoxTotalWid::updateAll()
     ui->tEleH->setText(str);
 
     if(gLanguage == 0) str = tr("总有功功率");
-    else str = tr("Total active power");
+    else str = tr("Total\nactive power");
     ui->tApPowH->setText(str);
 
     if(gLanguage == 0) str = tr("零线温度");
-    else str = tr("Zero line temperature");
+    else str = tr("Neutral line\ntemperature");
     ui->tPfH->setText(str);
     str = "---";
     ui->tPowH->setText(str);
@@ -107,11 +107,11 @@ void BoxTotalWid::initWid()
     ui->tEleH->setText(str);
 
     if(gLanguage == 0) str = tr("总有功功率");
-    else str = tr("Total active power");
+    else str = tr("Total\nactive power");
     ui->tApPowH->setText(str);
 
     if(gLanguage == 0) str = tr("零线温度");
-    else str = tr("Zero line temperature");
+    else str = tr("Neutral line\ntemperature");
     ui->tPfH->setText(str);
     str = "---";
     ui->tPowH->setText(str);

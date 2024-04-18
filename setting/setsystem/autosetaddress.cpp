@@ -218,7 +218,7 @@ void AutoSetAddress::getDelaySlot(int index)
         setProcessBarColor(ui->progressBar , "red");
         if(mCurBoxNum[0] == 0){
             if(gLanguage == 0) ui->statuslab1->setText(QString(tr("始端箱未发出命令")));
-            else ui->statuslab1->setText(QString(tr("The starting box did not issue a command")));
+            else ui->statuslab1->setText(QString(tr("The feeder box did not issue a command")));
         }else if(mCurBoxNum[0] >= 2 && mCurBoxNum[0] <= 20 ){
             if(gLanguage == 0) ui->statuslab1->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[0]));
             else ui->statuslab1->setText(QString(tr("Set address %1 failed")).arg(mCurBoxNum[0]));
@@ -234,7 +234,7 @@ void AutoSetAddress::getDelaySlot(int index)
         setProcessBarColor(ui->progressBar_2 , "red");
         if(mCurBoxNum[1] == 0){
             if(gLanguage == 0) ui->statuslab2->setText(QString(tr("始端箱未发出命令")));
-            else ui->statuslab2->setText(QString(tr("The starting box did not issue a command")));
+            else ui->statuslab2->setText(QString(tr("The feeder box did not issue a command")));
         }else if(mCurBoxNum[1] >= 2 && mCurBoxNum[1] <= 20 ){
             if(gLanguage == 0) ui->statuslab2->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[1]));
             else ui->statuslab2->setText(QString(tr("Set address %1 failed")).arg(mCurBoxNum[1]));
@@ -250,7 +250,7 @@ void AutoSetAddress::getDelaySlot(int index)
         setProcessBarColor(ui->progressBar_3 , "red");
         if(mCurBoxNum[2] == 0){
             if(gLanguage == 0) ui->statuslab3->setText(QString(tr("始端箱未发出命令")));
-            else ui->statuslab3->setText(QString(tr("The starting box did not issue a command")));
+            else ui->statuslab3->setText(QString(tr("The feeder box did not issue a command")));
         }else if(mCurBoxNum[2] >= 2 && mCurBoxNum[2] <= 20 ){
             if(gLanguage == 0) ui->statuslab3->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[2]));
             else ui->statuslab3->setText(QString(tr("Set address %1 failed")).arg(mCurBoxNum[2]));
@@ -266,7 +266,7 @@ void AutoSetAddress::getDelaySlot(int index)
         setProcessBarColor(ui->progressBar_4 , "red");
         if(mCurBoxNum[3] == 0){
             if(gLanguage == 0) ui->statuslab4->setText(QString(tr("始端箱未发出命令")));
-            else ui->statuslab4->setText(QString(tr("The starting box did not issue a command")));
+            else ui->statuslab4->setText(QString(tr("The feeder box did not issue a command")));
         }else if(mCurBoxNum[3] >= 2 && mCurBoxNum[3] <= 20 ){
             if(gLanguage == 0) ui->statuslab4->setText(QString(tr("设置地址%1失败")).arg(mCurBoxNum[3]));
             else ui->statuslab4->setText(QString(tr("Set address %1 failed")).arg(mCurBoxNum[3]));

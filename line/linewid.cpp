@@ -42,13 +42,13 @@ void LineWid::initLanguage()
         ui->label_7->setText("电能");
         ui->thdBtn->setText("谐波分析");
     }else{
-        ui->label_10->setText("Zero line\ncurrent:");
+        ui->label_10->setText("Neutral line\ncurrent:");
         ui->label_11->setText("Breaker:");
-        ui->label_15->setText("Zero line\ntemperature:");
+        ui->label_15->setText("Neutral line\ntemperature:");
         ui->label_16->setText("Total\nactive power:");
 
         ui->label_17->setText("Lightning\nprotection:");
-        ui->label_2->setText("Start box\nversion:");
+        ui->label_2->setText("Feeder box\nversion:");
         ui->label_5->setText("Input");
         ui->label_13->setText("Voltage");
         ui->label_9->setText("Current");

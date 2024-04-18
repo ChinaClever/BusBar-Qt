@@ -432,8 +432,14 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="rateLab">
       <property name="minimumSize">
        <size>
-        <width>35</width>
+        <width>40</width>
         <height>18</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
        </size>
       </property>
       <property name="font">
@@ -456,13 +462,13 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="label_10">
       <property name="minimumSize">
        <size>
-        <width>50</width>
+        <width>68</width>
         <height>18</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>50</width>
+        <width>68</width>
         <height>16777215</height>
        </size>
       </property>
@@ -486,13 +492,13 @@ border-bottom:2px solid rgb(228,228,228);
      <widget class="QLabel" name="zeroLineLab">
       <property name="minimumSize">
        <size>
-        <width>36</width>
+        <width>40</width>
         <height>18</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
-        <width>35</width>
+        <width>16777215</width>
         <height>16777215</height>
        </size>
       </property>
@@ -532,7 +538,7 @@ border-bottom:2px solid rgb(228,228,228);
       </property>
       <property name="maximumSize">
        <size>
-        <width>35</width>
+        <width>16777215</width>
         <height>16777215</height>
        </size>
       </property>
@@ -578,7 +584,7 @@ border-bottom:2px solid rgb(228,228,228);
       </property>
       <property name="maximumSize">
        <size>
-        <width>25</width>
+        <width>16777215</width>
         <height>16777215</height>
        </size>
       </property>
@@ -632,7 +638,7 @@ border-bottom:2px solid rgb(228,228,228);
       </property>
       <property name="maximumSize">
        <size>
-        <width>25</width>
+        <width>16777215</width>
         <height>16777215</height>
        </size>
       </property>
@@ -686,7 +692,7 @@ border-bottom:2px solid rgb(228,228,228);
       </property>
       <property name="maximumSize">
        <size>
-        <width>60</width>
+        <width>16777215</width>
         <height>16777215</height>
        </size>
       </property>

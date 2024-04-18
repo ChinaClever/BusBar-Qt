@@ -19,7 +19,7 @@ void LineTable::initWid()
     if(gLanguage == 0){
         header << "L" << tr("负载率(%)")<< tr("温度(°C)")<< tr("视在功率(kVA)") << tr("电压谐波含量(%)") << tr("电流谐波含量(%)");
     }else{
-        header << "L" << tr("Load rate(%)")<< tr("Temperature(°C)") << tr("Apparent power(kVA)") << tr("Voltage harmonic content(%)") << tr("Current harmonic content(%)");
+        header << "L" << tr("Load rate(%)")<< tr("Temperature(°C)") << tr("Apparent power(kVA)") << tr("Voltage harmonic\ncontent(%)") << tr("Current harmonic\ncontent(%)");
     }
     initTableWid(header, 3, title);
 }

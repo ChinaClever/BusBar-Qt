@@ -104,6 +104,11 @@
      <height>241</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
+   </property>
    <property name="currentIndex">
     <number>-1</number>
    </property>
@@ -112,23 +117,36 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>30</y>
-     <width>151</width>
-     <height>31</height>
+     <y>20</y>
+     <width>201</width>
+     <height>61</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>版本号：</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="version">
    <property name="geometry">
     <rect>
-     <x>190</x>
-     <y>30</y>
-     <width>91</width>
-     <height>31</height>
+     <x>240</x>
+     <y>20</y>
+     <width>51</width>
+     <height>61</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>V0.0.0</string>
@@ -137,10 +155,10 @@
   <widget class="QLabel" name="titleLab">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>30</y>
-     <width>391</width>
-     <height>31</height>
+     <x>320</x>
+     <y>20</y>
+     <width>401</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="font">

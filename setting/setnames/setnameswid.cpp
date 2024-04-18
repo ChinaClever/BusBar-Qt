@@ -139,12 +139,12 @@ void SetNamesWid::initTableWidget()
     if(gLanguage == 0){ui->label->setText("母线名称");ui->label_2->setText("额定电流");
         ui->label_3->setText("插接箱数量");ui->saveBtn->setText("保存");
     }else{ui->label->setText("Busbar name");ui->label_2->setText("Rated current");
-        ui->label_3->setText("Number of plug-in boxes");ui->saveBtn->setText("Save");
+        ui->label_3->setText("Number of tap-off boxes");ui->saveBtn->setText("Save");
     }
 
     QStringList horHead;
     if(gLanguage == 0) horHead<< tr("插接箱");
-    else horHead<< tr("Plug box");
+    else horHead<< tr("Tap-off box");
 
     int dc = mPacket ? mPacket->box[0].dc : 1;
     if(dc){ //交流9个

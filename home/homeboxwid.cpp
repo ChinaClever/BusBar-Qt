@@ -187,14 +187,25 @@ void HomeBoxWid::timeoutDone()
 void HomeBoxWid::updateUpAndDownAlarmStatus()
 {
     if(mData->offLine > 0) {
-        updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-        updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-        updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+        if(mData->boxType){//盒子类型：0-插接箱；1-温度模块
+            ui->iconLab_1->hide();ui->iconLab_3->hide();
+            updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+        }else{
+            ui->iconLab_1->show();ui->iconLab_3->show();
+            updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+        }
     } else { // 离线
-
-        setBackgroundImage(ui->iconLab_1, "boxoffine");
-        setBackgroundImage(ui->iconLab_2, "boxoffine");
-        setBackgroundImage(ui->iconLab_3, "boxoffine");
+        if(mData->boxType){//盒子类型：0-插接箱；1-温度模块
+            ui->iconLab_1->hide();ui->iconLab_3->hide();
+            setBackgroundImage(ui->iconLab_2, "boxoffine");
+        }else{
+            ui->iconLab_1->show();ui->iconLab_3->show();
+            setBackgroundImage(ui->iconLab_1, "boxoffine");
+            setBackgroundImage(ui->iconLab_2, "boxoffine");
+            setBackgroundImage(ui->iconLab_3, "boxoffine");
+        }
     }
 
     bool hidden = false;

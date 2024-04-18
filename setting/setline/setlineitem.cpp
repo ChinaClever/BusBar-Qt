@@ -24,7 +24,7 @@ SetLineItem::SetLineItem(QWidget *parent, bool flag) :
             ui->label_11->setText(tr("频率"));
             ui->nameLab->setText(tr("其他"));
         }else{
-            ui->label_14->setText(tr("Zero line current"));
+            ui->label_14->setText(tr("Neutral line current"));
             //        ui->volBar->hide();
             //        ui->volLab->hide();
             ui->label_11->setText(tr("Frequency"));

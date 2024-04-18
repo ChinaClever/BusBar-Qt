@@ -130,7 +130,7 @@ void MainWindow::setBusName(int index)
     mIndex = index;
 
     //ui->ratedLab->setText("V3.0.4_T03/27");
-    ui->ratedLab->setText("V3.0.5.001_T04/15");
+    ui->ratedLab->setText("V3.0.5.003_T04/18");
 }
 
 void MainWindow::checkAlarm()
@@ -194,13 +194,13 @@ void MainWindow::initLable()
 {
     if(gLanguage == 0){
         ui->homeLabBtn->setText("主界面");
-        ui->lineLabBtn->setText("主路信息");
-        ui->branchLabBtn->setText("支路信息");
-        ui->logLabBtn->setText("数据记录");
-        ui->setLabBtn->setText("参数设置");
+        ui->lineLabBtn->setText("主路\n信息");
+        ui->branchLabBtn->setText("支路\n信息");
+        ui->logLabBtn->setText("数据\n记录");
+        ui->setLabBtn->setText("参数\n设置");
     }else{
         ui->homeLabBtn->setText("Main\ninterface");
-        ui->lineLabBtn->setText("Main rode\ninformation");
+        ui->lineLabBtn->setText("Input\ninformation");
         ui->branchLabBtn->setText("Branch\ninformation");
         ui->logLabBtn->setText("Data\nrecord");
         ui->setLabBtn->setText("Parameter\nsetting");

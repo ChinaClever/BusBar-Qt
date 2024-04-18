@@ -182,7 +182,7 @@ void LogBranchEleWid::initTableSlot(int id)
     this->refreshTable(m_table);
 
     if(gLanguage == 0) mHeadList << tr("编号") << tr("日期") << tr("时间") << tr("插接箱");
-    else  mHeadList << tr("NO.") << tr("Date") << tr("Time") << tr("Plug box");
+    else  mHeadList << tr("NO.") << tr("Date") << tr("Time") << tr("Tap-off box");
     /* for(int i=0; i<9; ++i)
         mHeadList << "L" + QString::number(i+1);*/
     //--------------------[由于界面不好修改——By_MW 2018.3.21]-----------

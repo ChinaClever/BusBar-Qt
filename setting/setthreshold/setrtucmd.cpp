@@ -40,7 +40,7 @@ void SetRtuCmd::sendRegV3(int reg, sThresholdItem &item)
 
 void SetRtuCmd::sendDataUintV3(int busID, int addr, ushort reg, uint val1, uint val2)
 {
-    if((busID == 0xff) || (addr == 0xff)){
+    if((busID == 0xff) || (addr == 0xff - 1)){
         for(int i=0; i<4; ++i) {
             if(rtu[i]) rtu[i]->sendDataUintV3(addr, reg, val1 , val2);
         }
@@ -51,7 +51,7 @@ void SetRtuCmd::sendDataUintV3(int busID, int addr, ushort reg, uint val1, uint 
 
 void SetRtuCmd::sendDataUshortV3(int busID, int addr, ushort reg, uint val1, uint val2)
 {
-    if((busID == 0xff) || (addr == 0xff)){
+    if((busID == 0xff) || (addr == 0xff - 1)){
         for(int i=0; i<4; ++i) {
             if(rtu[i]) rtu[i]->sendDataUshortV3(addr, reg, val1 , val2);
         }
@@ -62,7 +62,7 @@ void SetRtuCmd::sendDataUshortV3(int busID, int addr, ushort reg, uint val1, uin
 
 void SetRtuCmd::sendDataUcharV3(int busID, int addr, ushort reg, uint val)
 {
-    if((busID == 0xff) || (addr == 0xff)){
+    if((busID == 0xff) || (addr == 0xff - 1)){
         for(int i=0; i<4; ++i) {
             if(rtu[i]) rtu[i]->sendDataUcharV3(addr, reg, val);
         }

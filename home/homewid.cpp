@@ -86,11 +86,11 @@ void HomeWid::timeoutDone()
             name2 = "流";
         }else{
             if(mBusData->box[0].dc){ //交流
-                name = "A";
+                name = "AC";
             }else{
-                name = "D";
+                name = "DC";
             }
-            name2 = "C";
+            name2 = "";
         }
         ui->name1->setText(name);
         ui->name2->setText(name2);

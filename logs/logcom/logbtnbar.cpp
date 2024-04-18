@@ -64,7 +64,7 @@ void LogBtnBar::initLanguage()
     }else{
         ui->exportBtn->setText("Export");
         ui->dateBtn->setText("Time selection");
-        ui->comboBox->setItemText(0,"Main\ncircuit power");
+        ui->comboBox->setItemText(0,"Input power");
         ui->comboBox->setItemText(1,"Branch power");
         ui->comboBox->setItemText(2,"Alarm log");
         ui->clearBtn->setText("Clear");

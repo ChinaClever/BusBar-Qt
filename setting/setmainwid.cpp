@@ -30,7 +30,7 @@ void SetMainWid::initLanguage()
     }else{
         ui->sysBtn->setText("System settings");
         ui->temBtn->setText("Temperature settings");
-        ui->lineBtn->setText("Main road settings");
+        ui->lineBtn->setText("Input settings");
         ui->loopBtn->setText("Branch current settings");
         ui->nameBtn->setText("Name settings");
         ui->powerBtn->setText("Power settings");

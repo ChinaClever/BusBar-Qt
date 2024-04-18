@@ -29,7 +29,7 @@ void PassordSettingDlg::initLanguage()
         ui->groupBox->setTitle("Password setting");
         ui->label->setText("Old password:");
         ui->label_2->setText("New password:");
-        ui->lineEdit->setPlaceholderText("Please enter the original password");
+        ui->lineEdit->setPlaceholderText("Please enter the old password");
         ui->pushButton_2->setText("Save");
         ui->pushButton_3->setText("Cancel");
     }

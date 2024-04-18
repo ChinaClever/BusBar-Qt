@@ -485,7 +485,7 @@ void frmInput::changeType(QString type)
         changeLetter(true);
         if(gLanguage == 0) {ui->btnType->setText("大写");
             ui->labInfo->setText("输入法--大写");}
-        else {ui->btnType->setText("Capital");
+        else {ui->btnType->setText("Upper case");
             ui->labInfo->setText("Input method--Uppercase");
         }
         ui->btnOther12->setText("/");

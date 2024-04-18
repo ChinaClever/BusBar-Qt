@@ -23,10 +23,10 @@ void TemMain::initWid()
     for(int i=0; i<SENSOR_NUM; ++i){
         if( i <= 2 ){
             if(gLanguage == 0) header << QString('A'+i) + tr("相温度");
-            else header << QString('A'+i)+ tr("-phase temperature") ;
+            else header << QString(tr("Phase %1 temperature")).arg(QString('A'+i)) ;
         }else{
             if(gLanguage == 0) header << tr("零线温度");
-            else header << tr("Zero line temperature") ;
+            else header << tr("Neutral line temperature") ;
         }
     }
 
