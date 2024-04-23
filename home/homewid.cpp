@@ -30,6 +30,13 @@ void HomeWid::initFun()
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone())); //实时更新
     //刷新信号（id）
     connect(InterfaceChangeSig::get(), SIGNAL(typeSig(int)), this,SLOT(interfaceChangedSlot(int)));
+    QString name;
+    if(gLanguage == 0){
+        name = "交流";
+    }else{
+        name = "AC";
+    }
+    ui->name->setText(name);
 }
 
 void HomeWid::initWidget()
@@ -50,14 +57,6 @@ void HomeWid::initWidget()
         }
     }
     checkBoxBaseNum();
-
-    /* 考虑到不可相加 故隐藏 */
-    ui->label->hide();
-    ui->curLcd->hide();
-    ui->label_2->hide();
-    ui->powLcd->hide();
-    ui->label_3->hide();
-    ui->label_4->hide();
 }
 
 void HomeWid::interfaceChangedSlot(int id)
@@ -76,24 +75,7 @@ void HomeWid::timeoutDone()
 //        ui->powLcd->display(mBusData->box[0].tgBox.pow/COM_RATE_POW); //W
 
         //------------[交直流区分]-------------------By_MW 2018.3.30
-        QString name,name2;
-        if(gLanguage == 0){
-            if(mBusData->box[0].dc){ //交流
-                name = "交";
-            }else{
-                name = "直";
-            }
-            name2 = "流";
-        }else{
-            if(mBusData->box[0].dc){ //交流
-                name = "AC";
-            }else{
-                name = "DC";
-            }
-            name2 = "";
-        }
-        ui->name1->setText(name);
-        ui->name2->setText(name2);
+
         //-----------------------------------------
 
         if(mMaxNum != mBusData->boxNum) {

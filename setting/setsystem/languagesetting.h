@@ -17,8 +17,8 @@ public:
     ~Languagesetting();
     void init();
 private slots:
-    void on_pushButton_clicked();
-    void on_pushButton_2_clicked();
+    void on_quitBtn_clicked();
+    void on_confirmBtn_clicked();
 signals:
     void finshSig();
 private:

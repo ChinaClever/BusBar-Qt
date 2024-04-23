@@ -95,7 +95,7 @@ void SetLineItem::updateWidget(int bus, int line)
     else{
         setProgressbarOtherValue(ui->curBar , &(busData->box[0].rate) , offline);
         setProgressbarOtherValue(ui->volBar , &(busData->box[0].zeroLineCur) , offline);
-        setLabeColor(ui->curLab , busData->box[0].rate.salarm, 0);
+        setLabeColor(ui->curLab , busData->box[0].HzAlarm, 0);
         setLabeColor(ui->volLab , busData->box[0].zeroLineCur.ialarm, 0);
     }
 }

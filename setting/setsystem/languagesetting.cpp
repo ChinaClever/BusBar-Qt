@@ -25,15 +25,23 @@ Languagesetting::~Languagesetting()
 void Languagesetting::init()
 {
     ui->comboBox->setCurrentIndex(gLanguage);
-    if(gLanguage == 0) ui->comboBox->setItemText(0,"中文简体");
-    else ui->comboBox->setItemText(0,"Chinese");
+    if(gLanguage == 0){
+        ui->quitBtn->setText(tr("退出"));
+        ui->confirmBtn->setText(tr("确定"));
+        ui->comboBox->setItemText(0,"中文简体");
+    }
+    else{
+        ui->quitBtn->setText(tr("Quit"));
+        ui->confirmBtn->setText(tr("Confirm"));
+        ui->comboBox->setItemText(0,"Chinese");
+    }
 }
-void Languagesetting::on_pushButton_clicked()
+void Languagesetting::on_quitBtn_clicked()
 {
     this->close();
 }
 
-void Languagesetting::on_pushButton_2_clicked()
+void Languagesetting::on_confirmBtn_clicked()
 {
     if( gLanguage != ui->comboBox->currentIndex() ){
         bool ret = true;

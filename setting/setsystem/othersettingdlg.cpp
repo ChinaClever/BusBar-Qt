@@ -127,6 +127,7 @@ void OtherSettingDlg::on_updateBtn_clicked()
             bool ret = update_fun("sda");
             if(!ret) ret = update_fun("sda1");
             if(!ret) ret = update_fun("sda2");
+            if(!ret) ret = update_fun("mmcblk0p1");
             if(!ret)
                 CriticalMsgBox box(this, tr("升级文件未找到！\n 请插入U盘，把升级文件放入upgrade目录下!"));
         }
@@ -136,6 +137,7 @@ void OtherSettingDlg::on_updateBtn_clicked()
             bool ret = update_fun("sda");
             if(!ret) ret = update_fun("sda1");
             if(!ret) ret = update_fun("sda2");
+            if(!ret) ret = update_fun("mmcblk0p1");
             if(!ret)
                 CriticalMsgBox box(this, tr("Upgrade file not found！\n Please insert a USB drive and place the upgrade files in the upgrade directory!"));
         }

@@ -146,13 +146,13 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, sDataPowUnit &unit,
         {
             if(gLanguage == 0){
                 tempStr = typeStr + tr("告警");
-                str += tr("%1，当前值：%2%3, 最小值：%4%5, 最大值：%6%7").arg(i+1)
+                str += tr("%1，当前值：%2%3, 最小值：%4%5, 最大值：%6%7").arg(QString('A'+i))
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.min[i]/rate).arg(sym)
                         .arg(unit.max[i]/rate).arg(sym);
             }else{
                 tempStr = typeStr + tr(" Alarm");
-                str += tr("%1，current value：%2%3, minimum value：%4%5, maximum value：%6%7").arg(i+1)
+                str += tr("%1，current value：%2%3, minimum value：%4%5, maximum value：%6%7").arg(QString('A'+i))
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.min[i]/rate).arg(sym)
                         .arg(unit.max[i]/rate).arg(sym);
@@ -167,13 +167,13 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, sDataPowUnit &unit,
         {
             if(gLanguage == 0){
                 tempStr = typeStr +  tr("预警");
-                str += tr("%1，当前值：%2%3, 临界下限值：%4%5, 临界上限值：%6%7").arg(i+1)
+                str += tr("%1，当前值：%2%3, 临界下限值：%4%5, 临界上限值：%6%7").arg(QString('A'+i))
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.crMin[i]/rate).arg(sym)
                         .arg(unit.crMax[i]/rate).arg(sym);
             }else{
                 tempStr = typeStr +  tr(" Warning");
-                str += tr("%1，current value：%2%3, critical lower limit：%4%5, critical upper limit：%6%7").arg(i+1)
+                str += tr("%1，current value：%2%3, critical lower limit：%4%5, critical upper limit：%6%7").arg(QString('A'+i))
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.crMin[i]/rate).arg(sym)
                         .arg(unit.crMax[i]/rate).arg(sym);
@@ -456,14 +456,14 @@ void DpAlarmSlave::busAlarm(int id)
     //----------------[区分日志关键字]-------------------
     QString alarmStr;
     if(gLanguage == 0){
-        alarmStr = "输入";
+        alarmStr = "输入 ";
         if(!busBox->dc){ // 直流
-            alarmStr = "输入";
+            alarmStr = "输入 ";
         }
     }else{
-        alarmStr = "input";
+        alarmStr = "input ";
         if(!busBox->dc){ // 直流
-            alarmStr = "input";
+            alarmStr = "input ";
         }
     }
     //--------------------------------------------------

@@ -38,7 +38,7 @@
     <number>0</number>
    </property>
    <property name="bottomMargin">
-    <number>0</number>
+    <number>10</number>
    </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">

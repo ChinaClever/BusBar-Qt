@@ -130,7 +130,7 @@ void MainWindow::setBusName(int index)
     mIndex = index;
 
     //ui->ratedLab->setText("V3.0.4_T03/27");
-    ui->ratedLab->setText("V3.0.5.003_T04/18");
+    ui->ratedLab->setText("V3.0.5.006");
 }
 
 void MainWindow::checkAlarm()
