@@ -11,6 +11,7 @@ struct DbNameItem{
     int type; // 名称类型 1 母线名称   2 插接箱名称  3 回路名称
     int box;
     int num; // 编号
+    int increment; //0:不递增 1：递增
     QString name;
 };
 

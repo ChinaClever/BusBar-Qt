@@ -83,6 +83,7 @@ void LogBtnBar::on_queryBtn_clicked()
 void LogBtnBar::on_exportBtn_clicked()
 {
     BeepThread::bulid()->beep();
+    mExportDlg->setWindowModality(Qt::WindowModal);
     mExportDlg->show();
     mExportDlg->move(0,0);
 }
@@ -97,7 +98,7 @@ void LogBtnBar::on_clearBtn_clicked()
             emit clearSig();
         }
     }else{
-        QuMsgBox box(NULL, tr("Confirm to clear data?"));
+        QuMsgBox box(NULL, tr("Confirm to clear data?"));//传入NULL才可以禁止操作其他界面，如果传入this还可以操作其他界面
         bool ret = box.Exec();
         if(ret){
             emit clearSig();

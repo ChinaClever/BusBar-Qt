@@ -84,7 +84,7 @@ void BoxTotalWid::updateAll()
     if( mBox && mBox->offLine ){
         mBox->data.totalPow.value[0] = 0;
         for(int i = 0 ; i < 3 ; ++i) mBox->data.totalPow.value[0] += mLineTgBox->pow[i];
-        str = QString::number(mBox->data.totalPow.value[0]/COM_RATE_POW, 'f', 2)+"kW";
+        str = QString::number(mBox->data.totalPow.value[0]/COM_RATE_POW, 'f', 3)+"kW";
         ui->tPowH->setText(str);
 
         if(mEnvData){

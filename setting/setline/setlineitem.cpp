@@ -93,7 +93,7 @@ void SetLineItem::updateWidget(int bus, int line)
         setLabeColor(ui->volLab , objData->vol.alarm[line], 0);
     }
     else{
-        setProgressbarOtherValue(ui->curBar , &(busData->box[0].rate) , offline);
+        setProgressbarOtherValue(ui->curBar , &(busData->box[0].rate) , offline , busData->box[0].HzAlarm);
         setProgressbarOtherValue(ui->volBar , &(busData->box[0].zeroLineCur) , offline);
         setLabeColor(ui->curLab , busData->box[0].HzAlarm, 0);
         setLabeColor(ui->volLab , busData->box[0].zeroLineCur.ialarm, 0);
@@ -101,7 +101,7 @@ void SetLineItem::updateWidget(int bus, int line)
 }
 
 
-void SetLineItem::setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *data , uchar offline)
+void SetLineItem::setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *data , uchar offline , int alarm)
 {
     int max = data->smax;
     int min = data->smin;
@@ -114,7 +114,7 @@ void SetLineItem::setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *da
     }else
         bar->setValue(0);
 
-    int alarm = data->salarm;
+//    int alarm = busData->box[0].HzAlarm;
     if(alarm >= 1)
         setProcessBarColor(bar,"red"); //告警
     else

@@ -36,7 +36,7 @@ void CheckPasswordDlg::on_pushButton_clicked()
     QString str = getPassword();
     QString linestr = ui->lineEdit->text();
     if( linestr == "reset" || linestr == "RESET" ){
-        QMessageBox msgBox(this);
+        QMessageBox msgBox(NULL);
         if(gLanguage == 0){
             com_setBackColour(tr("信息提示"),&msgBox);
             msgBox.setText(tr("\n请确认是否重置密码？\n"));
@@ -57,11 +57,11 @@ void CheckPasswordDlg::on_pushButton_clicked()
             resetPassword();
             str = getPassword();
             if(str.isEmpty()){
-                if(gLanguage == 0) QMessageBox::information(this,"information","重置密码成功！","确认");
-                else QMessageBox::information(this,"Password reset successful","！","Confirm");
+                if(gLanguage == 0) QMessageBox::information(NULL,"information","重置密码成功！","确认");
+                else QMessageBox::information(NULL,"Password reset successful","！","Confirm");
             }else{
-                if(gLanguage == 0) QMessageBox::information(this,"information","重置密码失败！","确认");
-                else QMessageBox::information(this,"Password reset failed","！","Confirm");
+                if(gLanguage == 0) QMessageBox::information(NULL,"information","重置密码失败！","确认");
+                else QMessageBox::information(NULL,"Password reset failed","！","Confirm");
             }
         }
     }else{

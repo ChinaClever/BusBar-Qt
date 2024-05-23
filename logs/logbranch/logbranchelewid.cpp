@@ -238,7 +238,7 @@ void LogBranchEleWid::doubleSlot(QModelIndex)
     QString str;
     if(gLanguage == 0) str = tr("是否删除这条记录?");
     else str = tr("Do you want to delete this record?");
-    QuMsgBox box(this, str);
+    QuMsgBox box(NULL, str);
     bool ret = box.Exec();
     if(ret)
     {

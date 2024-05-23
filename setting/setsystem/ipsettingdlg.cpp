@@ -172,7 +172,7 @@ bool IpSettingDlg::check(const QString& ip , const QString& netmask ,const QStri
             ret = false;
         }
     }
-    return MsgBox::question(this, str)&&ret;
+    return MsgBox::question(NULL, str)&&ret;
 }
 
 void IpSettingDlg::on_saveBtn_clicked()

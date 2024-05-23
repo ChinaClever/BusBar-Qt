@@ -45,8 +45,8 @@ void Languagesetting::on_confirmBtn_clicked()
 {
     if( gLanguage != ui->comboBox->currentIndex() ){
         bool ret = true;
-        if(gLanguage == 0) ret = MsgBox::question(this, tr("是否重启系统?"));
-        else ret = MsgBox::question(this, tr("Do you want to restart the system?"));
+        if(gLanguage == 0) ret = MsgBox::question(NULL, tr("是否重启系统?"));
+        else ret = MsgBox::question(NULL, tr("Do you want to restart the system?"));
         if(ret) {
             sys_configFile_writeParam("language",QString::number(ui->comboBox->currentIndex()));
             system("reboot");

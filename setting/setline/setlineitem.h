@@ -26,7 +26,7 @@ protected:
     void setProgressbarPowValue(QProgressBar *bar, sDataPowUnit *data, int index, uchar offline);
     void setProcessBarColor(QProgressBar *bar, QString color);
     void setLabeColor(QLabel *label, int alarm, int crAlarm);
-    void setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *data, uchar offline);
+    void setProgressbarOtherValue(QProgressBar *bar, sRtuUshortUnit *data, uchar offline, int alarm);
     void setProgressbarOtherValue(QProgressBar *bar, sRtuULLintUnit *data, uchar offline);
 
 protected slots:

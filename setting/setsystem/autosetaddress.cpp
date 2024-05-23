@@ -48,7 +48,7 @@ void AutoSetAddress::on_autoSet1Btn_clicked()
     QString str;
     if(gLanguage == 0) str = tr("是否确定自动分配第1条母线串口地址?");
     else str = tr("Are you sure to automatically allocate the serial port address of the first bus?");
-    QuMsgBox box(this, str);
+    QuMsgBox box(NULL, str);
     bool ret = box.Exec();
     if(ret){
         ui->autoSet1Btn->setEnabled(false);
@@ -63,7 +63,7 @@ void AutoSetAddress::on_autoSet2Btn_clicked()
     QString str;
     if(gLanguage == 0) str = tr("是否确定自动分配第2条母线串口地址?");
     else str = tr("Are you sure to automatically allocate the serial port address of the second bus?");
-    QuMsgBox box(this, str);
+    QuMsgBox box(NULL, str);
     bool ret = box.Exec();
     if(ret){
         ui->autoSet2Btn->setEnabled(false);
@@ -77,7 +77,7 @@ void AutoSetAddress::on_autoSet3Btn_clicked()
     QString str;
     if(gLanguage == 0) str = tr("是否确定自动分配第3条母线串口地址?");
     else str = tr("Are you sure to automatically allocate the serial port address of the third bus?");
-    QuMsgBox box(this, str);
+    QuMsgBox box(NULL, str);
     bool ret = box.Exec();
     if(ret){
         ui->autoSet3Btn->setEnabled(false);
@@ -92,7 +92,7 @@ void AutoSetAddress::on_autoSet4Btn_clicked()
     QString str;
     if(gLanguage == 0) str = tr("是否确定自动分配第4条母线串口地址?");
     else str = tr("Are you sure to automatically allocate the serial port address of the 4th bus?");
-    QuMsgBox box(this, str);
+    QuMsgBox box(NULL, str);
     bool ret = box.Exec();
     if(ret){
         ui->autoSet4Btn->setEnabled(false);

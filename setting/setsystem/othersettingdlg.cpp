@@ -122,36 +122,44 @@ void OtherSettingDlg::on_updateBtn_clicked()
 {
     BeepThread::bulid()->beep();
     if(gLanguage == 0) {
-        QuMsgBox box(this, tr("是否升级系统?"));
+        QuMsgBox box(NULL, tr("是否升级系统?"));
         if(box.Exec()) {
             bool ret = update_fun("sda");
             if(!ret) ret = update_fun("sda1");
             if(!ret) ret = update_fun("sda2");
             if(!ret) ret = update_fun("mmcblk0p1");
             if(!ret)
-                CriticalMsgBox box(this, tr("升级文件未找到！\n 请插入U盘，把升级文件放入upgrade目录下!"));
+                CriticalMsgBox box(NULL, tr("升级文件未找到！\n 请插入U盘，把升级文件放入upgrade目录下!"));
         }
     }else{
-        QuMsgBox box(this, tr("Whether to upgrade the system?"));
+        QuMsgBox box(NULL, tr("Whether to upgrade the system?"));
         if(box.Exec()) {
             bool ret = update_fun("sda");
             if(!ret) ret = update_fun("sda1");
             if(!ret) ret = update_fun("sda2");
             if(!ret) ret = update_fun("mmcblk0p1");
             if(!ret)
-                CriticalMsgBox box(this, tr("Upgrade file not found！\n Please insert a USB drive and place the upgrade files in the upgrade directory!"));
+                CriticalMsgBox box(NULL, tr("Upgrade file not found！\n Please insert a USB drive and place the upgrade files in the upgrade directory!"));
         }
     }
 }
 
 void OtherSettingDlg::on_resetBtn_clicked()
 {
-    BeepThread::bulid()->beep();bool ret;
-    if(gLanguage == 0) ret = MsgBox::question(this, tr("是否重启系统?"));
-    else ret = MsgBox::question(this, tr("Do you want to restart the system?"));
-    if(ret) {
-        system("reboot");
+    BeepThread::bulid()->beep();
+    if(gLanguage == 0){
+        QuMsgBox box(NULL, tr("是否重启系统?"));
+        if(box.Exec()) {
+            system("reboot");
+        }
     }
+    else{
+        QuMsgBox box(NULL, tr("Do you want to restart the system?"));
+        if(box.Exec()) {
+            system("reboot");
+        }
+    }
+
 }
 
 void OtherSettingDlg::on_timeSetBtn_clicked()
@@ -165,6 +173,7 @@ void OtherSettingDlg::on_pwdSetBtn_clicked()
 {
     BeepThread::bulid()->beep();
     PassordSettingDlg *passwordDlg = new PassordSettingDlg(this);
+    passwordDlg->setWindowModality(Qt::WindowModal);
     passwordDlg->show();
     passwordDlg->move(0,0);
 }
@@ -173,6 +182,7 @@ void OtherSettingDlg::on_languageBtn_clicked()
 {
     BeepThread::bulid()->beep();
     mlanguage = new Languagesetting(this);
+    mlanguage->setWindowModality(Qt::WindowModal);
     mlanguage->show();
     mlanguage->move(368,222);
 }
