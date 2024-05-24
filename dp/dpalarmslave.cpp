@@ -97,7 +97,6 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, sDataUnit &unit, do
     for(int i=0; i<line; ++i)
     {
         QString str=msg, tempStr = typeStr;
-        unit.alarm[i] = 1;
         if(unit.alarm[i])
         {
             if(gLanguage == 0){
@@ -149,7 +148,6 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, sDataPowUnit &unit,
     for(int i=0; i<3; ++i)
     {
         QString str=msg, tempStr = typeStr;
-        unit.alarm[i] = 1;
         if(unit.alarm[i])
         {
             if(gLanguage == 0){
@@ -213,7 +211,6 @@ void DpAlarmSlave::unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg, sD
         }
         //---------------------------------------------------
         QString str=msg, tempStr = typeStr;
-        unit.alarm[i] = 1;
         if(unit.alarm[i])
         {
             if(gLanguage == 0){
@@ -276,7 +273,6 @@ void DpAlarmSlave::unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, sDa
             alarmStr = "D" + QString("%1").arg(id+1);
         }
         //---------------------------------------------------
-        unit.alarm[i] = 1;
         QString str=msg, tempStr = typeStr;
         if(unit.alarm[i])
         {
@@ -440,7 +436,6 @@ void DpAlarmSlave::busAlarm(int id)
         }
     }
     //--------------------------------------------------
-    busBox->offLine = 1; busBox->boxAlarm = 1; busBox->boxCurAlarm = 1;
     if(gLanguage == 0){
         if(busBox->offLine){
             if(busBox->boxAlarm) {
