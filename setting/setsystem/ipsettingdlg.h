@@ -18,7 +18,7 @@ public:
     explicit IpSettingDlg(QWidget *parent = 0,int index = 1);
     ~IpSettingDlg();
     void initData(int index);
-
+    QString returnIp();
 protected:
     bool ipCheck(const QString& isAddress);
     bool ipSubnetMashValid(const QString& subnetMask);

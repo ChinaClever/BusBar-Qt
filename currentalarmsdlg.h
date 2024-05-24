@@ -5,6 +5,8 @@
 //#include <QScrollBar>
 //#include <QPropertyAnimation>
 //#include <QDateTime>
+#include <QObject>
+#include <QtCore>
 
 namespace Ui {
 class CurrentAlarmsDlg;

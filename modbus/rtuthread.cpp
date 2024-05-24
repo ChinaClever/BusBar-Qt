@@ -545,6 +545,7 @@ void RtuThread::initData(sBoxData *box, Rtu_recv *pkt)
     box->isd = pkt->isd;
     box->reState = pkt->reState;
     box->boxType = pkt->boxType;
+    box->phaseFlag = pkt->phaseFlag;
 }
 
 void RtuThread::readLocalTemHum()

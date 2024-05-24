@@ -10,7 +10,6 @@ class DpAlarmSlave : public QThread
 public:
     explicit DpAlarmSlave(QObject *parent = 0);
     ~DpAlarmSlave();
-
 signals:
 
 protected:
@@ -39,4 +38,5 @@ private:
 
 QString get_email_str();
 QStringList get_alarm_str();
+QStringList get_alarm_json();
 #endif // DPALARMSLAVE_H

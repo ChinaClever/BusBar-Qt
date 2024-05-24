@@ -9,6 +9,7 @@
 //#include "snmp/snmpthread.h"
 #include "mbs/mb_core.h"
 #include "modbus/thirdthread.h"
+#include "json_send.h"
 
 RtuThread *rtu[4] = {NULL, NULL, NULL, NULL};
 ThirdThread *thr = NULL;
@@ -30,7 +31,6 @@ MainWindow::MainWindow(QWidget *parent) :
     mIndex = 0;
     initWidget();
     updateTime();
-
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
     on_comboBox_currentIndexChanged(0);
     //BeepThread::bulid()->longBeep(); // 线程 -- 'bi~'
@@ -80,6 +80,7 @@ void MainWindow::initSerial()
 #endif
 
     Mb_Core::build(this);//////
+    Json_Send::bulid(this);
 //    rtu[4] = new RtuThread(this);
 //    rtu[4]->init(SERIAL_COM5, 1);
 }
@@ -155,6 +156,7 @@ void MainWindow::initFunSLot()
     initSerial(); //串口
     new DpThread(this); // 创建数据处理线程
     updateTime();
+
 
     timer = new QTimer(this);
     timer->start(1000);

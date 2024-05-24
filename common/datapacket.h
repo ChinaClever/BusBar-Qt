@@ -164,6 +164,7 @@ typedef struct _sBoxData {
     uchar buzzerStatus;//蜂鸣器
     uchar reState;
     uchar boxType;//盒子类型：0-插接箱，1-温度模块
+    uchar phaseFlag;//0-单相，1-三相
     unsigned long long totalApPow;//   总视在功率
 
     sObjData data; // 回路数据
@@ -225,9 +226,10 @@ typedef struct _sDataPacket
 struct sProgress
 {
     QString addr;
+    QString dev_ip;
     QString datetime;
-    int bus_insert[BUS_NUM][BOX_NUM+1];
-    int bus_start;
+    int bus_id[BUS_NUM][BOX_NUM+1];
+    int status;
 };
 
 

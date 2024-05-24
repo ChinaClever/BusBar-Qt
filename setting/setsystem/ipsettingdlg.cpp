@@ -195,7 +195,12 @@ void IpSettingDlg::on_saveBtn_clicked()
     }
 
 }
+QString IpSettingDlg::returnIp()
+{
+    QString ip = ui->IPlineEdit->text();
 
+    return ip;
+}
 void IpSettingDlg::on_cancelBtn_clicked()
 {
     if( 1 == this->m_index ) emit sendCloseDlgSig1();
