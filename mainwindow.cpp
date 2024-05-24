@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
     on_comboBox_currentIndexChanged(0);
     //BeepThread::bulid()->longBeep(); // 线程 -- 'bi~'
-    //count = 0;
+//    count = 0;
 
     for(int i=0; i < 4; i++) rtu[i] = NULL;
 }
@@ -131,7 +131,7 @@ void MainWindow::setBusName(int index)
     mIndex = index;
 
     //ui->ratedLab->setText("V3.0.4_T03/27");
-    ui->ratedLab->setText("V3.0.5");
+    ui->ratedLab->setText("V3.0.5.009");
 }
 
 void MainWindow::checkAlarm()
@@ -196,13 +196,13 @@ void MainWindow::initLable()
 {
     if(gLanguage == 0){
         ui->homeLabBtn->setText("主界面");
-        ui->lineLabBtn->setText("主路信息");
-        ui->branchLabBtn->setText("支路信息");
-        ui->logLabBtn->setText("数据记录");
-        ui->setLabBtn->setText("参数设置");
+        ui->lineLabBtn->setText("主路\n信息");
+        ui->branchLabBtn->setText("支路\n信息");
+        ui->logLabBtn->setText("数据\n记录");
+        ui->setLabBtn->setText("参数\n设置");
     }else{
         ui->homeLabBtn->setText("Main\ninterface");
-        ui->lineLabBtn->setText("Main rode\ninformation");
+        ui->lineLabBtn->setText("Input\ninformation");
         ui->branchLabBtn->setText("Branch\ninformation");
         ui->logLabBtn->setText("Data\nrecord");
         ui->setLabBtn->setText("Parameter\nsetting");
@@ -283,8 +283,9 @@ void MainWindow::on_setBtn_clicked()
 {
     if(ui->stackedWid->currentWidget() != mSettingWid) {
         BeepThread::bulid()->beep();
-        mCheckDlg->exec();
+        mCheckDlg->clear();
         mCheckDlg->move(0,0);
+        mCheckDlg->exec();
     }
 }
 
@@ -325,16 +326,15 @@ void MainWindow::initBackground()
 
 void MainWindow::dialogClosed(bool ret)
 {
-    if(ret)
-    {
+    if(ret){
         ui->stackedWid->setCurrentWidget(mSettingWid);
         setButtonClickedImage(ui->setBtn,"setting_select");
         InterfaceChangeSig::get()->changeType(5);
     }
     else{
         if(gLanguage == 0) QMessageBox::information(this,"information","对不起，密码输入不正确，您不具备该权限！","确认");
-        else QMessageBox::information(this,"information","Sorry,the passward entered is incorrect.You do not have the permission！","Confirm");}
-    mCheckDlg->clear();
+        else QMessageBox::information(this,"information","Sorry,the passward entered is incorrect.You do not have the permission！","Confirm");
+    }
 }
 
 void MainWindow::on_timeBtn_clicked()

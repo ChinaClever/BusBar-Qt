@@ -25,21 +25,33 @@ Languagesetting::~Languagesetting()
 void Languagesetting::init()
 {
     ui->comboBox->setCurrentIndex(gLanguage);
-    if(gLanguage == 0) ui->comboBox->setItemText(0,"中文简体");
-    else ui->comboBox->setItemText(0,"Chinese");
+    if(gLanguage == 0){
+        ui->quitBtn->setText(tr("退出"));
+        ui->confirmBtn->setText(tr("确定"));
+        ui->comboBox->setItemText(0,"中文简体");
+    }
+    else{
+        ui->quitBtn->setText(tr("Quit"));
+        ui->confirmBtn->setText(tr("Confirm"));
+        ui->comboBox->setItemText(0,"Chinese");
+    }
 }
-void Languagesetting::on_pushButton_clicked()
+void Languagesetting::on_quitBtn_clicked()
 {
     this->close();
 }
 
-void Languagesetting::on_pushButton_2_clicked()
+void Languagesetting::on_confirmBtn_clicked()
 {
-    bool ret = true;
-    if(gLanguage == 0) ret = MsgBox::question(this, tr("是否重启系统?"));
-    else ret = MsgBox::question(this, tr("Do you want to restart the system?"));
-    if(ret) {
-        sys_configFile_writeParam("language",QString::number(ui->comboBox->currentIndex()));
-        system("reboot");
+    if( gLanguage != ui->comboBox->currentIndex() ){
+        bool ret = true;
+        if(gLanguage == 0) ret = MsgBox::question(NULL, tr("是否重启系统?"));
+        else ret = MsgBox::question(NULL, tr("Do you want to restart the system?"));
+        if(ret) {
+            sys_configFile_writeParam("language",QString::number(ui->comboBox->currentIndex()));
+            system("reboot");
+        }
+    }else{
+        this->close();
     }
 }

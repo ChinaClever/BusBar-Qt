@@ -9,16 +9,18 @@ frmInput::frmInput(QWidget *parent) :
     ui(new Ui::frmInput)
 {
     ui->setupUi(this);
-    initLanguage();
+
     this->InitProperty();
     this->InitForm();
     this->ChangeStyle();
+    initLanguage();
 }
 
 frmInput::~frmInput()
 {
     delete ui;
 }
+
 void frmInput::initLanguage()
 {
     if(gLanguage == 0){
@@ -29,6 +31,7 @@ void frmInput::initLanguage()
         ui->btnClose->setText("Close");
     }
 }
+
 void frmInput::Init(QString position, QString style, int btnFontSize, int labFontSize)
 {
     this->currentPosition = position;
@@ -485,9 +488,10 @@ void frmInput::changeType(QString type)
         changeLetter(true);
         if(gLanguage == 0) {ui->btnType->setText("大写");
             ui->labInfo->setText("输入法--大写");}
-        else {ui->btnType->setText("Capital");
+        else {ui->btnType->setText("Upper case");
             ui->labInfo->setText("Input method--Uppercase");
         }
+        initLanguage();
         ui->btnOther12->setText("/");
         ui->btnOther14->setText(":");
         ui->btnOther17->setText(",");
@@ -500,25 +504,28 @@ void frmInput::changeType(QString type)
         else {ui->btnType->setText("Lower case");
             ui->labInfo->setText("Input method--Lowercase");
         }
+        initLanguage();
         ui->btnOther12->setText("/");
         ui->btnOther14->setText(":");
         ui->btnOther17->setText(",");
         ui->btnOther18->setText("\\");
         ui->btnOther21->setText("\"");
-    } else {
-        changeLetter(false);
-        if(gLanguage == 0) {ui->btnType->setText("中文");
-            ui->labInfo->setText("输入法--中文");}
-        else {ui->btnType->setText("Chinese");
-            ui->labInfo->setText("Input method--Chinese");}
-        ui->btnOther12->setText("。");
-        ui->btnOther14->setText("：");
-        ui->btnOther17->setText("，");
-        ui->btnOther18->setText("；");
-        ui->btnOther21->setText("“");
     }
-    //每次切换到模式,都要执行清空之前中文模式下的信息
-    clearChinese();
+//    else {
+//        changeLetter(false);
+//        if(gLanguage == 0) {ui->btnType->setText("中文");
+//            ui->labInfo->setText("输入法--中文");}
+//        else {ui->btnType->setText("Chinese");
+//            ui->labInfo->setText("Input method--Chinese");}
+//        initLanguage();
+//        ui->btnOther12->setText("。");
+//        ui->btnOther14->setText("：");
+//        ui->btnOther17->setText("，");
+//        ui->btnOther18->setText("；");
+//        ui->btnOther21->setText("“");
+//    }
+//    //每次切换到模式,都要执行清空之前中文模式下的信息
+//    clearChinese();
     ui->labPY->setText("");
 }
 
@@ -593,25 +600,27 @@ void frmInput::btn_clicked()
         if (currentType == "min") {
             currentType = "max";
         } else if (currentType == "max") {
-            currentType = "chinese";
-        } else if (currentType == "chinese") {
-            currentType = "min";
+//            currentType = "chinese";
+              currentType = "min";
         }
+//        else if (currentType == "chinese") {
+//            currentType = "min";
+//        }
         changeType(currentType);
     } else if (objectName == "btnDelete") {
         //如果当前是中文模式,则删除对应拼音,删除完拼音之后再删除对应文本输入框的内容
-        if (currentType == "chinese") {
-            QString txt = ui->labPY->text();
-            int len = txt.length();
-            if (len > 0) {
-                ui->labPY->setText(txt.left(len - 1));
-                selectChinese();
-            } else {
-                deleteValue();
-            }
-        } else {
+//        if (currentType == "chinese") {
+//            QString txt = ui->labPY->text();
+//            int len = txt.length();
+//            if (len > 0) {
+//                ui->labPY->setText(txt.left(len - 1));
+//                selectChinese();
+//            } else {
+//                deleteValue();
+//            }
+//        } else {
             deleteValue();
-        }
+//        }
     } else if (objectName == "btnPre") {
         if (currentPY_index >= 20) {
             //每次最多显示10个汉字,所以每次向前的时候索引要减20
@@ -731,13 +740,13 @@ void frmInput::deleteValue()
 
 void frmInput::setChinese(int index)
 {
-    int count = currentPY.count();
-    if (count > index) {
-        insertValue(currentPY[index]);
-        //添加完一个汉字后,清空当前汉字信息,等待重新输入
-        clearChinese();
-        ui->labPY->setText("");
-    }
+//    int count = currentPY.count();
+//    if (count > index) {
+//        insertValue(currentPY[index]);
+//        //添加完一个汉字后,清空当前汉字信息,等待重新输入
+//        clearChinese();
+//        ui->labPY->setText("");
+//    }
 }
 
 void frmInput::clearChinese()

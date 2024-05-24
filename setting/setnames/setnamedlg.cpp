@@ -18,12 +18,14 @@ SetNameDlg::SetNameDlg(QWidget *parent) :
         ui->label_3->setText("名称");
         ui->saveBtn->setText("保存");
         ui->cancelBtn->setText("取消");
+        ui->checkBox->setText("递增");
     }else {com_setBackColour(tr("Settings interface"), this);
         ui->label->setText("Name modification");
         ui->label_2->setText("Modify");
         ui->label_3->setText("Name");
         ui->saveBtn->setText("Save");
         ui->cancelBtn->setText("Cancel");
+        ui->checkBox->setText("Increment");
     }
 }
 
@@ -38,6 +40,11 @@ void SetNameDlg::init(int bus, int box, int loop, const QString &name)
     mBox = box;
     mLoop = loop;
     ui->nameLab->setText(name);
+    if(box == 1 && loop == 0){
+        ui->checkBox->show();
+    }else{
+        ui->checkBox->hide();
+    }
 }
 
 bool SetNameDlg::saveToDev()
@@ -73,6 +80,14 @@ bool SetNameDlg::save()
     item.type = type;
     item.num = num;
     item.name = ui->nameEdit->text();
+    item.increment = 0;
+    if(ui->checkBox->isChecked()) item.increment = 1;
+    const char *temp = item.name.right(1).toLatin1().data();
+    if(((*temp)<'0'||(*temp)>'9') && ui->checkBox->isChecked() && 1 == item.num && 2 == item.type){
+        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("名称最后字符不是数字，请重新输入或者是不选择自递增!!"));
+        else CriticalMsgBox box(NULL, tr("The last character of the name is not a number.\nPlease re-enter or do not select auto-increment!!"));
+        return false;
+    }
     shm.setName(item);
     return true;
 }
@@ -81,14 +96,18 @@ void SetNameDlg::on_saveBtn_clicked()
 {
     QString str = ui->nameEdit->text();
     if(!str.isEmpty()) {
-        if(save())
-        {
-            BeepThread::bulid()->beep();
-            close();
+        if(!(str.size() > NAME_LEN - 2)){
+            if(save()){
+                BeepThread::bulid()->beep();
+                close();
+            }
+        } else {
+            if(gLanguage == 0) CriticalMsgBox box(NULL, tr("名称不能超过30个字符!!"));
+            else CriticalMsgBox box(NULL, tr("Name cannot exceed 30 characters!!"));
         }
     } else {
-        if(gLanguage == 0) CriticalMsgBox box(this, tr("名称不能为空!!"));
-        else CriticalMsgBox box(this, tr("Name cannot be empty!!"));
+        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("名称不能为空!!"));
+        else CriticalMsgBox box(NULL, tr("Name cannot be empty!!"));
     }
 }
 

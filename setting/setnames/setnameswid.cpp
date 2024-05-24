@@ -8,6 +8,8 @@ SetNamesWid::SetNamesWid(QWidget *parent) :
     ui(new Ui::SetNamesWid)
 {
     ui->setupUi(this);
+    ui->rateCurSpin->hide();
+    ui->label_2->hide();
     mIndex = 0;
     mSetShm = new SetShm;
     mSetNameDlg = new SetNameDlg(this);
@@ -116,6 +118,8 @@ void SetNamesWid::interfaceChangedSlot(int id)
 void SetNamesWid::initFunSLot()
 {
     indexChanged(mIndex);
+//    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:30px;}");
+//    ui->tableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{height:30px;}");
     mTimer = new QTimer(this);
     mTimer->start(3*1000);
     connect(mTimer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
@@ -135,12 +139,12 @@ void SetNamesWid::initTableWidget()
     if(gLanguage == 0){ui->label->setText("母线名称");ui->label_2->setText("额定电流");
         ui->label_3->setText("插接箱数量");ui->saveBtn->setText("保存");
     }else{ui->label->setText("Busbar name");ui->label_2->setText("Rated current");
-        ui->label_3->setText("Number of plug-in boxes");ui->saveBtn->setText("Save");
+        ui->label_3->setText("Number of tap-off boxes");ui->saveBtn->setText("Save");
     }
 
     QStringList horHead;
     if(gLanguage == 0) horHead<< tr("插接箱");
-    else horHead<< tr("Plug box");
+    else horHead<< tr("Tap-off box");
 
     int dc = mPacket ? mPacket->box[0].dc : 1;
     if(dc){ //交流9个
@@ -160,8 +164,7 @@ void SetNamesWid::initTableWidget()
 
 //    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 //    ui->tableWidget->verticalHeader()->setDefaultSectionSize(45);
-    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
-    ui->tableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{height:35px;}");
+
     //    ui->tableWidget->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
     connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
 }
@@ -270,10 +273,11 @@ void SetNamesWid::itemDoubleClicked(QTableWidgetItem *item)
 {
     if(item->text().compare("---") == 0) return;  //为空不设置
     disconnect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
-    int boxNum = item->row() + 1 ;
+    int boxNum = item->row() + 1;
     int column = item->column();
 
     mSetNameDlg->init(mIndex, boxNum, column, item->text());
+    mSetNameDlg->setWindowModality(Qt::WindowModal);
     mSetNameDlg->show();
     mSetNameDlg->move(0,0);
 
@@ -308,22 +312,29 @@ bool SetNamesWid::saveBusName()
     item.type = 1; // 名称类型 1 母线名称   2 插接箱名称  3 回路名称
     item.num = 0; // 编号
     QString name = ui->nameEdit->text();
-    if( (!name.isEmpty()) && (!(name.size() > NAME_LEN))) {
-        item.name = name;
-        mSetShm->setName(item);
+    if( (!name.isEmpty()) ) {
+        if(!(name.size() > NAME_LEN - 2)){
+            item.name = name;
+            mSetShm->setName(item);
+            emit updateBusNameSig(mIndex , name);
+        }else{
+            if(gLanguage == 0) CriticalMsgBox box(NULL, tr("母线名称不能超过30个字符保存失败!!"));
+            else CriticalMsgBox box(NULL, tr("Busbar name cannot exceed 30 characters, saving failed!!"));
+            ret = false;
+        }
     }else {
-        if(gLanguage == 0) CriticalMsgBox box(this, tr("母线名称保存失败!!"));
-        else CriticalMsgBox box(this, tr("Busbar name save failed!!"));
+        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("母线名称不能为空保存失败!!"));
+        else CriticalMsgBox box(NULL, tr("Busbar name cannot be empty, saving failed!!"));
         ret = false;
     }
     if(ui->boxNumSpin->value() < 0 || ui->boxNumSpin->value() > 18){
-        if(gLanguage == 0) CriticalMsgBox box(this, tr("个数应在0-18!!"));
-        else CriticalMsgBox box(this, tr("The number should be between 0-18!!"));
+        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("个数应在0-18!!"));
+        else CriticalMsgBox box(NULL, tr("The number should be between 0-18!!"));
         ret = false;
     }
     if(ui->rateCurSpin->value() < 100 || ui->rateCurSpin->value() > 1200){
-        if(gLanguage == 0) CriticalMsgBox box(this, tr("额定电流应在100-1200!!"));
-        else CriticalMsgBox box(this, tr("The rated current should be between 100-1200!!"));
+        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("额定电流应在100-1200!!"));
+        else CriticalMsgBox box(NULL, tr("The rated current should be between 100-1200!!"));
         ret = false;
     }
     return ret;
@@ -339,8 +350,8 @@ void SetNamesWid::on_saveBtn_clicked()
         updateWid();                               //2018-12-17保存插接箱数量的同时，更新名称设置列表 pmd
 
         BeepThread::bulid()->beep();
-        if(gLanguage == 0) InfoMsgBox box(this, tr("保存成功！"));
-        else InfoMsgBox box(this, tr("Save successfully！"));
+        if(gLanguage == 0) InfoMsgBox box(NULL, tr("保存成功！"));
+        else InfoMsgBox box(NULL, tr("Save successfully！"));
     }
 }
 

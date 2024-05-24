@@ -94,39 +94,39 @@ bool LogExportModelDlg::checkInput()
 {
     QString str = ui->pathEdit->text();
     if(str.isEmpty()) {
-        if(gLanguage == 0) CriticalMsgBox box(this, tr("导出路径不能为空！"));
-        else CriticalMsgBox box(this, tr("Export path cannot be empty！"));
+        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("导出路径不能为空！"));
+        else CriticalMsgBox box(NULL, tr("Export path cannot be empty！"));
         return false;
     }
 
     str = ui->fileEdit->text();
     if(str.isEmpty()) {
-        if(gLanguage == 0) CriticalMsgBox box(this, tr("导出文件名不能为空！"));
-        else CriticalMsgBox box(this, tr("The export file name cannot be empty！"));
+        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("导出文件名不能为空！"));
+        else CriticalMsgBox box(NULL, tr("The export file name cannot be empty！"));
         return false;
     }
 
     str = ui->pathEdit->text() + ui->fileEdit->text() +".csv";
     QFile file(str);
     if (file.exists()){
-        if(gLanguage == 0) CriticalMsgBox box(this, str + tr("\n文件已存在！!"));
-        else CriticalMsgBox box(this, str + tr("\nFile already exists！!"));
+        if(gLanguage == 0) CriticalMsgBox box(NULL, str + tr("\n文件已存在！!"));
+        else CriticalMsgBox box(NULL, str + tr("\nFile already exists！!"));
         return false;
     }
 
     str = ui->pathEdit->text() + ui->fileEdit->text() +".txt";
     QFile file1(str);
     if (file1.exists()){
-        if(gLanguage == 0) CriticalMsgBox box(this, str + tr("\n文件已存在！!"));
-        else CriticalMsgBox box(this, str + tr("\nFile already exists！!"));
+        if(gLanguage == 0) CriticalMsgBox box(NULL, str + tr("\n文件已存在！!"));
+        else CriticalMsgBox box(NULL, str + tr("\nFile already exists！!"));
         return false;
     }
 
     QDate startDate = ui->startDateEdit->date();
     QDate endDate = ui->endDateEdit->date();
     if(startDate > endDate) {
-        if(gLanguage == 0) CriticalMsgBox box(this, tr("开始日期应早于结束日期，请重新输入日期！"));
-        else CriticalMsgBox box(this, tr("Start date should be before end date,please re-enter the date！"));
+        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("开始日期应早于结束日期，请重新输入日期！"));
+        else CriticalMsgBox box(NULL, tr("Start date should be before end date,please re-enter the date！"));
         return false;
     }
 
@@ -182,7 +182,7 @@ void LogExportModelDlg::on_pushButton_clicked()
 {
     BeepThread::bulid()->beep();QFileDialog dlg;
     if(gLanguage == 0) {
-        QFileDialog dlg(this,tr("路径选择"));
+        QFileDialog dlg(NULL,tr("路径选择"));
         dlg.setFileMode(QFileDialog::DirectoryOnly);
         QString filepath = "/run/media/sda";
         QDir directory(filepath);
@@ -203,7 +203,7 @@ void LogExportModelDlg::on_pushButton_clicked()
             ui->pathEdit->setText(fileNames.at(0) + "/");
         }
     }else{
-        QFileDialog dlg(this,tr("Path selection"));
+        QFileDialog dlg(NULL,tr("Path selection"));
         dlg.setFileMode(QFileDialog::DirectoryOnly);
         QString filepath = "/run/media/sda";
         QDir directory(filepath);

@@ -40,6 +40,7 @@ QString cm_pathOfData(const QString& name);
 bool cm_isDigitStr(const QString &src);
 bool cm_isIPaddress(const QString& ip);
 QString getPassword();
+bool resetPassword();
 int getBoxNum(int index);
 int getRateCur(int index);
 void mdelay(int msec);

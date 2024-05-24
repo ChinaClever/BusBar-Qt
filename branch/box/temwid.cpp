@@ -6,9 +6,10 @@ TemWid::TemWid(QWidget *parent) :
     ui(new Ui::TemWid)
 {
     ui->setupUi(this);
-    if(gLanguage == 0){com_setBackColour(tr("温度"), this); ui->label->setText("版本号：");}
-    else{com_setBackColour(tr("Temperature"), this); ui->label->setText("Version:");}
+    if(gLanguage == 0){com_setBackColour(tr("温度"), this); ui->label->setText("温度模块\n版本号：");}
+    else{com_setBackColour(tr("Temperature"), this); ui->label->setText("Temperature module version:");}
 }
+
 TemWid::~TemWid()
 {
     delete ui;

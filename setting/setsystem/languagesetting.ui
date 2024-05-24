@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>297</width>
+    <width>300</width>
     <height>140</height>
    </rect>
   </property>
@@ -104,21 +104,23 @@ image: url(:/new/prefix1/image/down.png);
     </property>
    </item>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="quitBtn">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>90</y>
-     <width>61</width>
+     <width>100</width>
      <height>50</height>
     </rect>
    </property>
-   <property name="text">
-    <string/>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
+border:2px solid rgb(15,80,232);
+border-radius:15px
+}</string>
    </property>
-   <property name="icon">
-    <iconset resource="../../images.qrc">
-     <normaloff>:/new/prefix1/image/number/delete.png</normaloff>:/new/prefix1/image/number/delete.png</iconset>
+   <property name="text">
+    <string>退出</string>
    </property>
    <property name="iconSize">
     <size>
@@ -133,24 +135,26 @@ image: url(:/new/prefix1/image/down.png);
     <bool>false</bool>
    </property>
    <property name="flat">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="confirmBtn">
    <property name="geometry">
     <rect>
-     <x>239</x>
+     <x>200</x>
      <y>90</y>
-     <width>61</width>
+     <width>100</width>
      <height>50</height>
     </rect>
    </property>
-   <property name="text">
-    <string/>
+   <property name="styleSheet">
+    <string notr="true">QPushButton{
+border:2px solid rgb(15,80,232);
+border-radius:15px
+}</string>
    </property>
-   <property name="icon">
-    <iconset resource="../../images.qrc">
-     <normaloff>:/new/prefix1/image/confirm.png</normaloff>:/new/prefix1/image/confirm.png</iconset>
+   <property name="text">
+    <string>确定</string>
    </property>
    <property name="iconSize">
     <size>
@@ -162,12 +166,10 @@ image: url(:/new/prefix1/image/down.png);
     <bool>true</bool>
    </property>
    <property name="flat">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
   </widget>
  </widget>
- <resources>
-  <include location="../../images.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

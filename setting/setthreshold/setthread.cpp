@@ -45,7 +45,7 @@ void SetThread::workDown()
 //            }
         }
 
-        mSetShm->setItem(item);
+        //mSetShm->setItem(item);
         mItems.removeFirst();
         sleep(1);
         gReadWriteflag = 1;

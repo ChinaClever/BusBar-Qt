@@ -50,20 +50,20 @@ void SetLineTem::initLanguae()
             hideWid();
         }
     }else{
-        ui->label_4->setText("Start box:");
-        ui->label_5->setText("Zero line\ntemperature:");
+        ui->label_4->setText("Feeder\nbox:");
+        ui->label_5->setText("Neutral line\ntemperature:");
 //        ui->label_6->setText(tr("Environmental\nparameters:"));
         ui->label_7->setText(tr("Temperature:"));
-        ui->label_8->setText("humidity:");
+        ui->label_8->setText("Humidity:");
         if(mFlag){
-            ui->label->setText(tr("A-phase\nTemperature:"));
-            ui->label_2->setText(tr("B-phase\nTemperature:"));
-            ui->label_3->setText(tr("C-phase\nTemperature:"));
+            ui->label->setText(tr("Phase A\nTemperature:"));
+            ui->label_2->setText(tr("Phase B\nTemperature:"));
+            ui->label_3->setText(tr("phase C\nTemperature:"));
             showWid();
         }else{
-            ui->label->setText(tr("A-phase\nPower:"));
-            ui->label_2->setText(tr("B-phase\nPower:"));
-            ui->label_3->setText(tr("C-phase\nPower:"));
+            ui->label->setText(tr("Phase A\nPower:"));
+            ui->label_2->setText(tr("Phase B\nPower:"));
+            ui->label_3->setText(tr("Phase C\nPower:"));
             hideWid();
         }
     }

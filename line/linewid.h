@@ -32,6 +32,7 @@ protected:
     void updateAlarmStatus(QLabel *lab, sDataUnit &unit , int id);
     void setLabeColor(QLabel *label, int alarm, int crAlarm);
     void updateTem();
+    void updateBreak();
     void initLanguage();
 protected slots:
     void timeoutDone();

@@ -128,8 +128,8 @@ void LogBranchEleWid::initFunSLot()
 
 //    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 //    ui->tableView->verticalHeader()->setDefaultSectionSize(45);
-    ui->tableView->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
-    ui->tableView->horizontalScrollBar()->setStyleSheet("QScrollBar{height:35px;}");
+    ui->tableView->verticalScrollBar()->setStyleSheet("QScrollBar{width:30px;}");
+    ui->tableView->horizontalScrollBar()->setStyleSheet("QScrollBar{height:30px;}");
 
     initBtnBar();
     initTableSlot(0);
@@ -182,7 +182,7 @@ void LogBranchEleWid::initTableSlot(int id)
     this->refreshTable(m_table);
 
     if(gLanguage == 0) mHeadList << tr("编号") << tr("日期") << tr("时间") << tr("插接箱");
-    else  mHeadList << tr("NO.") << tr("Date") << tr("Time") << tr("Plug box");
+    else  mHeadList << tr("NO.") << tr("Date") << tr("Time") << tr("Tap-off box");
     /* for(int i=0; i<9; ++i)
         mHeadList << "L" + QString::number(i+1);*/
     //--------------------[由于界面不好修改——By_MW 2018.3.21]-----------
@@ -238,7 +238,7 @@ void LogBranchEleWid::doubleSlot(QModelIndex)
     QString str;
     if(gLanguage == 0) str = tr("是否删除这条记录?");
     else str = tr("Do you want to delete this record?");
-    QuMsgBox box(this, str);
+    QuMsgBox box(NULL, str);
     bool ret = box.Exec();
     if(ret)
     {

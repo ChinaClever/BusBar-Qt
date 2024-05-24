@@ -65,7 +65,7 @@ bool LogBranchEleExportThread::readDb()
     } else {
         ret = false;
         if(gLanguage == 0) msg = tr("没有记录数据，无法导出!!");
-        else msg = tr("NO recorded data,unable to export!!");
+        else msg = tr("No recorded data,unable to export!!");
     }
     emit readDbSig(msg);
 

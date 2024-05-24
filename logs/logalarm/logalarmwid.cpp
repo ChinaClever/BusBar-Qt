@@ -128,8 +128,8 @@ void LogAlarmWid::initFunSLot()
 
 //    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 //    ui->tableView->verticalHeader()->setDefaultSectionSize(45);
-    ui->tableView->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
-    ui->tableView->horizontalScrollBar()->setStyleSheet("QScrollBar{height:35px;}");
+    ui->tableView->verticalScrollBar()->setStyleSheet("QScrollBar{width:30px;}");
+    ui->tableView->horizontalScrollBar()->setStyleSheet("QScrollBar{height:30px;}");
 
     initBtnBar(); // 切换
     initTableSlot(0);
@@ -207,7 +207,7 @@ void LogAlarmWid::doubleSlot(QModelIndex)
     QString str;
     if(gLanguage == 0) str= tr("是否删除这条记录?");
     else str= tr("Do you want to delete this record?");
-    QuMsgBox box(this, str);
+    QuMsgBox box(NULL, str);//传入NULL才可以禁止操作其他界面，如果传入this还可以操作其他界面
     bool ret = box.Exec();
     if(ret)
     {

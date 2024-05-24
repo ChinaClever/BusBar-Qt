@@ -26,7 +26,7 @@ void IpSettingDlg::initLanguage()
         ui->label_3->setText("网关:");
         ui->label_4->setText("DNS:");
         ui->saveBtn->setText("保存");
-        ui->cancelBtn->setText("取消");
+        ui->cancelBtn->setText("退出");
     }
     else{
         ui->groupBox->setTitle("Net1 settings");
@@ -35,7 +35,7 @@ void IpSettingDlg::initLanguage()
         ui->label_3->setText("Gateway:");
         ui->label_4->setText("DNS:");
         ui->saveBtn->setText("Save");
-        ui->cancelBtn->setText("Cancel");
+        ui->cancelBtn->setText("Quit");
     }
 }
 
@@ -172,7 +172,7 @@ bool IpSettingDlg::check(const QString& ip , const QString& netmask ,const QStri
             ret = false;
         }
     }
-    return MsgBox::question(this, str)&&ret;
+    return MsgBox::question(NULL, str)&&ret;
 }
 
 void IpSettingDlg::on_saveBtn_clicked()

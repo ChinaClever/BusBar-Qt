@@ -162,13 +162,31 @@ QString getPassword()
     QString passpord = "";
 
     bool ret = sys_configFile_open();  //打开配置文件
-    if(ret)
-    {
+    if(ret){
         passpord = sys_configFile_readStr("password");
         sys_configFile_close();
     }
 
     return passpord;
+}
+
+/**
+ * @brief resetPassword 置空系统密码
+ * @return
+ */
+bool resetPassword()
+{
+    bool ret = sys_configFile_open();  //打开配置文件
+    if(ret){
+        ret = sys_configFile_contains("password");
+        if(ret){
+            sys_configFile_writeParam("password" , "");
+        }
+
+        sys_configFile_close();
+    }
+
+    return ret;
 }
 
 /**
@@ -211,5 +229,5 @@ void hexToStr(char * buf , int rtn , QString str)
     strArray = array.toHex(); // 十六进制
     for(int i=0; i<array.size(); ++i)
         strArray.insert(2+3*i, " "); // 插入空格
-    qDebug()<<str << strArray<<"rtn  "<<rtn;
+//    qDebug()<<str << strArray<<"rtn  "<<rtn;
 }

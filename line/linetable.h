@@ -13,7 +13,7 @@ public:
     void updateData(sBoxData &box);
 protected:
     void initWid();
-    int updateObj(sObjData &obj, int row);
+    int updateObj(sObjData &obj, sEnvData &env, int row, uchar offline);
 
 signals:
 

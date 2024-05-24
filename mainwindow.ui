@@ -638,22 +638,22 @@ color: rgb(255, 255, 255);</string>
        </property>
        <item>
         <property name="text">
-         <string>01 主路源</string>
+         <string>01 BUSBAR</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>02 主路源</string>
+         <string>02 BUSBAR</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>03 主路源</string>
+         <string>03 BUSBAR</string>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>04 主路源</string>
+         <string>04 BUSBAR</string>
         </property>
        </item>
       </widget>

@@ -126,8 +126,8 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, sDataUnit &unit, do
                         .arg(unit.crMin[i]/rate).arg(sym)
                         .arg(unit.crMax[i]/rate).arg(sym);
             }else{
-                tempStr = typeStr +  tr(" Early warning");
-                str += tr(" %1，current value：%2%3, critical lower limit：%4%5, critical upper limit：%6%7").arg(i+1)
+		tempStr = typeStr +  tr(" Warning");
+                str += tr("%1，current value：%2%3, critical lower limit：%4%5, critical upper limit：%6%7").arg(i+1)
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.crMin[i]/rate).arg(sym)
                         .arg(unit.crMax[i]/rate).arg(sym);
@@ -152,13 +152,13 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, sDataPowUnit &unit,
         {
             if(gLanguage == 0){
                 tempStr = typeStr + tr("告警");
-                str += tr("%1，当前值：%2%3, 最小值：%4%5, 最大值：%6%7").arg(i+1)
+                str += tr("%1，当前值：%2%3, 最小值：%4%5, 最大值：%6%7").arg(QString('A'+i))
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.min[i]/rate).arg(sym)
                         .arg(unit.max[i]/rate).arg(sym);
             }else{
                 tempStr = typeStr + tr(" Alarm");
-                str += tr(" %1，current value：%2%3, minimum value：%4%5, maximum value：%6%7").arg(i+1)
+		str += tr("%1，current value：%2%3, minimum value：%4%5, maximum value：%6%7").arg(QString('A'+i))
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.min[i]/rate).arg(sym)
                         .arg(unit.max[i]/rate).arg(sym);
@@ -173,13 +173,13 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, sDataPowUnit &unit,
         {
             if(gLanguage == 0){
                 tempStr = typeStr +  tr("预警");
-                str += tr("%1，当前值：%2%3, 临界下限值：%4%5, 临界上限值：%6%7").arg(i+1)
+                str += tr("%1，当前值：%2%3, 临界下限值：%4%5, 临界上限值：%6%7").arg(QString('A'+i))
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.crMin[i]/rate).arg(sym)
                         .arg(unit.crMax[i]/rate).arg(sym);
             }else{
-                tempStr = typeStr +  tr(" Early warning");
-                str += tr(" %1，current value：%2%3, critical lower limit：%4%5, critical upper limit：%6%7").arg(i+1)
+		tempStr = typeStr +  tr(" Warning");
+                str += tr("%1，current value：%2%3, critical lower limit：%4%5, critical upper limit：%6%7").arg(QString('A'+i))
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.crMin[i]/rate).arg(sym)
                         .arg(unit.crMax[i]/rate).arg(sym);
@@ -241,8 +241,8 @@ void DpAlarmSlave::unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg, sD
                         .arg(unit.crMin[i]/rate).arg(sym)
                         .arg(unit.crMax[i]/rate).arg(sym);
             }else{
-                tempStr = typeStr +  tr(" Early warning");
-                str += tr(" %1，current value：%2%3, critical lower limit：%4%5, critical upper limit：%6%7").arg(alarmStr)
+                tempStr = typeStr +  tr(" Warning");
+                str += tr("%1，current value：%2%3, critical lower limit：%4%5, critical upper limit：%6%7").arg(alarmStr)
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.crMin[i]/rate).arg(sym)
                         .arg(unit.crMax[i]/rate).arg(sym);
@@ -304,8 +304,8 @@ void DpAlarmSlave::unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, sDa
                         .arg(unit.crMin[i]/rate).arg(sym)
                         .arg(unit.crMax[i]/rate).arg(sym);
             }else{
-                tempStr = typeStr +  tr(" Early warning");
-                str += tr(" %1，current value：%2%3, critical lower limit：%4%5, critical upper limit：%6%7").arg(alarmStr)
+                tempStr = typeStr +  tr(" Warning");
+                str += tr("%1，current value：%2%3, critical lower limit：%4%5, critical upper limit：%6%7").arg(alarmStr)
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.crMin[i]/rate).arg(sym)
                         .arg(unit.crMax[i]/rate).arg(sym);
@@ -325,7 +325,7 @@ void DpAlarmSlave::unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, sDa
 void DpAlarmSlave::boxAlarm(sBoxData &box)
 {
     if(box.offLine) {
-        if(box.boxAlarm)  {
+        if(box.boxAlarm){
             if(gLanguage == 0){
                 QString typeStr = tr("回路电流");
                 if(box.boxCurAlarm) {
@@ -350,32 +350,69 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
                     QString msg = tr("插接箱：%1，温度").arg(box.boxName);
                     unitAlarm(typeStr, msg, box.env.tem, COM_RATE_TEM, "°C");
                 }
+                for(int i = 0 ; i < box.data.lineNum ; i++){
+                    if( box.data.swAlarm[i] ) {
+                        QString typeStr = tr("回路断路器");
+                        QString str = tr("插接箱：%1").arg(box.boxName);
+                        QString tempStr = typeStr + tr("告警");
+                        QString statueStr = QString(tr(" 第 %1 个回路断开")).arg( i + 1 );
+                        str += statueStr;
+                        if(box.data.swAlarm[i] == 1){
+                            box.data.swAlarm[i]= 2;
+                            saveMsg( typeStr , str );
+                        }
+                        mAlarmStr << shm->data[mBusId].busName;
+                        mAlarmStr << tempStr;
+                        mAlarmStr << str;
+                    }
+                }
             }else{
                 QString typeStr = tr(" Loop current");
                 if(box.boxCurAlarm) {
-                    QString msg = tr(" Plug box：%1，").arg(box.boxName);
+                    QString msg = tr("Tap-off box：%1，").arg(box.boxName);
                     unitAlarmW(box, typeStr, msg, box.data.cur, COM_RATE_CUR, "A");
                 }
 
                 typeStr = tr(" Loop voltage");
                 if(box.boxVolAlarm) {
-                    QString msg = tr(" Plug box：%1，").arg(box.boxName);
+		QString msg = tr("Tap-off box：%1，").arg(box.boxName);
                     unitAlarmVA(box, typeStr, msg, box.data.vol, COM_RATE_VOL, "V");
                 }
 
                 typeStr = tr(" Loop power");
                 if(box.boxPowerAlarm) {
-                    QString msg = tr(" Plug box：%1，").arg(box.boxName);
+		    QString msg = tr("Tap-off box：%1，").arg(box.boxName);
                     unitAlarmW(box, typeStr, msg, box.data.pow, COM_RATE_POW , "kW");
                 }
 
-                typeStr = tr(" Plug box temperature");
+                typeStr = tr("Tap-off box temperature");
                 if(box.boxEnvAlarm) {
-                    QString msg = tr(" Plug box：%1，temperature").arg(box.boxName);
+                    QString msg = tr("Tap-off box：%1，temperature").arg(box.boxName);
                     unitAlarm(typeStr, msg, box.env.tem, COM_RATE_TEM, "°C");
                 }
-            }
-        }
+                for(int i = 0 ; i < box.data.lineNum ; i++){
+                    if( box.data.swAlarm[i] ) {
+                        QString typeStr = tr("Loop breaker");
+                        QString str = tr("Tap-off box：%1").arg(box.boxName);
+                        QString tempStr = typeStr + tr("Alarm");
+                        QString tempEn = "";
+                        if(i == 0) tempEn = "st";
+                        else if( i == 1 ) tempEn = "nd";
+                        else if( i == 2 ) tempEn = "rd";
+                        else tempEn = "th";
+                        QString statueStr = QString(tr(" %1%2 loop OFF")).arg( i + 1 ).arg(tempEn);
+                        str += statueStr;
+                        if(box.data.swAlarm[i] == 1){
+                            box.data.swAlarm[i]= 2;
+                            saveMsg( typeStr , str );
+                        }
+                        mAlarmStr << shm->data[mBusId].busName;
+                        mAlarmStr << tempStr;
+                        mAlarmStr << str;
+                    }//if
+                }//for
+            }////else
+        }//if(box.boxAlarm)
     } else {
         if(gLanguage == 0){
             if(box.boxOffLineAlarm == 2){
@@ -398,20 +435,20 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
         }else{
             if(box.boxOffLineAlarm == 2){
                 QString tempStr ,str;
-                tempStr = tr(" Offline alarm");
-                str += shm->data[mBusId].busName+tr("Plug box offline")+tr("Plug box：%1 is offline").arg(box.boxName);
+                tempStr = tr("Offline alarm");
+                str += shm->data[mBusId].busName+tr("Tap-off box offline")+tr("Tap-off box：%1 is offline").arg(box.boxName);
                 mAlarmStr << shm->data[mBusId].busName;
                 mAlarmStr << tempStr;
-                mAlarmStr << tr(" Plug box：%1 is offline").arg(box.boxName);
+                mAlarmStr << tr("Tap-off box：%1 is offline").arg(box.boxName);
                                  saveMsg(tempStr,str);
                 box.boxOffLineAlarm = 3;
             }else if(box.boxOffLineAlarm == 3){
                 QString tempStr ,str;
-                tempStr = tr(" Offline alarm");
-                str += shm->data[mBusId].busName+tr("Plug box offline")+tr("Plug box：%1 is offline").arg(box.boxName);
+                tempStr = tr("Offline alarm");
+                str += shm->data[mBusId].busName+tr("Tap-off box offline")+tr("Tap-off box：%1 is offline").arg(box.boxName);
                 mAlarmStr << shm->data[mBusId].busName;
                 mAlarmStr << tempStr;
-                mAlarmStr << tr(" Plug box：%1 is offline").arg(box.boxName);
+                mAlarmStr << tr("Tap-off box：%1 is offline").arg(box.boxName);
             }
         }
     }
@@ -425,14 +462,14 @@ void DpAlarmSlave::busAlarm(int id)
     //----------------[区分日志关键字]-------------------
     QString alarmStr;
     if(gLanguage == 0){
-        alarmStr = "输入";
+        alarmStr = "输入 ";
         if(!busBox->dc){ // 直流
-            alarmStr = "输入";
+            alarmStr = "输入 ";
         }
     }else{
-        alarmStr = "input";
+        alarmStr = "input ";
         if(!busBox->dc){ // 直流
-            alarmStr = "input";
+            alarmStr = "input ";
         }
     }
     //--------------------------------------------------
@@ -524,6 +561,23 @@ void DpAlarmSlave::busAlarm(int id)
                     mAlarmStr << tempStr;
                     mAlarmStr << str;
                 }
+
+                if( busBox->data.swAlarm[0] ) {
+                    QString typeStr = tr("主路断路器");
+                    QString str = tr("母线：%1").arg(bus->busName);
+                    QString tempStr = typeStr + tr("告警");
+                    QString statueStr = tr("");
+                    if(busBox->data.sw[0] == 2) statueStr = tr("断开");
+                    else if(busBox->data.sw[0] == 3) statueStr = tr("跳闸");
+                    str += tr(" %1 ").arg(statueStr);
+                    if(busBox->data.swAlarm[0] == 1){
+                        busBox->data.swAlarm[0]= 2;
+                        saveMsg( typeStr , str );
+                    }
+                    mAlarmStr << shm->data[mBusId].busName;
+                    mAlarmStr << tempStr;
+                    mAlarmStr << str;
+                }
             }
         }else{
             if(busBox->boxOffLineAlarm == 2){
@@ -548,33 +602,33 @@ void DpAlarmSlave::busAlarm(int id)
         if(busBox->offLine){
             if(busBox->boxAlarm) {
                 if(busBox->boxCurAlarm) { // 总线电流告警
-                    QString typeStr = tr(" Main circuit current");
-                    QString msg = tr(" Busbar：%1，%2 ").arg(bus->busName).arg(alarmStr);
+                    QString typeStr = tr("Input current");
+                    QString msg = tr("Busbar：%1，%2 ").arg(bus->busName).arg(alarmStr);
                     unitAlarm(typeStr, msg, busBox->data.cur, COM_RATE_CUR, "A");
                 }
 
                 if(busBox->boxVolAlarm) { // 总线电压告警
-                    QString typeStr = tr(" Main circuit voltage");
-                    QString msg = tr(" Busbar：%1，%2 ").arg(bus->busName).arg(alarmStr);
+                    QString typeStr = tr("Input voltage");
+                    QString msg = tr("Busbar：%1，%2 ").arg(bus->busName).arg(alarmStr);
                     unitAlarm(typeStr, msg, busBox->data.vol, COM_RATE_VOL, "V");
                 }
 
                 if(busBox->boxEnvAlarm) { // 温度
-                    QString typeStr = tr(" Main road temperature");
-                    QString msg = tr(" Busbar：%1，temperature").arg(bus->busName);
+                    QString typeStr = tr("Input temperature");
+                    QString msg = tr("Busbar：%1，temperature").arg(bus->busName);
                     unitAlarm(typeStr, msg, busBox->env.tem, COM_RATE_TEM, "°C");
                 }
 
                 if(busBox->boxPowerAlarm){
-                    QString typeStr = tr(" Main power");
-                    QString msg = tr(" Busbar：%1，power").arg(bus->busName);
+                    QString typeStr = tr("Input power");
+                    QString msg = tr("Busbar：%1，power").arg(bus->busName);
                     unitAlarm(typeStr, msg, busBox->data.pow, COM_RATE_POW , "kW");
                 }
 
                 if( busBox->HzAlarm ) {
-                    QString typeStr = tr(" Main frequency");
-                    QString str = tr(" Busbar：%1").arg(bus->busName);
-                    QString tempStr = typeStr + tr(" Alarm");
+                    QString typeStr = tr("Input frequency");
+                    QString str = tr("Busbar：%1").arg(bus->busName);
+                    QString tempStr = typeStr + tr("Alarm");
                     str += tr(" current value：%2%3, minimum value：%4%5, maximum value：%6%7")
                                .arg(QString::number(busBox->rate.svalue/COM_RATE_FREQUENCY,'f',1)).arg("Hz")
                                .arg(QString::number(busBox->rate.smin/COM_RATE_FREQUENCY,'f',1)).arg("Hz")
@@ -588,9 +642,9 @@ void DpAlarmSlave::busAlarm(int id)
                     mAlarmStr << str;
                 }
                 if( busBox->totalPowAlarm ) {
-                    QString typeStr = tr(" Main circuit total power");
-                    QString str = tr(" Busbar：%1").arg(bus->busName);
-                    QString tempStr = typeStr + tr(" Alarm");
+                    QString typeStr = tr("Input total power");
+                    QString str = tr("Busbar：%1").arg(bus->busName);
+                    QString tempStr = typeStr + tr("Alarm");
                     str += tr(" current value：%2%3, minimum value：%4%5, maximum value：%6%7")
                                .arg(QString::number(busBox->totalPow.ivalue/COM_RATE_POW,'f',3)).arg("kW")
                                .arg(QString::number(busBox->rate.smin/COM_RATE_FREQUENCY,'f',3)).arg("kW")
@@ -604,10 +658,10 @@ void DpAlarmSlave::busAlarm(int id)
                     mAlarmStr << str;
                 }
                 if( busBox->lpsLogAlarm ) {
-                    QString typeStr = tr(" Main road lightning protection");
-                    QString str = tr(" Busbar：%1 ").arg(bus->busName);
-                    QString tempStr = typeStr + tr(" Alarm");
-                    str += tr(" damage");
+		    QString typeStr = tr("Input lightning protection");
+                    QString str = tr("Busbar：%1 ").arg(bus->busName);
+                    QString tempStr = typeStr + tr("Alarm");
+                    str += tr("damage");
                     if(busBox->lpsLogAlarm == 1){
                         busBox->lpsLogAlarm = 2;
                         saveMsg( typeStr , str );
@@ -617,7 +671,7 @@ void DpAlarmSlave::busAlarm(int id)
                     mAlarmStr << str;
                 }
                 if( busBox->zeroLineAlarm ) {
-                    QString typeStr = tr("Main circuit zero line current");
+                    QString typeStr = tr("Input neutral line current");
                     QString str = tr("Busbar：%1").arg(bus->busName);
                     QString tempStr = typeStr + tr("Alarm");
                     str += tr(" current value:%2%3, minimum value：%4%5, maximum value：%6%7")
@@ -632,6 +686,23 @@ void DpAlarmSlave::busAlarm(int id)
                     mAlarmStr << tempStr;
                     mAlarmStr << str;
                 }
+
+                if( busBox->data.swAlarm[0] ) {
+                    QString typeStr = tr("Input breaker");
+                    QString str = tr("Busbar：%1").arg(bus->busName);
+                    QString tempStr = typeStr + tr("Alarm");
+                    QString statueStr = tr("");
+                    if(busBox->data.sw[0] == 2) statueStr = tr("OFF");
+                    else if(busBox->data.sw[0] == 3) statueStr = tr("TRIP");
+                    str += tr(" %1 ").arg(statueStr);
+                    if(busBox->data.swAlarm[0] == 1){
+                        busBox->data.swAlarm[0]= 2;
+                        saveMsg( typeStr , str );
+                    }
+                    mAlarmStr << shm->data[mBusId].busName;
+                    mAlarmStr << tempStr;
+                    mAlarmStr << str;
+                }
             }
         }else{
             if(busBox->boxOffLineAlarm == 2){
@@ -639,8 +710,8 @@ void DpAlarmSlave::busAlarm(int id)
                 QString tempStr ,str;
                 tempStr = tr(" Offline alarm");
                 mAlarmStr << tempStr;
-                mAlarmStr << tr(" Start box offline");
-                str += shm->data[mBusId].busName+tr(" Start box offline");
+                mAlarmStr << tr("Feeder box offline");
+                str += shm->data[mBusId].busName+tr("Feeder box offline");
                 saveMsg(tempStr,str);
                 busBox->boxOffLineAlarm = 3;
             }else if(busBox->boxOffLineAlarm == 3){
@@ -648,8 +719,8 @@ void DpAlarmSlave::busAlarm(int id)
                 QString tempStr ,str;
                 tempStr = tr(" Offline alarm");
                 mAlarmStr << tempStr;
-                mAlarmStr << tr(" Start box offline");
-                str += shm->data[mBusId].busName+tr(" Start box offline");
+                mAlarmStr << tr("Feeder box offline");
+                str += shm->data[mBusId].busName+tr("Feeder box offline");
             }
         }
     }

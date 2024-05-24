@@ -21,44 +21,41 @@ LineWid::~LineWid()
 {
     delete ui;
 }
+
 void LineWid::initLanguage()
 {
     if(gLanguage == 0){
-        ui->label_10->setText("零线电流:");
-        ui->label_11->setText("A相温度:");
-        ui->label_12->setText("B相温度:");
-        ui->label_14->setText("C相温度:");
-        ui->label_15->setText("零线温度:");
-        ui->label_16->setText("总有功功率:");
+        ui->label_10->setText("零线\n电流:");
+        ui->label_11->setText("断路器:");
+        ui->label_15->setText("零线\n温度:");
+        ui->label_16->setText("总有功\n功率:");
 
         ui->label_17->setText("防雷:");
-        ui->label_2->setText("版本:");
+        ui->label_2->setText("始端箱\n版本:");
         ui->label_5->setText("输入");
         ui->label_13->setText("电压");
         ui->label_9->setText("电流");
         ui->label_3->setText("过载电流");
         ui->label_8->setText("有功功率");
         ui->label_6->setText("功率因数");
-        ui->label_4->setText("温度");
+        ui->label_4->setText("无功功率");
         ui->label_7->setText("电能");
         ui->thdBtn->setText("谐波分析");
     }else{
-        ui->label_10->setText("Zero line\ncurrent:");
-        ui->label_11->setText("A-phase\ntemperature:");
-        ui->label_12->setText("B-phase\ntemperature:");
-        ui->label_14->setText("C-phase\ntemperature:");
-        ui->label_15->setText("Zero line\ntemperature:");
+        ui->label_10->setText("Neutral line\ncurrent:");
+        ui->label_11->setText("Breaker:");
+        ui->label_15->setText("Neutral line\ntemperature:");
         ui->label_16->setText("Total\nactive power:");
 
         ui->label_17->setText("Lightning\nprotection:");
-        ui->label_2->setText("Version:");
+        ui->label_2->setText("Feeder box\nversion:");
         ui->label_5->setText("Input");
         ui->label_13->setText("Voltage");
         ui->label_9->setText("Current");
         ui->label_3->setText("Overload current");
         ui->label_8->setText("Active power");
         ui->label_6->setText("Power factor");
-        ui->label_4->setText("Temperature");
+        ui->label_4->setText("Reactive power");
         ui->label_7->setText("Electric energy");
         ui->thdBtn->setText("Harmonic\nanalysis");
     }
@@ -110,6 +107,7 @@ void LineWid::interfaceChangedSlot(int id)
 void LineWid::timeoutDone()
 {
     if(isRun) {
+        uchar offline = mData->box[0].offLine;
         QString str;
         if(mData->box[0].dc){ //交流
             str = QString::number(mData->box[0].rate.svalue/10.0,'f',1) + "Hz";
@@ -120,9 +118,10 @@ void LineWid::timeoutDone()
             ui->thdBtn->setHidden(false);
             ui->widget->setHidden(false);
             mLineTable->updateData(mData->box[0]);
-            ui->zeroLineLab->setText(QString::number(mData->box[0].zeroLineCur.ivalue/COM_RATE_CUR,'f',3) + "A");
+            ui->zeroLineLab->setText(QString::number(offline==0?0:
+                                             mData->box[0].zeroLineCur.ivalue/COM_RATE_CUR,'f',3) + "A");
             QPalette pa;
-            if(mData->box[0].zeroLineAlarm==1 || mData->box[0].zeroLineAlarm==2)
+            if((mData->box[0].zeroLineAlarm==1 || mData->box[0].zeroLineAlarm==2)&&offline)
             {
                 pa.setColor(QPalette::WindowText, Qt::red);
                 ui->zeroLineLab->setPalette(pa);
@@ -133,13 +132,13 @@ void LineWid::timeoutDone()
             }
 
             ui->lpStateLab->setText(tr("---"));
-            if(mData->box[0].lpsAlarm==2&&mData->box[0].offLine)
+            if(mData->box[0].lpsAlarm==2&&offline)
             {
                 if(gLanguage == 0)ui->lpStateLab->setText(tr("损坏"));
                 else ui->lpStateLab->setText(tr("damage"));
                 pa.setColor(QPalette::WindowText, Qt::red);
                 ui->lpStateLab->setPalette(pa);
-            }else if(mData->box[0].lpsAlarm==1&&mData->box[0].offLine){
+            }else if(mData->box[0].lpsAlarm==1&&offline){
                 if(gLanguage == 0)ui->lpStateLab->setText(tr("正常"));
                 else ui->lpStateLab->setText(tr("normal"));
                 pa.setColor(QPalette::WindowText, Qt::black);
@@ -150,6 +149,8 @@ void LineWid::timeoutDone()
                 pa.setColor(QPalette::WindowText, Qt::black);
                 ui->lpStateLab->setPalette(pa);
             }
+            updateBreak();
+
             updateTem();
         }else{
             if(gLanguage == 0) {str= QString::number(mData->box[0].rate.svalue) + "路";ui->label->setText("输入：");}
@@ -163,7 +164,9 @@ void LineWid::timeoutDone()
 
 
         //------[版本号]------------
-        QString version = QString("V%1.%2.%3").arg(mData->box[0].version/100).arg(mData->box[0].version/10%10).arg(mData->box[0].version%10);
+        QString version = QString("V%1.%2.%3").arg(offline==0?0:mData->box[0].version/100)
+                              .arg(offline==0?0:mData->box[0].version/10%10)
+                              .arg(offline==0?0:mData->box[0].version%10);
         ui->version->setText(version);
 
         //        updateTotalWid();
@@ -171,6 +174,31 @@ void LineWid::timeoutDone()
     }
 }
 
+void LineWid::updateBreak()
+{
+    QPalette pa;
+    ui->breakLab->setText(tr("---"));
+    uchar offline = mData->box[0].offLine;
+    if(mData->box[0].data.sw[0]&&offline){
+        if(mData->box[0].data.sw[0] == 1){
+            if(gLanguage == 0)ui->breakLab->setText(tr("闭合"));
+            else ui->breakLab->setText(tr("ON"));
+            pa.setColor(QPalette::WindowText, Qt::black);
+        }else if(mData->box[0].data.sw[0] == 2){
+            if(gLanguage == 0)ui->breakLab->setText(tr("断开"));
+            else ui->breakLab->setText(tr("OFF"));
+            pa.setColor(QPalette::WindowText, Qt::red);
+        }else if(mData->box[0].data.sw[0] == 3){
+            if(gLanguage == 0)ui->breakLab->setText(tr("跳闸"));
+            else ui->breakLab->setText(tr("TRIP"));
+            pa.setColor(QPalette::WindowText, Qt::red);
+        }
+        ui->breakLab->setPalette(pa);
+    }else{
+        pa.setColor(QPalette::WindowText, Qt::black);
+        ui->breakLab->setPalette(pa);
+    }
+}
 
 void LineWid::initTotalWid()
 {    
@@ -208,15 +236,12 @@ void LineWid::updateTotalWid()
 
 void LineWid::updateTem()
 {
-    QLabel *temLab[] = {ui->temA, ui->temB, ui->temC ,ui->temD};
     QString str = "---";
     if(mData && mData->box[0].offLine){
         sDataUnit unit = mData->box[0].env.tem;
 
-        for(int i = 0 ; i < SENSOR_NUM ; i++){
-            temLab[i]->setText(QString::number(unit.value[i]/COM_RATE_TEM) + "°C");
-            updateAlarmStatus(temLab[i],unit,i);
-        }
+        ui->temD->setText(QString::number(unit.value[SENSOR_NUM-1]/COM_RATE_TEM) + "°C");
+        updateAlarmStatus(ui->temD,unit,SENSOR_NUM-1);
         if(mData->box[0].totalPow.ivalue == 0 )
             str = QString::number(0, 'f', 2)+"kW";
         else
@@ -230,9 +255,7 @@ void LineWid::updateTem()
         }
         setLabeColor(ui->totalPowLab , flag , 0);
     }else{
-        for(int i = 0 ; i < SENSOR_NUM ; i++){
-            temLab[i]->setText(str);
-        }
+        ui->temD->setText(str);
         ui->totalPowLab->setText(str);
         ui->rateLab->setText(str);
     }

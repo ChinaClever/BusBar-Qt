@@ -17,7 +17,7 @@ void SetLoopWid::initWid()
 {
     QString title;QStringList header;
     if(gLanguage == 0){title = tr("回路电流");header<< tr("插接箱");}
-    else {title = tr("Loop current");header<< tr("Plug box");}
+    else {title = tr("Loop current");header<< tr("Tap-off box");}
 
     if(mDc){ //交流9个
         for(int i = 0; i < LINE_NUM; ++i)

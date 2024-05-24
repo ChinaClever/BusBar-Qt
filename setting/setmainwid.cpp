@@ -30,7 +30,7 @@ void SetMainWid::initLanguage()
     }else{
         ui->sysBtn->setText("System settings");
         ui->temBtn->setText("Temperature settings");
-        ui->lineBtn->setText("Main road settings");
+        ui->lineBtn->setText("Input settings");
         ui->loopBtn->setText("Branch current settings");
         ui->nameBtn->setText("Name settings");
         ui->powerBtn->setText("Power settings");
@@ -54,12 +54,14 @@ void SetMainWid::initWidget()
 
     mSystemDlg = new SystemSettingDlg(ui->stackedWidget); //系统
     ui->stackedWidget->addWidget(mSystemDlg);
+
 #if ( SI_RTUWIFI == 1 )
     connect(this, SIGNAL(busChangedSig(int)), mSystemDlg, SIGNAL(busChangedSig(int)));
 #endif
 
     mSetNamesWid = new SetNamesWid(ui->stackedWidget); //名称
     ui->stackedWidget->addWidget(mSetNamesWid);
+    connect(mSetNamesWid,SIGNAL(updateBusNameSig(int,QString&)),mSystemDlg , SIGNAL(updateBusNameSig(int,QString&)));
 
     setButtonColor(ui->lineBtn);
     //    ui->stackedWidget->setCurrentWidget(mSetLineWid);

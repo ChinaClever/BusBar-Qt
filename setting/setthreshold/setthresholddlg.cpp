@@ -10,7 +10,6 @@ SetThresholdDlg::SetThresholdDlg(QWidget *parent) :
     if(gLanguage == 0) com_setBackColour(tr("阈值设置"),this);
     else com_setBackColour(tr("Threshold setting"),this);
     initLanguage();
-    ui->checkBox->hide();
     setWindowModality(Qt::WindowModal);
 }
 
@@ -137,8 +136,9 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
         if(item.box == 0) nameStr = "始端箱";;
 
         QString busName = share_mem_get()->data[item.bus].busName;
-        QString title = tr("母线%1 %2 输入%3 %4设置").arg(busName).arg(nameStr).arg(item.num+1).arg(str);
-        if( item.type == 5 ) title = tr("母线%1 %2 %3设置").arg(busName).arg(nameStr).arg(str);
+        QString title = tr("母线%1 %2 %3相 %4设置").arg(busName).arg(nameStr).arg(QString('A'+item.num)).arg(str);
+        if( item.type == 5 || item.type == 8 ) title = tr("母线%1 %2 %3设置").arg(busName).arg(nameStr).arg(str);
+        if(item.type == 8) ui->label_3->setText(tr("超限\n告警值："));
         ui->titleLab->setText(title);
     }else{
         QString str;
@@ -148,16 +148,17 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
         case 3: str = tr("Temperature"); break;
         case 4: str = tr("Power"); break;
         case 5: str = tr("Frequency"); break;
-        case 8: str = tr("Zero line current"); break;
+        case 8: str = tr("Neutral line current"); break;
         }
 
         sBoxData *dev = &(share_mem_get()->data[item.bus].box[item.box]); //获取共享内存
-        QString nameStr = QString("Plug box%1").arg(dev->boxName);
-        if(item.box == 0) nameStr = "Start box";;
+        QString nameStr = QString("Tap-off box %1").arg(dev->boxName);
+        if(item.box == 0) nameStr = "Feeder box";
 
         QString busName = share_mem_get()->data[item.bus].busName;
-        QString title = tr("Busbar%1 %2 input%3 %4set").arg(busName).arg(nameStr).arg(item.num+1).arg(str);
-        if( item.type == 5 ) title = tr("Busbar%1 %2 %3set").arg(busName).arg(nameStr).arg(str);
+        QString title = tr("Busbar %1 %2 phase %3 %4 set").arg(busName).arg(nameStr).arg(QString('A'+item.num)).arg(str);
+        if( item.type == 5 || item.type == 8 ) title = tr("Busbar %1 %2 %3 set").arg(busName).arg(nameStr).arg(str);
+        if(item.type == 8) ui->label_3->setText("Over limit\nalarm value:");
         ui->titleLab->setText(title);
     }
 
@@ -264,7 +265,7 @@ void SetThresholdDlg::on_saveBtn_clicked()
     bool ret = checkData();
     if(ret) {
         if(ui->checkBox->isChecked()) {
-            if(mItem.box) mItem.box = 0xff;
+            if(mItem.box) mItem.box = 0xff - 1;
             else mItem.bus = 0xff;
             SetThread::bulid()->append(mItem);//统一设置发两遍
         }

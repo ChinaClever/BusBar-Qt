@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>563</width>
-    <height>355</height>
+    <width>829</width>
+    <height>356</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,7 +40,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>561</width>
+     <width>821</width>
      <height>20</height>
     </rect>
    </property>
@@ -59,7 +59,7 @@
     <rect>
      <x>0</x>
      <y>340</y>
-     <width>561</width>
+     <width>821</width>
      <height>20</height>
     </rect>
    </property>
@@ -76,7 +76,7 @@
   <widget class="Line" name="line_3">
    <property name="geometry">
     <rect>
-     <x>550</x>
+     <x>810</x>
      <y>10</y>
      <width>20</width>
      <height>341</height>
@@ -100,9 +100,14 @@
     <rect>
      <x>20</x>
      <y>90</y>
-     <width>521</width>
+     <width>781</width>
      <height>241</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="currentIndex">
     <number>-1</number>
@@ -112,23 +117,36 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>40</y>
-     <width>67</width>
-     <height>17</height>
+     <y>20</y>
+     <width>201</width>
+     <height>61</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>版本号：</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="version">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>40</y>
-     <width>67</width>
-     <height>17</height>
+     <x>240</x>
+     <y>20</y>
+     <width>51</width>
+     <height>61</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>V0.0.0</string>
@@ -137,10 +155,10 @@
   <widget class="QLabel" name="titleLab">
    <property name="geometry">
     <rect>
-     <x>180</x>
-     <y>30</y>
-     <width>171</width>
-     <height>31</height>
+     <x>320</x>
+     <y>20</y>
+     <width>401</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="font">
@@ -158,7 +176,7 @@
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>460</x>
+     <x>730</x>
      <y>10</y>
      <width>81</width>
      <height>61</height>

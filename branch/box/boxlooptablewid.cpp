@@ -144,7 +144,7 @@ void BoxLoopTableWid::initTableWidget()
     ui->tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); //关闭横向滑条
-    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
+    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:30px;}");
 
 
 
@@ -305,12 +305,12 @@ void BoxLoopTableWid::setSw(int id, int column)
     int alram = 0;
     if(sw == 1){
         if(gLanguage == 0)str = "断开";
-        else str = "Disconnect";
+        else str = "OFF";
         alram = 1;
     }
     else if(sw == 2){
         if(gLanguage == 0)str = "闭合";
-        else str = "Closure";
+        else str = "ON";
     }
 
     setTableItem(id, column, str);

@@ -80,7 +80,7 @@ private:
     NetWork *mNetWork;
     Server *mServer;
 
-    //int count;
+//    int count;
     //Watchdogthread* mWatchdogThread;
 };
 

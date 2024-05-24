@@ -15,6 +15,7 @@ HomeBoxWid::HomeBoxWid(QWidget *parent) :
     isRun = true;
     timer = new QTimer(this);
     timer->start(2000 + rand()%500); //防止所有对象同时申请刷新
+    mCount = 0;
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
     connect(InterfaceChangeSig::get(), SIGNAL(typeSig(int)), this,SLOT(interfaceChangedSlot(int)));
 }
@@ -91,9 +92,10 @@ void HomeBoxWid::updateAlarmIcon(QLabel *lab,int volAlarm, int curALarm, int env
  */
 void HomeBoxWid::updateStatus()
 {
+    mCount++;
     if(mData->offLine > 0) {
         uchar alarm = mData->boxAlarm + mData->boxCurAlarm + mData->boxEnvAlarm + mData->boxPowerAlarm;
-        if(!mData->firsttime || mData->preoffLine == 0 || mData->prealarm != alarm || mData->boxType != mData->preboxType){
+        if(!mData->firsttime || mData->preoffLine == 0 || mData->prealarm != alarm || mData->boxType != mData->preboxType || mCount > 50){
             if(mData->boxType)//盒子类型：0-插接箱；1-温度模块
             {
                 mData->firsttime = true;
@@ -112,9 +114,10 @@ void HomeBoxWid::updateStatus()
                 updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
                 updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
             }
+            mCount = 0;
         }
     } else { // 离线
-        if(!mData->firsttime || mData->preoffLine > 0 || mData->boxType != mData->preboxType){
+        if(!mData->firsttime || mData->preoffLine > 0 || mData->boxType != mData->preboxType || mCount > 50){
             if(mData->boxType)//测温模块
             {
                 mData->firsttime = true;
@@ -131,6 +134,7 @@ void HomeBoxWid::updateStatus()
                 setBackgroundImage(ui->iconLab_2, "boxoffine");
                 setBackgroundImage(ui->iconLab_3, "boxoffine");
             }
+            mCount = 0 ;
         }
 
     }
@@ -183,14 +187,25 @@ void HomeBoxWid::timeoutDone()
 void HomeBoxWid::updateUpAndDownAlarmStatus()
 {
     if(mData->offLine > 0) {
-        updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-        updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-        updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+        if(mData->boxType){//盒子类型：0-插接箱；1-温度模块
+            ui->iconLab_1->hide();ui->iconLab_3->hide();
+            updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+        }else{
+            ui->iconLab_1->show();ui->iconLab_3->show();
+            updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+        }
     } else { // 离线
-
-        setBackgroundImage(ui->iconLab_1, "boxoffine");
-        setBackgroundImage(ui->iconLab_2, "boxoffine");
-        setBackgroundImage(ui->iconLab_3, "boxoffine");
+        if(mData->boxType){//盒子类型：0-插接箱；1-温度模块
+            ui->iconLab_1->hide();ui->iconLab_3->hide();
+            setBackgroundImage(ui->iconLab_2, "boxoffine");
+        }else{
+            ui->iconLab_1->show();ui->iconLab_3->show();
+            setBackgroundImage(ui->iconLab_1, "boxoffine");
+            setBackgroundImage(ui->iconLab_2, "boxoffine");
+            setBackgroundImage(ui->iconLab_3, "boxoffine");
+        }
     }
 
     bool hidden = false;

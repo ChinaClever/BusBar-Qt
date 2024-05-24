@@ -127,8 +127,8 @@ void LogMainEleWid::initFunSLot()
 
 //    ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 //    ui->tableView->verticalHeader()->setDefaultSectionSize(45);
-    ui->tableView->verticalScrollBar()->setStyleSheet("QScrollBar{width:35px;}");
-    ui->tableView->horizontalScrollBar()->setStyleSheet("QScrollBar{height:35px;}");
+    ui->tableView->verticalScrollBar()->setStyleSheet("QScrollBar{width:30px;}");
+    ui->tableView->horizontalScrollBar()->setStyleSheet("QScrollBar{height:30px;}");
 
     initBtnBar();
     initTableSlot(0);
@@ -206,7 +206,7 @@ void LogMainEleWid::doubleSlot(QModelIndex)
     QString str;
     if(gLanguage == 0) str = tr("是否删除这条记录?");
     else str = tr("Do you want to delete this record?");
-    QuMsgBox box(this, str);
+    QuMsgBox box(NULL, str);
     bool ret = box.Exec();
     if(ret)
     {
