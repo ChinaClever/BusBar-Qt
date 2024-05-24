@@ -33,15 +33,16 @@ void Json_Send::initFun()
 
 void Json_Send::run()
 {
-//    sendData();
-    TcpsendData();
+    sendData();
+//    TcpsendData();
 }
 
 void Json_Send::TcpsendData()
 {
-    QString mHost = "192.168.1.44";
+    QString mHost = "192.168.1.151";
     int port = 2222;
     bool ret = mTcp->newConnect(mHost,port);
+    qDebug()<<"    ret    "<<ret;
     if(ret) {
         QJsonObject bar_json, box_json ; QByteArray ba;
 

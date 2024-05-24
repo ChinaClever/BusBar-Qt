@@ -99,7 +99,8 @@ void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
 {
     QJsonArray jsonArray; QJsonObject subObj, envObj, cfgObj, tgObj, dataObj;
 //----------------------------配置数据------------------------------------------
-    cfgObj.insert("bus_version",mBoxData[id]->version);
+    QString version = QString("V%1.%2.%3").arg(mBoxData[id]->version/100).arg(mBoxData[id]->version/10%10).arg(mBoxData[id]->version%10);
+    cfgObj.insert("bus_version",version);
     cfgObj.insert("cur_specs", mBoxData[id]->curSpecification);
     cfgObj.insert("baud_rate",mBoxData[id]->baudRate);
     cfgObj.insert("beep",mBoxData[id]->buzzerStatus);
@@ -283,7 +284,8 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
 {
     QJsonArray swArray; QJsonObject subObj, cfgObj, loopObj, lineObj, envObj, totalObj, outputObj;
 //----------------------------配置数据------------------------------------------
-    cfgObj.insert("box_version",mBusData[bus_id]->box[insert_id].version);
+    QString version = QString("V%1.%2.%3").arg(mBusData[bus_id]->box[insert_id].version/100).arg(mBusData[bus_id]->box[insert_id].version/10%10).arg(mBusData[bus_id]->box[insert_id].version%10);
+    cfgObj.insert("box_version",version);
     cfgObj.insert("baud_rate",mBusData[bus_id]->box[insert_id].baudRate);
     cfgObj.insert("beep",mBusData[bus_id]->box[insert_id].buzzerStatus);
     cfgObj.insert("work_mode",mBusData[bus_id]->box[insert_id].workMode);
