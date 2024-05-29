@@ -169,13 +169,14 @@ void SetShm::setName(DbNameItem &item)
         QString temp;
         if(str.length() >= 1){
             temp = str.right(1);
-            str = str.remove(str.size() -1 , 1);
+            str = str.remove(str.size() - 1 , 1);
         }
+        int start = item.num;
         if(1 == item.increment){
-            for(int i = 1 ; i < BOX_NUM - 1 ; i++){
+            for(int i = start , j = 1; i < BOX_NUM - 1 ; i++ , j++){
                 item.num = i;
-                if( item.num > 1 ){
-                    item.name = str+ QString("%1").arg(temp.toInt()+i-1);
+                if( j > 1 ){
+                    item.name = str+ QString("%1").arg(temp.toInt()+j-1);
                     strcpy(bus->box[item.num].boxName,item.name.toLatin1().data());
                 }
                 DbDevName::bulid()->saveItem(item);
