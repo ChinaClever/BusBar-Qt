@@ -6,11 +6,11 @@
  */
 #include "json_pack.h"
 
+//extern QString get_alarm_json();
 
 Json_Pack::Json_Pack(QObject *parent) : QThread(parent)
 {
     mPro = new sProgress();
-    mAlarm = new DpAlarmSlave(this);
     mIp = new IpSettingDlg();
     sDataPacket *shm = get_share_mem();
     for(int i = 0;i <BUS_NUM; i++)
@@ -41,6 +41,8 @@ void Json_Pack::Startbox(QJsonObject &obj,int id)
     obj.insert("dev_ip", mPro->dev_ip);
     mPro->status = Startbox_Status(id);
     obj.insert("status", mPro->status);
+    obj.insert("bus_name", mBusData[id]->busName);
+    obj.insert("box_name", "");
 
     Startbox_pduInfo(obj,id);
 }
@@ -169,7 +171,7 @@ void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
         pfArray.append(mBoxData[id]->data.pf[i]/COM_RATE_PF);
         apArray.append(QJsonValue::fromVariant((mBoxData[id]->data.apPow[i]/COM_RATE_POW)));
         elepowArray.append(QJsonValue::fromVariant((mBoxData[id]->data.ele[i])/COM_RATE_ELE));
-        ele_reactive.append("a");
+        ele_reactive.append("");
     }
     subObj.insert("pow_apparent",apArray);
     subObj.insert("pow_reactive",reactivepowArray);
@@ -211,20 +213,22 @@ void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
     tgObj.insert("pow_status",mBoxData[id]->totalPow.iupalarm);
     tgObj.insert("pow_apparent",mBoxData[id]->totalApPow/COM_RATE_POW);
     tgObj.insert("pow_reactive",((mBoxData[id]->totalApPow/COM_RATE_POW)-(mBoxData[id]->totalPow.ivalue/COM_RATE_POW)));
-    double eleActive,pfTotal;
+    double eleActive = 0,pfTotal = 0;
     for(int j=0; j<3; ++j) {
         eleActive += ((mBoxData[id]->data.ele[j])/COM_RATE_ELE);
     }
-    pfTotal = (mBoxData[id]->totalPow.ivalue/COM_RATE_POW)/(mBoxData[id]->totalApPow/COM_RATE_POW);
-    tgObj.insert("power_factor",pfTotal);   //功率因素
-    tgObj.insert("ele_active",eleActive);
-    tgObj.insert("ele_apparent","a");     //视在电能
-    tgObj.insert("ele_reactive","a");     //无功电能
+    if(mBoxData[id]->totalApPow)
+        pfTotal = (((mBoxData[id]->totalPow.ivalue)/(mBoxData[id]->totalApPow))/COM_RATE_POW);
+    else pfTotal = 0;
+    tgObj.insert("power_factor",QString::number(pfTotal,'f',2).toDouble());   //功率因素
+    tgObj.insert("ele_active",QString::number(eleActive,'f',2).toDouble());
+    tgObj.insert("ele_apparent","");     //视在电能
+    tgObj.insert("ele_reactive","");     //无功电能
     tgObj.insert("cur_residual_value",mBoxData[id]->reCur.svalue/COM_RATE_CUR);
     tgObj.insert("cur_residual_alarm",mBoxData[id]->reCur.smax/COM_RATE_CUR);
     tgObj.insert("cur_residual_status",mBoxData[id]->reCur.supalarm);
-    tgObj.insert("cur_zero_value",QString::number((mBoxData[id]->zeroLineCur.ivalue)/COM_RATE_CUR));
-    tgObj.insert("cur_zero_alarm",QString::number((mBoxData[id]->zeroLineCur.imax)/COM_RATE_CUR));
+    tgObj.insert("cur_zero_value",(mBoxData[id]->zeroLineCur.ivalue)/COM_RATE_CUR);
+    tgObj.insert("cur_zero_alarm",(mBoxData[id]->zeroLineCur.imax)/COM_RATE_CUR);
     tgObj.insert("cur_zero_status",mBoxData[id]->zeroLineCur.iupalarm);
     tgObj.insert("vol_unbalance",QJsonValue::fromVariant(mBoxData[id]->volUnbalance));
     tgObj.insert("cur_unbalance",QJsonValue::fromVariant(mBoxData[id]->curUnbalance));
@@ -242,13 +246,15 @@ void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
             thdVol.append(mBusData[id]->thdData.volThd[i][j]);
         }
     }
+
     subObj.insert("cur_thd",thdCur);
     subObj.insert("vol_thd",thdVol);
     dataObj.insert("bus_cfg",cfgObj);
     dataObj.insert("line_item_list",subObj);
-    dataObj.insert("env_item_list",envObj);
     dataObj.insert("bus_total_data",tgObj);
+
     obj.insert("bus_data" ,dataObj);
+    obj.insert("env_item_list" ,envObj);
 }
 
 //----------------------------插接箱----------------------------
@@ -256,10 +262,15 @@ void Json_Pack::Insertbox(QJsonObject &obj,int bus_id,int insert_id)
 {
     QDateTime t = QDateTime::currentDateTime();
     mPro->datetime = t.toString("yyyy-MM-dd HH:mm:ss");
+    obj.insert("datetime", mPro->datetime);
     obj.insert("addr", insert_id + 1);
     obj.insert("bar_id", bus_id + 1);
+    obj.insert("dev_ip", mPro->dev_ip);
     mPro->status = Insertbox_Status(bus_id, insert_id);
     obj.insert("status",mPro->status);
+    obj.insert("bus_name", mBusData[bus_id]->busName);
+    obj.insert("box_name", mBusData[bus_id]->box[insert_id].boxName);
+
     Insertbox_pduInfo(obj,bus_id,insert_id);
 }
 int Json_Pack::Insertbox_Status(int bus_id,int insert_id)
@@ -282,21 +293,23 @@ void Json_Pack::Insertbox_pduInfo(QJsonObject &obj, int bus_id,int insert_id)
 
 void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
 {
+    sBoxData *BoxData = &(mBusData[bus_id]->box[insert_id]);
+    sObjData *LoopData = &(mBusData[bus_id]->box[insert_id].data);
     QJsonArray swArray; QJsonObject subObj, cfgObj, loopObj, lineObj, envObj, totalObj, outputObj;
 //----------------------------配置数据------------------------------------------
-    QString version = QString("V%1.%2.%3").arg(mBusData[bus_id]->box[insert_id].version/100).arg(mBusData[bus_id]->box[insert_id].version/10%10).arg(mBusData[bus_id]->box[insert_id].version%10);
+    QString version = QString("V%1.%2.%3").arg(BoxData->version/100).arg(BoxData->version/10%10).arg(BoxData->version%10);
     cfgObj.insert("box_version",version);
-    cfgObj.insert("baud_rate",mBusData[bus_id]->box[insert_id].baudRate);
-    cfgObj.insert("beep",mBusData[bus_id]->box[insert_id].buzzerStatus);
-    cfgObj.insert("work_mode",mBusData[bus_id]->box[insert_id].workMode);
-    cfgObj.insert("item_type",mBusData[bus_id]->box[insert_id].proNum);
-    cfgObj.insert("loop_num",mBusData[bus_id]->box[insert_id].loopNum);
-    cfgObj.insert("alarm_count",mBusData[bus_id]->box[insert_id].alarmTime);
-    cfgObj.insert("iof",mBusData[bus_id]->box[insert_id].iOF);
-    cfgObj.insert("box_type",mBusData[bus_id]->box[insert_id].boxType);
-    for(int i =0; i < mBusData[bus_id]->box[insert_id].loopNum; i++)
+    cfgObj.insert("baud_rate",BoxData->baudRate);
+    cfgObj.insert("beep",BoxData->buzzerStatus);
+    cfgObj.insert("work_mode",insert_id +1);
+    cfgObj.insert("item_type",BoxData->proNum);
+    cfgObj.insert("loop_num",BoxData->loopNum);
+    cfgObj.insert("alarm_count",BoxData->alarmTime);
+    cfgObj.insert("iof",BoxData->iOF);
+    cfgObj.insert("box_type",BoxData->boxType);
+    for(int i =0; i < BoxData->loopNum; i++)
     {
-        swArray.append(mBusData[bus_id]->box[insert_id].data.sw[i]);
+        swArray.append(BoxData->data.sw[i]);
     }
     cfgObj.insert("breaker_status",swArray);
     subObj.insert("box_cfg",cfgObj);
@@ -306,22 +319,22 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
     QJsonArray loopvolMax, loopcurMax, looppowMax;
     QJsonArray volArray, curArray, powArray;
 
-    for(int i = 0;i < mBusData[bus_id]->box[insert_id].loopNum; i++)
+    for(int i = 0;i < BoxData->loopNum; i++)
     {
-        loopvolArray.append((mBusData[bus_id]->box[insert_id].data.vol.value[i])/COM_RATE_VOL);
-        loopvolMin.append((mBusData[bus_id]->box[insert_id].data.vol.min[i])/COM_RATE_VOL);
-        loopvolMax.append((mBusData[bus_id]->box[insert_id].data.vol.max[i])/COM_RATE_VOL);
-        volArray.append(mBusData[bus_id]->box[insert_id].data.vol.upalarm[i]);
+        loopvolArray.append((LoopData->vol.value[i])/COM_RATE_VOL);
+        loopvolMin.append((LoopData->vol.min[i])/COM_RATE_VOL);
+        loopvolMax.append((LoopData->vol.max[i])/COM_RATE_VOL);
+        volArray.append(LoopData->vol.upalarm[i]);
 
-        loopcurArray.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].data.cur.value[i])/COM_RATE_CUR));
-        loopcurMin.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].data.cur.min[i])/COM_RATE_CUR));
-        loopcurMax.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].data.cur.max[i])/COM_RATE_CUR));
-        curArray.append(mBusData[bus_id]->box[insert_id].data.cur.upalarm[i]);
+        loopcurArray.append(QJsonValue::fromVariant((LoopData->cur.value[i])/COM_RATE_CUR));
+        loopcurMin.append(QJsonValue::fromVariant((LoopData->cur.min[i])/COM_RATE_CUR));
+        loopcurMax.append(QJsonValue::fromVariant((LoopData->cur.max[i])/COM_RATE_CUR));
+        curArray.append(BoxData->data.cur.upalarm[i]);
 
-        looppowArray.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].data.pow.value[i])/COM_RATE_POW));
-        looppowMin.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].data.pow.min[i])/COM_RATE_POW));
-        looppowMax.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].data.pow.max[i])/COM_RATE_POW));
-        powArray.append(mBusData[bus_id]->box[insert_id].data.pow.upalarm[i]);
+        looppowArray.append(QJsonValue::fromVariant((LoopData->pow.value[i])/COM_RATE_POW));
+        looppowMin.append(QJsonValue::fromVariant((LoopData->pow.min[i])/COM_RATE_POW));
+        looppowMax.append(QJsonValue::fromVariant((LoopData->pow.max[i])/COM_RATE_POW));
+        powArray.append(LoopData->pow.upalarm[i]);
     }
     loopObj.insert("vol_value",loopvolArray);
     loopObj.insert("vol_min",loopvolMin);
@@ -341,34 +354,36 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
     loopObj.insert("pow_status",looppowArray);
 
     QJsonArray reactivepowValue, appowValue, pfValue, eleValue, reactiveValue;
-    for(int i = 0;i < mBusData[bus_id]->box[insert_id].loopNum; i++)
+    for(int i = 0;i < BoxData->loopNum; i++)
     {
-        reactivepowValue.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].data.reactivePower[i])/COM_RATE_POW));
-        appowValue.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].data.apPow[i])/COM_RATE_POW));
-        pfValue.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].data.pf[i])/COM_RATE_PF));
-        eleValue.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].data.ele[i])/COM_RATE_ELE));
-        reactiveValue.append("a");
+        reactivepowValue.append(QJsonValue::fromVariant((LoopData->reactivePower[i])/COM_RATE_POW));
+        appowValue.append(QJsonValue::fromVariant((LoopData->apPow[i])/COM_RATE_POW));
+        pfValue.append(QJsonValue::fromVariant((LoopData->pf[i])/COM_RATE_PF));
+        eleValue.append(QJsonValue::fromVariant((LoopData->ele[i])/COM_RATE_ELE));
+        reactiveValue.append("");
     }
     loopObj.insert("pow_reactive" ,reactivepowValue);
     loopObj.insert("pow_apparent" ,appowValue);
     loopObj.insert("power_factor" ,pfValue);
     loopObj.insert("ele_active" ,eleValue);
     loopObj.insert("ele_reactive" ,reactiveValue);
+
     subObj.insert("loop_item_list" ,loopObj);
 //----------------------------相数据-------------------------------
-    QJsonArray lineVol, linecur, linepow, lineele, lineapw,linereactive, linepf, linepl, linereactiveele, curthd;
+    QJsonArray lineVol, linecur, linepow, lineele, lineapw,linereactive;
+    QJsonArray linepf, linepl, linereactiveele, curthd;
     for(int i = 0;i < START_LINE_NUM; i++)
     {
-        lineVol.append(mBusData[bus_id]->box[insert_id].lineTgBox.vol[i]);
-        linecur.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].lineTgBox.cur[i])/COM_RATE_CUR));
-        curthd.append(mBusData[bus_id]->box[insert_id].data.curThd[i]);
-        linepow.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].lineTgBox.pow[i])/COM_RATE_POW));
-        lineele.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].lineTgBox.ele[i])/COM_RATE_ELE));
-        lineapw.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].lineTgBox.apPow[i])/COM_RATE_POW));
-        linereactive.append(QJsonValue::fromVariant((mBusData[bus_id]->box[insert_id].lineTgBox.reactivePower[i])/COM_RATE_POW));
+        lineVol.append(BoxData->lineTgBox.vol[i]/COM_RATE_VOL);
+        linecur.append(QJsonValue::fromVariant((BoxData->lineTgBox.cur[i])/COM_RATE_CUR));
+        curthd.append(LoopData->curThd[i]);
+        linepow.append(QJsonValue::fromVariant((BoxData->lineTgBox.pow[i])/COM_RATE_POW));
+        lineele.append(QJsonValue::fromVariant((BoxData->lineTgBox.ele[i])/COM_RATE_ELE));
+        lineapw.append(QJsonValue::fromVariant((BoxData->lineTgBox.apPow[i])/COM_RATE_POW));
+        linereactive.append(QJsonValue::fromVariant((BoxData->lineTgBox.reactivePower[i])/COM_RATE_POW));
         linepf.append((mBusData[bus_id]->box[insert_id].lineTgBox.pf[i]/COM_RATE_PF));
-        linepl.append(mBusData[bus_id]->box[insert_id].data.pl[i]);
-        linereactiveele.append("a");
+        linepl.append(LoopData->pl[i]);
+        linereactiveele.append("");
     }
     lineObj.insert("vol_value",lineVol);
     lineObj.insert("cur_value",linecur);
@@ -383,53 +398,58 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
 
     subObj.insert("line_item_list" ,lineObj);
 //----------------------------总数据------------------------------------------
-    double pf_Total;
-    totalObj.insert("pow_active",(mBusData[bus_id]->box[insert_id].tgBox.pow)/COM_RATE_POW);
-    totalObj.insert("pow_apparent",(mBusData[bus_id]->box[insert_id].tgBox.apPow)/COM_RATE_POW);
-    totalObj.insert("ele_active",(mBusData[bus_id]->box[insert_id].tgBox.ele)/COM_RATE_ELE);
-    totalObj.insert("pow_reactive",((mBusData[bus_id]->box[insert_id].tgBox.apPow)-(mBusData[bus_id]->box[insert_id].tgBox.pow))/COM_RATE_POW);
-    pf_Total = ((mBusData[bus_id]->box[insert_id].tgBox.pow)/(mBusData[bus_id]->box[insert_id].tgBox.apPow))/COM_RATE_POW;
-    totalObj.insert("power_factor",pf_Total);
-    totalObj.insert("ele_apparent","a");
-    totalObj.insert("ele_reactive","a");
+    double pf_Total = 0;
+    totalObj.insert("pow_active",(BoxData->tgBox.pow)/COM_RATE_POW);
+    totalObj.insert("pow_apparent",(BoxData->tgBox.apPow)/COM_RATE_POW);
+    totalObj.insert("ele_active",(BoxData->tgBox.ele)/COM_RATE_ELE);
+    totalObj.insert("pow_reactive",((BoxData->tgBox.apPow)-(BoxData->tgBox.pow))/COM_RATE_POW);
+    pf_Total = ((BoxData->tgBox.pow)/(BoxData->tgBox.apPow))/COM_RATE_POW;
+    totalObj.insert("power_factor",QString::number(pf_Total,'f',2).toDouble());
+    totalObj.insert("ele_apparent","");
+    totalObj.insert("ele_reactive","");
     subObj.insert("box_total_data" ,totalObj);
 //----------------------------输出位数据------------------------------------------
-    double pow_active[3], pow_apparent[3],pow_reactive[3], ele_active[3],ele_apparent[3],ele_reactive[3];
+    double pow_active[3] = {0}, pow_apparent[3] = {0},pow_reactive[3] = {0}, ele_active[3] = {0};
     QJsonArray actPow, apPow, reaPow, actEle, apEle, reaEle, pfPow;
-    if(mBusData[bus_id]->box[insert_id].phaseFlag){//三相
-        for(int i=0; i<3; ++i)
+    int lineNum = BoxData->loopNum /3;
+
+    if(BoxData->phaseFlag){//三相
+        for(int i=0; i< lineNum; ++i)
         {
-            for(int j=0; j<3; ++j) {
-                    pow_apparent[i] += ((mBusData[bus_id]->box[insert_id].data.apPow[i*3+j])/COM_RATE_POW);
-                    pow_active[i] += ((mBusData[bus_id]->box[insert_id].data.pow.value[i*3+j])/COM_RATE_POW);
-                    pow_reactive[i] += ((mBusData[bus_id]->box[insert_id].data.reactivePower[i*3+j])/COM_RATE_POW);
-                    ele_active[i] += ((mBusData[bus_id]->box[insert_id].data.ele[i*3+j])/COM_RATE_ELE);
+            for(int j=0; j<3; ++j)
+            {
+                pow_apparent[i] += ((LoopData->apPow[i*3+j])/COM_RATE_POW);
+                pow_active[i] += ((LoopData->pow.value[i*3+j])/COM_RATE_POW);
+                pow_reactive[i] += ((LoopData->reactivePower[i*3+j])/COM_RATE_POW);
+                ele_active[i] += ((LoopData->ele[i*3+j])/COM_RATE_ELE);
             }
+
             if(pow_active[i] > 0) pfPow.append(pow_active[i] * 100.0/ pow_apparent[i]);
             else pfPow.append(0);
             if((pfPow.at(i)).toInt() >99) pfPow.at(i) = 99;
 
-            apPow.append(pow_apparent[i]);
-            actPow.append(pow_active[i]);
-            reaPow.append(pow_reactive[i]);
-            actEle.append(ele_active[i]);
-            apEle.append("a");
-            reaEle.append("a");
+            apPow.append(QString::number(pow_apparent[i],'f',3).toDouble());
+            actPow.append(QString::number(pow_active[i],'f',3).toDouble());
+            reaPow.append(QString::number(pow_reactive[i],'f',3).toDouble());
+            actEle.append(QString::number(ele_active[i],'f',3).toDouble());
+            apEle.append("");
+            reaEle.append("");
         }
 
-    }else{
+    } else {
         for(int i=0; i<3; ++i)//单相三个输出位
         {
-            if(mBusData[bus_id]->box[insert_id].data.pow.value[i] > 0) pfPow.append((mBusData[bus_id]->box[insert_id].data.pow.value[i]) * 100.0 / (mBusData[bus_id]->box[insert_id].data.apPow[i]));
+            if(LoopData->pow.value[i] > 0)
+                    pfPow.append((LoopData->pow.value[i]) * 100.0 / (LoopData->apPow[i]));
             else pfPow.append(0);
             if((pfPow.at(i)).toInt()>99) pfPow.at(i) = 99;
 
-            actPow.append((mBusData[bus_id]->box[insert_id].data.pow.value[i])/COM_RATE_POW);
-            apPow.append((mBusData[bus_id]->box[insert_id].data.apPow[i])/COM_RATE_POW);
-            reaPow.append((mBusData[bus_id]->box[insert_id].data.reactivePower[i])/COM_RATE_POW);
-            actEle.append((mBusData[bus_id]->box[insert_id].data.ele[i])/COM_RATE_ELE);
-            apEle.append("a");
-            reaEle.append("a");
+            actPow.append((LoopData->pow.value[i])/COM_RATE_POW);
+            apPow.append((LoopData->apPow[i])/COM_RATE_POW);
+            reaPow.append((LoopData->reactivePower[i])/COM_RATE_POW);
+            actEle.append((LoopData->ele[i])/COM_RATE_ELE);
+            apEle.append("");
+            reaEle.append("");
         }
     }
     outputObj.insert("pow_active",actPow);
@@ -445,30 +465,40 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
     QJsonArray envValue, envMin, envMax, temArray;
     for(int i = 0;i < SENSOR_NUM; i++)
     {
-        envValue.append((mBusData[bus_id]->box[insert_id].env.tem.value[i])/COM_RATE_TEM);
-        envMin.append((mBusData[bus_id]->box[insert_id].env.tem.min[i])/COM_RATE_TEM);
-        envMax.append((mBusData[bus_id]->box[insert_id].env.tem.max[i])/COM_RATE_TEM);
-        temArray.append(mBusData[bus_id]->box[insert_id].env.tem.upalarm[i]);
+        envValue.append((BoxData->env.tem.value[i])/COM_RATE_TEM);
+        envMin.append((BoxData->env.tem.min[i])/COM_RATE_TEM);
+        envMax.append((BoxData->env.tem.max[i])/COM_RATE_TEM);
+        temArray.append(BoxData->env.tem.upalarm[i]);
     }
     envObj.insert("tem_value",envValue);
     envObj.insert("tem_min",envMin);
     envObj.insert("tem_max",envMax);
     envObj.insert("tem_status",temArray);
 
-    subObj.insert("env_item_list" ,envObj);
     obj.insert("box_data" ,subObj);
+    obj.insert("env_item_list" ,envObj);
 }
 
 void Json_Pack::getStart_Json(QJsonObject &json , QByteArray &ba, int id)
 {
     Startbox(json, id);
     QJsonDocument jsonDoc(json);
-    ba = jsonDoc.toJson();
+    ba = jsonDoc.toJson(QJsonDocument::Compact);
 }
 
 void Json_Pack::getInsert_Json(QJsonObject &json , QByteArray &ba, int id, int num)
 {
     Insertbox(json, id, num);
     QJsonDocument jsonDoc(json);
-    ba = jsonDoc.toJson();
+    ba = jsonDoc.toJson(QJsonDocument::Compact);
+}
+
+bool Json_Pack::delay(int s)
+{
+    bool ret = true;
+    for(int i=0; i<s; ++i) {
+        QThread::msleep(1000);
+    }
+
+    return ret;
 }

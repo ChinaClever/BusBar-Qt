@@ -229,6 +229,7 @@ struct sProgress
     QString addr;
     QString dev_ip;
     QString datetime;
+    QString dev_name;
     int bus_id[BUS_NUM][BOX_NUM+1];
     int status;
 };

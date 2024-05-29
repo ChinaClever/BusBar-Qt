@@ -14,6 +14,7 @@ public:
     static Json_Pack *bulid(QObject *parent = nullptr);
     void getStart_Json(QJsonObject &json, QByteArray &ba, int id);
     void getInsert_Json(QJsonObject &json , QByteArray &ba, int id, int num);
+    bool delay(int s);
 signals:
 
 protected:

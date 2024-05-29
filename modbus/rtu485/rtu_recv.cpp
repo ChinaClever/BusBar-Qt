@@ -242,8 +242,8 @@ static int rtu_start_recv_init(uchar *ptr, Rtu_recv *msg)
     msg->dc = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[交直流]
     msg->dc = 1;
     msg->curSpecification = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[电流规格]
-    ptr+=2;len+=2;//[地址码]
-//    msg->workMode = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[始端箱的工作模式]
+//    ptr+=2;len+=2;//[地址码]
+    msg->workMode = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[始端箱的工作模式]
     msg->baudRate = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[波特率]
     msg->buzzerStatus = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[蜂鸣器]
     msg->alarmTime = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
@@ -387,7 +387,7 @@ static int rtu_plug_recv_init(uchar *ptr, Rtu_recv *msg)
     msg->version = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;// 软件版本
     msg->proNum = (*ptr) * 256 + *(ptr+1); ptr+=2; len+=2;// 项目ID
     msg->lineNum = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//回路数
-    //msg->addr = (*ptr) * 256 + *(ptr+1);
+//    msg->addr = (*ptr) * 256 + *(ptr+1);
     ptr+=2;len+=2;//地址
     msg->baudRate = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[波特率]
     msg->iOF = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[iOF触点]
@@ -561,7 +561,7 @@ bool rtu_recv_packetV3(int addr ,uchar *buf, int len, Rtu_recv *pkt)
         }
         else{//插接箱
             ptr += rtu_plug_recv_init(ptr , pkt);
-            ptr += (16-9)*2;//保留
+            ptr += (16-10)*2;//保留
             for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop 数据
                 ptr += rtu_plug_recv_loop_data(ptr , pkt , i);
             ptr += rtu_plug_recv_thd_pl_data(ptr , pkt);

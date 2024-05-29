@@ -3,7 +3,7 @@
 #include "json_pack.h"
 #include "network.h"
 #include <QThread>
-#include "tcpclient.h"
+#include "tcpsent.h"
 
 class Json_Send : public QThread
 {
@@ -23,6 +23,8 @@ private:
     QTimer *timer;
     UdpSentSocket *mSocket;
     TcpClient *mTcp;
+    sBusData *mBus[4];
+    QReadWriteLock  *mLock;
     int *mBoxNum[BUS_NUM];
 };
 
