@@ -40,7 +40,7 @@ void SetNameDlg::init(int bus, int box, int loop, const QString &name)
     mBox = box;
     mLoop = loop;
     ui->nameLab->setText(name);
-    if(box == 1 && loop == 0){
+    if(loop == 0){
         ui->checkBox->show();
     }else{
         ui->checkBox->hide();
@@ -81,9 +81,9 @@ bool SetNameDlg::save()
     item.num = num;
     item.name = ui->nameEdit->text();
     item.increment = 0;
-    if(ui->checkBox->isChecked()) item.increment = 1;
+    if(ui->checkBox->isChecked() && mLoop == 0) item.increment = 1;
     const char *temp = item.name.right(1).toLatin1().data();
-    if(((*temp)<'0'||(*temp)>'9') && ui->checkBox->isChecked() && 1 == item.num && 2 == item.type){
+    if(((*temp)<'0'||(*temp)>'9') && ui->checkBox->isChecked() && 2 == item.type){
         if(gLanguage == 0) CriticalMsgBox box(NULL, tr("名称最后字符不是数字，请重新输入或者是不选择自递增!!"));
         else CriticalMsgBox box(NULL, tr("The last character of the name is not a number.\nPlease re-enter or do not select auto-increment!!"));
         return false;
