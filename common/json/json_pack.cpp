@@ -54,34 +54,35 @@ void Json_Pack::Startbox_pduInfo(QJsonObject &obj, int id)
 void Json_Pack::Startbox_Alarm(QJsonObject &obj ,int id)
 {
     QStringList alarmStr = get_alarm_json();
-    QString bus_list[4];
+    QString bus_list; bus_list.clear();
 
     for(int i=0; i<alarmStr.size()-3; i+=3){
-        if(alarmStr.at(i).contains("BUS-1"))
-            {
-                for(int j = i; j< i+3;j++){
-                    bus_list[0] += alarmStr.at(j);
-                }
-                bus_list[0] += tr("\n");
-            }else if(alarmStr.at(i).contains("BUS-2")){
-                for(int j = i; j< i+3;j++){
-                    bus_list[1] += alarmStr.at(j);
-                }
-                bus_list[1] += tr("\n");
-            }else if(alarmStr.at(i).contains("BUS-3")){
-                for(int j = i; j< i+3;j++){
-                    bus_list[2] += alarmStr.at(j);
-                }
-                bus_list[2] += tr("\n");
-            }else if(alarmStr.at(i).contains("BUS-4")){
-                for(int j = i; j< i+3;j++){
-                    bus_list[3] += alarmStr.at(j);
-                }
-                bus_list[3] += tr("\n");
+        if(alarmStr.at(i).contains(mBusData[id]->busName))
+        {
+            for(int j = i; j< i+3;j++){
+                bus_list += alarmStr.at(j);
             }
+            bus_list += tr("\n");
+        }
+//        else if(alarmStr.at(i).contains("BUS-2")){
+//                for(int j = i; j< i+3;j++){
+//                    bus_list[1] += alarmStr.at(j);
+//                }
+//                bus_list[1] += tr("\n");
+//            }else if(alarmStr.at(i).contains("BUS-3")){
+//                for(int j = i; j< i+3;j++){
+//                    bus_list[2] += alarmStr.at(j);
+//                }
+//                bus_list[2] += tr("\n");
+//            }else if(alarmStr.at(i).contains("BUS-4")){
+//                for(int j = i; j< i+3;j++){
+//                    bus_list[3] += alarmStr.at(j);
+//                }
+//                bus_list[3] += tr("\n");
+//            }
     }
 
-    obj.insert("dev_alarm",bus_list[id]);
+    obj.insert("dev_alarm",bus_list);
 }
 int Json_Pack::Startbox_Status(int id)
 {
@@ -100,6 +101,7 @@ int Json_Pack::Startbox_Status(int id)
 void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
 {
     QJsonArray jsonArray; QJsonObject subObj, envObj, cfgObj, tgObj, dataObj;
+    char dc;
 //----------------------------配置数据------------------------------------------
     QString version = QString("V%1.%2.%3").arg(mBoxData[id]->version/100).arg(mBoxData[id]->version/10%10).arg(mBoxData[id]->version%10);
     cfgObj.insert("bus_version",version);
@@ -107,7 +109,9 @@ void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
     cfgObj.insert("baud_rate",mBoxData[id]->baudRate);
     cfgObj.insert("beep",mBoxData[id]->buzzerStatus);
     cfgObj.insert("work_mode",mBoxData[id]->workMode);
-    cfgObj.insert("ac_dc",mBoxData[id]->dc);
+    if(mBoxData[id]->dc) dc = 0;
+    else dc = 1;
+    cfgObj.insert("ac_dc",dc);
     cfgObj.insert("item_type",mBoxData[id]->proNum);
     cfgObj.insert("box_num",mBusData[id]->boxNum);
     cfgObj.insert("alarm_count",mBoxData[id]->alarmTime);

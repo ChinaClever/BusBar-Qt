@@ -36,21 +36,20 @@ void Json_Send::initFun()
 
 void Json_Send::run()
 {
-//    sendData();
-    TcpsendData();
+    sendData();//udp
+//    TcpsendData();//tcp
 }
 
 void Json_Send::TcpsendData()
 {
-    QString mHost = "192.168.1.151";
-    int port = 2222;
-
-    bool ret = true;
+    QString mHost = "192.168.1.44";
+    int port = 2222; bool ret = true;
 
     QJsonObject bar_json, box_json ; QByteArray ba;
     for(int i = 0;i < BUS_NUM;i++)
     {
-        if(mBus[i]->box[0].offLine) {
+        if(mBus[i]->box[0].offLine)
+        {
             bar_json.empty(); ba.clear();
             mJson->getStart_Json(bar_json, ba, i);
             ret = get_tcp_connect();
@@ -66,9 +65,11 @@ void Json_Send::TcpsendData()
         }
         for(int j = 1;j < *(mBoxNum[i]) + 1;j++)
         {
-            if(mBus[i]->box[j].offLine) {
+            if(mBus[i]->box[j].offLine)
+            {
                 ba.clear();
                 mJson->getInsert_Json(box_json, ba, i, j);
+                qDebug()<<"   tcp    "<<ba.size();
                 ret = get_tcp_connect();
                 if(ret == false)
                 {
@@ -89,14 +90,14 @@ void Json_Send::TcpsendData()
 void Json_Send::sendData()
 {
     QHostAddress address; bool ret;
-    address.setAddress(QString("192.168.1.151"));
+    address.setAddress(QString("192.168.1.19"));
     QJsonObject bar_json, box_json ; QByteArray ba;
 
     for(int i = 0;i < BUS_NUM;i++)
     {
         if(mBus[i]->box[0].offLine) {
             mJson->getStart_Json(bar_json, ba, i);
-            ret = mSocket->sentData(address, ba ,20010);
+            ret = mSocket->sentData(address, ba ,6000);
             if(!ret) break;
             bar_json.empty(); ba.clear();
 
@@ -104,7 +105,7 @@ void Json_Send::sendData()
             {
                 if(mBus[i]->box[j].offLine) {
                     mJson->getInsert_Json(box_json, ba, i, j);
-                    ret = mSocket->sentData(address, ba ,20010);
+                    ret = mSocket->sentData(address, ba ,6000);
                     if(!ret) break;
                     box_json.empty(); ba.clear();
                 }
