@@ -216,7 +216,7 @@ void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
     tgObj.insert("pow_max",mBoxData[id]->totalPow.imax/COM_RATE_POW);
     tgObj.insert("pow_status",mBoxData[id]->totalPow.iupalarm);
     tgObj.insert("pow_apparent",mBoxData[id]->totalApPow/COM_RATE_POW);
-    tgObj.insert("pow_reactive",((mBoxData[id]->totalApPow/COM_RATE_POW)-(mBoxData[id]->totalPow.ivalue/COM_RATE_POW)));
+    tgObj.insert("pow_reactive",((mBoxData[id]->totalApPow-mBoxData[id]->totalPow.ivalue)/COM_RATE_POW));
     double eleActive = 0,pfTotal = 0;
     for(int j=0; j<3; ++j) {
         eleActive += ((mBoxData[id]->data.ele[j])/COM_RATE_ELE);
@@ -415,7 +415,7 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
 //----------------------------输出位数据------------------------------------------
     double pow_active[3] = {0}, pow_apparent[3] = {0},pow_reactive[3] = {0}, ele_active[3] = {0};
     QJsonArray actPow, apPow, reaPow, actEle, apEle, reaEle, pfPow;
-    int lineNum = BoxData->loopNum /3;
+    int lineNum = BoxData->loopNum /3; double pf_factor=0;
 
     if(BoxData->phaseFlag){//三相
         for(int i=0; i< lineNum; ++i)
@@ -428,9 +428,12 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
                 ele_active[i] += ((LoopData->ele[i*3+j])/COM_RATE_ELE);
             }
 
-            if(pow_active[i] > 0) pfPow.append(pow_active[i] * 100.0/ pow_apparent[i]);
-            else pfPow.append(0);
-            if((pfPow.at(i)).toInt() >99) pfPow.at(i) = 99;
+            if(pow_active[i] > 0) {
+                pf_factor = (pow_active[i] * 100.0/ pow_apparent[i]) /COM_RATE_PF;
+                pfPow.append(QString::number(pf_factor,'f',2).toDouble());
+            } else pfPow.append(0);
+
+            if((pfPow.at(i).toDouble()) >0.99) pfPow.at(i) = 0.99;
 
             apPow.append(QString::number(pow_apparent[i],'f',3).toDouble());
             actPow.append(QString::number(pow_active[i],'f',3).toDouble());
@@ -443,10 +446,12 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
     } else {
         for(int i=0; i<3; ++i)//单相三个输出位
         {
-            if(LoopData->pow.value[i] > 0)
-                    pfPow.append((LoopData->pow.value[i]) * 100.0 / (LoopData->apPow[i]));
-            else pfPow.append(0);
-            if((pfPow.at(i)).toInt()>99) pfPow.at(i) = 99;
+            if(LoopData->pow.value[i] > 0) {
+                pf_factor = (LoopData->pow.value[i] * 100.0 / LoopData->apPow[i]) /COM_RATE_PF;
+                pfPow.append(QString::number(pf_factor,'f',2).toDouble());
+            } else pfPow.append(0);
+
+            if((pfPow.at(i).toDouble())>0.99) pfPow.at(i) = 0.99;
 
             actPow.append((LoopData->pow.value[i])/COM_RATE_POW);
             apPow.append((LoopData->apPow[i])/COM_RATE_POW);

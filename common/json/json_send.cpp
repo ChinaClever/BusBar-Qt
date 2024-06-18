@@ -105,6 +105,7 @@ void Json_Send::sendData()
             {
                 if(mBus[i]->box[j].offLine) {
                     mJson->getInsert_Json(box_json, ba, i, j);
+//                    qDebug()<<"   udp    "<<ba.size();
                     ret = mSocket->sentData(address, ba ,6000);
                     if(!ret) break;
                     box_json.empty(); ba.clear();
