@@ -344,20 +344,41 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
                     QString msg = tr("插接箱：%1，温度").arg(box.boxName);
                     unitAlarm(typeStr, msg, box.env.tem, COM_RATE_TEM, "°C");
                 }
-                for(int i = 0 ; i < box.data.lineNum ; i++){
-                    if( box.data.swAlarm[i] ) {
-                        QString typeStr = tr("回路断路器");
-                        QString str = tr("插接箱：%1").arg(box.boxName);
-                        QString tempStr = typeStr + tr("告警");
-                        QString statueStr = QString(tr(" 第 %1 个回路断开")).arg( i + 1 );
-                        str += statueStr;
-                        if(box.data.swAlarm[i] == 1){
-                            box.data.swAlarm[i]= 2;
-                            saveMsg( typeStr , str );
+                if(box.phaseFlag == 0){
+                    for(int i = 0 ; i < box.data.lineNum ; i++){
+                        if( box.data.swAlarm[i] ) {
+                            QString typeStr = tr("断路器");
+                            QString str = tr("插接箱：%1").arg(box.boxName);
+                            QString tempStr = typeStr + tr("告警");
+                            QString statueStr = QString(tr(" 第 %1 个回路断开")).arg( i + 1 );
+                            if(box.version >= 223) statueStr = QString(tr(" 第 %1 个断路器断开")).arg( i + 1 );
+                            str += statueStr;
+                            if(box.data.swAlarm[i] == 1){
+                                box.data.swAlarm[i]= 2;
+                                saveMsg( typeStr , str );
+                            }
+                            mAlarmStr << shm->data[mBusId].busName;
+                            mAlarmStr << tempStr;
+                            mAlarmStr << str;
                         }
-                        mAlarmStr << shm->data[mBusId].busName;
-                        mAlarmStr << tempStr;
-                        mAlarmStr << str;
+                    }
+                }else if(box.phaseFlag == 1){
+                    uchar breaker_num = (box.plugbreaker>>12)&0x0F;
+                    for(int i = 0 ; i < breaker_num ; i++){
+                        if( box.data.swAlarm[i] ) {
+                            QString typeStr = tr("断路器");
+                            QString str = tr("插接箱：%1").arg(box.boxName);
+                            QString tempStr = typeStr + tr("告警");
+                            QString statueStr = QString(tr(" 第 %1 个断路器断开")).arg( i + 1 );
+                            str += statueStr;
+                            if(box.data.swAlarm[i] == 1){
+                                box.data.swAlarm[i]= 2;
+                                saveMsg( typeStr , str );
+                            }
+                            mAlarmStr << shm->data[mBusId].busName;
+                            mAlarmStr << tempStr;
+                            mAlarmStr << str;
+                        }
                     }
                 }
             }else{
@@ -384,27 +405,54 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
                     QString msg = tr("Tap-off box：%1，temperature").arg(box.boxName);
                     unitAlarm(typeStr, msg, box.env.tem, COM_RATE_TEM, "°C");
                 }
-                for(int i = 0 ; i < box.data.lineNum ; i++){
-                    if( box.data.swAlarm[i] ) {
-                        QString typeStr = tr("Loop breaker");
-                        QString str = tr("Tap-off box：%1").arg(box.boxName);
-                        QString tempStr = typeStr + tr("Alarm");
-                        QString tempEn = "";
-                        if(i == 0) tempEn = "st";
-                        else if( i == 1 ) tempEn = "nd";
-                        else if( i == 2 ) tempEn = "rd";
-                        else tempEn = "th";
-                        QString statueStr = QString(tr(" %1%2 loop OFF")).arg( i + 1 ).arg(tempEn);
-                        str += statueStr;
-                        if(box.data.swAlarm[i] == 1){
-                            box.data.swAlarm[i]= 2;
-                            saveMsg( typeStr , str );
+                if(box.phaseFlag == 0){
+                    for(int i = 0 ; i < box.data.lineNum ; i++){
+                        if( box.data.swAlarm[i] ) {
+                            QString typeStr = tr("breaker");
+                            QString str = tr("Tap-off box：%1").arg(box.boxName);
+                            QString tempStr = typeStr + tr("Alarm");
+                            QString tempEn = "";
+                            if(i == 0) tempEn = "st";
+                            else if( i == 1 ) tempEn = "nd";
+                            else if( i == 2 ) tempEn = "rd";
+                            else tempEn = "th";
+                            QString statueStr = QString(tr(" %1%2 loop OFF")).arg( i + 1 ).arg(tempEn);
+                            if(box.version >= 223) statueStr = QString(tr(" %1%2 breaker OFF")).arg( i + 1 ).arg(tempEn);
+                            str += statueStr;
+                            if(box.data.swAlarm[i] == 1){
+                                box.data.swAlarm[i]= 2;
+                                saveMsg( typeStr , str );
+                            }
+                            mAlarmStr << shm->data[mBusId].busName;
+                            mAlarmStr << tempStr;
+                            mAlarmStr << str;
+                        }//if
+                    }//for
+                }//if box.phaseFlag == 0
+                else if(box.phaseFlag == 1){
+                    uchar breaker_num = (box.plugbreaker>>12)&0x0F;
+                    for(int i = 0 ; i < breaker_num ; i++){
+                        if( box.data.swAlarm[i] ) {
+                            QString typeStr = tr("breaker");
+                            QString str = tr("Tap-off box：%1").arg(box.boxName);
+                            QString tempStr = typeStr + tr("Alarm");
+                            QString tempEn = "";
+                            if(i == 0) tempEn = "st";
+                            else if( i == 1 ) tempEn = "nd";
+                            else if( i == 2 ) tempEn = "rd";
+                            else tempEn = "th";
+                            QString statueStr = QString(tr(" %1%2 breaker OFF")).arg( i + 1 ).arg(tempEn);
+                            str += statueStr;
+                            if(box.data.swAlarm[i] == 1){
+                                box.data.swAlarm[i]= 2;
+                                saveMsg( typeStr , str );
+                            }
+                            mAlarmStr << shm->data[mBusId].busName;
+                            mAlarmStr << tempStr;
+                            mAlarmStr << str;
                         }
-                        mAlarmStr << shm->data[mBusId].busName;
-                        mAlarmStr << tempStr;
-                        mAlarmStr << str;
-                    }//if
-                }//for
+                    }
+                }///else if(box.phaseFlag == 1)
             }////else
         }//if(box.boxAlarm)
     } else {

@@ -5,6 +5,8 @@
 #include "logmain/logmainelewid.h"
 #include "logbranch/logbranchelewid.h"
 #include "logalarm/logalarmwid.h"
+#include "logoperation/logoperationwid.h"
+#include "logsystem/logsystemwid.h"
 
 namespace Ui {
 class LogsWid;
@@ -33,6 +35,8 @@ private:
     LogMainEleWid *mMainEleWid;
     LogBranchEleWid *mBranchEleWid;
     LogAlarmWid *mAlarmWid;
+    LogOperationWid *mOperationWid;
+    LogSystemWid *mSystemWid;
 };
 
 #endif // LOGSWID_H

@@ -33,6 +33,7 @@ void SetTempWid::initWid()
     }
 
     initTableWid(header, 1, title);
+    for(int i = 0 ; i < header.size() ; i++) setTableColumnWidth(i,80); //设置宽度
 }
 
 

@@ -56,7 +56,7 @@ void LogMainEleExportDlg::readDbSlot(QString str)
 void LogMainEleExportDlg::exportSlot(bool e)
 {
     if(e)
-        mProgressWid->set(gExcelExportStr->path, gExcelExportStr->file, mDbThread->mList);
+        mProgressWid->set(gExcelExportStr->path, gExcelExportStr->file, mDbThread->mList , MainEleLog);
     else
         overSlot();
 }

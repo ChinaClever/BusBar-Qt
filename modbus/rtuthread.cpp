@@ -385,7 +385,7 @@ int RtuThread::transData(int addr)
         bool ret = rtu_recv_packet(buf, rtn, pkt); // 解析数据 data - len - it
         if(ret) {
             if(addr+1 == pkt->addr) { //回收地址和发送地址同
-                offLine = 4;
+                offLine = 8;
                 loopData(box, pkt); //更新数据
                 envData(&(box->env), pkt);
                 box->rate.svalue = pkt->rate.svalue;
@@ -545,6 +545,7 @@ void RtuThread::initData(sBoxData *box, Rtu_recv *pkt)
     box->isd = pkt->isd;
     box->reState = pkt->reState;
     box->boxType = pkt->boxType;
+    box->phaseFlag = pkt->phaseFlag;
 }
 
 void RtuThread::readLocalTemHum()
@@ -613,7 +614,7 @@ int RtuThread::transDataV3(int addr)
         if(ret) {
             if(addr+1 == pkt->addr) { //回收地址和发送地址同
                 box->boxOffLineAlarm = 1;
-                offLine = 4;
+                offLine = 8;
                 loopDataV3(box, pkt); //更新数据
                 envDataV3(&(box->env), pkt);
                 initData(box, pkt);
@@ -635,6 +636,7 @@ int RtuThread::transDataV3(int addr)
                 box->totalPow.imin = pkt->totalPow.imin;
                 box->totalPow.imax = pkt->totalPow.imax;
                 box->totalPow.iupalarm=  pkt->totalPow.ialarm;
+                box->plugbreaker = pkt->plugBreaker;
                 thdDataV3(pkt);
             }
 

@@ -165,6 +165,7 @@ typedef struct _sBoxData {
     uchar buzzerStatus;//蜂鸣器
     uchar reState;
     uchar boxType;//盒子类型：0-插接箱，1-温度模块
+    uchar phaseFlag;//0-单相，1-三相
     unsigned long long totalApPow;//   总视在功率
 
     sObjData data; // 回路数据
@@ -197,6 +198,7 @@ typedef struct _sBoxData {
     uint totalCur;//总电流
     uint online1;
     uint online2;
+    ushort plugbreaker;
 
     ushort rtuLen;
     uchar rtuArray[SRC_DATA_LEN_MAX];
@@ -550,6 +552,15 @@ enum  sSetPlugType{
     ,PlugPowerMAX_L9_1       = 243           //功率上限
     ,PlugPowerMAX_L9_2       = 244           //功率上限
 
+};
+
+
+enum  sLogType{
+    MainEleLog           = 0           //主路电能
+    ,BranchEleLog        = 1           //支路电能
+    ,AlarmLog            = 2           //告警日志
+    ,OperationLog        = 3           //操作日志
+    ,SystemLog           = 4           //系统日志
 };
 
 sDataPacket *share_mem_get();

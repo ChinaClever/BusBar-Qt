@@ -139,23 +139,34 @@ void SetShm::setItem(sThresholdItem &item)
 void SetShm::setName(DbNameItem &item)
 {
     char *name = NULL;
+    QString prename , msg1;
     int boxNum=0, num = item.num;
     sBusData *bus = &(shm->data[item.bus]);
-    switch(item.type) // 名称类型 1 母线名称   2 插接箱名称
+    QString type = tr("本机%1设置");
+    if(gLanguage == 1) type = tr("Local %1 settings");
+    QString typemame = tr("母线名称");
+    switch(item.type) // 名称类型 1 母线名称   2 插接箱名称 3 回路名称
     {
-    case 1:
+    case 1:{
         name = bus->busName;
+        prename = QString(bus->busName);
+        typemame = tr("母线名称");if(gLanguage == 1)typemame = tr("the busbar name");
         break;
-
-    case 2:
+    }
+    case 2:{
         name = bus->box[item.num].boxName;
+        prename = QString(bus->box[item.num].boxName);
+        typemame = tr("插接箱名称");if(gLanguage == 1)typemame = tr("the tap-off box name");
         break;
-
-    case 3:
+    }
+    case 3:{
         boxNum = num / LINE_NUM ;
         num = num % LINE_NUM ;
         name = bus->box[boxNum].loopName[num];
+        prename = QString(bus->box[boxNum].loopName[num]);
+        typemame = tr("回路名称");if(gLanguage == 1)typemame = tr("the loop name");
         break;
+    }
     }
 
 //    qDebug()<<" name "<<item.name << " bus "<< item.bus << " box "<<item.box
@@ -181,7 +192,17 @@ void SetShm::setName(DbNameItem &item)
                 }
                 DbDevName::bulid()->saveItem(item);
             }
-        }else DbDevName::bulid()->saveItem(item);
+            msg1 = tr("从插接箱%1开始统一设置 ").arg(start)+typemame+" !";
+            if(gLanguage == 1)msg1 = tr("Unified set %1 from tap-off box %2 !").arg(typemame).arg(start);
+            db_operation_obj(item.bus)->insertOperation(type.arg(typemame) , msg1);
+        }else{
+            DbDevName::bulid()->saveItem(item);
+                if(prename != item.name){
+                msg1 = tr("%1:将%2改成%3 ！").arg(typemame).arg(prename).arg(item.name);
+                if(gLanguage == 1)msg1 = tr("%1:set from %2 to %3 !").arg(typemame).arg(prename).arg(item.name);
+                db_operation_obj(item.bus)->insertOperation(type.arg(typemame) , msg1);
+            }
+        }
     }
 }
 

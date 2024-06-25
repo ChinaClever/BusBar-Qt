@@ -173,7 +173,6 @@ void DpTgThread::run()
 
         for(int i=0; i<BUS_NUM; ++i)
             tgBus(&(shm->data[i]));
-
         isRun  = false;
     }
 }

@@ -94,12 +94,21 @@ void SetLineTem::updateWid()
     QPushButton *btn[] ={ui->temBtn_1, ui->temBtn_2, ui->temBtn_3, ui->temBtn_4};
 
     if(mFlag){
-        for(int i=0; i<SENSOR_NUM; ++i) {
-            QString str = "";
-            str = startBoxTem->value[i] ?  QString::number(startBoxTem->value[i],10)+"℃" : "---";
-            btn[i]->setText(str);
-            sDataUnit *unit = &(get_share_mem()->data[mBus].box[0].env.tem);
-            setBtnColor(btn[i] , unit->alarm[i], unit->crAlarm[i]);
+        if(share_mem_get()->data[mBus].box[0].offLine){
+            for(int i=0; i<SENSOR_NUM; ++i) {
+                QString str = "";
+                str = QString::number(startBoxTem->value[i],10)+"℃";
+                btn[i]->setText(str);
+                sDataUnit *unit = &(get_share_mem()->data[mBus].box[0].env.tem);
+                setBtnColor(btn[i] , unit->alarm[i], unit->crAlarm[i]);
+            }
+        }else{
+            for(int i=0; i<SENSOR_NUM; ++i) {
+                QString str = "";
+                str = "---";
+                btn[i]->setText(str);
+                setBtnColor(btn[i] , 0, 0);
+            }
         }
         sDataUnit *it = &(get_share_mem()->data[0].box[0].env.tem);
         if(it->value[7] !=0 && it->value[8] != 0){
@@ -107,13 +116,14 @@ void SetLineTem::updateWid()
             ui->humlab->setText(QString::number(it->value[8])+"%");
         }
     }else{
+        uchar offline = share_mem_get()->data[mBus].box[0].offLine;
         for(int i=0; i<SENSOR_NUM; ++i) {
             if(i == SENSOR_NUM - 1 ) {btn[i]->hide();break;}
             QString str = "";
-            str = share_mem_get()->data[mBus].box[0].offLine ?  QString::number(startBoxPow->value[i]/COM_RATE_POW,'f', 3)+"kW" : "---";
+            str = offline ?  QString::number(startBoxPow->value[i]/COM_RATE_POW,'f', 3)+"kW" : "---";
             btn[i]->setText(str);
             sDataPowUnit *unit = &(get_share_mem()->data[mBus].box[0].data.pow);
-            setBtnColor(btn[i] , unit->alarm[i], unit->crAlarm[i]);
+            setBtnColor(btn[i] , offline?unit->alarm[i]:0, offline?unit->crAlarm[i]:0);
         }
     }
 }

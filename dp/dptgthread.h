@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "common/common.h"
+#include "sql/dbsystem.h"
 
 class DpTgThread : public QThread
 {

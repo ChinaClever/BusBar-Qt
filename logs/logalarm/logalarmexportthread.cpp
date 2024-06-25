@@ -55,7 +55,7 @@ bool LogAlarmExportThread::readDb()
                 msleep(10);
             }
         }
-        if(gLanguage == 0) msg = tr("数据读取完成!!");
+        if(gLanguage == 0)msg = tr("数据读取完成!!");
         else msg = tr("Data reading completed!!");
     } else {
         ret = false;

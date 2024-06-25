@@ -108,6 +108,16 @@ image: url(:/new/prefix1/image/down.png);
           <string>告警日志</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>操作日志</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>系统日志</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>

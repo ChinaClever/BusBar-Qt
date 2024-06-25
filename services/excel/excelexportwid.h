@@ -16,7 +16,7 @@ class ExcelExportWid : public QWidget
 public:
     explicit ExcelExportWid(QWidget *parent = 0);
     ~ExcelExportWid();
-    void set(const QString &path, const QString &file, const QList<QStringList> &list, int mode=1);
+    void set(const QString &path, const QString &file, const QList<QStringList> &list, int type=0 , int mode=1);
 
 signals:
     void overSig();

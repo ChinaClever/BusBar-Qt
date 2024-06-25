@@ -29,6 +29,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mIndex = 0;
     initWidget();
+    QString insertStr;
+    if(gLanguage == 0) insertStr = tr("系统启动 !");
+    else  insertStr = tr("System start !");//插入系统日志
+    db_system_obj()->insertSystem(insertStr);
+    mVersion = "V3.0.6.013";//当前软件版本
+    initVersion();
     updateTime();
 
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
@@ -105,8 +111,10 @@ void MainWindow::timeoutDone()
 //    count++;
 //    if(count>50)
 //    {
-//        QScreen *screen = QGuiApplication::primaryScreen();
-//        screen->grabWindow(0).save(QString("/home/root/pic/screensshot%1.png").arg(count));
+//        if(count % 5 == 0){
+//            QScreen *screen = QGuiApplication::primaryScreen();
+//            screen->grabWindow(0).save(QString("/home/root/pic/screensshot%1.png").arg(count));
+//        }
 //    }
 }
 
@@ -126,11 +134,12 @@ void MainWindow::setBusName(int index)
     QString str = "0" + QString::number(index+1) + " " + name;
     ui->busNameLab->setText(str);
     ui->busNameLab->setText("");
+//    ui->nameLab->hide();//legrand need hide
 
     mIndex = index;
 
     //ui->ratedLab->setText("V3.0.4_T03/27");
-    ui->ratedLab->setText("V3.0.5.010");
+    ui->ratedLab->setText(mVersion);
 }
 
 void MainWindow::checkAlarm()
@@ -190,6 +199,25 @@ void MainWindow::initLanguage()
     }
     sys_configFile_close();
 }
+
+void MainWindow::initVersion()
+{
+    bool ret = sys_configFile_open();
+    ret = sys_configFile_contains("version");
+    if(ret){
+        QString temp = sys_configFile_readStr("version");
+        if(temp != mVersion){
+            QString insertStr = tr("系统从%1升级到%2 !").arg(temp).arg(mVersion);
+            if(gLanguage == 1) insertStr = tr("Upgrading the system from %1 to %2 !").arg(temp).arg(mVersion);//插入系统日志
+            db_system_obj()->insertSystem(insertStr);
+            sys_configFile_write("version" , mVersion);
+        }
+    }else{
+        sys_configFile_write("version" , mVersion);
+    }
+    sys_configFile_close();
+}
+
 void MainWindow::initLable()
 {
     if(gLanguage == 0){
@@ -328,10 +356,20 @@ void MainWindow::dialogClosed(bool ret)
         ui->stackedWid->setCurrentWidget(mSettingWid);
         setButtonClickedImage(ui->setBtn,"setting_select");
         InterfaceChangeSig::get()->changeType(5);
+        QString insertStr;
+        if(gLanguage == 0) insertStr = tr("参数设置页面登录 !");
+        else  insertStr = tr("Log in parameter setting !");//插入系统日志
+        db_system_obj()->insertSystem(insertStr);
     }
     else{
-        if(gLanguage == 0) QMessageBox::information(this,"information","对不起，密码输入不正确，您不具备该权限！","确认");
-        else QMessageBox::information(this,"information","Sorry,the passward entered is incorrect.You do not have the permission！","Confirm");
+        if(gLanguage == 0){
+           QuMsgBox box(NULL,"对不起，密码输入不正确，您不具备该权限！");
+           box.Exec();
+        }
+        else{
+           QuMsgBox box(NULL,"Sorry,the passward entered is incorrect.You do not have the permission！");
+           box.Exec();
+        }
     }
 }
 

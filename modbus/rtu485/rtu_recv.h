@@ -65,6 +65,7 @@ struct Rtu_recv {
     uchar iOF;// 表示iOF触点
     uchar alarmTime;// 表示告警滤波2-5
     uchar boxType;// 表示插接箱类型
+    uchar phaseFlag;//0-单相，1-三相
     uchar shuntRelease;// 表示分励脱扣
     uchar lps; // 防雷开关
     uchar lpsState; // 防雷开关
@@ -94,6 +95,7 @@ struct Rtu_recv {
     ushort thd[40]; //   谐波含量
     unsigned long long totalApPow;//   总视在功率
     ushort crc; // 检验码
+    ushort plugBreaker; // 表示插接箱新加的断路器个数和状态
 };
 
 bool rtu_recv_packet(uchar *buf, int len, Rtu_recv *pkt);

@@ -2,6 +2,7 @@
 #define SETTHREAD_H
 
 #include "setnetcmd.h"
+#include "sql/dboperation.h"
 extern int gVerflag;//1代表一期 2代表二期
 extern int gReadWriteflag;
 class SetThread : public QThread
@@ -16,6 +17,9 @@ public:
 protected:
     void run();
     void workDown();
+    void change(sThresholdItem &item , QString &msg1, QString &msg2, int index = 0);
+    QString changeType(int index, QString &sym, double &rate);
+    QString calcLoop(int id);
 
 signals:
     void sendSetSnmpSig(sThresholdItem *);

@@ -4,12 +4,12 @@
  *  Created on: 2017年10月11日
  *      Author: Lzy
  */
-#include "logalarmeleexportdlg.h"
-#include "ui_logalarmeleexportdlg.h"
+#include "logalarmexportdlg.h"
+#include "ui_logalarmexportdlg.h"
 
-LogAlarmEleExportDlg::LogAlarmEleExportDlg(QWidget *parent) :
+LogAlarmExportDlg::LogAlarmExportDlg(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::LogAlarmEleExportDlg)
+    ui(new Ui::LogAlarmExportDlg)
 {
     ui->setupUi(this);
     initLanguage();
@@ -22,11 +22,11 @@ LogAlarmEleExportDlg::LogAlarmEleExportDlg(QWidget *parent) :
     connect(mProgressWid,SIGNAL(overSig()), this,SLOT(overSlot()));
 }
 
-LogAlarmEleExportDlg::~LogAlarmEleExportDlg()
+LogAlarmExportDlg::~LogAlarmExportDlg()
 {
     delete ui;
 }
-void LogAlarmEleExportDlg::initLanguage()
+void LogAlarmExportDlg::initLanguage()
 {
     if(gLanguage == 0){
         ui->label->setText("日志导出");
@@ -41,31 +41,31 @@ void LogAlarmEleExportDlg::initLanguage()
     }
 }
 
-void LogAlarmEleExportDlg::set(int id)
+void LogAlarmExportDlg::set(int id)
 {
     ui->pushButton->setEnabled(false);
     mDbThread->initData(id);
 }
 
-void LogAlarmEleExportDlg::readDbSlot(QString str)
+void LogAlarmExportDlg::readDbSlot(QString str)
 {
     ui->statusLab->setText(str);
 }
 
-void LogAlarmEleExportDlg::exportSlot(bool e)
+void LogAlarmExportDlg::exportSlot(bool e)
 {
     if(e)
-        mProgressWid->set(gExcelExportStr->path, gExcelExportStr->file, mDbThread->mList, 1);
+        mProgressWid->set(gExcelExportStr->path, gExcelExportStr->file, mDbThread->mList , AlarmLog);
     else
         overSlot();
 }
 
-void LogAlarmEleExportDlg:: overSlot()
+void LogAlarmExportDlg::overSlot()
 {
     ui->pushButton->setEnabled(true);
 }
 
-void LogAlarmEleExportDlg::on_pushButton_clicked()
+void LogAlarmExportDlg::on_pushButton_clicked()
 {
     this->close();
 }

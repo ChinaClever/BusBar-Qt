@@ -236,6 +236,14 @@ void BoxLoopTableWid::setTableItem(int id, int column, const QString &str)
     item->setText(str);
 }
 
+void BoxLoopTableWid::setTableSWItem(int id, int column, const QString &str)
+{
+    ui->tableWidget->setSpan(id , column , 3 , 1);
+    QTableWidgetItem *item = ui->tableWidget->item(id, column);
+    item->setText(str);
+}
+
+
 /**
  * @brief 清空表格
  */
@@ -299,22 +307,44 @@ void BoxLoopTableWid::setVol(int id, int column)
 
 void BoxLoopTableWid::setSw(int id, int column)
 {
-    QString str = "---";
+    if(mBoxData->phaseFlag == 0){
+        QString str = "---";
 
-    int sw = mData->sw[id];
-    int alram = 0;
-    if(sw == 1){
-        if(gLanguage == 0)str = "断开";
-        else str = "OFF";
-        alram = 1;
-    }
-    else if(sw == 2){
-        if(gLanguage == 0)str = "闭合";
-        else str = "ON";
-    }
+        int sw = mData->sw[id];
+        int alram = 0;
+        if(sw == 1){
+            if(gLanguage == 0)str = "断开";
+            else str = "OFF";
+            alram = 1;
+        }
+        else if(sw == 2){
+            if(gLanguage == 0)str = "闭合";
+            else str = "ON";
+        }
 
-    setTableItem(id, column, str);
-    setAlarmStatus(id, column,alram, 0);
+        setTableItem(id, column, str);
+        setAlarmStatus(id, column,alram, 0);
+    }
+}
+
+void BoxLoopTableWid::setPhaseSw(int id, int column , int sw)
+{
+    if(mBoxData->phaseFlag == 1){
+        QString str = "---";
+        int alram = 0;
+        if(sw == 1){
+            if(gLanguage == 0)str = "断开";
+            else str = "OFF";
+            alram = 1;
+        }
+        else if(sw == 2){
+            if(gLanguage == 0)str = "闭合";
+            else str = "ON";
+        }
+
+        setTableSWItem(id, column, str);
+        setAlarmStatus(id, column,alram, 0);
+    }
 }
 
 void BoxLoopTableWid::setCur(int id, int column)
@@ -409,6 +439,13 @@ void BoxLoopTableWid::updateData()
             setPf(i, k++); // 功率因素
             setEle(i, k++);
            // setTemp(i, k++); //温度
+        }
+        if(mBoxData->phaseFlag == 1){
+            uchar breaker_num = (mBoxData->plugbreaker>>12)&0x0F;
+            for(int k = 0 ; k < breaker_num ; k++){
+                uchar breaker_ver = (mBoxData->plugbreaker>>k*2)&0x03;
+                setPhaseSw((k * 3), 2 , breaker_ver);
+            }
         }
     } else {
         clearTable();

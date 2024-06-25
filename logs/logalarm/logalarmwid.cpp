@@ -8,7 +8,7 @@
 #include "logalarmwid.h"
 #include "ui_logalarmwid.h"
 #include "dbalarm.h"
-#include "logalarmeleexportdlg.h"
+#include "logalarmexportdlg.h"
 
 LogAlarmWid::LogAlarmWid(QWidget *parent) :
     QWidget(parent),
@@ -171,8 +171,8 @@ bool LogAlarmWid::refreshTable(const QString &table)
         ui->tableView->setColumnHidden(0, true); //隐藏列
         ui->tableView->setColumnWidth(1,90); //设置宽度
         ui->tableView->setColumnWidth(2,85); //设置宽度
-        ui->tableView->setColumnWidth(3,120); //设置宽度
-        ui->tableView->setColumnWidth(4,750); //设置宽度
+        ui->tableView->setColumnWidth(3,90); //设置宽度
+        ui->tableView->setColumnWidth(4,502); //设置宽度
     }
     return  ret;
 }
@@ -224,7 +224,7 @@ void LogAlarmWid::doubleSlot(QModelIndex)
 void LogAlarmWid::exportSlot(int mode)
 {
     if(mode == 0) {
-        LogAlarmEleExportDlg dlg(this);
+        LogAlarmExportDlg dlg(this);
         dlg.set(mid);
         dlg.exec();
     }

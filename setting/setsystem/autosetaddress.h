@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "common.h"
 #include <QProgressBar>
+#include "dboperation.h"
 
 namespace Ui {
 class AutoSetAddress;

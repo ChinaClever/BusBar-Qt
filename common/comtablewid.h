@@ -33,6 +33,7 @@ protected:
     void delTable();
     void setBackgroundColor(int id);
     void setItemColor(int id, int column, int alarm);
+    void setTableColumnWidth(int column, int width);
 //    void initScrollArea();
 //    bool eventFilter(QObject *obj, QEvent *event);
 

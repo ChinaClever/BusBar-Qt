@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "common/common.h"
+#include "sql/dbsystem.h"
 
 namespace Ui {
 class PassordSettingDlg;

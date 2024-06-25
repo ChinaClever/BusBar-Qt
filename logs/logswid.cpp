@@ -35,21 +35,34 @@ void LogsWid::initWidget()
     mAlarmWid = new LogAlarmWid(ui->stackedWid); //告警
     ui->stackedWid->addWidget(mAlarmWid);
     connect(this, SIGNAL(busChangedSig(int)), mAlarmWid, SLOT(initTableSlot(int)));
+
+    mOperationWid = new LogOperationWid(ui->stackedWid); //操作日志
+    ui->stackedWid->addWidget(mOperationWid);
+    connect(this, SIGNAL(busChangedSig(int)), mOperationWid, SLOT(initTableSlot(int)));
+
+    mSystemWid = new LogSystemWid(ui->stackedWid); //系统日志
+    ui->stackedWid->addWidget(mSystemWid);
+
     connect(LogSignal::get(), SIGNAL(logTypeSig(int)), this,SLOT(logTypeSlot(int)));
 }
 
 void LogsWid::logTypeSlot(int type)
 {
     switch (type) {
-    case 0:
+    case MainEleLog:
         ui->stackedWid->setCurrentWidget(mMainEleWid);
         break;
-    case 1:
+    case BranchEleLog:
         ui->stackedWid->setCurrentWidget(mBranchEleWid);
         break;
-
-    case 2:
+    case AlarmLog:
         ui->stackedWid->setCurrentWidget(mAlarmWid);
+        break;
+    case OperationLog:
+        ui->stackedWid->setCurrentWidget(mOperationWid);
+        break;
+    case SystemLog:
+        ui->stackedWid->setCurrentWidget(mSystemWid);
         break;
     default:
         break;

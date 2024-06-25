@@ -150,12 +150,14 @@ void OtherSettingDlg::on_resetBtn_clicked()
     if(gLanguage == 0){
         QuMsgBox box(NULL, tr("是否重启系统?"));
         if(box.Exec()) {
+            db_system_obj()->insertSystem(tr("系统重启 !"));
             system("reboot");
         }
     }
     else{
         QuMsgBox box(NULL, tr("Do you want to restart the system?"));
         if(box.Exec()) {
+            db_system_obj()->insertSystem(tr("System restart !"));
             system("reboot");
         }
     }

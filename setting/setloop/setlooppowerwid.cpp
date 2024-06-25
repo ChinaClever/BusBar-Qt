@@ -29,6 +29,7 @@ void SetLoopPowerWid::initWid()
     }
 
     initTableWid(header, 1, title);
+    for(int i = 0 ; i < header.size() ; i++) setTableColumnWidth(i,40); //设置宽度
 }
 
 

@@ -84,12 +84,14 @@ void IpSettingDlg::initData(int index)
         QString str;
         str = sys_configNetFile_readStr("Address");
         QStringList temp = str.split("/");
-        ui->IPlineEdit->setText(temp.at(0));
-        ui->NetMasklineEdit->setText(prefixToSubnetMask(temp.at(1).toInt()));
-        str = sys_configNetFile_readStr("Gateway");
-        ui->GatewaylineEdit->setText(str);
-        str = sys_configNetFile_readStr("DNS");
-        ui->DNSlineEdit->setText(str);
+        m_IP = temp.at(0);
+        m_SubnetMask = prefixToSubnetMask(temp.at(1).toInt());
+        ui->IPlineEdit->setText(m_IP);
+        ui->NetMasklineEdit->setText(m_SubnetMask);
+        m_GateWay = sys_configNetFile_readStr("Gateway");
+        ui->GatewaylineEdit->setText(m_GateWay);
+        m_DNS = sys_configNetFile_readStr("DNS");
+        ui->DNSlineEdit->setText(m_DNS);
     }
     sys_configNetFile_close();
 }
@@ -128,12 +130,12 @@ bool IpSettingDlg::check(const QString& ip , const QString& netmask ,const QStri
     else str= tr("Check for accuracy, do you want to modify it？");
     bool ret = true;
     if(ip.isEmpty()){
-        if(gLanguage == 0) str = tr("ip地址不能为空 ");
+        if(gLanguage == 0) str = tr("IP地址不能为空 ");
         else str = tr("IP address cannot be empty ");
         ret = false;
     }else{
         if(!ipCheck(ip)){
-            if(gLanguage == 0) str = tr("ip地址不合法 ");
+            if(gLanguage == 0) str = tr("IP地址不合法 ");
             else str = tr("IP address is illegal");
 
             ret = false;
@@ -190,10 +192,26 @@ void IpSettingDlg::on_saveBtn_clicked()
             sys_configNetFile_write("Address" , str);
             sys_configNetFile_write("Gateway",gateway);
             sys_configNetFile_write("DNS" , dns);
+            insertSystemLog("IP Address" , this->m_IP , ip);
+            insertSystemLog("Subnet Mask" , this->m_SubnetMask , netmask);
+            insertSystemLog("Gateway" , this->m_GateWay , gateway);
+            insertSystemLog("DNS" , this->m_DNS , dns);
         }
         sys_configNetFile_close();
     }
 
+}
+
+void IpSettingDlg::insertSystemLog(const QString &change , const QString &origin , const QString &current)
+{
+    QString insertStr;
+    if(origin != current){
+        if(gLanguage == 0)insertStr = tr("把系统Net%1的%4从%2改成%3 !")
+                            .arg(this->m_index).arg(origin).arg(current).arg(change);
+        else insertStr = tr("Change the %4 of the system Net%1 from %2 to %3 !")
+                            .arg(this->m_index).arg(origin).arg(current).arg(change);
+        db_system_obj()->insertSystem(insertStr);
+    }
 }
 
 void IpSettingDlg::on_cancelBtn_clicked()

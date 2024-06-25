@@ -144,6 +144,11 @@ void ComTableWid::initTableWidget(QStringList &header, const QString &title)
     // ui->tableWidget->setColumnWidth(0,200);
 }
 
+void ComTableWid::setTableColumnWidth(int column, int width)
+{
+    ui->tableWidget->setColumnWidth(column,width);
+}
+
 
 /**
  * @brief 增加Item

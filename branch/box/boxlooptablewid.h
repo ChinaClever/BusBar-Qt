@@ -32,6 +32,7 @@ protected:
     bool checkTable();
 
     void setTableItem(int id, int column, const QString &str);
+    void setTableSWItem(int id, int column, const QString &str);
     void setLoop(int id, int column);
     void setName(int id, int column);
 
@@ -39,6 +40,7 @@ protected:
     void setCur(int id, int column);
     void setVol(int id, int column);
     void setSw(int id, int column);
+    void setPhaseSw(int id, int column , int sw);
     void setPow(int id, int column);
     void setRePow(int id, int column);
     void setPf(int id, int column);

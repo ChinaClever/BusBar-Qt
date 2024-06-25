@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "passordsettingdlg.h"
 #include "languagesetting.h"
+#include "sql/dbsystem.h"
 
 namespace Ui {
 class OtherSettingDlg;
