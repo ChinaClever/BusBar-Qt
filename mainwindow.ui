@@ -60,14 +60,14 @@ color: rgb(255, 255, 255);</string>
         <widget class="QLabel" name="label_2">
          <property name="minimumSize">
           <size>
-           <width>60</width>
-           <height>60</height>
+           <width>170</width>
+           <height>45</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>60</width>
-           <height>16777215</height>
+           <width>170</width>
+           <height>45</height>
           </size>
          </property>
          <property name="text">
