@@ -134,7 +134,7 @@ void MainWindow::setBusName(int index)
     QString str = "0" + QString::number(index+1) + " " + name;
     ui->busNameLab->setText(str);
     ui->busNameLab->setText("");
-//    ui->nameLab->hide();//legrand need hide
+    ui->nameLab->hide();//legrand need hide
 
     mIndex = index;
 
