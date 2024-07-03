@@ -42,8 +42,8 @@ void Json_Send::run()
 
 void Json_Send::TcpsendData()
 {
-    QString mHost = "192.168.1.44";
-    int port = 2222; bool ret = true;
+    QString mHost = "192.168.1.41";
+    int port = 6000; bool ret = true;
 
     QJsonObject bar_json, box_json ; QByteArray ba;
     for(int i = 0;i < BUS_NUM;i++)
