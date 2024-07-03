@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "common/common.h"
 #include "net/udp/sent/udpheartbeat.h"
+#include "sql/dbsystem.h"
 #define IP1 "192.168.1.163"
 
 namespace Ui {
@@ -26,6 +27,8 @@ protected:
     int subnetMaskToPrefix(const QString& subnetMask);
     bool check(const QString& ip , const QString& netmask ,const QString& gateway ,const QString& dns );
     void initLanguage();
+    void insertSystemLog(const QString &change , const QString &origin , const QString &current);
+
 private slots:
     void on_saveBtn_clicked();
     void on_cancelBtn_clicked();
@@ -37,5 +40,9 @@ signals:
 private:
     Ui::IpSettingDlg *ui;
     int m_index;
+    QString m_IP;
+    QString m_SubnetMask;
+    QString m_GateWay;
+    QString m_DNS;
 };
 #endif // IPSETTINGDLG_H

@@ -42,13 +42,22 @@ void PassordSettingDlg::on_pushButton_2_clicked()
 {
     bool ret = checkJurisdiction();
     QString newPassword = ui->lineEdit_2->text();
-
     if(ret)
     {
         BeepThread::bulid()->beep();
         sys_configFile_writeParam("password",newPassword);
-        if(gLanguage == 0) QMessageBox::information(this,"information",tr("密码设置成功，点击确定退出！"),tr("确定"));
-        else QMessageBox::information(this,"information",tr("The password is set successfully,click Confirm to exit！"),tr("Confirm"));
+        QString insertStr;
+        if(gLanguage == 0){
+            insertStr = tr("密码设置成功");
+            QuMsgBox box(NULL,"密码设置成功，点击确定退出！");
+            bool ret = box.Exec();
+        }
+        else{
+            insertStr = tr("The password is set successfully");
+            QuMsgBox box(NULL,"The password is set successfully,click Confirm to exit！");
+            bool ret = box.Exec();
+        }
+        db_system_obj()->insertSystem(insertStr);
         this->close();
     }
     else{

@@ -178,11 +178,22 @@ void DpAlarmThread::boxAlarm(sBoxData &box , int index )
         if(index == 0){
             box.boxAlarm += box.data.swAlarm[0];
         }else{
-            for(int i  = 0 ; i < box.data.lineNum ; i++){
-                if(box.data.sw[i] == 1){
-                    if(box.data.swAlarm[i] == 0) box.data.swAlarm[i] = 1;
-                } else box.data.swAlarm[i] = 0;
-                box.boxAlarm += box.data.swAlarm[i];
+            if(box.phaseFlag == 0){
+                for(int i  = 0 ; i < box.data.lineNum ; i++){
+                    if(box.data.sw[i] == 1){
+                        if(box.data.swAlarm[i] == 0) box.data.swAlarm[i] = 1;
+                    } else box.data.swAlarm[i] = 0;
+                    box.boxAlarm += box.data.swAlarm[i];
+                }
+            }else if(box.phaseFlag == 1){
+                uchar breaker_num = (box.plugbreaker>>12)&0x0F;
+                for(int i  = 0 ; i < breaker_num ; i++){
+                    uchar sw = (box.plugbreaker>>i*2)&0x03;
+                    if(sw == 1){
+                        if(box.data.swAlarm[i] == 0) box.data.swAlarm[i] = 1;
+                    } else box.data.swAlarm[i] = 0;
+                    box.boxAlarm += box.data.swAlarm[i];
+                }
             }
         }
     } else {

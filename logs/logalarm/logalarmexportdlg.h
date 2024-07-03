@@ -1,21 +1,21 @@
-#ifndef LOGALARMELEEXPORTDLG_H
-#define LOGALARMELEEXPORTDLG_H
+#ifndef LOGALARMEXPORTDLG_H
+#define LOGALARMEXPORTDLG_H
 
 #include <QDialog>
 #include "logalarmexportthread.h"
 #include "excel/excelexportwid.h"
 
 namespace Ui {
-class LogAlarmEleExportDlg;
+class LogAlarmExportDlg;
 }
 
-class LogAlarmEleExportDlg : public QDialog
+class LogAlarmExportDlg : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit LogAlarmEleExportDlg(QWidget *parent = 0);
-    ~LogAlarmEleExportDlg();
+    explicit LogAlarmExportDlg(QWidget *parent = 0);
+    ~LogAlarmExportDlg();
 
     void set(int id);
     void initLanguage();
@@ -28,9 +28,9 @@ private slots:
      void on_pushButton_clicked();
 
 private:
-    Ui::LogAlarmEleExportDlg *ui;
+    Ui::LogAlarmExportDlg *ui;
     LogAlarmExportThread *mDbThread;
     ExcelExportWid *mProgressWid;
 };
 
-#endif // LOGALARMELEEXPORTDLG_H
+#endif // LOGALARMEXPORTDLG_H

@@ -136,7 +136,12 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
         if(item.box == 0) nameStr = "始端箱";;
 
         QString busName = share_mem_get()->data[item.bus].busName;
-        QString title = tr("母线%1 %2 %3相 %4设置").arg(busName).arg(nameStr).arg(QString('A'+item.num)).arg(str);
+        QString title = tr("母线%1 %2 %3 %4设置").arg(busName).arg(nameStr).arg(QString((char)('A' + item.num%3))+ QString("%1").arg(item.num/3 + 1)).arg(str);
+        if(item.box == 0) title = tr("母线%1 %2 %3相 %4设置").arg(busName).arg(nameStr).arg(QString('A'+item.num)).arg(str);
+        if(item.type == 3){
+            title = tr("母线%1 %2 %3相 %4设置").arg(busName).arg(nameStr).arg(QString('A' + item.num)).arg(str);
+            if(item.num == 3)title = tr("母线%1 %2 %3 %4设置").arg(busName).arg(nameStr).arg(tr("零线")).arg(str);
+        }
         if( item.type == 5 || item.type == 8 ) title = tr("母线%1 %2 %3设置").arg(busName).arg(nameStr).arg(str);
         if(item.type == 8) ui->label_3->setText(tr("超限\n告警值："));
         ui->titleLab->setText(title);
@@ -156,7 +161,12 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
         if(item.box == 0) nameStr = "Feeder box";
 
         QString busName = share_mem_get()->data[item.bus].busName;
-        QString title = tr("Busbar %1 %2 phase %3 %4 set").arg(busName).arg(nameStr).arg(QString('A'+item.num)).arg(str);
+        QString title = tr("Busbar %1 %2 loop %3 %4 set").arg(busName).arg(nameStr).arg(QString((char)('A' + item.num%3))+ QString("%1").arg(item.num/3 + 1)).arg(str);
+        if(item.box == 0) title = tr("Busbar %1 %2 phase %3 %4 set").arg(busName).arg(nameStr).arg(QString('A'+item.num)).arg(str);
+        if(item.type == 3){
+            title = tr("Busbar %1 %2 phase %3 %4 set").arg(busName).arg(nameStr).arg(QString('A' + item.num)).arg(str);
+            if(item.num == 3)title = tr("Busbar %1 %2 %3 %4 set").arg(busName).arg(nameStr).arg(tr("neutral line")).arg(str);
+        }
         if( item.type == 5 || item.type == 8 ) title = tr("Busbar %1 %2 %3 set").arg(busName).arg(nameStr).arg(str);
         if(item.type == 8) ui->label_3->setText("Over limit\nalarm value:");
         ui->titleLab->setText(title);
@@ -219,7 +229,8 @@ void SetThresholdDlg::set(sThresholdItem &item)
         item.min = busData->box[item.box].rate.smin;
         item.max = busData->box[item.box].rate.smax;
     }
-
+    item.premin = item.min;
+    item.premax = item.max;
     mItem = item;
     setTitle(item);
     initSpinBox(item);
@@ -251,8 +262,15 @@ bool SetThresholdDlg::checkData()
         mItem.min = min;
         mItem.max = max;
     } else {
-        if(gLanguage == 0) QMessageBox::warning(this,tr("warning"),tr("最小值大于最大值！"),tr("OK"));
-        else QMessageBox::warning(this,tr("warning"),tr("The minimun value is greater than the maximum value！"),tr("OK"));
+        if(gLanguage == 0){
+            WaringMsgBox box(NULL,tr("最小值大于最大值！"));
+            box.Exec();
+        }
+        else{
+            WaringMsgBox box(NULL,tr("The minimun value is greater than the maximum value！"));
+            box.Exec();
+        }
+
         ret = false;
     }
 
@@ -269,6 +287,7 @@ void SetThresholdDlg::on_saveBtn_clicked()
             else mItem.bus = 0xff;
             SetThread::bulid()->append(mItem);//统一设置发两遍
         }
+        mItem.insertlog = 1;
         SetThread::bulid()->append(mItem);
     }
     this->close();

@@ -3,6 +3,8 @@
 
 #include <QThread>
 #include <QtCore>
+#include "common.h"
+#include "sql/dbsystem.h"
 
 struct sExcelExportStr
 {
@@ -22,7 +24,7 @@ public:
     explicit ExcelExportLogThread(QObject *parent = 0);
     ~ExcelExportLogThread();
 
-    void set(const QString &path, const QString &file, const QList<QStringList> &list);
+    void set(const QString &path, const QString &file, const QList<QStringList> &list, int type);
 
 signals:
     void overSig(bool);
@@ -32,6 +34,7 @@ protected:
     void run();
     int getProgress();
     virtual void exportMsg(QList<QStringList> &list);
+    QString transformer(int type);
 
 protected slots:
     void progressSlot();
@@ -41,6 +44,7 @@ protected:
     QList<QStringList> mList;
     QString mFile; // 导出文件
     QString mPath; // 文件路径
+    int mType;
 };
-
+extern sExcelExportStr *gExcelExportStr;
 #endif // EXCELEXPORTLOGTHREAD_H

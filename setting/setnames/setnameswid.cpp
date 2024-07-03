@@ -156,11 +156,13 @@ void SetNamesWid::initTableWidget()
     }
 
     ui->tableWidget->setColumnCount(horHead.size());
+
     ui->tableWidget->setHorizontalHeaderLabels(horHead);
 
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置不可编辑
+    for(int i = 0 ; i < horHead.size() ; i++) ui->tableWidget->setColumnWidth(i,40); //设置宽度
 
 //    ui->tableWidget->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 //    ui->tableWidget->verticalHeader()->setDefaultSectionSize(45);
@@ -260,7 +262,7 @@ void SetNamesWid::setTableItem(int row, int column)
 
     //box->rate 直流的情况下，box->rate代表路数
     if(box->offLine > 0 /* && column <= box->rate */) {
-        if(column <= box->loopNum) {
+        if(column <= box->data.lineNum) {
             str = box->loopName[column-1];
         }
     }

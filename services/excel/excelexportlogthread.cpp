@@ -42,11 +42,12 @@ void ExcelExportLogThread::progressSlot()
 }
 
 
-void ExcelExportLogThread::set(const QString &path , const QString &file, const QList<QStringList> &list)
+void ExcelExportLogThread::set(const QString &path , const QString &file, const QList<QStringList> &list , int type)
 {
     mPath = path;
     mFile = file;
     mList = list;
+    mType = type;
     progressSlot();
 
     start();
@@ -106,10 +107,44 @@ void ExcelExportLogThread::exportMsg(QList<QStringList> &list)
     if(ans < 0) {
         qDebug() << cstr+" err";
     }
-
+    if(gExcelExportStr){
+        QString typeStr = transformer(mType);
+        QString insertStr =  tr("导出从%1到%2的%3 !").arg(gExcelExportStr->start).arg(gExcelExportStr->end).arg(typeStr);
+        if(gLanguage == 1){
+            insertStr = tr("Export the %3 form %1 to %2 !").arg(gExcelExportStr->start).arg(gExcelExportStr->end).arg(typeStr);
+        }
+        db_system_obj()->insertSystem(insertStr);
+    }
     emit overSig(ret);
 }
 
+QString ExcelExportLogThread::transformer(int type)
+{
+    QString str = tr("主路电能");
+    if(gLanguage == 1) str = tr("input power");
+    switch(type)
+    {
+        case MainEleLog:{
+            str = tr("主路电能");if(gLanguage == 1) str = tr("input power");break;
+        }
+        case BranchEleLog:{
+            str = tr("支路电能");if(gLanguage == 1) str = tr("branch power");break;
+        }
+        case AlarmLog:{
+            str = tr("告警日志");if(gLanguage == 1) str = tr("alarm log");break;
+        }
+        case OperationLog:{
+            str = tr("操作日志");if(gLanguage == 1) str = tr("operation log");break;
+        }
+        case SystemLog:{
+            str = tr("系统日志");if(gLanguage == 1) str = tr("system log");break;
+        }
+        default:{
+            str = tr("主路电能");if(gLanguage == 1) str = tr("input power");break;
+        }
+    }
+    return str;
+}
 
 void ExcelExportLogThread::run()
 {

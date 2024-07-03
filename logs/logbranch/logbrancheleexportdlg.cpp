@@ -55,7 +55,7 @@ void LogBranchEleExportDlg::readDbSlot(QString str)
 void LogBranchEleExportDlg::exportSlot(bool e)
 {
     if(e)
-        mProgressWid->set(gExcelExportStr->path, gExcelExportStr->file, mDbThread->mList);
+        mProgressWid->set(gExcelExportStr->path, gExcelExportStr->file, mDbThread->mList , BranchEleLog);
     else
         overSlot();
 }

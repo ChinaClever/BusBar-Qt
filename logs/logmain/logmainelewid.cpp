@@ -170,6 +170,11 @@ bool LogMainEleWid::refreshTable(const QString &table)
         ui->tableView->sortByColumn(0, Qt::DescendingOrder); // 降序排列
         ui->tableView->setColumnHidden(0, true);
         ui->tableView->setColumnHidden(6, true);
+        ui->tableView->setColumnWidth(1,90); //设置宽度
+        ui->tableView->setColumnWidth(2,85); //设置宽度
+        ui->tableView->setColumnWidth(3,180); //设置宽度
+        ui->tableView->setColumnWidth(4,180); //设置宽度
+        ui->tableView->setColumnWidth(5,180); //设置宽度
     }
     return  ret;
 }

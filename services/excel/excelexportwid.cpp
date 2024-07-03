@@ -30,17 +30,18 @@ ExcelExportWid::~ExcelExportWid()
 }
 
 
-void ExcelExportWid::set(const QString &path, const QString &file, const QList<QStringList> &list, int mode)
+void ExcelExportWid::set(const QString &path, const QString &file, const QList<QStringList> &list,
+                         int type, int mode)
 {
     QString fileName = path + file;
 
     switch (mode) {
     case 1:
-        mExportThread->set(path , fileName, list);
+        mExportThread->set(path , fileName, list , type);
         break;
 
     case 2:
-        mtxtThread->set(path , fileName, list);
+        mtxtThread->set(path , fileName, list , type);
         break;
 
     default:

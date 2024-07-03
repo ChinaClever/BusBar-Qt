@@ -41,6 +41,7 @@ protected:
     void checkFile();
     void initLanguage();
     void initLable();
+    void initVersion();
     //void seedWatchdog();
     //void clearCache();
 
@@ -79,6 +80,7 @@ private:
 
     NetWork *mNetWork;
     Server *mServer;
+    QString mVersion;
 
 //    int count;
     //Watchdogthread* mWatchdogThread;

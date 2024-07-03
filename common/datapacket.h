@@ -198,6 +198,7 @@ typedef struct _sBoxData {
     uint totalCur;//总电流
     uint online1;
     uint online2;
+    ushort plugbreaker;
 
     ushort rtuLen;
     uchar rtuArray[SRC_DATA_LEN_MAX];
@@ -559,6 +560,15 @@ enum  sSetPlugType{
     ,PlugPowerMAX_L9_1       = 243           //功率上限
     ,PlugPowerMAX_L9_2       = 244           //功率上限
 
+};
+
+
+enum  sLogType{
+    MainEleLog           = 0           //主路电能
+    ,BranchEleLog        = 1           //支路电能
+    ,AlarmLog            = 2           //告警日志
+    ,OperationLog        = 3           //操作日志
+    ,SystemLog           = 4           //系统日志
 };
 
 sDataPacket *share_mem_get();
