@@ -205,6 +205,7 @@ QString IpSettingDlg::returnIp()
 {
     QString ip = ui->IPlineEdit->text();
 
+    return ip;
 }
 
 void IpSettingDlg::insertSystemLog(const QString &change , const QString &origin , const QString &current)
