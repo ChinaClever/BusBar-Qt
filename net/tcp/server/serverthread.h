@@ -8,6 +8,7 @@
 
 #include "mysocket.h"
 #include "rtuthread.h"
+#include "sql/dbsystem.h"
 //#include "tcpserver.h"
 
 class Socket;

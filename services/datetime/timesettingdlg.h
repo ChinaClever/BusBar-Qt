@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QtCore>
 #include <sys/time.h>
+#include "sql/dbsystem.h"
 
 namespace Ui {
     class TimeSettingDlg;
