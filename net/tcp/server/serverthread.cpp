@@ -42,6 +42,10 @@ void serverThread::recvDataSlot(const QString &ip, const QByteArray &data)
     if( qAbs(t.secsTo(t1)) <= 60 ){
         m_socket->write((char*)"OK");
         m_socket->flush();
+        QString insertStr;
+        if(gLanguage == 0) insertStr = tr("系统时间修改为 %1 !").arg(QString(data));
+        else  insertStr = tr("The system time is changed to %1 !").arg(QString(data));//插入系统日志
+        db_system_obj()->insertSystem(insertStr);
     }else{
         m_socket->write((char*)"FAIL");
         m_socket->flush();

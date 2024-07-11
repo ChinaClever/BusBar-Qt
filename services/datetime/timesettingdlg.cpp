@@ -452,6 +452,11 @@ void TimeSettingDlg::on_timeSet_but_clicked()
                     || minute_old != minute_new)  {
                 if(gLanguage == 0) str = tr("时间设置成功");
                 else str = tr("Time set successfully");
+                QString insertStr;
+                QString dateTimeString = currentTime_new.toString("yyyy-MM-dd hh:mm:ss");
+                if(gLanguage == 0) insertStr = tr("系统时间修改为 %1 !").arg(dateTimeString);
+                else  insertStr = tr("The system time is changed to %1 !").arg(dateTimeString);//插入系统日志
+                db_system_obj()->insertSystem(insertStr);
             }  else {
                 if(gLanguage == 0) str = tr("时间未修改");
                 else str = tr("Time not modified");
