@@ -13,8 +13,8 @@ Mb_Core::Mb_Core(QObject *parent) : QThread{parent}
     mCfg = &modbusCfg;
     connect(this, &Mb_Core::connectTcpSig, this, &Mb_Core::connectTcpSlot);
     connect(this, &Mb_Core::connectRtuSig, this, &Mb_Core::connectRtuSlot);
-    mTimer = new QTimer(this); mTimer->start(1000+rand()%500);
-    connect(mTimer, SIGNAL(timeout()), this, SLOT(run()));
+    //mTimer = new QTimer(this); mTimer->start(1000+rand()%500);
+    //connect(mTimer, SIGNAL(timeout()), this, SLOT(run()));
     QTimer::singleShot(135, this, SLOT(initFunSlot()));
 }
 
@@ -32,7 +32,7 @@ void Mb_Core::initFunSlot()
     mCfg->enTcp = 1;
     mCfg->port = 502;
     mCfg->enRtu = 1;/////////////////
-    mCfg->baud = 115200;
+    mCfg->baud = 9600;
 
     emit connectTcpSig();
     emit connectRtuSig();
@@ -89,17 +89,21 @@ void Mb_Core::connectRtuSlot()
 
 void Mb_Core::run()
 {
+
     static uint cnt = 0;
     bool ret = true;
-    if(cnt++ %2)
-    {
-        ret = mRtu->isConnectedModbus();
-        if(ret) mRtu->mbUpdates();
-    }
-    else
-    {
-        ret = mTcp->isConnectedModbus();
-        if(ret) mTcp->mbUpdates();
+    while(ret){
+        if(cnt++ %2)
+        {
+            ret = mRtu->isConnectedModbus();
+            if(ret)mRtu->mbUpdates();
+        }
+        else
+        {
+            ret = mTcp->isConnectedModbus();
+            if(ret)mTcp->mbUpdates();
+        }
+        msleep(1000);
     }
 }
 

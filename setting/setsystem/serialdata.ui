@@ -59,7 +59,7 @@
            </font>
           </property>
           <property name="text">
-           <string>115200</string>
+           <string>9600</string>
           </property>
          </widget>
         </item>
