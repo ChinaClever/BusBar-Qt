@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     if(gLanguage == 0) insertStr = tr("系统启动 !");
     else  insertStr = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
-    mVersion = "V4.0.0.001";//当前软件版本
+    mVersion = "V4.0.0.002";//当前软件版本
     initVersion();
     updateTime();
 
@@ -157,6 +157,7 @@ void MainWindow::initNetSLot()
     mServer = new Server(this);
     mServer->setMaxPendingConnections(2);
     mServer->listen(QHostAddress::AnyIPv4, 22223);
+    Mb_Core::build(this)->start();
 }
 
 void MainWindow::initFunSLot()
