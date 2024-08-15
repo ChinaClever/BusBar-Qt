@@ -32,7 +32,38 @@ void Mb_Core::initFunSlot()
     mCfg->enTcp = 1;
     mCfg->port = 502;
     mCfg->enRtu = 1;/////////////////
-    mCfg->baud = 9600;
+
+    bool ret = sys_configFile_open();
+    ret = sys_configFile_contains("baudrate");
+    if(ret){
+        mCfg->baud = sys_configFile_readInt("baudrate");
+    }else{
+        sys_configFile_write("baudrate" , QString::number(9600));
+    }
+    ret = sys_configFile_contains("parity");
+    if(ret){
+        mCfg->baud = sys_configFile_readInt("parity");
+    }else{
+        sys_configFile_write("parity" , QString::number(0));
+    }
+    ret = sys_configFile_contains("databits");
+    if(ret){
+        mCfg->baud = sys_configFile_readInt("databits");
+    }else{
+        sys_configFile_write("databits" , QString::number(8));
+    }
+    ret = sys_configFile_contains("stopbits");
+    if(ret){
+        mCfg->baud = sys_configFile_readInt("stopbits");
+    }else{
+        sys_configFile_write("stopbits" , QString::number(1));
+    }
+    sys_configFile_close();
+
+//    int parity = QSerialPort::NoParity;
+//    int baud = QSerialPort::Baud9600;
+//    int dataBits = QSerialPort::Data8;
+//    int stopBits = QSerialPort::OneStop;
 
     emit connectTcpSig();
     emit connectRtuSig();
