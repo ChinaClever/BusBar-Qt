@@ -38,23 +38,23 @@ void Mb_Core::initFunSlot()
     if(ret){
         mCfg->baud = sys_configFile_readInt("baudrate");
     }else{
-        sys_configFile_write("baudrate" , QString::number(9600));
+        sys_configFile_write("baudrate" , QString::number(115200));
     }
     ret = sys_configFile_contains("parity");
     if(ret){
-        mCfg->baud = sys_configFile_readInt("parity");
+        mCfg->parity = sys_configFile_readInt("parity");
     }else{
         sys_configFile_write("parity" , QString::number(0));
     }
     ret = sys_configFile_contains("databits");
     if(ret){
-        mCfg->baud = sys_configFile_readInt("databits");
+        mCfg->dataBits = sys_configFile_readInt("databits");
     }else{
         sys_configFile_write("databits" , QString::number(8));
     }
     ret = sys_configFile_contains("stopbits");
     if(ret){
-        mCfg->baud = sys_configFile_readInt("stopbits");
+        mCfg->stopBits = sys_configFile_readInt("stopbits");
     }else{
         sys_configFile_write("stopbits" , QString::number(1));
     }

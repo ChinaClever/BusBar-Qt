@@ -53,11 +53,12 @@ void Serialdata::initLanguage()
     for(int i = 0 ; i < 2 ; i++)
         ui->stopbitsBox->setItemIcon(i , icon);
     initComParameter();
+    ui->databitsBox->setEnabled(false);
 }
 
 int Serialdata::baudToIndex(int baud)
 {
-    int index = 0;
+    int index = 4;
     switch(baud)
     {
         case 9600:index = 0;break;
@@ -65,7 +66,7 @@ int Serialdata::baudToIndex(int baud)
         case 38400:index = 2;break;
         case 57600:index = 3;break;
         case 115200:index = 4;break;
-        default:index = 0;break;
+        default:index = 4;break;
     }
     return index;
 }
@@ -119,7 +120,7 @@ void Serialdata::initComParameter()
         int baud = sys_configFile_readInt("baudrate");
         ui->baudBox->setCurrentIndex(baudToIndex(baud));
     }else{
-        ui->baudBox->setCurrentIndex(0);
+        ui->baudBox->setCurrentIndex(4);
     }
     ret = sys_configFile_contains("parity");
     if(ret){
@@ -148,7 +149,7 @@ void Serialdata::initComParameter()
 QString Serialdata::transformerBaud()
 {
     int index = ui->baudBox->currentIndex();
-    QString str = "9600";
+    QString str = "115200";
     switch(index)
     {
         case 0 :str = "9600";break;
@@ -156,7 +157,7 @@ QString Serialdata::transformerBaud()
         case 2 :str = "38400";break;
         case 3 :str = "57600";break;
         case 4 :str = "115200";break;
-        default: str = "9600";break;
+        default: str = "115200";break;
     }
     return str;
 }
@@ -206,19 +207,31 @@ QString Serialdata::transformerStopbits()
 
 void Serialdata::on_saveBtn_clicked()
 {
-    bool ret = sys_configFile_open();
-    if(ret){
-        sys_configFile_write("baudrate" , transformerBaud());
+    bool ret = true;
+
+    if(gLanguage == 0){
+        QuMsgBox box(NULL, tr("需重启系统后生效！"));
+        ret = box.Exec();
     }
-    if(ret){
-        sys_configFile_write("parity" , transformerParity());
+    else{
+        QuMsgBox box(NULL, tr("It will take effect after restarting the system！"));
+        ret = box.Exec();
     }
-    if(ret){
-        sys_configFile_write("databits" , transformerDatabits());
+    if(ret) {
+        ret = sys_configFile_open();
+        if(ret){
+            sys_configFile_write("baudrate" , transformerBaud());
+        }
+        if(ret){
+            sys_configFile_write("parity" , transformerParity());
+        }
+        if(ret){
+            sys_configFile_write("databits" , transformerDatabits());
+        }
+        if(ret){
+            sys_configFile_write("stopbits" , transformerStopbits());
+        }
+        sys_configFile_close();
     }
-    if(ret){
-        sys_configFile_write("stopbits" , transformerStopbits());
-    }
-    sys_configFile_close();
 }
 

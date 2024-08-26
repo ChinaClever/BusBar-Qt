@@ -2,6 +2,7 @@
 #define SERIALDATA_H
 
 #include <QWidget>
+#include "common/msgbox.h"
 namespace Ui {
 class Serialdata;
 }

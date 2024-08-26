@@ -101,6 +101,9 @@ QComboBox::down-arrow{
 image: url(:/new/prefix1/image/down.png);
 }</string>
         </property>
+        <property name="currentIndex">
+         <number>4</number>
+        </property>
         <item>
          <property name="text">
           <string>9600</string>
@@ -184,9 +187,6 @@ border-left-color:darkgray;
 border-left-style:solid;
 border-top-right-radius:3px;
 border-bottom-right-radius:3px;
-}
-QComboBox::down-arrow{
-image: url(:/new/prefix1/image/down.png);
 }</string>
         </property>
         <property name="currentIndex">
