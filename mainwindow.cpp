@@ -33,14 +33,14 @@ MainWindow::MainWindow(QWidget *parent) :
     if(gLanguage == 0) insertStr = tr("系统启动 !");
     else  insertStr = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
-    mVersion = "V4.0.0.002";//当前软件版本
+    mVersion = "V4.0.0.003";//当前软件版本
     initVersion();
     updateTime();
 
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
     on_comboBox_currentIndexChanged(0);
     //BeepThread::bulid()->longBeep(); // 线程 -- 'bi~'
-//    count = 0;
+    count = 0;
 
     for(int i=0; i < 4; i++) rtu[i] = NULL;
 }
@@ -108,14 +108,14 @@ void MainWindow::timeoutDone()
     ///截图功能
     ///
     //
-//    count++;
-//    if(count>50)
-//    {
-//        if(count % 5 == 0){
-//            QScreen *screen = QGuiApplication::primaryScreen();
-//            screen->grabWindow(0).save(QString("/home/root/pic/screensshot%1.png").arg(count));
-//        }
-//    }
+    count++;
+    if(count>50)
+    {
+        if(count % 5 == 0){
+            QScreen *screen = QGuiApplication::primaryScreen();
+            screen->grabWindow(0).save(QString("/home/root/pic/screensshot%1.png").arg(count));
+        }
+    }
 }
 
 void MainWindow::updateBusName(int index)

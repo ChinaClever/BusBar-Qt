@@ -82,7 +82,7 @@ private:
     Server *mServer;
     QString mVersion;
 
-//    int count;
+    int count;
     //Watchdogthread* mWatchdogThread;
 };
 
