@@ -160,6 +160,7 @@ void MainWindow::initNetSLot()
     mServer->setMaxPendingConnections(2);
     mServer->listen(QHostAddress::AnyIPv4, 22223);
     Mb_Core::build()->start();
+    Json_Send::bulid()->start();
 }
 
 void MainWindow::initFunSLot()

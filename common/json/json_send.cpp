@@ -14,9 +14,9 @@ Json_Send::Json_Send(QObject *parent) : QThread(parent)
         mBoxNum[i] = &(shm->data[i].boxNum);
     }
 
-    timer = new QTimer(this);
-    timer->start(8*1000+rand()%500);
-    connect(timer, SIGNAL(timeout()),this, SLOT(run()));
+//    timer = new QTimer(this);
+//    timer->start(8*1000+rand()%500);
+//    connect(timer, SIGNAL(timeout()),this, SLOT(run()));
 }
 
 Json_Send *Json_Send::bulid(QObject *parent)
@@ -37,13 +37,21 @@ void Json_Send::initFun()
 void Json_Send::run()
 {
 //    sendData();//udp
-    TcpsendData();//tcp
+//    TcpsendData();//tcp
+//    msleep(1000);
+
+    bool ret = true;
+    while(ret){
+
+        sendData();
+        msleep(1000);
+    }
 }
 
 void Json_Send::TcpsendData()
 {
-    QString mHost = "192.168.1.41";
-    int port = 6000; bool ret = true;
+    QString mHost = "192.168.1.4";
+    int port = 55320; bool ret = true;
 
     QJsonObject bar_json, box_json ; QByteArray ba;
     for(int i = 0;i < BUS_NUM;i++)
@@ -87,10 +95,11 @@ void Json_Send::TcpsendData()
         }
     }
 }
+
 void Json_Send::sendData()
 {
     QHostAddress address; bool ret;
-    address.setAddress(QString("192.168.1.19"));
+    address.setAddress(QString("192.168.1.41"));
     QJsonObject bar_json, box_json ; QByteArray ba;
 
     for(int i = 0;i < BUS_NUM;i++)
