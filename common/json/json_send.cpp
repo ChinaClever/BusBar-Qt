@@ -36,8 +36,8 @@ void Json_Send::initFun()
 
 void Json_Send::run()
 {
-    sendData();//udp
-//    TcpsendData();//tcp
+//    sendData();//udp
+    TcpsendData();//tcp
 }
 
 void Json_Send::TcpsendData()
