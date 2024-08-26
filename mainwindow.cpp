@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
     on_comboBox_currentIndexChanged(0);
     //BeepThread::bulid()->longBeep(); // 线程 -- 'bi~'
-    count = 0;
+//    count = 0;
 
     for(int i=0; i < 4; i++) rtu[i] = NULL;
 }
@@ -108,14 +108,14 @@ void MainWindow::timeoutDone()
     ///截图功能
     ///
     //
-    count++;
-    if(count>50)
-    {
-        if(count % 5 == 0){
-            QScreen *screen = QGuiApplication::primaryScreen();
-            screen->grabWindow(0).save(QString("/home/root/pic/screensshot%1.png").arg(count));
-        }
-    }
+//    count++;
+//    if(count>50)
+//    {
+//        if(count % 5 == 0){
+//            QScreen *screen = QGuiApplication::primaryScreen();
+//            screen->grabWindow(0).save(QString("/home/root/pic/screensshot%1.png").arg(count));
+//        }
+//    }
 }
 
 void MainWindow::updateBusName(int index)
