@@ -205,6 +205,22 @@ void MainWindow::initLanguage()
     sys_configFile_close();
 }
 
+void MainWindow::initSendUse()
+{
+    bool ret = sys_configFile_open();
+    ret = sys_configFile_contains("Senduse");
+    if(ret){
+        SendIP = sys_configFile_readStr("SendIP");
+        Sendport = sys_configFile_readInt("Sendport");
+        user = sys_configFile_readInt("Senduse");
+    }else{
+        sys_configFile_write("Senduse" , QString::number(user));
+        sys_configFile_write("SendIP" , SendIP);
+        sys_configFile_write("Senduse" , QString::number(Sendport));
+    }
+    sys_configFile_close();
+}
+
 void MainWindow::initVersion()
 {
     bool ret = sys_configFile_open();
@@ -246,6 +262,7 @@ void MainWindow::initWidget()
     set_background_icon(ui->stackedWid,":/new/prefix1/image/background.png");
     initBackground(); //按钮图标
     initLable();
+    initSendUse();
     mHomeWid = new HomeWid(ui->stackedWid); //主界面
     ui->stackedWid->addWidget(mHomeWid);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), mHomeWid, SIGNAL(busChangedSig(int)));

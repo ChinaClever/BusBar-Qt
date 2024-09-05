@@ -22,6 +22,10 @@ OtherSettingDlg::OtherSettingDlg(QWidget *parent) :
     ui->setupUi(this);
     initLanguage();
     ui->timeSetBtn->setHidden(true);
+    ui->ipEdit->setText(SendIP);
+    ui->useBox->setChecked(user);
+    ui->portEdit->setText(QString::number(Sendport));
+
 //    ui->updateBtn->setHidden(true);
 }
 
@@ -189,3 +193,19 @@ void OtherSettingDlg::on_languageBtn_clicked()
     mlanguage->move(368,222);
 }
 
+
+void OtherSettingDlg::on_saveBtn_clicked()
+{
+    SendIP = ui->ipEdit->text();
+    Sendport = ui->portEdit->text().toInt();
+    user = ui->useBox->isChecked();
+    if(!SendIP.isEmpty()){
+
+        sys_configFile_writeParam("SendIP",SendIP);
+        sys_configFile_writeParam("Sendport",QString::number(Sendport));
+        sys_configFile_writeParam("Senduse",QString::number(user));
+        qDebug()<<"user"<<user;
+        if(gLanguage == 0) InfoMsgBox box(NULL, tr("保存成功！"));
+        else InfoMsgBox box(NULL, tr("Save successfully！"));
+    }
+}

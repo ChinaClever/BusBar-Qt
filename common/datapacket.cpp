@@ -14,6 +14,10 @@
  * 获取共享内存
  */
 int gLanguage = 0;
+int user = 1;//默认发送
+QString SendIP = "192.168.1.41";
+int Sendport = 6000;
+
 sDataPacket *share_mem_get()
 {
     static sDataPacket *ptr = nullptr;

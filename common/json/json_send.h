@@ -26,6 +26,7 @@ private:
     sBusData *mBus[4];
     QReadWriteLock  *mLock;
     int *mBoxNum[BUS_NUM];
+
 };
 
 #endif // JSON_SEND_H

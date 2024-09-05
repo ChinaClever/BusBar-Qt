@@ -29,6 +29,9 @@
 
 #define SRC_DATA_LEN_MAX 1024 //一包数据最长 —— 用于对接动环
 extern int gLanguage;//0代表中文 1代表英文
+extern int user;
+extern QString SendIP;
+extern int Sendport;
 /**
  * 统计数据结构体
  */
