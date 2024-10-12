@@ -224,7 +224,9 @@ void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
     if(mBoxData[id]->totalApPow)
         pfTotal = (((mBoxData[id]->totalPow.ivalue)/(mBoxData[id]->totalApPow))/COM_RATE_POW);
     else pfTotal = 0;
-    tgObj.insert("power_factor",QString::number(pfTotal,'f',2).toDouble());   //功率因素
+
+    tgObj.insert("power_factor",QString::number(mBoxData[id]->tgBox.pf/COM_RATE_PF,'f',2).toDouble());
+//    tgObj.insert("power_factor",QString::number(pfTotal,'f',2).toDouble());   //功率因素
     tgObj.insert("ele_active",QString::number(eleActive,'f',2).toDouble());
     tgObj.insert("ele_apparent","");     //视在电能
     tgObj.insert("ele_reactive","");     //无功电能
@@ -385,7 +387,16 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
         lineele.append(QJsonValue::fromVariant((BoxData->lineTgBox.ele[i])/COM_RATE_ELE));
         lineapw.append(QJsonValue::fromVariant((BoxData->lineTgBox.apPow[i])/COM_RATE_POW));
         linereactive.append(QJsonValue::fromVariant((BoxData->lineTgBox.reactivePower[i])/COM_RATE_POW));
-        linepf.append((mBusData[bus_id]->box[insert_id].lineTgBox.pf[i]/COM_RATE_PF));
+
+        if(BoxData->lineTgBox.apPow[i] == 0 )
+            linepf.append(QString::number(0, 'f', 2));
+        else
+        {
+            double pf = (BoxData->lineTgBox.pow[i]*1000.0)/(BoxData->lineTgBox.apPow[i]);
+            if( pf > 0.99 ) linepf.append(0.99);
+            else linepf.append(QString::number(pf, 'f', 2));;
+        }
+
         linepl.append(LoopData->pl[i]);
         linereactiveele.append("");
     }
@@ -407,8 +418,8 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
     totalObj.insert("pow_apparent",(BoxData->tgBox.apPow)/COM_RATE_POW);
     totalObj.insert("ele_active",(BoxData->tgBox.ele)/COM_RATE_ELE);
     totalObj.insert("pow_reactive",((BoxData->tgBox.apPow)-(BoxData->tgBox.pow))/COM_RATE_POW);
-    pf_Total = ((BoxData->tgBox.pow)/(BoxData->tgBox.apPow))/COM_RATE_POW;
-    totalObj.insert("power_factor",QString::number(pf_Total,'f',2).toDouble());
+    totalObj.insert("power_factor",QString::number(BoxData->tgBox.pf/COM_RATE_PF,'f',2).toDouble());
+
     totalObj.insert("ele_apparent","");
     totalObj.insert("ele_reactive","");
     subObj.insert("box_total_data" ,totalObj);
