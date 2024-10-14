@@ -172,7 +172,7 @@ void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
     for(int i = 0;i < START_LINE_NUM; i++)
     {
         reactivepowArray.append(QJsonValue::fromVariant((mBoxData[id]->data.reactivePower[i])/COM_RATE_POW));
-        pfArray.append(mBoxData[id]->data.pf[i]/COM_RATE_PF);
+        pfArray.append(QJsonValue::fromVariant(mBoxData[id]->data.pf[i]/COM_RATE_PF));
         apArray.append(QJsonValue::fromVariant((mBoxData[id]->data.apPow[i]/COM_RATE_POW)));
         elepowArray.append(QJsonValue::fromVariant((mBoxData[id]->data.ele[i])/COM_RATE_ELE));
         ele_reactive.append("");
@@ -225,9 +225,9 @@ void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
         pfTotal = (((mBoxData[id]->totalPow.ivalue)/(mBoxData[id]->totalApPow))/COM_RATE_POW);
     else pfTotal = 0;
 
-    tgObj.insert("power_factor",QString::number(mBoxData[id]->tgBox.pf/COM_RATE_PF,'f',2).toDouble());
+    tgObj.insert("power_factor",QJsonValue::fromVariant(mBoxData[id]->tgBox.pf/COM_RATE_PF));
 //    tgObj.insert("power_factor",QString::number(pfTotal,'f',2).toDouble());   //功率因素
-    tgObj.insert("ele_active",QString::number(eleActive,'f',2).toDouble());
+    tgObj.insert("ele_active",eleActive);
     tgObj.insert("ele_apparent","");     //视在电能
     tgObj.insert("ele_reactive","");     //无功电能
     tgObj.insert("cur_residual_value",mBoxData[id]->reCur.svalue/COM_RATE_CUR);
@@ -389,12 +389,12 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
         linereactive.append(QJsonValue::fromVariant((BoxData->lineTgBox.reactivePower[i])/COM_RATE_POW));
 
         if(BoxData->lineTgBox.apPow[i] == 0 )
-            linepf.append(QString::number(0, 'f', 2));
+            linepf.append(QJsonValue::fromVariant(0));
         else
         {
             double pf = (BoxData->lineTgBox.pow[i]*1000.0)/(BoxData->lineTgBox.apPow[i]);
-            if( pf > 0.99 ) linepf.append(0.99);
-            else linepf.append(QString::number(pf, 'f', 2));;
+            if( pf > 0.99 ) linepf.append(QJsonValue::fromVariant(pf));
+            else linepf.append(QJsonValue::fromVariant(pf));;
         }
 
         linepl.append(LoopData->pl[i]);
@@ -418,7 +418,7 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
     totalObj.insert("pow_apparent",(BoxData->tgBox.apPow)/COM_RATE_POW);
     totalObj.insert("ele_active",(BoxData->tgBox.ele)/COM_RATE_ELE);
     totalObj.insert("pow_reactive",((BoxData->tgBox.apPow)-(BoxData->tgBox.pow))/COM_RATE_POW);
-    totalObj.insert("power_factor",QString::number(BoxData->tgBox.pf/COM_RATE_PF,'f',2).toDouble());
+    totalObj.insert("power_factor",(BoxData->tgBox.pf/COM_RATE_PF));
 
     totalObj.insert("ele_apparent","");
     totalObj.insert("ele_reactive","");
@@ -441,15 +441,15 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
 
             if(pow_active[i] > 0) {
                 pf_factor = (pow_active[i] * 100.0/ pow_apparent[i]) /COM_RATE_PF;
-                pfPow.append(QString::number(pf_factor,'f',2).toDouble());
+                pfPow.append(pf_factor);
             } else pfPow.append(0);
 
             if((pfPow.at(i).toDouble()) >0.99) pfPow.at(i) = 0.99;
 
-            apPow.append(QString::number(pow_apparent[i],'f',3).toDouble());
-            actPow.append(QString::number(pow_active[i],'f',3).toDouble());
-            reaPow.append(QString::number(pow_reactive[i],'f',3).toDouble());
-            actEle.append(QString::number(ele_active[i],'f',3).toDouble());
+            apPow.append(pow_apparent[i]);
+            actPow.append(pow_active[i]);
+            reaPow.append(pow_reactive[i]);
+            actEle.append(ele_active[i]);
             apEle.append("");
             reaEle.append("");
         }
@@ -459,7 +459,7 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
         {
             if(LoopData->pow.value[i] > 0) {
                 pf_factor = (LoopData->pow.value[i] * 100.0 / LoopData->apPow[i]) /COM_RATE_PF;
-                pfPow.append(QString::number(pf_factor,'f',2).toDouble());
+                pfPow.append(pf_factor);
             } else pfPow.append(0);
 
             if((pfPow.at(i).toDouble())>0.99) pfPow.at(i) = 0.99;
