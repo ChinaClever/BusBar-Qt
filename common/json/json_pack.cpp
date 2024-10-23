@@ -357,7 +357,7 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
     loopObj.insert("pow_value",looppowArray);
     loopObj.insert("pow_min",looppowMin);
     loopObj.insert("pow_max",looppowMax);
-    loopObj.insert("pow_status",looppowArray);
+    loopObj.insert("pow_status",powArray);
 
     QJsonArray reactivepowValue, appowValue, pfValue, eleValue, reactiveValue;
     for(int i = 0;i < BoxData->loopNum; i++)
