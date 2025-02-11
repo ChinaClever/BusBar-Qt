@@ -106,3 +106,33 @@ DbOperation* db_operation_obj(int id)
     return sington;
 }
 
+
+DbOperation* db_operation_obj_en(int id)
+{
+    static DbOperationEN1* sington1  = new DbOperationEN1();
+    static DbOperationEN2* sington2  = new DbOperationEN2();
+    static DbOperationEN3* sington3  = new DbOperationEN3();
+    static DbOperationEN4* sington4  = new DbOperationEN4();
+
+    DbOperation* sington = NULL;
+    switch (id)
+    {
+    case 0:
+        sington = sington1;
+        break;
+
+    case 1:
+        sington = sington2;
+        break;
+
+    case 2:
+        sington = sington3;
+        break;
+
+    case 3:
+        sington = sington4;
+        break;
+    }
+    return sington;
+}
+

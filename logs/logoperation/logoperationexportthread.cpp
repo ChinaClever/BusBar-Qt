@@ -19,7 +19,8 @@ LogOperationExportThread::~LogOperationExportThread()
 
 void LogOperationExportThread::initData(int busId)
 {
-    mOperation = db_operation_obj(busId);
+    if(gLanguage == 0)  mOperation = db_operation_obj(busId);
+    else mOperation = db_operation_obj_en(busId);
     mList.clear();
     start();
 }

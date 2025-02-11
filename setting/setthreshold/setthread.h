@@ -17,7 +17,7 @@ public:
 protected:
     void run();
     void workDown();
-    void change(sThresholdItem &item , QString &msg1, QString &msg2, int index = 0);
+    void change(sThresholdItem &item , QString &msg1, QString &msg2, QString &msgen1, QString &msgen2, int index = 0);
     QString changeType(int index, QString &sym, double &rate);
     QString calcLoop(int id);
 

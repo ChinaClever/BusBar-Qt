@@ -4,6 +4,7 @@
 #include "basicsql.h"
 
 #define DB_TABLE_OPERATION "operation"
+#define DB_TABLE_OPERATION_EN "operation_en"
 
 struct DbOperationItem : public DbBasicItem{
     QString type;
@@ -48,6 +49,35 @@ public:
     QString tableName(){return QString("%1_%2").arg(DB_TABLE_OPERATION).arg(4) ;}
 };
 
-DbOperation* db_operation_obj(int id);
+class DbOperationEN1 : public DbOperation
+{
+public:
+    DbOperationEN1(){ createTable(); }
+    QString tableName(){return QString("%1_%2").arg(DB_TABLE_OPERATION_EN).arg(1) ;}
+};
 
+class DbOperationEN2 : public DbOperation
+{
+public:
+    DbOperationEN2(){ createTable(); }
+    QString tableName(){return QString("%1_%2").arg(DB_TABLE_OPERATION_EN).arg(2) ;}
+};
+
+
+class DbOperationEN3 : public DbOperation
+{
+public:
+    DbOperationEN3(){ createTable(); }
+    QString tableName(){return QString("%1_%2").arg(DB_TABLE_OPERATION_EN).arg(3) ;}
+};
+
+class DbOperationEN4 : public DbOperation
+{
+public:
+    DbOperationEN4(){ createTable(); }
+    QString tableName(){return QString("%1_%2").arg(DB_TABLE_OPERATION_EN).arg(4) ;}
+};
+
+DbOperation* db_operation_obj(int id);
+DbOperation* db_operation_obj_en(int id);
 #endif // DBOPERATION_H

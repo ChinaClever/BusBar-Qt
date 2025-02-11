@@ -19,7 +19,8 @@ LogSystemExportThread::~LogSystemExportThread()
 
 void LogSystemExportThread::initData()
 {
-    mSystem = db_system_obj();
+    if(gLanguage == 0) mSystem = db_system_obj();
+    else mSystem = db_system_obj_en();
     mList.clear();
     start();
 }

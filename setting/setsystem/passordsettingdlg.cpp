@@ -46,18 +46,21 @@ void PassordSettingDlg::on_pushButton_2_clicked()
     {
         BeepThread::bulid()->beep();
         sys_configFile_writeParam("password",newPassword);
-        QString insertStr;
+        QString insertStr,insertStrEn;
         if(gLanguage == 0){
             insertStr = tr("密码设置成功");
+            insertStrEn = tr("The password is set successfully");
             QuMsgBox box(NULL,"密码设置成功，点击确定退出！");
             bool ret = box.Exec();
         }
         else{
-            insertStr = tr("The password is set successfully");
+            insertStr = tr("密码设置成功");
+            insertStrEn = tr("The password is set successfully");
             QuMsgBox box(NULL,"The password is set successfully,click Confirm to exit！");
             bool ret = box.Exec();
         }
         db_system_obj()->insertSystem(insertStr);
+        db_system_obj_en()->insertSystem(insertStrEn);
         this->close();
     }
     else{

@@ -97,3 +97,32 @@ DbAlarm* db_alarm_obj(int id)
     return sington;
 }
 
+DbAlarm* db_alarm_obj_en(int id)
+{
+    static DbAlarmEN1* sington1  = new DbAlarmEN1();
+    static DbAlarmEN2* sington2  = new DbAlarmEN2();
+    static DbAlarmEN3* sington3  = new DbAlarmEN3();
+    static DbAlarmEN4* sington4  = new DbAlarmEN4();
+
+    DbAlarm* sington = NULL;
+    switch (id)
+    {
+    case 0:
+        sington = sington1;
+        break;
+
+    case 1:
+        sington = sington2;
+        break;
+
+    case 2:
+        sington = sington3;
+        break;
+
+    case 3:
+        sington = sington4;
+        break;
+    }
+    return sington;
+}
+

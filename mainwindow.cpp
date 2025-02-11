@@ -29,11 +29,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mIndex = 0;
     initWidget();
-    QString insertStr;
-    if(gLanguage == 0) insertStr = tr("系统启动 !");
-    else  insertStr = tr("System start !");//插入系统日志
+    QString insertStr,insertStrEn;
+    insertStr = tr("系统启动 !");
+    insertStrEn = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
-    mVersion = "V3.0.6.016";//当前软件版本
+    db_system_obj_en()->insertSystem(insertStrEn);
+    mVersion = "V3.0.7.017";//当前软件版本
     initVersion();
     updateTime();
 
@@ -210,8 +211,9 @@ void MainWindow::initVersion()
         QString temp = sys_configFile_readStr("version");
         if(temp != mVersion){
             QString insertStr = tr("系统从%1升级到%2 !").arg(temp).arg(mVersion);
-            if(gLanguage == 1) insertStr = tr("Upgrading the system from %1 to %2 !").arg(temp).arg(mVersion);//插入系统日志
+            QString insertStrEn = tr("Upgrading the system from %1 to %2 !").arg(temp).arg(mVersion);//插入系统日志
             db_system_obj()->insertSystem(insertStr);
+            db_system_obj_en()->insertSystem(insertStrEn);
             sys_configFile_write("version" , mVersion);
         }
     }else{
@@ -358,10 +360,11 @@ void MainWindow::dialogClosed(bool ret)
         ui->stackedWid->setCurrentWidget(mSettingWid);
         setButtonClickedImage(ui->setBtn,"setting_select");
         InterfaceChangeSig::get()->changeType(5);
-        QString insertStr;
-        if(gLanguage == 0) insertStr = tr("参数设置页面登录 !");
-        else  insertStr = tr("Log in parameter setting !");//插入系统日志
+        QString insertStr,insertStrEn;
+        insertStr = tr("参数设置页面登录 !");
+        insertStrEn = tr("Log in parameter setting !");//插入系统日志
         db_system_obj()->insertSystem(insertStr);
+        db_system_obj_en()->insertSystem(insertStrEn);
     }
     else{
         if(gLanguage == 0){

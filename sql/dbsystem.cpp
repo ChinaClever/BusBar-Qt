@@ -82,3 +82,13 @@ DbSystem* db_system_obj()
     return sington;
 }
 
+DbSystem* db_system_obj_en()
+{
+    static DbSystem* sington1  = new DbSystem_en();
+
+    DbSystem* sington = sington1;
+
+    return sington;
+}
+
+

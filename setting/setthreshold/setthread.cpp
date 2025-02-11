@@ -40,24 +40,34 @@ void SetThread::workDown()
                 else mRtuCmd->sendPlugV3(item);
                 if(item.insertlog == 1){
                     QString type = tr("本机阈值设置");
-                    if(gLanguage == 1) type = tr("Local threshold settings");
+                    QString typeen = tr("Local threshold settings");
                     QString msg1 = tr("");
                     QString msg2 = tr("");
+                    QString msgen1 = tr("");
+                    QString msgen2 = tr("");
 
                     if(item.bus == 0xff){
                         for(int i = 0; i < BUS_NUM; i++){
-                            change(item , msg1 , msg2 , i);
-                            if(item.premin != item.min)
+                            change(item , msg1 , msg2 , msgen1 , msgen2 , i);
+                            if(item.premin != item.min){
                                 db_operation_obj(i)->insertOperation(type , msg1);
-                            if(item.premax != item.max)
+                                db_operation_obj_en(i)->insertOperation(typeen , msgen1);
+                            }
+                            if(item.premax != item.max){
                                 db_operation_obj(i)->insertOperation(type , msg2);
+                                db_operation_obj_en(i)->insertOperation(typeen , msgen2);
+                            }
                         }
                     }else{
-                        change(item , msg1 , msg2);
-                        if(item.premin != item.min)
+                        change(item , msg1 , msg2 , msgen1 , msgen2);
+                        if(item.premin != item.min){
                             db_operation_obj(item.bus)->insertOperation(type , msg1);
-                        if(item.premax != item.max)
+                            db_operation_obj_en(item.bus)->insertOperation(typeen , msgen1);
+                        }
+                        if(item.premax != item.max){
                             db_operation_obj(item.bus)->insertOperation(type , msg2);
+                            db_operation_obj_en(item.bus)->insertOperation(typeen , msgen2);
+                        }
                     }
                 }
             }
@@ -113,84 +123,70 @@ QString SetThread::calcLoop(int id)
     return QString((char)('A' + remainder))+ QString("%1").arg(divisor + 1);
 }
 
-void SetThread::change(sThresholdItem &item , QString &msg1 , QString &msg2 ,int index)
+void SetThread::change(sThresholdItem &item , QString &msg1 , QString &msg2 , QString &msgen1 , QString &msgen2 ,int index)
 {
     sBusData *busdata = &(get_share_mem()->data[item.bus == 0xff ?index:item.bus]);
     QString str;QString sym;
     double rate;
     str = changeType(item.type , sym , rate);
-    if(gLanguage == 0){
-        if(item.box == 0){
-            QString phase = QString('A'+item.num);
-            if(item.type == 3 && item.num == 3){
-                phase = QString(tr("零线"));
-            }
-            msg1 = tr("母线: %1 ，将输入 %2 %3最小值 %4%5设置成%6%7 !")
-                      .arg(busdata->busName).arg(phase).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
-            msg2 = tr("母线: %1 ，将输入 %2 %3最大值 %4%5设置成%6%7 !")
-                       .arg(busdata->busName).arg(phase).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
+    if(item.box == 0){
+        QString phase = QString('A'+item.num);
+        QString phaseen = phase;
+        if(item.type == 3 && item.num == 3){
+            phase = QString(tr("零线"));
+            phaseen = QString(tr("neutral line"));
         }
-        else if(item.box != 0xff-1){
-            msg1 = tr("插接箱:%1 ，").arg(busdata->box[item.box].boxName);
-            int id = item.num;
-            QString output = calcLoop(id);
-            if(item.type == 3){
-                output = QString(tr("%1相").arg(QString('A' + item.num)));
-                if( item.num == 3) output = QString(tr("零线"));
-            }
-            msg2 = msg1;
-            msg1 += tr("将%1 %2最小值 %3%4设置成%5%6 !").arg(output).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
-            msg2 += tr("将%1 %2最大值 %3%4设置成%5%6 !").arg(output).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
-        }
-        else{
-            msg1 = tr("插接箱统一设置： ");
-            int id = item.num;
-            QString output = calcLoop(id);
-            if(item.type == 3){
-                output = QString(tr("%1相").arg(QString('A' + item.num)));
-                if( item.num == 3) output = QString(tr("零线"));
-            }
-            msg2 = msg1;
-            msg1 += tr("将%1 %2最小值 %3%4设置成%5%6 !").arg(output).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
-            msg2 += tr("将%1 %2最大值 %3%4设置成%5%6 !").arg(output).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
-        }
-    }else{
-        if(item.box == 0){
-            QString phase = QString('A'+item.num);
-            if(item.type == 3 && item.num == 3){
-                phase = QString(tr("neutral line"));
-            }
-            msg1 = tr("Busbar: %1 ，set the minimum %3 of input %2 from %4%5 to %6%7 !")
-                      .arg(busdata->busName).arg(phase).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
-            msg2 = tr("Busbar: %1 ，set the maximum %3 of input %2 from %4%5 to %6%7 !")
-                       .arg(busdata->busName).arg(phase).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
-        }
-        else if(item.box != 0xff-1){
-            msg1 = tr("Tap-off box:%1 ，").arg(busdata->box[item.box].boxName);
-            int id = item.num;
-            QString output = calcLoop(id);
-            if(item.type == 3){
-                output = QString(tr("phase %1").arg(QString('A' + item.num)));
-                if( item.num == 3) output = QString(tr("neutral line"));
-            }
-            msg2 = msg1;
-            msg1 += tr("set the minimum %2 of %1 from %3%4 to %5%6 !").arg(output).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
-            msg2 += tr("set the maximum %2 of %1 from %3%4 to %5%6 !").arg(output).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
-        }
-        else{
-            msg1 = tr("Tap-off box Unified settings: ");
-            int id = item.num;
-            QString output = calcLoop(id);
-            if(item.type == 3){
-                output = QString(tr("phase %1").arg(QString('A' + item.num)));
-                if( item.num == 3) output = QString(tr("neutral line"));
-            }
-            msg2 = msg1;
-            msg1 += tr("set the minimum %2 of %1 from %3%4 to %5%6 !").arg(output).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
-            msg2 += tr("set the maximum %2 of %1 from %3%4 to %5%6 !").arg(output).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
-        }
+        msg1 = tr("母线: %1 ，将输入 %2 %3最小值 %4%5设置成%6%7 !")
+                  .arg(busdata->busName).arg(phase).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
+        msg2 = tr("母线: %1 ，将输入 %2 %3最大值 %4%5设置成%6%7 !")
+                   .arg(busdata->busName).arg(phase).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
+        msgen1 = tr("Busbar: %1 ，set the minimum %3 of input %2 from %4%5 to %6%7 !")
+                     .arg(busdata->busName).arg(phaseen).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
+        msgen2 = tr("Busbar: %1 ，set the maximum %3 of input %2 from %4%5 to %6%7 !")
+                     .arg(busdata->busName).arg(phaseen).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
     }
-
+    else if(item.box != 0xff-1){
+        msg1 = tr("插接箱:%1 ，").arg(busdata->box[item.box].boxName);
+        msgen1 = tr("Tap-off box:%1 ，").arg(busdata->box[item.box].boxName);
+        int id = item.num;
+        QString output = calcLoop(id);
+        QString outputen;
+        if(item.type == 3){
+            output = QString(tr("%1相").arg(QString('A' + item.num)));
+            outputen = QString(tr("phase %1").arg(QString('A' + item.num)));
+            if( item.num == 3){
+                output = QString(tr("零线"));
+                outputen = QString(tr("neutral line"));
+            }
+        }
+        msg2 = msg1;
+        msg1 += tr("将%1 %2最小值 %3%4设置成%5%6 !").arg(output).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
+        msg2 += tr("将%1 %2最大值 %3%4设置成%5%6 !").arg(output).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
+        msgen2 = msgen1;
+        msgen1 += tr("set the minimum %2 of %1 from %3%4 to %5%6 !").arg(outputen).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
+        msgen2 += tr("set the maximum %2 of %1 from %3%4 to %5%6 !").arg(outputen).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
+    }
+    else{
+        msg1 = tr("插接箱统一设置： ");
+        msgen1 = tr("Tap-off box Unified settings: ");
+        int id = item.num;
+        QString output = calcLoop(id);
+        QString outputen;
+        if(item.type == 3){
+            output = QString(tr("%1相").arg(QString('A' + item.num)));
+            outputen = QString(tr("phase %1").arg(QString('A' + item.num)));
+            if( item.num == 3){
+                output = QString(tr("零线"));
+                outputen = QString(tr("neutral line"));
+            }
+        }
+        msg2 = msg1;
+        msg1 += tr("将%1 %2最小值 %3%4设置成%5%6 !").arg(output).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
+        msg2 += tr("将%1 %2最大值 %3%4设置成%5%6 !").arg(output).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
+        msgen2 = msgen1;
+        msgen1 += tr("set the minimum %2 of %1 from %3%4 to %5%6 !").arg(outputen).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
+        msgen2 += tr("set the maximum %2 of %1 from %3%4 to %5%6 !").arg(outputen).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
+    }
 }
 
 void SetThread::run()
