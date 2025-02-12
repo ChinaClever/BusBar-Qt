@@ -204,7 +204,7 @@ void TimeSettingDlg::initTimeZone()
     }
     sys_configFile_close();
     for(int i = 0 ; i < g_ZoneTimeList.size() ; i++){
-         ui->TimeZoneBox->setItemIcon(i , icon);
+        ui->TimeZoneBox->setItemIcon(i , icon);
         if(str == g_ZoneTimeList.at(i).second){
             ui->TimeZoneBox->setCurrentText(g_ZoneTimeList.at(i).first);
         }
