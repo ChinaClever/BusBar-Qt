@@ -171,7 +171,6 @@ void CurrentAlarmsDlg::updateData()
     }
 }
 
-
 void CurrentAlarmsDlg::on_refreshBtn_clicked()
 {
     BeepThread::bulid()->beep();

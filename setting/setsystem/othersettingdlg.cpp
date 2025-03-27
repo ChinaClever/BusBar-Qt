@@ -22,6 +22,10 @@ OtherSettingDlg::OtherSettingDlg(QWidget *parent) :
     ui->setupUi(this);
     initLanguage();
     ui->timeSetBtn->setHidden(true);
+    ui->ipEdit->setText(SendIP);
+    ui->useBox->setChecked(user);
+    ui->portEdit->setText(QString::number(Sendport));
+
 //    ui->updateBtn->setHidden(true);
 }
 
@@ -38,12 +42,20 @@ void OtherSettingDlg::initLanguage()
         ui->resetBtn->setText("系统重启");
         ui->updateBtn->setText("软件升级");
         ui->languageBtn->setText("语言设置");
+        ui->label->setText("IP地址");
+        ui->label_2->setText("端口号");
+        ui->useBox->setText("是否启用");
+        ui->saveBtn->setText("保存");
     }else{
         ui->pwdSetBtn->setText("Password modifiction");
         ui->timeSetBtn->setText("Time modification");
         ui->resetBtn->setText("System restart");
         ui->updateBtn->setText("Software upgrading");
         ui->languageBtn->setText("Language settings");
+        ui->label->setText("IP Address");
+        ui->label_2->setText("Port number");
+        ui->useBox->setText("Is it enabled");
+        ui->saveBtn->setText("Save");
     }
 }
 
@@ -191,3 +203,19 @@ void OtherSettingDlg::on_languageBtn_clicked()
     mlanguage->move(368,222);
 }
 
+
+void OtherSettingDlg::on_saveBtn_clicked()
+{
+    SendIP = ui->ipEdit->text();
+    Sendport = ui->portEdit->text().toInt();
+    user = ui->useBox->isChecked();
+    if(!SendIP.isEmpty()){
+
+        sys_configFile_writeParam("SendIP",SendIP);
+        sys_configFile_writeParam("Sendport",QString::number(Sendport));
+        sys_configFile_writeParam("Senduse",QString::number(user));
+        qDebug()<<"user"<<user;
+        if(gLanguage == 0) { InfoMsgBox box(NULL, tr("保存成功！"));}
+        else InfoMsgBox box(NULL, tr("Save successfully！"));
+    }
+}

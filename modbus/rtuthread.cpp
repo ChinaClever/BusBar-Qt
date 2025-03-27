@@ -116,7 +116,7 @@ int RtuThread::transmit(int addr, ushort reg, uint len)
 }
 
 int RtuThread::sendData(int addr, ushort reg, uint len, bool value)
-{   
+{
     if(addr == 0xff){
         uchar *buf = mBuf;
         int rtn = rtu_sent_buff(addr, reg, len, buf); // 把数据打包成通讯格式的数据

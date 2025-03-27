@@ -12,7 +12,7 @@
 static QMutex mutex; // 互拆锁
 static QString gEmailStr; // 告警邮件的内容
 static QStringList gAlarmStr; // 实时告警内容 存储格式 母线名称，告警类型，告警内容
-
+static QStringList mAlarmJson;
 /**
  * @brief 获取告警邮件的内容
  * @return
@@ -38,7 +38,14 @@ QStringList get_alarm_str()
 
     return str;
 }
+QStringList get_alarm_json()
+{
+    QMutexLocker locker(&mutex);
+    QStringList str = mAlarmJson;
+    mAlarmJson.clear();
 
+    return str;
+}
 int get_alarm_len()
 {
     return gAlarmStr.size();
@@ -70,6 +77,7 @@ void DpAlarmSlave::timeoutDone()
 }
 
 
+
 void DpAlarmSlave::saveMsg(const QString &typeStr, const QString &str , const QString &typeStrEn, const QString &strEn)
 {
     DB_Tran tran;
@@ -97,6 +105,7 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn,
         QString str = msg, tempStr = typeStr , strEn = msgEn , tempStrEn = typeStrEn;
         if(unit.alarm[i])
         {
+
             tempStr = typeStr + tr("告警");
             str += tr("%1，当前值：%2%3, 最小值：%4%5, 最大值：%6%7").arg(i+1)
                     .arg(unit.value[i]/rate).arg(sym)
@@ -125,6 +134,7 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn,
 
                 tempStrEn = typeStrEn +  tr(" Warning");
                 strEn += tr("%1，current value：%2%3, critical lower limit：%4%5, critical upper limit：%6%7").arg(i+1)
+
                         .arg(unit.value[i]/rate).arg(sym)
                         .arg(unit.crMin[i]/rate).arg(sym)
                         .arg(unit.crMax[i]/rate).arg(sym);
@@ -153,7 +163,6 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn,
         QString strEn = msgEn , tempStrEn = typeStrEn;
         if(unit.alarm[i])
         {
-
             tempStr = typeStr + tr("告警");
             str += tr("%1，当前值：%2%3, 最小值：%4%5, 最大值：%6%7").arg(QString('A'+i))
                     .arg(unit.value[i]/rate).arg(sym)
@@ -166,7 +175,6 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn,
                     .arg(unit.min[i]/rate).arg(sym)
                     .arg(unit.max[i]/rate).arg(sym);
 
-
             if(unit.alarm[i] == 1){
                 unit.alarm[i] = 2;
                 saveMsg(typeStr, str , typeStrEn , strEn);
@@ -174,7 +182,6 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn,
         }
         else if(unit.crAlarm[i])
         {
-
             tempStr = typeStr +  tr("预警");
             str += tr("%1，当前值：%2%3, 临界下限值：%4%5, 临界上限值：%6%7").arg(QString('A'+i))
                     .arg(unit.value[i]/rate).arg(sym)
@@ -186,7 +193,6 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn,
                     .arg(unit.value[i]/rate).arg(sym)
                     .arg(unit.crMin[i]/rate).arg(sym)
                     .arg(unit.crMax[i]/rate).arg(sym);
-
         }
 
         // 实时告警信息
@@ -221,7 +227,6 @@ void DpAlarmSlave::unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg,QSt
         QString str=msg, tempStr = typeStr, strEn=msgEn, tempStrEn = typeStrEn;
         if(unit.alarm[i])
         {
-
             tempStr = typeStr + tr("告警");
             str += tr("%1，当前值：%2%3, 最小值：%4%5, 最大值：%6%7").arg(alarmStr)
                     .arg(unit.value[i]/rate).arg(sym)
@@ -233,7 +238,6 @@ void DpAlarmSlave::unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg,QSt
                     .arg(unit.value[i]/rate).arg(sym)
                     .arg(unit.min[i]/rate).arg(sym)
                     .arg(unit.max[i]/rate).arg(sym);
-
 
             if(unit.alarm[i] == 1){
                 unit.alarm[i] = 2;
@@ -300,7 +304,6 @@ void DpAlarmSlave::unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, QSt
                     .arg(unit.value[i]/rate).arg(sym)
                     .arg(unit.min[i]/rate).arg(sym)
                     .arg(unit.max[i]/rate).arg(sym);
-
 
             if(unit.alarm[i] == 1){
                 unit.alarm[i] = 2;
@@ -742,6 +745,7 @@ void DpAlarmSlave::checkAlarm()
 
     QMutexLocker locker(&mutex);
     gAlarmStr = mAlarmStr;
+    mAlarmJson = mAlarmStr;
     mAlarmStr.clear();
 }
 

@@ -9,6 +9,7 @@
 //#include "snmp/snmpthread.h"
 #include "mbs/mb_core.h"
 #include "modbus/thirdthread.h"
+#include "json_send.h"
 
 RtuThread *rtu[4] = {NULL, NULL, NULL, NULL};
 ThirdThread *thr = NULL;
@@ -37,7 +38,6 @@ MainWindow::MainWindow(QWidget *parent) :
     mVersion = "V3.0.7.018";//当前软件版本
     initVersion();
     updateTime();
-
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
     on_comboBox_currentIndexChanged(0);
     //BeepThread::bulid()->longBeep(); // 线程 -- 'bi~'
@@ -87,6 +87,7 @@ void MainWindow::initSerial()
 #endif
 
     Mb_Core::build(this);//////
+    Json_Send::bulid(this);
 
 //    rtu[4] = new RtuThread(this);
 //    rtu[4]->init(SERIAL_COM5, 1);
@@ -160,6 +161,7 @@ void MainWindow::initNetSLot()
     mServer->setMaxPendingConnections(2);
     mServer->listen(QHostAddress::AnyIPv4, 22223);
     Mb_Core::build()->start();
+    Json_Send::bulid()->start();
 }
 
 void MainWindow::initFunSLot()
@@ -167,6 +169,7 @@ void MainWindow::initFunSLot()
     initSerial(); //串口
     new DpThread(this); // 创建数据处理线程
     updateTime();
+
 
     timer = new QTimer(this);
     timer->start(1000);
@@ -199,6 +202,22 @@ void MainWindow::initLanguage()
         gLanguage = sys_configFile_readInt("language");
     }else{
         sys_configFile_write("language" , QString::number(gLanguage));
+    }
+    sys_configFile_close();
+}
+
+void MainWindow::initSendUse()
+{
+    bool ret = sys_configFile_open();
+    ret = sys_configFile_contains("Senduse");
+    if(ret){
+        SendIP = sys_configFile_readStr("SendIP");
+        Sendport = sys_configFile_readInt("Sendport");
+        user = sys_configFile_readInt("Senduse");
+    }else{
+        sys_configFile_write("Senduse" , QString::number(user));
+        sys_configFile_write("SendIP" , SendIP);
+        sys_configFile_write("Senduse" , QString::number(Sendport));
     }
     sys_configFile_close();
 }
@@ -245,6 +264,7 @@ void MainWindow::initWidget()
     set_background_icon(ui->stackedWid,":/new/prefix1/image/background.png");
     initBackground(); //按钮图标
     initLable();
+    initSendUse();
     mHomeWid = new HomeWid(ui->stackedWid); //主界面
     ui->stackedWid->addWidget(mHomeWid);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), mHomeWid, SIGNAL(busChangedSig(int)));

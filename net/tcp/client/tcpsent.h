@@ -28,5 +28,6 @@ private:
     QReadWriteLock  *mLock;
     QQueue<QByteArray>  *mArrayQue;
 };
-void tcp_queue_append(uchar *buf, int len);
+//void tcp_queue_append(uchar *buf, int len);
+void tcp_queue_append(QByteArray &data);
 #endif // TCPSENT_H
