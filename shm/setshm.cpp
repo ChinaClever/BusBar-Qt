@@ -198,12 +198,12 @@ void SetShm::setName(DbNameItem &item)
             db_operation_obj(item.bus)->insertOperation(type.arg(typemame) , msg1);
             db_operation_obj_en(item.bus)->insertOperation(typeen.arg(typemameen) , msgen1);
         }else{
-            DbDevName::bulid()->saveItem(item);
+                DbDevName::bulid()->saveItem(item);
                 if(prename != item.name){
                 msg1 = tr("%1:将%2改成%3 ！").arg(typemame).arg(prename).arg(item.name);
                 msgen1 = tr("%1:set from %2 to %3 !").arg(typemameen).arg(prename).arg(item.name);
                 db_operation_obj(item.bus)->insertOperation(type.arg(typemame) , msg1);
-                db_operation_obj(item.bus)->insertOperation(typeen.arg(typemameen) , msgen1);
+                db_operation_obj_en(item.bus)->insertOperation(typeen.arg(typemameen) , msgen1);
             }
         }
     }

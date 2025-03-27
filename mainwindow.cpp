@@ -34,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
     insertStrEn = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
     db_system_obj_en()->insertSystem(insertStrEn);
-    mVersion = "V3.0.7.017";//当前软件版本
+    mVersion = "V3.0.7.018";//当前软件版本
     initVersion();
     updateTime();
 
