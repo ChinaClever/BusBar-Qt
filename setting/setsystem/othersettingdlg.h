@@ -27,6 +27,8 @@ private slots:
 
     void on_saveBtn_clicked();
 
+    void on_alramBtn_clicked();
+
 private:
     Ui::OtherSettingDlg *ui;
     Languagesetting *mlanguage;

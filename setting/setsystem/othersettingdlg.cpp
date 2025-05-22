@@ -27,6 +27,8 @@ OtherSettingDlg::OtherSettingDlg(QWidget *parent) :
     else ui->useBox->setChecked(false);
     ui->portEdit->setText(QString::number(gSendport));
 
+    if(gStartAlarm) ui->alramBtn->setText(tr("关闭告警器"));
+    else ui->alramBtn->setText(tr("启用告警器"));
 //    ui->updateBtn->setHidden(true);
 }
 
@@ -220,3 +222,17 @@ void OtherSettingDlg::on_saveBtn_clicked()
         else InfoMsgBox box(NULL, tr("Save successfully！"));
     }
 }
+
+void OtherSettingDlg::on_alramBtn_clicked()
+{
+    if(gStartAlarm){
+        gStartAlarm = 0;
+        ui->alramBtn->setText(tr("关闭告警器"));
+        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
+    }else{
+        gStartAlarm = 1;
+        ui->alramBtn->setText(tr("启用告警器"));
+        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
+    }
+}
+

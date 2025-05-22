@@ -6,7 +6,8 @@ BeepThread::BeepThread(QObject *parent) : QThread(parent)
 {
     isRun = false ;
 //    gpio_init();
-
+    initGpio(131);
+    initGpio(132);
 #if ARM_LINUX == 2 //第一次运行时要执行
     system("echo 129 > /sys/class/gpio/export");
     system("echo \"out\" > /sys/class/gpio/gpio129/direction");
@@ -21,16 +22,24 @@ BeepThread *BeepThread::bulid()
     return sington;
 }
 
-void BeepThread::beep()
+void BeepThread::initGpio(int num)
 {
-//    mSec = 100;
-//    start();
+    QString str = QString("echo %1 > /sys/class/gpio/export").arg(num);
+    system(str.toLatin1().data());
+    str = QString("echo out > /sys/class/gpio/gpio%1/direction").arg(num);
+    system(str.toLatin1().data());
 }
 
-void BeepThread::longBeep()
+void BeepThread::openBeep()
 {
-//    mSec = 650;
-//    start();
+    system("echo 1  > /sys/class/gpio/gpio131/value");
+    system("echo 1  > /sys/class/gpio/gpio132/value");
+}
+
+void BeepThread::closeBeep()
+{
+    system("echo 0  > /sys/class/gpio/gpio131/value");
+    system("echo 0  > /sys/class/gpio/gpio132/value");
 }
 
 void BeepThread::run()

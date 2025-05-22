@@ -28,9 +28,20 @@ void DpBeepThread::timeoutDone()
 
 void DpBeepThread::boxAlarm(sBoxData &box)
 {
-    if((box.boxAlarm))
-    {
-        BeepThread::bulid()->beep();
+    if(box.boxAlarm){
+        if(gStartAlarm){
+            if(gOpenAlarm == 0) BeepThread::bulid()->openBeep();
+            gOpenAlarm = 1;
+            gCloseAlarm = 0;
+        }else{
+            if(gCloseAlarm == 0) BeepThread::bulid()->closeBeep();
+            gCloseAlarm = 1;
+            gOpenAlarm = 0;
+        }
+    }else{
+        if(gCloseAlarm == 0) BeepThread::bulid()->closeBeep();
+        gCloseAlarm = 1;
+        gOpenAlarm = 0;
     }
 }
 

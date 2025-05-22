@@ -32,6 +32,9 @@ extern int gLanguage;//0代表中文 1代表英文
 extern int gUser;
 extern QString gSendIP;
 extern int gSendport;
+extern uchar gStartAlarm;//0代表关闭 1代表启用
+extern uchar gOpenAlarm;//0代表关闭 1代表启用
+extern uchar gCloseAlarm;//
 /**
  * 统计数据结构体
  */
