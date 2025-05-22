@@ -20,9 +20,9 @@ signals:
 protected:
     void Startbox(QJsonObject &obj,int id);
     void Startbox_pduInfo(QJsonObject &json,int id);
-    void Startbox_Alarm(QJsonObject &obj ,int id);
+    bool Startbox_Alarm(QJsonObject &obj ,int id);
     void Startbox_Data(QJsonObject &obj ,int id);
-    int Startbox_Status(int id);
+    int Startbox_Status(QJsonObject &obj, int id);
 
     void Insertbox(QJsonObject &obj,int bus_id,int insert_id);
     void Insertbox_pduInfo(QJsonObject &json,int bus_id,int insert_id);
@@ -32,8 +32,8 @@ private:
     sBusData *mBusData[BUS_NUM];
     sBoxData *mBoxData[BUS_NUM];
     sProgress *mPro;
-    DpAlarmSlave *mAlarm;
     IpSettingDlg *mIp;
+    QString m_buslist[BUS_NUM];
 };
 
 #endif // JSONPACK_H

@@ -215,7 +215,7 @@ void HomeBoxWid::updateUpAndDownAlarmStatus()
 
 void HomeBoxWid::on_pushButton_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     if(mData->boxType)//测温模块
     {
         TemWid mTemWid(0);

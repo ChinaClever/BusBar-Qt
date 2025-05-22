@@ -39,7 +39,7 @@ void Json_Pack::Startbox(QJsonObject &obj,int id)
     obj.insert("bar_id", id + 1);
     obj.insert("datetime", mPro->datetime);
     obj.insert("dev_ip", mPro->dev_ip);
-    mPro->status = Startbox_Status(id);
+    mPro->status = Startbox_Status(obj ,id);
     obj.insert("status", mPro->status);
     obj.insert("bus_name", mBusData[id]->busName);
     obj.insert("box_name", "");
@@ -49,9 +49,10 @@ void Json_Pack::Startbox(QJsonObject &obj,int id)
 void Json_Pack::Startbox_pduInfo(QJsonObject &obj, int id)
 {
     Startbox_Data(obj,id);
-    Startbox_Alarm(obj,id);
+    //Startbox_Alarm(obj,id);
 }
-void Json_Pack::Startbox_Alarm(QJsonObject &obj ,int id)
+
+bool Json_Pack::Startbox_Alarm(QJsonObject &obj ,int id)
 {
     QStringList alarmStr = get_alarm_json();
     QString bus_list; bus_list.clear();
@@ -81,18 +82,25 @@ void Json_Pack::Startbox_Alarm(QJsonObject &obj ,int id)
 //                bus_list[3] += tr("\n");
 //            }
     }
-
-    obj.insert("dev_alarm",bus_list);
+    if(!bus_list.isEmpty())m_buslist[id] = bus_list;
+    obj.insert("dev_alarm",m_buslist[id]);
+    return m_buslist[id].isEmpty();
 }
-int Json_Pack::Startbox_Status(int id)
+int Json_Pack::Startbox_Status(QJsonObject &obj,int id)
 {
     int status = 0;
     uchar boxalarm = mBoxData[id]->boxAlarm;
     if(mBoxData[id]->offLine){
-        if(boxalarm) status = 2;//告警
-        else if(boxalarm == 0) status = 1;//正常工作
+        if(boxalarm && !Startbox_Alarm(obj,id)) status = 2;//告警
+        else{
+            status = 1;//正常工作
+            if(!m_buslist[id].isEmpty())
+            m_buslist[id].clear();
+        }
     }else{
-        status = 0;                         //离线
+        status = 0;//离线
+        if(!m_buslist[id].isEmpty())
+        m_buslist[id].clear();
     }
 
     return status;

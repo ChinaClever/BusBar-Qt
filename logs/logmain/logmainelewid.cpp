@@ -163,7 +163,7 @@ void LogMainEleWid::initTableSlot(int id)
 
 bool LogMainEleWid::refreshTable(const QString &table)
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     bool ret = model->refreshTable(table);
     if(ret) {
         m_table = table;
@@ -207,7 +207,7 @@ void LogMainEleWid::refreshSlot()
 
 void LogMainEleWid::doubleSlot(QModelIndex)
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     QString str;
     if(gLanguage == 0) str = tr("是否删除这条记录?");
     else str = tr("Do you want to delete this record?");

@@ -22,9 +22,10 @@ OtherSettingDlg::OtherSettingDlg(QWidget *parent) :
     ui->setupUi(this);
     initLanguage();
     ui->timeSetBtn->setHidden(true);
-    ui->ipEdit->setText(SendIP);
-    ui->useBox->setChecked(user);
-    ui->portEdit->setText(QString::number(Sendport));
+    ui->ipEdit->setText(gSendIP);
+    if(gUser)ui->useBox->setChecked(true);
+    else ui->useBox->setChecked(false);
+    ui->portEdit->setText(QString::number(gSendport));
 
 //    ui->updateBtn->setHidden(true);
 }
@@ -42,9 +43,9 @@ void OtherSettingDlg::initLanguage()
         ui->resetBtn->setText("系统重启");
         ui->updateBtn->setText("软件升级");
         ui->languageBtn->setText("语言设置");
-        ui->label->setText("IP地址");
-        ui->label_2->setText("端口号");
-        ui->useBox->setText("是否启用");
+        ui->label->setText("推送数据IP地址");
+        ui->label_2->setText("推送数据端口号");
+        ui->useBox->setText("是否启用推送数据");
         ui->saveBtn->setText("保存");
     }else{
         ui->pwdSetBtn->setText("Password modifiction");
@@ -52,9 +53,9 @@ void OtherSettingDlg::initLanguage()
         ui->resetBtn->setText("System restart");
         ui->updateBtn->setText("Software upgrading");
         ui->languageBtn->setText("Language settings");
-        ui->label->setText("IP Address");
-        ui->label_2->setText("Port number");
-        ui->useBox->setText("Is it enabled");
+        ui->label->setText("IP Address of \npushing data");
+        ui->label_2->setText("Port number of \npushing data");
+        ui->useBox->setText("Is it enabled pushing data");
         ui->saveBtn->setText("Save");
     }
 }
@@ -132,7 +133,7 @@ static bool update_fun(const QString &str)
 
 void OtherSettingDlg::on_updateBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     if(gLanguage == 0) {
         QuMsgBox box(NULL, tr("是否升级系统?"));
         if(box.Exec()) {
@@ -158,7 +159,7 @@ void OtherSettingDlg::on_updateBtn_clicked()
 
 void OtherSettingDlg::on_resetBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     if(gLanguage == 0){
         QuMsgBox box(NULL, tr("是否重启系统?"));
         if(box.Exec()) {
@@ -180,14 +181,14 @@ void OtherSettingDlg::on_resetBtn_clicked()
 
 void OtherSettingDlg::on_timeSetBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     TimeSettingDlg dlg(this);
     dlg.exec();
 }
 
 void OtherSettingDlg::on_pwdSetBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     PassordSettingDlg *passwordDlg = new PassordSettingDlg(this);
     passwordDlg->setWindowModality(Qt::WindowModal);
     passwordDlg->show();
@@ -196,7 +197,7 @@ void OtherSettingDlg::on_pwdSetBtn_clicked()
 
 void OtherSettingDlg::on_languageBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     mlanguage = new Languagesetting(this);
     mlanguage->setWindowModality(Qt::WindowModal);
     mlanguage->show();
@@ -206,15 +207,15 @@ void OtherSettingDlg::on_languageBtn_clicked()
 
 void OtherSettingDlg::on_saveBtn_clicked()
 {
-    SendIP = ui->ipEdit->text();
-    Sendport = ui->portEdit->text().toInt();
-    user = ui->useBox->isChecked();
-    if(!SendIP.isEmpty()){
+    gSendIP = ui->ipEdit->text();
+    gSendport = ui->portEdit->text().toInt();
+    gUser = ui->useBox->isChecked()?1:0;
+    if(!gSendIP.isEmpty()&&!ui->portEdit->text().isEmpty()){
 
-        sys_configFile_writeParam("SendIP",SendIP);
-        sys_configFile_writeParam("Sendport",QString::number(Sendport));
-        sys_configFile_writeParam("Senduse",QString::number(user));
-        qDebug()<<"user"<<user;
+        sys_configFile_writeParam("SendIP",gSendIP);
+        sys_configFile_writeParam("Sendport",QString::number(gSendport));
+        sys_configFile_writeParam("Senduse",QString::number(gUser));
+        //qDebug()<<"user"<<user;
         if(gLanguage == 0) { InfoMsgBox box(NULL, tr("保存成功！"));}
         else InfoMsgBox box(NULL, tr("Save successfully！"));
     }

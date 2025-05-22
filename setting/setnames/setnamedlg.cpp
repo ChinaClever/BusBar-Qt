@@ -98,7 +98,7 @@ void SetNameDlg::on_saveBtn_clicked()
     if(!str.isEmpty()) {
         if(!(str.size() > NAME_LEN - 2)){
             if(save()){
-                BeepThread::bulid()->beep();
+                //BeepThread::bulid()->beep();
                 close();
             }
         } else {
@@ -113,6 +113,6 @@ void SetNameDlg::on_saveBtn_clicked()
 
 void SetNameDlg::on_cancelBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     close();
 }

@@ -91,7 +91,7 @@ void HomeWid::setBoxBaseNum()
         mBoxWid[i]->initFun(mBaseNum, i);
         mBoxWid[i]->updateUpAndDownAlarmStatus();
     }
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
 }
 
 bool HomeWid::checkBoxBaseNum()

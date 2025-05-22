@@ -357,7 +357,7 @@ void BoxTableWidget::timeoutDone()
 void BoxTableWidget::getItem(QTableWidgetItem*)
 {
     disconnect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(getItem(QTableWidgetItem*)));
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     int row = ui->tableWidget->currentRow();
     sDataPacket *shm = get_share_mem();
     mData = &(shm->data[mBusID].box[row+1]);

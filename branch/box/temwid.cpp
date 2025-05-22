@@ -35,5 +35,5 @@ void TemWid::updateWid(int bus, int box)
 void TemWid::on_pushButton_clicked()
 {
     this->close();
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
 }

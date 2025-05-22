@@ -33,14 +33,14 @@ void Json_Send::initFun()
     bool ret = sys_configFile_open();
     ret = sys_configFile_contains("Senduse");
     if(ret){
-        SendIP = sys_configFile_readStr("SendIP");
-        Sendport = sys_configFile_readInt("Sendport");
-        user = sys_configFile_readInt("Senduse");
-        qDebug()<<"SendIP"<<SendIP;
+        gSendIP = sys_configFile_readStr("SendIP");
+        gSendport = sys_configFile_readInt("Sendport");
+        gUser = sys_configFile_readInt("Senduse");
+        //qDebug()<<"SendIP"<<SendIP;
     }else {
-        sys_configFile_write("Senduse" , QString::number(user));
-        sys_configFile_write("SendIP" , SendIP);
-        sys_configFile_write("Senduse" , QString::number(Sendport));
+        sys_configFile_write("Senduse" , QString::number(gUser));
+        sys_configFile_write("SendIP" , gSendIP);
+        sys_configFile_write("Sendport" , QString::number(gSendport));
     }
     sys_configFile_close();
 
@@ -54,7 +54,7 @@ void Json_Send::run()
     bool ret = true;
     initFun();
     while(ret){
-        if(user) {
+        if(gUser) {
             sendData();
         }
         msleep(1000);
@@ -112,14 +112,14 @@ void Json_Send::TcpsendData()
 void Json_Send::sendData()
 {
     QHostAddress address; bool ret;
-    address.setAddress(SendIP);
+    address.setAddress(gSendIP);
     QJsonObject bar_json, box_json ; QByteArray ba;
 
     for(int i = 0;i < BUS_NUM;i++)
     {
         if(mBus[i]->box[0].offLine) {
             mJson->getStart_Json(bar_json, ba, i);
-            ret = mSocket->sentData(address, ba ,Sendport);
+            ret = mSocket->sentData(address, ba ,gSendport);
             if(!ret) break;
             bar_json.empty(); ba.clear();
 
@@ -128,8 +128,8 @@ void Json_Send::sendData()
                 if(mBus[i]->box[j].offLine) {
                     mJson->getInsert_Json(box_json, ba, i, j);
 //                    qDebug()<<"   udp    "<<ba;
-                    ret = mSocket->sentData(address, ba ,Sendport);
-                    qDebug()<<"   udp    "<<ba<<ret<<SendIP<<Sendport;
+                    ret = mSocket->sentData(address, ba ,gSendport);
+//                    qDebug()<<"   udp    "<<ba<<ret<<gSendIP<<gSendport;
                     if(!ret) break;
                     box_json.empty(); ba.clear();
                 }

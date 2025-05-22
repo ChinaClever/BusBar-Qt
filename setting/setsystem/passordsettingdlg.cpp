@@ -44,7 +44,7 @@ void PassordSettingDlg::on_pushButton_2_clicked()
     QString newPassword = ui->lineEdit_2->text();
     if(ret)
     {
-        BeepThread::bulid()->beep();
+        //BeepThread::bulid()->beep();
         sys_configFile_writeParam("password",newPassword);
         QString insertStr,insertStrEn;
         if(gLanguage == 0){

@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     insertStrEn = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
     db_system_obj_en()->insertSystem(insertStrEn);
-    mVersion = "V3.0.7.019";//当前软件版本
+    mVersion = "V3.0.8.023";//当前软件版本
     initVersion();
     updateTime();
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
@@ -211,13 +211,13 @@ void MainWindow::initSendUse()
     bool ret = sys_configFile_open();
     ret = sys_configFile_contains("Senduse");
     if(ret){
-        SendIP = sys_configFile_readStr("SendIP");
-        Sendport = sys_configFile_readInt("Sendport");
-        user = sys_configFile_readInt("Senduse");
+        gSendIP = sys_configFile_readStr("SendIP");
+        gSendport = sys_configFile_readInt("Sendport");
+        gUser = sys_configFile_readInt("Senduse");
     }else{
-        sys_configFile_write("Senduse" , QString::number(user));
-        sys_configFile_write("SendIP" , SendIP);
-        sys_configFile_write("Senduse" , QString::number(Sendport));
+        sys_configFile_write("Senduse" , QString::number(gUser));
+        sys_configFile_write("SendIP" , gSendIP);
+        sys_configFile_write("Sendport" , QString::number(gSendport));
     }
     sys_configFile_close();
 }
@@ -332,7 +332,7 @@ void MainWindow::on_logBtn_clicked()
 void MainWindow::on_setBtn_clicked()
 {
     if(ui->stackedWid->currentWidget() != mSettingWid) {
-        BeepThread::bulid()->beep();
+        //BeepThread::bulid()->beep();
         mCheckDlg->clear();
         mCheckDlg->move(0,0);
         mCheckDlg->exec();
@@ -341,14 +341,14 @@ void MainWindow::on_setBtn_clicked()
 
 void MainWindow::on_alarmBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     CurrentAlarmsDlg dlg(this);
     dlg.exec();
 }
 
 void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     setBusName(index);
 }
 
