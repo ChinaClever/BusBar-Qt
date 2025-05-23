@@ -24,6 +24,7 @@ private:
      bool isRun;
      QTimer *timer;
      sDataPacket *shm;
+     uint mAllAlarm;
 };
 
 #endif // DPBEEPTHREAD_H
