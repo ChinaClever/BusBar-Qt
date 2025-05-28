@@ -174,9 +174,13 @@ void DpAlarmThread::boxAlarm(sBoxData &box , int index )
         }
 
         box.boxOffLineAlarm = 1;
-        box.boxAlarm = box.boxCurAlarm + box.boxVolAlarm + box.boxEnvAlarm + box.boxPowerAlarm + box.HzAlarm + box.zeroLineAlarm;
+        box.boxAlarm = box.boxCurAlarm + box.boxVolAlarm + box.boxEnvAlarm + box.boxPowerAlarm;
         if(index == 0){
             box.boxAlarm += box.data.swAlarm[0];
+            box.boxAlarm += box.lpsLogAlarm;
+            box.boxAlarm += box.totalPowAlarm;
+            box.boxAlarm += box.HzAlarm;
+            box.boxAlarm += box.zeroLineAlarm;
         }else{
             if(box.phaseFlag == 0){
                 for(int i  = 0 ; i < box.data.lineNum ; i++){

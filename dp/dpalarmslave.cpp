@@ -602,14 +602,14 @@ void DpAlarmSlave::busAlarm(int id)
                 }
             }
             if( busBox->lpsLogAlarm ) {
-                QString typeStr = tr("主路防雷");
+                QString typeStr = tr("主路防雷 ");
                 QString str = tr("母线：%1").arg(bus->busName);
                 QString tempStr = typeStr + tr("告警");
-                str += tr("损坏");
-                QString typeStrEn = tr("Input lightning protection");
+                str += tr("防雷损坏");
+                QString typeStrEn = tr("Input lightning protection ");
                 QString strEn = tr("Busbar：%1 ").arg(bus->busName);
                 QString tempStrEn = typeStrEn + tr("Alarm");
-                str += tr("damage");
+                strEn += tr("lightning protection damage");
                 if(busBox->lpsLogAlarm == 1){
                     busBox->lpsLogAlarm = 2;
                     saveMsg( typeStr , str , typeStrEn , strEn);
