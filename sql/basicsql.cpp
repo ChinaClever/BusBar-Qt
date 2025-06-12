@@ -22,7 +22,7 @@ BasicSql::BasicSql(QObject *parent) :
     QSqlQuery query(mDb);
     if(!query.exec(cmd))
         throwError(query.lastError());
-    cmd = "PRAGMA journal_mode = WAL;";
+    //cmd = "PRAGMA journal_mode = WAL;";
     if(!query.exec(cmd))
         throwError(query.lastError());
 }

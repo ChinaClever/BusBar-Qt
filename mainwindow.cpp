@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     insertStrEn = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
     db_system_obj_en()->insertSystem(insertStrEn);
-    mVersion = "V3.0.8.023";//当前软件版本
+    mVersion = "V3.1.0.026";//当前软件版本
     initVersion();
     updateTime();
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
