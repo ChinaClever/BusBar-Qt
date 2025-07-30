@@ -57,14 +57,15 @@ bool Json_Pack::Startbox_Alarm(QJsonObject &obj ,int id)
     QStringList alarmStr = get_alarm_json();
     QString bus_list; bus_list.clear();
 
-    for(int i=0; i<alarmStr.size()-3; i+=3){
+    for(int i=0; i<alarmStr.size(); i+=3){
         if(alarmStr.at(i).contains(mBusData[id]->busName))
         {
             for(int j = i; j< i+3;j++){
                 bus_list += alarmStr.at(j);
             }
-            bus_list += tr("\n");
+            bus_list += tr("； \n");
         }
+    }
 //        else if(alarmStr.at(i).contains("BUS-2")){
 //                for(int j = i; j< i+3;j++){
 //                    bus_list[1] += alarmStr.at(j);
@@ -91,7 +92,7 @@ int Json_Pack::Startbox_Status(QJsonObject &obj,int id)
     int status = 0;
     uchar boxalarm = mBoxData[id]->boxAlarm;
     if(mBoxData[id]->offLine){
-        if(boxalarm && !Startbox_Alarm(obj,id)) status = 2;//告警
+        if(!Startbox_Alarm(obj,id) && boxalarm ) status = 2;//告警
         else{
             status = 1;//正常工作
             if(!m_buslist[id].isEmpty())
@@ -224,7 +225,9 @@ void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
     tgObj.insert("pow_max",mBoxData[id]->totalPow.imax/COM_RATE_POW);
     tgObj.insert("pow_status",mBoxData[id]->totalPow.iupalarm);
     tgObj.insert("pow_apparent",mBoxData[id]->totalApPow/COM_RATE_POW);
-    tgObj.insert("pow_reactive",((mBoxData[id]->totalApPow-mBoxData[id]->totalPow.ivalue)/COM_RATE_POW));
+    if(mBoxData[id]->totalApPow > mBoxData[id]->totalPow.ivalue)
+        tgObj.insert("pow_reactive",(qSqrt(qPow(mBoxData[id]->totalApPow , 2)-qPow(mBoxData[id]->totalPow.ivalue , 2))/COM_RATE_POW));//
+    else tgObj.insert("pow_reactive",0);//
     double eleActive = 0,pfTotal = 0;
     for(int j=0; j<3; ++j) {
         eleActive += ((mBoxData[id]->data.ele[j])/COM_RATE_ELE);
@@ -425,7 +428,9 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
     totalObj.insert("pow_active",(BoxData->tgBox.pow)/COM_RATE_POW);
     totalObj.insert("pow_apparent",(BoxData->tgBox.apPow)/COM_RATE_POW);
     totalObj.insert("ele_active",(BoxData->tgBox.ele)/COM_RATE_ELE);
-    totalObj.insert("pow_reactive",((BoxData->tgBox.apPow)-(BoxData->tgBox.pow))/COM_RATE_POW);
+    if( BoxData->tgBox.apPow > BoxData->tgBox.pow )
+        totalObj.insert("pow_reactive",(qSqrt(qPow(BoxData->tgBox.apPow , 2)-qPow(BoxData->tgBox.pow,2))/COM_RATE_POW));
+    else totalObj.insert("pow_reactive",0);
     totalObj.insert("power_factor",(BoxData->tgBox.pf/COM_RATE_PF));
 
     totalObj.insert("ele_apparent","");

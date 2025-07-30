@@ -113,25 +113,27 @@ void Json_Send::sendData()
 {
     QHostAddress address; bool ret;
     address.setAddress(gSendIP);
-    QJsonObject bar_json, box_json ; QByteArray ba;
+    QJsonObject bar_json[BUS_NUM], box_json[BUS_NUM][BOX_NUM] ; QByteArray ba;
 
     for(int i = 0;i < BUS_NUM;i++)
     {
         if(mBus[i]->box[0].offLine) {
-            mJson->getStart_Json(bar_json, ba, i);
+            mJson->getStart_Json(bar_json[i], ba, i);
             ret = mSocket->sentData(address, ba ,gSendport);
             if(!ret) break;
-            bar_json.empty(); ba.clear();
+            //bar_json.empty();
+            ba.clear();
 
             for(int j = 1;j < *(mBoxNum[i]) + 1;j++)
             {
                 if(mBus[i]->box[j].offLine) {
-                    mJson->getInsert_Json(box_json, ba, i, j);
+                    mJson->getInsert_Json(box_json[i][j], ba, i, j);
 //                    qDebug()<<"   udp    "<<ba;
                     ret = mSocket->sentData(address, ba ,gSendport);
 //                    qDebug()<<"   udp    "<<ba<<ret<<gSendIP<<gSendport;
                     if(!ret) break;
-                    box_json.empty(); ba.clear();
+                    //box_json.empty();
+                    ba.clear();
                 }
             }
         }
