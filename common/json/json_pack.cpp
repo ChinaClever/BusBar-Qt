@@ -82,7 +82,7 @@ bool Json_Pack::Startbox_Alarm(QJsonObject &obj ,int id)
 //                }
 //                bus_list[3] += tr("\n");
 //            }
-    }
+//    }
     if(!bus_list.isEmpty())m_buslist[id] = bus_list;
     obj.insert("dev_alarm",m_buslist[id]);
     return m_buslist[id].isEmpty();

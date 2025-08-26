@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     insertStrEn = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
     db_system_obj_en()->insertSystem(insertStrEn);
-    mVersion = "V3.0.8.025";//当前软件版本
+    mVersion = "V3.0.8.026";//当前软件版本
     initVersion();
     updateTime();
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
@@ -393,12 +393,13 @@ void MainWindow::dialogClosed(bool ret)
         db_system_obj_en()->insertSystem(insertStrEn);
     }
     else{
+        QString str = getReservedInformation();
         if(gLanguage == 0){
-           QuMsgBox box(NULL,"对不起，密码输入不正确，您不具备该权限！");
+            QuMsgBox box(NULL,tr("对不起，密码输入不正确，您不具备该权限！\n预留信息：%1").arg(str));
            box.Exec();
         }
         else{
-           QuMsgBox box(NULL,"Sorry,the passward entered is incorrect.You do not have the permission！");
+           QuMsgBox box(NULL,tr("Sorry,the passward entered is incorrect.You do not have the permission！\nReserved information：%1").arg(str));
            box.Exec();
         }
     }

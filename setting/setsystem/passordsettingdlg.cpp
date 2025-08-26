@@ -25,6 +25,7 @@ void PassordSettingDlg::initLanguage()
         ui->lineEdit->setPlaceholderText("请输入原密码");
         ui->pushButton_2->setText("保存");
         ui->pushButton_3->setText("取消");
+        ui->label_3->setText("预留信息：");
     }else{
         ui->groupBox->setTitle("Password setting");
         ui->label->setText("Old password:");
@@ -32,6 +33,7 @@ void PassordSettingDlg::initLanguage()
         ui->lineEdit->setPlaceholderText("Please enter the old password");
         ui->pushButton_2->setText("Save");
         ui->pushButton_3->setText("Cancel");
+        ui->label_3->setText("Reserved information:");
     }
 }
 
@@ -42,26 +44,49 @@ void PassordSettingDlg::on_pushButton_2_clicked()
 {
     bool ret = checkJurisdiction();
     QString newPassword = ui->lineEdit_2->text();
+    QString reservedInformation = ui->tiplineEdit->text();
     if(ret)
     {
         //BeepThread::bulid()->beep();
-        sys_configFile_writeParam("password",newPassword);
-        QString insertStr,insertStrEn;
-        if(gLanguage == 0){
-            insertStr = tr("密码设置成功");
-            insertStrEn = tr("The password is set successfully");
-            QuMsgBox box(NULL,"密码设置成功，点击确定退出！");
-            bool ret = box.Exec();
+        if(reservedInformation == newPassword){
+            if(gLanguage == 0){
+                QuMsgBox box(NULL,"预留信息和新密码不能一致！");
+                bool ret = box.Exec();
+            }
+            else{
+                QuMsgBox box(NULL,"The reserved information and the new password cannot be the same！");
+                bool ret = box.Exec();
+            }
+        }else if(newPassword.isEmpty() || reservedInformation.isEmpty()){
+            if(gLanguage == 0){
+                QuMsgBox box(NULL,"预留信息和新密码不能空！");
+                bool ret = box.Exec();
+            }
+            else{
+                QuMsgBox box(NULL,"The reserved information and the new password cannot be empty！");
+                bool ret = box.Exec();
+            }
         }
         else{
-            insertStr = tr("密码设置成功");
-            insertStrEn = tr("The password is set successfully");
-            QuMsgBox box(NULL,"The password is set successfully,click Confirm to exit！");
-            bool ret = box.Exec();
+            sys_configFile_writeParam("password",newPassword);
+            sys_configFile_writeParam("reservedinformation",reservedInformation);
+            QString insertStr,insertStrEn;
+            if(gLanguage == 0){
+                insertStr = tr("密码设置成功");
+                insertStrEn = tr("The password is set successfully");
+                QuMsgBox box(NULL,"密码设置成功，点击确定退出！");
+                bool ret = box.Exec();
+            }
+            else{
+                insertStr = tr("密码设置成功");
+                insertStrEn = tr("The password is set successfully");
+                QuMsgBox box(NULL,"The password is set successfully,click Confirm to exit！");
+                bool ret = box.Exec();
+            }
+            db_system_obj()->insertSystem(insertStr);
+            db_system_obj_en()->insertSystem(insertStrEn);
+            this->close();
         }
-        db_system_obj()->insertSystem(insertStr);
-        db_system_obj_en()->insertSystem(insertStrEn);
-        this->close();
     }
     else{
         if(gLanguage == 0) QMessageBox::information(this,"information","原密码输入错误，请重新输入！","确定");
