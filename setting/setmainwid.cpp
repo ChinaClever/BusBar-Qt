@@ -22,6 +22,7 @@ void SetMainWid::initLanguage()
 {
     if(gLanguage == 0){
         ui->sysBtn->setText("系统设置");
+        ui->cabnameBtn->setText("机柜名设置");
         ui->temBtn->setText("温度设置");
         ui->lineBtn->setText("主路设置");
         ui->loopBtn->setText("支路电流设置");
@@ -33,6 +34,7 @@ void SetMainWid::initLanguage()
         ui->lineBtn->setText("Input settings");
         ui->loopBtn->setText("Branch current settings");
         ui->nameBtn->setText("Name settings");
+        ui->cabnameBtn->setText("Cabinet name settings");
         ui->powerBtn->setText("Power settings");
     }
 }
@@ -63,6 +65,9 @@ void SetMainWid::initWidget()
     ui->stackedWidget->addWidget(mSetNamesWid);
     connect(mSetNamesWid,SIGNAL(updateBusNameSig(int,QString&)),mSystemDlg , SIGNAL(updateBusNameSig(int,QString&)));
 
+    mSetCabNamesWid = new SetCabNamesWid(ui->stackedWidget); //名称
+    ui->stackedWidget->addWidget(mSetCabNamesWid);
+
     setButtonColor(ui->lineBtn);
     //    ui->stackedWidget->setCurrentWidget(mSetLineWid);
 }
@@ -70,6 +75,7 @@ void SetMainWid::initWidget()
 
 void SetMainWid::setButtonColor(QPushButton *button)
 {
+    ui->cabnameBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
     ui->nameBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
     ui->lineBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
     ui->loopBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
@@ -133,3 +139,10 @@ void SetMainWid::on_powerBtn_clicked()
     setButtonColor(ui->powerBtn);
     ui->stackedWidget->setCurrentWidget(mSetPowerMainWid);
 }
+
+void SetMainWid::on_cabnameBtn_clicked()
+{
+    setButtonColor(ui->cabnameBtn);
+    ui->stackedWidget->setCurrentWidget(mSetCabNamesWid);
+}
+

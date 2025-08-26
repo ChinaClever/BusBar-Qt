@@ -37,7 +37,7 @@ void HomeBoxWid::initFun(int base, int id)
 
 void HomeBoxWid::interfaceChangedSlot(int id)
 {
-    if(id == 1) {
+    if(id == 2) {
         isRun = true;
     } else {
         isRun = false;

@@ -208,6 +208,40 @@ int getBoxNum(int index)
     return boxNum;
 }
 
+QString getCabColStr(int index)
+{
+    QString str = "" ;
+    bool ret = sys_configFile_open();  //打开配置文件
+    if(ret)
+    {
+        QString strGroup = QString("Cab%1").arg(index+1);
+        ret = sys_configFile_contains("cabinetcol1",strGroup);
+        if(ret) str = sys_configFile_readStr("cabinetcol1",strGroup);
+        sys_configFile_close();
+    }
+    return str;
+}
+
+
+/**
+ * @brief getCabNum
+ * @param index 即机柜列编号
+ * @return
+ */
+int getCabNum(int index)
+{
+    int cabNum = -1 ;
+    bool ret = sys_configFile_open();  //打开配置文件
+    if(ret)
+    {
+        QString strGroup = QString("Cab%1").arg(index+1);
+        ret = sys_configFile_contains("cabNum",strGroup);
+        if(ret) cabNum = sys_configFile_readInt("cabNum",strGroup);
+        sys_configFile_close();
+    }
+    return cabNum;
+}
+
 int getRateCur(int index)
 {
     int rateCur = 0 ;

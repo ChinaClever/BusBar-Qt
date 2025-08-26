@@ -46,6 +46,7 @@ include(net/net.pri)
 include(thd/thd.pri)
 #include(snmp/snmp.pri)
 include(mbs/mbs.pri)
+include(cabinet/cabinet.pri)
 
 SOURCES += \
         main.cpp \

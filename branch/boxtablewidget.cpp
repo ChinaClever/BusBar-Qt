@@ -340,7 +340,7 @@ void BoxTableWidget::updateData()
 
 void BoxTableWidget::interfaceChangedSlot(int id)
 {
-    if(id == 3) {
+    if(id == 4) {
         isRun = true;
     } else {
         isRun = false;

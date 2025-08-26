@@ -18,6 +18,8 @@ HEADERS += \
     $$PWD/setthreshold/mylabel.h \
     $$PWD/setnames/setnameswid.h \
     $$PWD/setnames/setnamedlg.h \
+    $$PWD/setcabnames/setcabnameswid.h \
+    $$PWD/setcabnames/setcabnamedlg.h \
     $$PWD/setsystem/ipsettingdlg.h \
     $$PWD/setline/setlineitem.h \
     $$PWD/setline/setlinewid.h \
@@ -53,6 +55,8 @@ SOURCES += \
     $$PWD/setthreshold/mylabel.cpp \
     $$PWD/setnames/setnameswid.cpp \
     $$PWD/setnames/setnamedlg.cpp \
+    $$PWD/setcabnames/setcabnameswid.cpp \
+    $$PWD/setcabnames/setcabnamedlg.cpp \
     $$PWD/setsystem/ipsettingdlg.cpp \
     $$PWD/setline/setlineitem.cpp \
     $$PWD/setline/setlinewid.cpp \
@@ -84,6 +88,8 @@ FORMS += \
     $$PWD/setthreshold/setkey.ui \
     $$PWD/setnames/setnameswid.ui \
     $$PWD/setnames/setnamedlg.ui \
+    $$PWD/setcabnames/setcabnameswid.ui \
+    $$PWD/setcabnames/setcabnamedlg.ui \
     $$PWD/setsystem/ipsettingdlg.ui \
     $$PWD/setline/setlineitem.ui \
     $$PWD/setline/setlinewid.ui \

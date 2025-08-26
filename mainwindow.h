@@ -9,6 +9,7 @@
 #include "logswid.h"
 #include "network.h"
 #include "setmainwid.h"
+#include "cabinetwid.h"
 
 #include "net/tcp/server/server.h"
 //#include "watchdogthread.h"
@@ -63,6 +64,7 @@ private slots:
     void on_alarmBtn_clicked();
     void on_comboBox_currentIndexChanged(int index);
     void on_timeBtn_clicked();
+    void on_topologyBtn_clicked();
 
 private:
     Ui::MainWindow *ui;
@@ -78,6 +80,7 @@ private:
     LogsWid *mLogsWid;
     SetMainWid *mSettingWid;
     CheckPasswordDlg *mCheckDlg;
+    CabinetWid *mCabinetWid;
 
     NetWork *mNetWork;
     Server *mServer;

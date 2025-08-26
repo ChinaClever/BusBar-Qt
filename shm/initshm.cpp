@@ -22,6 +22,19 @@ void InitShm::initBoxNum()
     }
 }
 
+/**
+ * @brief 初始化机柜数量
+ */
+void InitShm::initCabNum()
+{
+    for(int i=0; i<BUS_NUM; ++i) {
+        int cabNum = getCabNum(i);  //机柜数
+        if(cabNum < 0) cabNum = shm->data[i].boxNum*3;
+        shm->data[i].cabNum = cabNum;
+    }
+}
+
+
 void InitShm::initThresholdUnit(int id, sDataUnit &unit, int max)
 {
     unit.max[id] = max;
@@ -106,6 +119,18 @@ void InitShm::initBusName()
     }
 }
 
+void InitShm::initCabColName()
+{
+    for(int i=0; i<BUS_NUM; ++i){
+        sBusData *busData = &(shm->data[i]);
+        QString cabColName = getCabColStr(i);  //机柜列名称
+        if(cabColName.isEmpty()) cabColName = QString("Cabinet-Column%1").arg(i / 2 + 1);
+        QByteArray ba = cabColName.toLatin1();
+        char *mm = ba.data();
+        strcpy(busData->cabColName,mm);
+    }
+}
+
 void InitShm::initBoxName()
 {
     for(int i=0; i<BUS_NUM; ++i)
@@ -138,6 +163,7 @@ void InitShm::initLoopName()
 
 void InitShm::initName()
 {
+    initCabColName();
     initBusName();
     initBoxName();
     initLoopName();
@@ -146,6 +172,7 @@ void InitShm::initName()
 void InitShm::run()
 {
     initBoxNum();  //统一ini 与共享内存的数组有效长度
+    initCabNum();
     //sleep(5);
     initName(); //统一SQL 与功效内存内neme
     //sleep(5);

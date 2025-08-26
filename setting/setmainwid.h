@@ -6,6 +6,7 @@
 #include "setsystem/systemsettingdlg.h"
 #include "setsystem/checkpassworddlg.h"
 #include "setloop/setpowmain.h"
+#include "setcabnames/setcabnameswid.h"
 
 namespace Ui {
 class SetMainWid;
@@ -40,6 +41,7 @@ signals:
 #endif
 
     void on_powerBtn_clicked();
+    void on_cabnameBtn_clicked();
 
 private:
     Ui::SetMainWid *ui;
@@ -49,6 +51,7 @@ private:
     SetLineWid *mSetLineWid;
     SetLoopWid *mSetLoopWid;
     SetPowMain *mSetPowerMainWid;
+    SetCabNamesWid *mSetCabNamesWid;
 
 };
 

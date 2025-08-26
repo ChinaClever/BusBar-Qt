@@ -97,7 +97,7 @@ void LineWid::initWid()
 
 void LineWid::interfaceChangedSlot(int id)
 {
-    if(id == 2) {
+    if(id == 3) {
         isRun = true;
     } else {
         isRun = false;

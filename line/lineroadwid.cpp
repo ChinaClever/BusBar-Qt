@@ -30,7 +30,7 @@ void LineRoadWid::initLine(int id)
 
 void LineRoadWid::interfaceChangedSlot(int id)
 {
-    if(id == 2) {
+    if(id == 3) {
         isRun = true;
     } else {
         isRun = false;

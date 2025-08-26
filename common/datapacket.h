@@ -26,6 +26,7 @@
 #define NAME_LEN 32 // 名称最大长度
 #define SENSOR_NUM 4  // 四个传感器
 #define HARMONIC_NUM 32  // 谐波数量
+#define CABINET_NUM 54  // 机柜数量
 
 #define SRC_DATA_LEN_MAX 1024 //一包数据最长 —— 用于对接动环
 extern int gLanguage;//0代表中文 1代表英文
@@ -59,6 +60,17 @@ typedef struct _sLineTgObjData {
     uint apPow[3]; // 视在功率
     uint reactivePower[3]; // 无功功率
 }sLineTgObjData;
+
+typedef struct _sLoopTgObjData {
+    ushort vol[3]; // 电压
+    uint cur[3];  // 电流
+
+    uint pow[3]; // 功率
+    uint ele[3]; // 电能
+    ushort pf[3]; // 功率因数
+    uint apPow[3]; // 视在功率
+    uint reactivePower[3]; // 无功功率
+}sLoopTgObjData;
 
 /**
  * 数据单元：包括当前值，阈值，临界值，告警状态等
@@ -180,6 +192,7 @@ typedef struct _sBoxData {
 
     sTgObjData tgBox; // 插接箱统计信息
     sLineTgObjData lineTgBox;
+    sLoopTgObjData loopTgBox;
     char boxAlarm, boxVolAlarm, boxCurAlarm, boxEnvAlarm , boxPowerAlarm , boxOffLineAlarm; // 插接箱告警
     char boxStatus; // 插接箱状态
     char boxSpec; //  0 表示 SI  1 表示 IP
@@ -222,8 +235,11 @@ typedef struct _sThdData {
  */
 typedef struct _sBusData{
     int boxNum; // 插接箱数量
+    int cabNum; // 机柜数量
     sBoxData   box[BOX_NUM+1];  // 最多20个插接箱
     char busName[NAME_LEN]; // 母线名称
+    char cabName[CABINET_NUM][NAME_LEN]; // 机柜名称
+    char cabColName[NAME_LEN]; // 机柜列名称
     sThdData thdData;
 }sBusData;
 

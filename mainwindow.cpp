@@ -251,18 +251,21 @@ void MainWindow::initLable()
 {
     if(gLanguage == 0){
         ui->homeLabBtn->setText("主界面");
+        ui->topologyLabBtn->setText("拓扑图");
         ui->lineLabBtn->setText("主路\n信息");
         ui->branchLabBtn->setText("支路\n信息");
         ui->logLabBtn->setText("数据\n记录");
         ui->setLabBtn->setText("参数\n设置");
     }else{
         ui->homeLabBtn->setText("Main\ninterface");
+        ui->topologyLabBtn->setText("Topology\nmap");
         ui->lineLabBtn->setText("Input\ninformation");
         ui->branchLabBtn->setText("Branch\ninformation");
         ui->logLabBtn->setText("Data\nrecord");
         ui->setLabBtn->setText("Parameter\nsetting");
     }
 }
+
 void MainWindow::initWidget()
 {
     initLanguage();
@@ -271,7 +274,11 @@ void MainWindow::initWidget()
     initBackground(); //按钮图标
     initLable();
     initSendUse();
-    mHomeWid = new HomeWid(ui->stackedWid); //主界面
+
+    mCabinetWid = new CabinetWid(ui->stackedWid); //主界面
+    ui->stackedWid->addWidget(mCabinetWid);
+
+    mHomeWid = new HomeWid(ui->stackedWid); //拓扑图
     ui->stackedWid->addWidget(mHomeWid);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), mHomeWid, SIGNAL(busChangedSig(int)));
 
@@ -295,7 +302,7 @@ void MainWindow::initWidget()
 
 void MainWindow::on_homeBtn_clicked()
 {
-    ui->stackedWid->setCurrentWidget(mHomeWid);
+    ui->stackedWid->setCurrentWidget(mCabinetWid);
     setButtonClickedImage(ui->homeBtn,"home_select");
 
     InterfaceChangeSig::get()->changeType(1);
@@ -312,12 +319,21 @@ void MainWindow::checkFile()//check file exists ,delete file
     }
 }
 
+
+void MainWindow::on_topologyBtn_clicked()
+{
+    ui->stackedWid->setCurrentWidget(mHomeWid);
+    setButtonClickedImage(ui->topologyBtn,"home_select");
+
+    InterfaceChangeSig::get()->changeType(2);
+}
+
 void MainWindow::on_lineBtn_clicked()
 {
     ui->stackedWid->setCurrentWidget(mLineWid);
     setButtonClickedImage(ui->lineBtn,"main_select");
 
-    InterfaceChangeSig::get()->changeType(2);
+    InterfaceChangeSig::get()->changeType(3);
 }
 
 void MainWindow::on_branchBtn_clicked()
@@ -325,14 +341,14 @@ void MainWindow::on_branchBtn_clicked()
     ui->stackedWid->setCurrentWidget(mBranchWid);
     setButtonClickedImage(ui->branchBtn,"branch_select");
 
-    InterfaceChangeSig::get()->changeType(3);
+    InterfaceChangeSig::get()->changeType(4);
 }
 
 void MainWindow::on_logBtn_clicked()
 {
     ui->stackedWid->setCurrentWidget(mLogsWid);
     setButtonClickedImage(ui->logBtn,"data_select");
-    InterfaceChangeSig::get()->changeType(4);
+    InterfaceChangeSig::get()->changeType(5);
 }
 
 void MainWindow::on_setBtn_clicked()
@@ -374,6 +390,7 @@ void MainWindow::setButtonClickedImage(QToolButton *button, QString name)
 void MainWindow::initBackground()
 {
     setButtonImage(ui->homeBtn,"home");
+    setButtonImage(ui->topologyBtn,"home");
     setButtonImage(ui->lineBtn,"main");
     setButtonImage(ui->branchBtn,"branch");
     setButtonImage(ui->logBtn,"data");
@@ -385,7 +402,7 @@ void MainWindow::dialogClosed(bool ret)
     if(ret){
         ui->stackedWid->setCurrentWidget(mSettingWid);
         setButtonClickedImage(ui->setBtn,"setting_select");
-        InterfaceChangeSig::get()->changeType(5);
+        InterfaceChangeSig::get()->changeType(6);
         QString insertStr,insertStrEn;
         insertStr = tr("参数设置页面登录 !");
         insertStrEn = tr("Log in parameter setting !");//插入系统日志
@@ -412,3 +429,5 @@ void MainWindow::on_timeBtn_clicked()
     dlg.exec();
 #endif
 }
+
+

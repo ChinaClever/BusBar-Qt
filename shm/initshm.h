@@ -15,6 +15,7 @@ signals:
 protected:
     void run();
     void initBoxNum();
+    void initCabNum();
 
     void initThresholdUnit(int id, sDataUnit &unit, int max);
     void initThresholdPowUnit(int id, sDataPowUnit &unit, int max);
@@ -27,6 +28,7 @@ protected:
     void initBoxName();
     void initLoopName();
     void initName();
+    void initCabColName();
 
 private:
     sDataPacket *shm;

@@ -54,17 +54,17 @@ void DpBeepThread::busAlarm(sBusData &bus)
 
 void DpBeepThread::run()
 {
-    if(isRun == false)
-    {
-        isRun  = true;
-        mAllAlarm = 0;
-        for(int i=0; i<BUS_NUM; ++i)
-            busAlarm(shm->data[i]);
-        if(mAllAlarm == 0){
-            if(gCloseAlarm == 0) BeepThread::bulid()->closeBeep();
-            gCloseAlarm = 1;
-            gOpenAlarm = 0;
-        }
-        isRun  = false;
-    }
+//    if(isRun == false)
+//    {
+//        isRun  = true;
+//        mAllAlarm = 0;
+//        for(int i=0; i<BUS_NUM; ++i)
+//            busAlarm(shm->data[i]);
+//        if(mAllAlarm == 0){
+//            if(gCloseAlarm == 0) BeepThread::bulid()->closeBeep();
+//            gCloseAlarm = 1;
+//            gOpenAlarm = 0;
+//        }
+//        isRun  = false;
+//    }
 }

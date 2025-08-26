@@ -1,25 +1,23 @@
-#include "setnameswid.h"
-#include "ui_setnameswid.h"
+#include "setcabnameswid.h"
+#include "ui_setcabnameswid.h"
 #include "interfacechangesig.h"
 extern void set_box_num(int id, int num);
 
-SetNamesWid::SetNamesWid(QWidget *parent) :
+SetCabNamesWid::SetCabNamesWid(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::SetNamesWid)
+    ui(new Ui::SetCabNamesWid)
 {
     ui->setupUi(this);
-    ui->rateCurSpin->hide();
-    ui->label_2->hide();
     mIndex = 0;
     mSetShm = new SetShm;
-    mSetNameDlg = new SetNameDlg(this);
+    mSetCabNameDlg = new SetCabNameDlg(this);
     QTimer::singleShot(7650,this,SLOT(initFunSLot()));
 //    initScrollArea(); // 开启滑动功能
     connect(InterfaceChangeSig::get(), SIGNAL(typeSig(int)), this,SLOT(interfaceChangedSlot(int)));
     isRun = false;
 }
 
-void SetNamesWid::interfaceChangedSlot(int id)
+void SetCabNamesWid::interfaceChangedSlot(int id)
 {
     if(id == 6) {
         isRun = true;
@@ -28,94 +26,7 @@ void SetNamesWid::interfaceChangedSlot(int id)
     }
 }
 
-//void SetNamesWid::initScrollArea()
-//{
-//    m_scrollBarV = ui->tableWidget->verticalScrollBar();
-//    m_scrollBarH = ui->tableWidget->horizontalScrollBar();
-//    QObjectList objectList = ui->tableWidget->children();
-//    for(int i = 0; i < objectList.count(); i++) {
-//        if(objectList.at(i)->objectName() == "qt_scrollarea_viewport") {
-//            //objectList.at(i)->installEventFilter(this);
-//        }
-//    }
-//}
-
-//bool SetNamesWid::eventFilter(QObject *obj, QEvent *event)
-//{
-//    static int press_y   = 0;
-//    static int move_y    = -1;
-//    static int release_y = 0;
-//    static QDateTime pressDateTime;
-//    static QPropertyAnimation *animation = new QPropertyAnimation();
-//    if("qt_scrollarea_viewport" != obj->objectName()) return false;
-
-//    int scrollV_max = m_scrollBarV->maximum();
-//    int scrollV_min = m_scrollBarV->minimum();
-
-//    //根据鼠标的动作——按下、放开、拖动，执行相应的操作
-//    if(event->type() == QEvent::MouseButtonPress) {  //记录按下的时间、坐标
-//        pressDateTime = QDateTime::currentDateTime();
-//        move_y  = QCursor::pos().y();
-//        press_y = move_y;
-//        animation->stop();
-//    } else if(event->type() == QEvent::MouseButtonRelease) {
-//        //鼠标放开，根据鼠标拖动的垂直距离和持续时间，设置窗口滚动快慢程度和距离
-//        if(animation->targetObject() != m_scrollBarV) {
-//            animation->setTargetObject(m_scrollBarV);
-//            animation->setPropertyName("value");
-//        }
-
-//        move_y = -1;
-//        release_y = QCursor::pos().y();
-//        QObject *parent_obj = obj->parent();
-//        if(parent_obj != 0 || parent_obj->inherits("QAbstractItemView")) {
-//            QTimer::singleShot(150, (QAbstractItemView *)parent_obj, SLOT(clearSelection()));
-//        }
-
-//        int endValue = 0;
-//        int pageStep;
-
-//        if(release_y - press_y != 0 && qAbs(release_y - press_y) > 45) {//45
-//            int mseconds = pressDateTime.msecsTo(QDateTime::currentDateTime());
-//            int limit = 440;//440
-//            pageStep = 240;//scrollBarV->pageStep();
-//            if(mseconds > limit) { //滑动的时间大于某个值的时候，不再滚动(通过增加分母)
-//                mseconds = mseconds + (mseconds - limit) * 20;
-//            }
-
-//            if(release_y - press_y > 0) {//.0避免避免强制转换为整形
-//                endValue = m_scrollBarV->value() - pageStep * (200.0 / mseconds);
-//                if(scrollV_min > endValue) endValue = scrollV_min;
-//            } else if(release_y - press_y < 0) {
-//                endValue = m_scrollBarV->value() + pageStep * (200.0 / mseconds);
-//                if(endValue > scrollV_max) endValue = scrollV_max;
-//            }
-//            if(mseconds > limit) mseconds = 0;//滑动的时间大于某个值的时候，滚动距离变小，减小滑动的时间
-//            animation->setDuration(mseconds+550);
-//            animation->setEndValue(endValue);
-
-//            if(m_scrollBarH != NULL)
-//                m_scrollBarH->setValue(0);
-//            animation->setEasingCurve(QEasingCurve::OutQuad);
-//            animation->start();
-//            return true;
-//        }
-//        if(m_scrollBarH != NULL)
-//            m_scrollBarH->setValue(0);
-//    }
-////    else if(event->type() == QEvent::MouseMove && move_y >= 0) {   //窗口跟着鼠标移动
-////        int move_distance = QCursor::pos().y() - move_y;
-////        int endValue = m_scrollBarV->value() - move_distance;
-////        if(scrollV_min > endValue) endValue = scrollV_min;
-////        if(endValue > scrollV_max)  endValue = scrollV_max;
-////        m_scrollBarV->setValue(endValue);
-////        move_y = QCursor::pos().y();
-////    }
-
-//    return false;
-//}
-
-void SetNamesWid::initFunSLot()
+void SetCabNamesWid::initFunSLot()
 {
     indexChanged(mIndex);
 //    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:30px;}");
@@ -126,20 +37,20 @@ void SetNamesWid::initFunSLot()
 }
 
 
-SetNamesWid::~SetNamesWid()
+SetCabNamesWid::~SetCabNamesWid()
 {
     delete ui;
 }
 
 
-void SetNamesWid::initTableWidget()
+void SetCabNamesWid::initTableWidget()
 {
     ui->tableWidget->clear();
     ui->tableWidget->setRowCount(0);
-    if(gLanguage == 0){ui->label->setText("母线名称");ui->label_2->setText("额定电流");
-        ui->label_3->setText("插接箱数量");ui->saveBtn->setText("保存");
-    }else{ui->label->setText("Busbar name");ui->label_2->setText("Rated current");
-        ui->label_3->setText("Number of tap-off boxes");ui->saveBtn->setText("Save");
+    if(gLanguage == 0){ui->label->setText("机柜列名称");
+        ui->label_3->setText("机柜数量");ui->saveBtn->setText("保存");
+    }else{ui->label->setText("Busbar name");
+        ui->label_3->setText("Number of cabinet column");ui->saveBtn->setText("Save");
     }
 
     QStringList horHead;
@@ -172,14 +83,14 @@ void SetNamesWid::initTableWidget()
 }
 
 
-void SetNamesWid::clearWidget()
+void SetCabNamesWid::clearWidget()
 {
     int row = ui->tableWidget->rowCount();
     for(int i = 0 ; i < row ; i++)
         ui->tableWidget->removeRow(0);
 }
 
-void SetNamesWid::resetWidget()
+void SetCabNamesWid::resetWidget()
 {
     initTableWidget();
     int boxNum = mPacket->boxNum;
@@ -199,7 +110,7 @@ void SetNamesWid::resetWidget()
 }
 
 
-void SetNamesWid::checkBus()
+void SetCabNamesWid::checkBus()
 {
     int row = ui->tableWidget->rowCount();
     int col = ui->tableWidget->columnCount();
@@ -216,7 +127,7 @@ void SetNamesWid::checkBus()
  * @brief 刷新界面
  * @param index 主路源编号
  */
-void SetNamesWid::indexChanged(int index)
+void SetCabNamesWid::indexChanged(int index)
 {
     //    if(mIndex == index)  return;
     mIndex = index;
@@ -224,7 +135,7 @@ void SetNamesWid::indexChanged(int index)
     initWid(index);
 }
 
-void SetNamesWid::updateWid()
+void SetCabNamesWid::updateWid()
 {
     checkBus();
 
@@ -238,7 +149,7 @@ void SetNamesWid::updateWid()
     }
 }
 
-void SetNamesWid::timeoutDone()
+void SetCabNamesWid::timeoutDone()
 {
     if(isRun){
         updateWid();
@@ -246,7 +157,7 @@ void SetNamesWid::timeoutDone()
 }
 
 
-void SetNamesWid::setName(int row, int column)
+void SetCabNamesWid::setName(int row, int column)
 {
     QTableWidgetItem *item = ui->tableWidget->item(row,column);
     QString str = mPacket->box[row+1].boxName;  //第0个为始端箱，所以从第一个开始
@@ -254,7 +165,7 @@ void SetNamesWid::setName(int row, int column)
 }
 
 
-void SetNamesWid::setTableItem(int row, int column)
+void SetCabNamesWid::setTableItem(int row, int column)
 {
     QString str = "---";
     QTableWidgetItem *item = ui->tableWidget->item(row,column);
@@ -271,29 +182,26 @@ void SetNamesWid::setTableItem(int row, int column)
 }
 
 
-void SetNamesWid::itemDoubleClicked(QTableWidgetItem *item)
+void SetCabNamesWid::itemDoubleClicked(QTableWidgetItem *item)
 {
     if(item->text().compare("---") == 0) return;  //为空不设置
     disconnect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
     int boxNum = item->row() + 1;
     int column = item->column();
 
-    mSetNameDlg->init(mIndex, boxNum, column, item->text());
-    mSetNameDlg->setWindowModality(Qt::WindowModal);
-    mSetNameDlg->show();
-    mSetNameDlg->move(0,0);
+    mSetCabNameDlg->init(mIndex, boxNum, column, item->text());
+    mSetCabNameDlg->setWindowModality(Qt::WindowModal);
+    mSetCabNameDlg->show();
+    mSetCabNameDlg->move(0,0);
 
     connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
 }
 
-void SetNamesWid::initWid(int index)
+void SetCabNamesWid::initWid(int index)
 {
     sBusData *busData = &(get_share_mem()->data[index]);
-    ui->nameEdit->setText(busData->busName);
-    ui->boxNumSpin->setValue(busData->boxNum);
-
-    double rateCur = busData->box[0].ratedCur/COM_RATE_CUR;
-    ui->rateCurSpin->setValue(rateCur);
+    ui->cabnameEdit->setText(busData->busName);
+    ui->cabNumSpin->setValue(busData->boxNum);
 
     checkBus();//切换通道，更新表格名称  2018-12-20 pmd
     int row = ui->tableWidget->rowCount();
@@ -306,14 +214,14 @@ void SetNamesWid::initWid(int index)
     }
 }
 
-bool SetNamesWid::saveBusName()
+bool SetCabNamesWid::saveBusName()
 {
     bool ret = true;
     DbNameItem item;
     item.bus = mIndex;
     item.type = 1; // 名称类型 1 母线名称   2 插接箱名称  3 回路名称
     item.num = 0; // 编号
-    QString name = ui->nameEdit->text();
+    QString name = ui->cabnameEdit->text();
     if( (!name.isEmpty()) ) {
         if(!(name.size() > NAME_LEN - 2)){
             item.name = name;
@@ -329,26 +237,21 @@ bool SetNamesWid::saveBusName()
         else CriticalMsgBox box(NULL, tr("Busbar name cannot be empty, saving failed!!"));
         ret = false;
     }
-    if(ui->boxNumSpin->value() < 0 || ui->boxNumSpin->value() > 18){
+    if(ui->cabNumSpin->value() < 0 || ui->cabNumSpin->value() > 18){
         if(gLanguage == 0) CriticalMsgBox box(NULL, tr("个数应在0-18!!"));
         else CriticalMsgBox box(NULL, tr("The number should be between 0-18!!"));
         ret = false;
     }
-    if(ui->rateCurSpin->value() < 100 || ui->rateCurSpin->value() > 1200){
-        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("额定电流应在100-1200!!"));
-        else CriticalMsgBox box(NULL, tr("The rated current should be between 100-1200!!"));
-        ret = false;
-    }
+
     return ret;
 }
 
 
-void SetNamesWid::on_saveBtn_clicked()
+void SetCabNamesWid::on_saveBtn_clicked()
 {
-    mSetShm->setLineRatedCur(mIndex,ui->rateCurSpin->value() * COM_RATE_CUR);
-    mSetShm->setLineBoxNum(mIndex, ui->boxNumSpin->value());
+    mSetShm->setLineBoxNum(mIndex, ui->cabNumSpin->value());
     if(saveBusName()) {
-        set_box_num(mIndex, ui->boxNumSpin->value());
+        set_box_num(mIndex, ui->cabNumSpin->value());
         updateWid();                               //2018-12-17保存插接箱数量的同时，更新名称设置列表 pmd
 
         //BeepThread::bulid()->beep();
