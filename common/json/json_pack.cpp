@@ -396,7 +396,7 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
         curthd.append(LoopData->curThd[i]);
         linepow.append(QJsonValue::fromVariant((BoxData->lineTgBox.pow[i])/COM_RATE_POW));
         lineele.append(QJsonValue::fromVariant((BoxData->lineTgBox.ele[i])/COM_RATE_ELE));
-        lineapw.append(QJsonValue::fromVariant((BoxData->lineTgBox.apPow[i])/COM_RATE_POW));
+        lineapw.append(QJsonValue::fromVariant((BoxData->lineTgBox.apPow[i])/(COM_RATE_POW*1000));
         linereactive.append(QJsonValue::fromVariant((BoxData->lineTgBox.reactivePower[i])/COM_RATE_POW));
 
         if(BoxData->lineTgBox.apPow[i] == 0 )
