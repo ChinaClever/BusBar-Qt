@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->comboBox->hide();
     mInitShm = new InitShm(this); //线程
     mInitShm->start(); //初始化共享内存 -- 单线程运行一次
 
@@ -40,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     updateTime();
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
     on_comboBox_currentIndexChanged(0);
+    on_cabinetBox_currentIndexChanged(0);
     //BeepThread::bulid()->longBeep(); // 线程 -- 'bi~'
 //    count = 0;
 
@@ -103,8 +105,8 @@ void MainWindow::timeoutDone()
 {
     updateTime();
     checkAlarm();
-    if(get_share_mem()) ui->comboBox->setEnabled(true);
-    setBusName(mIndex);
+    //if(get_share_mem()) ui->comboBox->setEnabled(true);
+    //setBusName(mIndex);
     for(int i = 0; i<BUS_NUM; ++i)
         updateBusName(i);
     //////
@@ -192,6 +194,10 @@ void MainWindow::initFunSLot()
     ui->comboBox->setItemIcon(1 , icon);
     ui->comboBox->setItemIcon(2 , icon);
     ui->comboBox->setItemIcon(3 , icon);
+
+    ui->cabinetBox->setIconSize(QSize(1,60));
+    ui->cabinetBox->setItemIcon(0 , icon);
+    ui->cabinetBox->setItemIcon(1 , icon);
 }
 
 void MainWindow::initLanguage()
@@ -277,6 +283,8 @@ void MainWindow::initWidget()
 
     mCabinetWid = new CabinetWid(ui->stackedWid); //主界面
     ui->stackedWid->addWidget(mCabinetWid);
+    connect(ui->cabinetBox, SIGNAL(currentIndexChanged(int)), mCabinetWid, SIGNAL(cabColChangedSig(int)));
+
 
     mHomeWid = new HomeWid(ui->stackedWid); //拓扑图
     ui->stackedWid->addWidget(mHomeWid);
@@ -297,6 +305,9 @@ void MainWindow::initWidget()
     mSettingWid = new SetMainWid(ui->stackedWid); //配置
     ui->stackedWid->addWidget(mSettingWid);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), mSettingWid, SLOT(busChangedSlot(int)));
+    connect(mSettingWid, SIGNAL(showAndHideBoxSig(int)), this, SLOT(showAndHideBoxSlot(int)));
+    connect(ui->cabinetBox, SIGNAL(currentIndexChanged(int)), mSettingWid, SLOT(cabChangedSlot(int)));
+
     checkFile();
 }
 
@@ -306,6 +317,7 @@ void MainWindow::on_homeBtn_clicked()
     setButtonClickedImage(ui->homeBtn,"home_select");
 
     InterfaceChangeSig::get()->changeType(1);
+    showAndHideBoxSlot(0);
 }
 
 void MainWindow::checkFile()//check file exists ,delete file
@@ -319,6 +331,22 @@ void MainWindow::checkFile()//check file exists ,delete file
     }
 }
 
+void MainWindow::showAndHideBoxSlot(int mode)
+{
+    if( 0 == mode ){
+        ui->comboBox->hide();
+        ui->cabinetBox->show();
+        ui->busNameLab->show();
+        sDataPacket *shm = get_share_mem();
+        QString str = shm->cabColName[mIndex];
+        ui->busNameLab->setText(str);
+    }else{
+        ui->comboBox->show();
+        ui->cabinetBox->hide();
+        ui->busNameLab->hide();
+        ui->comboBox->setEnabled(true);
+    }
+}
 
 void MainWindow::on_topologyBtn_clicked()
 {
@@ -326,6 +354,7 @@ void MainWindow::on_topologyBtn_clicked()
     setButtonClickedImage(ui->topologyBtn,"home_select");
 
     InterfaceChangeSig::get()->changeType(2);
+    showAndHideBoxSlot(1);
 }
 
 void MainWindow::on_lineBtn_clicked()
@@ -334,6 +363,7 @@ void MainWindow::on_lineBtn_clicked()
     setButtonClickedImage(ui->lineBtn,"main_select");
 
     InterfaceChangeSig::get()->changeType(3);
+    showAndHideBoxSlot(1);
 }
 
 void MainWindow::on_branchBtn_clicked()
@@ -342,6 +372,7 @@ void MainWindow::on_branchBtn_clicked()
     setButtonClickedImage(ui->branchBtn,"branch_select");
 
     InterfaceChangeSig::get()->changeType(4);
+    showAndHideBoxSlot(1);
 }
 
 void MainWindow::on_logBtn_clicked()
@@ -349,6 +380,7 @@ void MainWindow::on_logBtn_clicked()
     ui->stackedWid->setCurrentWidget(mLogsWid);
     setButtonClickedImage(ui->logBtn,"data_select");
     InterfaceChangeSig::get()->changeType(5);
+    showAndHideBoxSlot(1);
 }
 
 void MainWindow::on_setBtn_clicked()
@@ -390,7 +422,7 @@ void MainWindow::setButtonClickedImage(QToolButton *button, QString name)
 void MainWindow::initBackground()
 {
     setButtonImage(ui->homeBtn,"home");
-    setButtonImage(ui->topologyBtn,"home");
+    setButtonImage(ui->topologyBtn,"home");//？？？
     setButtonImage(ui->lineBtn,"main");
     setButtonImage(ui->branchBtn,"branch");
     setButtonImage(ui->logBtn,"data");
@@ -403,6 +435,8 @@ void MainWindow::dialogClosed(bool ret)
         ui->stackedWid->setCurrentWidget(mSettingWid);
         setButtonClickedImage(ui->setBtn,"setting_select");
         InterfaceChangeSig::get()->changeType(6);
+        if(!this->mSettingWid->mFirstLoad) showAndHideBoxSlot(1);
+        else showAndHideBoxSlot(0);
         QString insertStr,insertStrEn;
         insertStr = tr("参数设置页面登录 !");
         insertStrEn = tr("Log in parameter setting !");//插入系统日志
@@ -430,4 +464,16 @@ void MainWindow::on_timeBtn_clicked()
 #endif
 }
 
+void MainWindow::on_cabinetBox_currentIndexChanged(int index)
+{
+    setCabinetName(index);
+}
 
+void MainWindow::setCabinetName(int index)
+{
+    sDataPacket *shm = get_share_mem();
+    QString str = shm->cabColName[index];
+    ui->busNameLab->setText(str);
+    mIndex = index;
+    ui->ratedLab->setText(mVersion);
+}

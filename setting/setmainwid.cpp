@@ -9,6 +9,7 @@ SetMainWid::SetMainWid(QWidget *parent) :
     ui->setupUi(this);
     initLanguage();
     this->setStyleSheet(BTN_FOCUS_BACK_COLOR);
+    mFirstLoad = false;
     QTimer::singleShot(10,this,SLOT(initFunSLot())); //延时初始化
     SetThread::bulid(this)->start();
 }
@@ -99,6 +100,11 @@ void SetMainWid::busChangedSlot(int index)
 #endif
 }
 
+void SetMainWid::cabChangedSlot(int index)
+{
+    mSetCabNamesWid->indexChanged(index);
+}
+
 void SetMainWid::initFunSLot()
 {
     initWidget();
@@ -108,41 +114,54 @@ void SetMainWid::on_nameBtn_clicked()
 {
     setButtonColor(ui->nameBtn);
     ui->stackedWidget->setCurrentWidget(mSetNamesWid);
+    emit showAndHideBoxSig(1);
+    mFirstLoad = false;
 }
 
 void SetMainWid::on_lineBtn_clicked()
 {
     setButtonColor(ui->lineBtn);
     ui->stackedWidget->setCurrentWidget(mSetLineWid);
+    emit showAndHideBoxSig(1);
+    mFirstLoad = false;
 }
 
 void SetMainWid::on_loopBtn_clicked()
 {
     setButtonColor(ui->loopBtn);
     ui->stackedWidget->setCurrentWidget(mSetLoopWid);
+    emit showAndHideBoxSig(1);
+    mFirstLoad = false;
 }
 
 void SetMainWid::on_temBtn_clicked()
 {
     setButtonColor(ui->temBtn);
     ui->stackedWidget->setCurrentWidget(mSetTemWid);
+    emit showAndHideBoxSig(1);
+    mFirstLoad = false;
 }
 
 void SetMainWid::on_sysBtn_clicked()
 {
     setButtonColor(ui->sysBtn);
     ui->stackedWidget->setCurrentWidget(mSystemDlg);
+    emit showAndHideBoxSig(1);
 }
 
 void SetMainWid::on_powerBtn_clicked()
 {
     setButtonColor(ui->powerBtn);
     ui->stackedWidget->setCurrentWidget(mSetPowerMainWid);
+    emit showAndHideBoxSig(1);
+    mFirstLoad = false;
 }
 
 void SetMainWid::on_cabnameBtn_clicked()
 {
     setButtonColor(ui->cabnameBtn);
     ui->stackedWidget->setCurrentWidget(mSetCabNamesWid);
+    emit showAndHideBoxSig(0);
+    mFirstLoad = true;;
 }
 

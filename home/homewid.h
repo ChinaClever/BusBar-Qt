@@ -28,7 +28,7 @@ signals:
 public slots:
     void timeoutDone();
     void interfaceChangedSlot(int);
-     void busChangedSlot(int);
+    void busChangedSlot(int);
     void on_upBtn_clicked();
     void on_downBtn_clicked();
 

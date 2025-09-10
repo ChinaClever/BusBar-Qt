@@ -35,6 +35,7 @@ protected:
     void initBackground();
     void checkAlarm();
     void setBusName(int index);
+    void setCabinetName(int index);
     void updateBusName(int index);
     void setButtonImage(QToolButton *button, QString name);
     void setButtonClickedImage(QToolButton *button, QString name);
@@ -52,6 +53,7 @@ protected slots:
     void timeoutDone();
     void dialogClosed(bool ret);
     void initNetSLot();
+    void showAndHideBoxSlot(int mode);
     //void watchdogDone();
     //void clearCacheDone();
 
@@ -62,9 +64,10 @@ private slots:
     void on_logBtn_clicked();
     void on_setBtn_clicked();
     void on_alarmBtn_clicked();
-    void on_comboBox_currentIndexChanged(int index);
     void on_timeBtn_clicked();
     void on_topologyBtn_clicked();
+    void on_comboBox_currentIndexChanged(int index);
+    void on_cabinetBox_currentIndexChanged(int index);
 
 private:
     Ui::MainWindow *ui;

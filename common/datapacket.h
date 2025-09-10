@@ -26,7 +26,7 @@
 #define NAME_LEN 32 // 名称最大长度
 #define SENSOR_NUM 4  // 四个传感器
 #define HARMONIC_NUM 32  // 谐波数量
-#define CABINET_NUM 54  // 机柜数量
+#define CABINET_NUM 60  // 机柜数量
 
 #define SRC_DATA_LEN_MAX 1024 //一包数据最长 —— 用于对接动环
 extern int gLanguage;//0代表中文 1代表英文
@@ -235,16 +235,27 @@ typedef struct _sThdData {
  */
 typedef struct _sBusData{
     int boxNum; // 插接箱数量
-    int cabNum; // 机柜数量
     sBoxData   box[BOX_NUM+1];  // 最多20个插接箱
     char busName[NAME_LEN]; // 母线名称
-    char cabName[CABINET_NUM][NAME_LEN]; // 机柜名称
-    char cabColName[NAME_LEN]; // 机柜列名称
     sThdData thdData;
 }sBusData;
 
+typedef struct _sCabData{
+    char cabName[NAME_LEN]; // 机柜名称
+    char lineA_No;
+    char lineB_No;
+    char lineA_Tapoff_No;
+    char lineB_Tapoff_No;
+    char lineA_Tapoff_Line;
+    char lineB_Tapoff_Line;
+    int capacity;
+}sCabData;
+
 typedef struct _sDataPacket
 {
+    int cabNum[BUS_NUM]; // 机柜数量
+    sCabData cabData[BUS_NUM][CABINET_NUM];
+    char cabColName[BUS_NUM][NAME_LEN]; // 机柜列名称
     sBusData data[BUS_NUM];  // 四条母线数据
 }sDataPacket;
 struct sProgress

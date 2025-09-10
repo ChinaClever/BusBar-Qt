@@ -198,8 +198,7 @@ int getBoxNum(int index)
 {
     int boxNum = -1 ;
     bool ret = sys_configFile_open();  //打开配置文件
-    if(ret)
-    {
+    if(ret){
         QString strGroup = QString("Line%1").arg(index+1);
         ret = sys_configFile_contains("boxNum",strGroup);
         if(ret) boxNum = sys_configFile_readInt("boxNum",strGroup);
@@ -211,17 +210,59 @@ int getBoxNum(int index)
 QString getCabColStr(int index)
 {
     QString str = "" ;
-    bool ret = sys_configFile_open();  //打开配置文件
-    if(ret)
-    {
-        QString strGroup = QString("Cab%1").arg(index+1);
-        ret = sys_configFile_contains("cabinetcol1",strGroup);
-        if(ret) str = sys_configFile_readStr("cabinetcol1",strGroup);
-        sys_configFile_close();
+    bool ret = cab_configFile_open();  //打开配置文件
+    if(ret){
+        QString strGroup = QString("CabCol%1").arg(index+1);
+        ret = cab_configFile_contains(QString("CabColName"),strGroup);
+        if(ret) str = cab_configFile_readStr(QString("CabColName"),strGroup);
+        cab_configFile_close();
     }
     return str;
 }
 
+bool getCabNameStr(int index , int id , QString &str)
+{
+    bool ret = cab_configFile_open();  //打开配置文件
+    if(ret){
+        QString strGroup = QString("CabCol%1").arg(index+1);
+        ret = cab_configFile_contains(QString("CabName_%1").arg(id+1),strGroup);
+        if(ret) str = cab_configFile_readStr(QString("CabName_%1").arg(id+1),strGroup);
+        cab_configFile_close();
+    }
+    return ret;
+}
+
+
+/**
+ * @brief getCabParameters
+ * @param index 即机柜列编号
+ * @param id 即插接箱编号
+ * @return
+ */
+QVector<int> getCabParameters(int index, int id)
+{
+    QVector<int> value(7 , -1);
+    bool ret = cab_configFile_open();  //打开配置文件
+    if(ret){
+        QString strGroup = QString("CabCol%1").arg(index+1);
+        ret = cab_configFile_contains(QString("Capacity_%1").arg(id+1),strGroup);
+        if(ret) value[0] = cab_configFile_readInt(QString("Capacity_%1").arg(id+1),strGroup);
+        ret = cab_configFile_contains(QString("LineA_No_%1").arg(id+1),strGroup);
+        if(ret) value[1] = cab_configFile_readInt(QString("LineA_No_%1").arg(id+1),strGroup);
+        ret = cab_configFile_contains(QString("LineB_No_%1").arg(id+1),strGroup);
+        if(ret) value[2] = cab_configFile_readInt(QString("LineB_No_%1").arg(id+1),strGroup);
+        ret = cab_configFile_contains(QString("LineA_Tapoff_No_%1").arg(id+1),strGroup);
+        if(ret) value[3] = cab_configFile_readInt(QString("LineA_Tapoff_No_%1").arg(id+1),strGroup);
+        ret = cab_configFile_contains(QString("LineB_Tapoff_No_%1").arg(id+1),strGroup);
+        if(ret) value[4] = cab_configFile_readInt(QString("LineB_Tapoff_No_%1").arg(id+1),strGroup);
+        ret = cab_configFile_contains(QString("LineA_Tapoff_Line_%1").arg(id+1),strGroup);
+        if(ret) value[5] = cab_configFile_readInt(QString("LineA_Tapoff_Line_%1").arg(id+1),strGroup);
+        ret = cab_configFile_contains(QString("LineB_Tapoff_Line_%1").arg(id+1),strGroup);
+        if(ret) value[6] = cab_configFile_readInt(QString("LineB_Tapoff_Line_%1").arg(id+1),strGroup);
+        cab_configFile_close();
+    }
+    return value;
+}
 
 /**
  * @brief getCabNum
@@ -231,13 +272,12 @@ QString getCabColStr(int index)
 int getCabNum(int index)
 {
     int cabNum = -1 ;
-    bool ret = sys_configFile_open();  //打开配置文件
-    if(ret)
-    {
-        QString strGroup = QString("Cab%1").arg(index+1);
-        ret = sys_configFile_contains("cabNum",strGroup);
-        if(ret) cabNum = sys_configFile_readInt("cabNum",strGroup);
-        sys_configFile_close();
+    bool ret = cab_configFile_open();  //打开配置文件
+    if(ret){
+        QString strGroup = QString("CabCol%1").arg(index+1);
+        ret = cab_configFile_contains("CabinetNum",strGroup);
+        if(ret) cabNum = cab_configFile_readInt("CabinetNum",strGroup);
+        cab_configFile_close();
     }
     return cabNum;
 }
@@ -246,12 +286,11 @@ int getRateCur(int index)
 {
     int rateCur = 0 ;
     bool ret = sys_configFile_open();  //打开配置文件
-    if(ret)
-    {
+    if(ret){
         QString strGroup = QString("Line%1").arg(index+1);
         rateCur = sys_configFile_readInt("rateCur",strGroup);
         sys_configFile_close();
-    }  
+    }
     return rateCur;
 }
 

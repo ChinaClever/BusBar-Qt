@@ -18,7 +18,7 @@ CabinetTableWidget::~CabinetTableWidget()
 
 void CabinetTableWidget::initFunSLot()
 {
-    busChangeSlot(0);///
+    cabColChangeSlot(0);///
     timer = new QTimer(this);
     timer->start(1500+ rand() % 500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
@@ -27,14 +27,12 @@ void CabinetTableWidget::initFunSLot()
 }
 
 
-void CabinetTableWidget::busChangeSlot(int id)
+void CabinetTableWidget::cabColChangeSlot(int id)
 {
     mBusID = id;
     sDataPacket *shm = get_share_mem();
-    if(id <= 1) id = 0;///
-    else id = 2;///
-    mBoxData1 = &(shm->data[id]);///
-    mBoxData2 = &(shm->data[id+1]);
+    mBoxData1 = &(shm->data[shm->cabData[id][0].lineA_No]);///
+    mBoxData2 = &(shm->data[shm->cabData[id][0].lineB_No]);
     updateData();
 }
 
@@ -48,8 +46,12 @@ void CabinetTableWidget::initTableWidget()
     ui->tableWidget->setRowCount(0);        //设置行数/
 
     QStringList header;
+    if(0 == gLanguage)
     header <<tr("机柜名称") << tr("A路电压\n(V)") << tr("B路电压\n(V)") << tr("A路电流\n(A)") << tr("B路电流\n(A)") << tr("合计电流\n(A)") << tr("合计功率\n(kW)")<<
         tr("电能\n(kWh)") << tr("负载率\n(%)");
+    else
+    header <<tr("cabinet") << tr("A-line voltage\n(V)") << tr("B-line voltage\n(V)") << tr("A-line current\n(A)") << tr("B-line current\n(A)") << tr("Total current\n(A)") << tr("Total power\n(kW)")<<
+        tr("Electricity\n(kWh)") << tr("load rate\n(%)");
     ui->tableWidget->setColumnCount(header.size());    //设置列数
     ui->tableWidget->setHorizontalHeaderLabels(header);
 
@@ -119,7 +121,7 @@ void CabinetTableWidget::initTableWid()
 {
     initTableWidget();
 
-    int size = mBoxData1->boxNum; // 获取插接箱的数量///*3
+    int size = get_share_mem()->cabNum[mBusID]; // 获取插接箱的数量///*3
     for(int i=0; i<size; ++i)
         initTable();
 }
@@ -132,7 +134,7 @@ bool CabinetTableWidget::checkTable()
 {
     bool ret = false;
 
-    int size = mBoxData1->boxNum;///*3
+    int size = get_share_mem()->cabNum[mBusID]; // 获取插接箱的数量///*3
     int row = ui->tableWidget->rowCount();
     if(size != row)
         ret = true;
@@ -162,11 +164,10 @@ void CabinetTableWidget::clearTable()
     }
 }
 
-void CabinetTableWidget::setName(int id, int row, int column)
+void CabinetTableWidget::setName(int row, int column)
 {
-    QString name = mBoxData1->box[id].boxName;
-    if(name.isEmpty())
-        name = tr("cabibet-%1").arg(id);
+    QString name = get_share_mem()->cabData[mBusID][row-1].cabName;
+    if(name.isEmpty()) name = tr("Cabinet%1").arg(row);
     setTableItem(row, column, name);
 }
 
@@ -227,16 +228,17 @@ void CabinetTableWidget::setSumPow(int id1, int line1, int id2, int line2, int r
 }
 
 //id :第几条母线 line ：第几个工业接头
-void CabinetTableWidget::setSumLoad(int id1, int line1, int id2, int line2, int row,  int column)
+void CabinetTableWidget::setSumLoad(int id1, int line1, int id2, int line2, int row,  int column , int load)
 {
     QString str = "---";
     //if(mBoxData->box[id].offLine)
     {
         sLoopTgObjData *unit1 = &(mBoxData1->box[id1].loopTgBox);
         sLoopTgObjData *unit2 = &(mBoxData2->box[id2].loopTgBox);
-        double value = ((unit1->pow[line1]+unit2->pow[line2])*100) / (5*COM_RATE_POW);
-        if(value >= 0)
-            str = QString::number(value, 'f', 2);
+        if(load){
+            double value = ((unit1->pow[line1]+unit2->pow[line2])*100.0) / load;
+            if(value >= 0) str = QString::number(value, 'f', 2);
+        }
     }
     setTableItem(row, column, str);
 }
@@ -290,24 +292,29 @@ void CabinetTableWidget::setSumEle(int id1, int line1, int id2, int line2, int r
 void CabinetTableWidget::updateData()
 {
     bool ret = checkTable();
-    if(ret)
-        initTableWid(); // 重新建立表格
+    if(ret) initTableWid(); // 重新建立表格
     // id1 , id2 , line1 , line2??
     int row = ui->tableWidget->rowCount();
+    sDataPacket *shm = get_share_mem();
     for(int i=1; i<=row; ++i) //更新数据
     {
+        int id1 = shm->cabData[mBusID][i-1].lineA_Tapoff_No - 1;
+        int id2 = shm->cabData[mBusID][i-1].lineB_Tapoff_No - 1;
+        int line1 = shm->cabData[mBusID][i-1].lineA_Tapoff_Line - 1;
+        int line2 = shm->cabData[mBusID][i-1].lineB_Tapoff_Line - 1;
+        int capacity = shm->cabData[mBusID][i-1].capacity;
         int k=0;
-        setName(i ,i, k++); // 设置输出位名称
+        setName(i, k++); // 设置名称
         //setAlarmStatus(i, k++); //设置告警状态
 
-        setVol(&(mBoxData1->box[i].loopTgBox) , 0, i, k++);
-        setVol(&(mBoxData2->box[i].loopTgBox) , 0, i, k++);
-        setCur(&(mBoxData1->box[i].loopTgBox) , 0, i, k++); // 设置A路电流值
-        setCur(&(mBoxData2->box[i].loopTgBox) , 0, i, k++); // 设置B路电流值
-        setSumCur(i, 0, i, 0, i, k++);
-        setSumPow(i, 0, i, 0, i, k++);
-        setSumEle(i, 0, i, 0, i, k++);
-        setSumLoad(i, 0, i, 0, i, k++);
+        setVol(&(mBoxData1->box[id1].loopTgBox) , line1, i, k++);
+        setVol(&(mBoxData2->box[id2].loopTgBox) , line2, i, k++);
+        setCur(&(mBoxData1->box[id1].loopTgBox) , line1, i, k++); // 设置A路电流值
+        setCur(&(mBoxData2->box[id2].loopTgBox) , line2, i, k++); // 设置B路电流值
+        setSumCur(id1, line1, id2, line2, i, k++);
+        setSumPow(id1, line1, id2, line2, i, k++);
+        setSumEle(id1, line1, id2, line2, i, k++);
+        setSumLoad(id1, line1, id2, line2, i, k++ , capacity);
     }
 }
 

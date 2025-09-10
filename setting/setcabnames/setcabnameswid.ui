@@ -91,7 +91,7 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>50</width>
+         <width>70</width>
          <height>40</height>
         </size>
        </property>
@@ -208,7 +208,7 @@ QSpinBox{
         <number>0</number>
        </property>
        <property name="maximum">
-        <number>18</number>
+        <number>54</number>
        </property>
        <property name="singleStep">
         <number>1</number>

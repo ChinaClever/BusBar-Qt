@@ -45,8 +45,10 @@ bool sys_configFile_open(void)
  */
 void sys_configFile_close(void)
 {
-    delete pConfigIni;
-    pConfigIni = NULL;
+    if(pConfigIni){
+        delete pConfigIni;
+        pConfigIni = NULL;
+    }
    // sync();
 }
 

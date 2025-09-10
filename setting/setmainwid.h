@@ -20,6 +20,10 @@ public:
     explicit SetMainWid(QWidget *parent = 0);
     ~SetMainWid();
     SystemSettingDlg *mSystemDlg;
+    bool mFirstLoad;
+
+signals:
+    void showAndHideBoxSig(int);
 
 private:
     void initWidget();
@@ -27,6 +31,7 @@ private:
     void initLanguage();
 public slots:
     void busChangedSlot(int);
+    void cabChangedSlot(int);
 
 private slots:
     void initFunSLot();

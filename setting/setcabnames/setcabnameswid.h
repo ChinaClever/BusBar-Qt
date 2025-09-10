@@ -29,11 +29,11 @@ public:
 
 protected:
     void initWid(int index);
-    bool saveBusName();
+    bool saveCabColName();
     void initTableWidget();
-    void clearWidget();
+//    void clearWidget();
     void resetWidget();
-    void checkBus();
+//    void checkBus();
     void setName(int row, int column);
     void setTableItem(int row, int column);
 //    void initScrollArea();
@@ -41,10 +41,11 @@ protected:
 
 private slots:
     void on_saveBtn_clicked();
-    void itemDoubleClicked(QTableWidgetItem *item);
+//    void itemDoubleClicked(QTableWidgetItem *item);
     void initFunSLot();
     void timeoutDone();
     void interfaceChangedSlot(int id);
+    void onCellDoubleClicked(int row);
 
 signals:
     void updateBusNameSig(int index ,QString &name);
@@ -55,7 +56,7 @@ private:
 
     int mIndex;
     SetShm *mSetShm;
-    sBusData *mPacket ;
+    sCabData *mPacket ;
     QTimer* mTimer;
 //    QScrollBar *m_scrollBarV;
 //    QScrollBar *m_scrollBarH;

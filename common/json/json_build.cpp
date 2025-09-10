@@ -9,10 +9,10 @@
 
 Json_Build::Json_Build()
 {
-    QString product[PRODUCT_NUM]={"ZPDU","MPDU","RPDU","NPM-V","IP-PDU","SI-PDU","BM-PDU"};
-    for(int i = 0 ; i < PRODUCT_NUM ; i++)
+    QString cab[CABINET_COL_NUM]={"col1","col2"};
+    for(int i = 0 ; i < CABINET_COL_NUM ; i++)
     {
-        mProduct.push_back(product[i]);//产品种类初始化
+        mProduct.push_back(cab[i]);//机柜列初始化
     }
 }
 
@@ -194,7 +194,7 @@ int Json_Build::objData(QJsonObject &obj,QVector<QString>& devtype)
 
         jsonArray.append(subObj);
     }
-    obj.insert("ZPDU" ,QJsonValue(jsonArray));
+    obj.insert("col1" ,QJsonValue(jsonArray));
 
     return num;
 }
@@ -209,7 +209,7 @@ bool Json_Build::saveJson( QJsonObject &json)
 {
     QJsonDocument jsonDoc(json);
     QByteArray ba = jsonDoc.toJson();
-    QString path = CfgCom::bulid()->pathOfData("pdu_id.json");
+    QString path = cm_pathOfData("cabinet_col_id.json");
     QFile file(path);
     bool ret = false;
     if(file.exists())//文件存在则不需要再写

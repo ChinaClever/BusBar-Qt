@@ -17,7 +17,7 @@ public:
     ~CabinetWid();
 
 signals:
-    void busChangedSig(int);
+    void cabColChangedSig(int);
 
 private:
     Ui::CabinetWid *ui;

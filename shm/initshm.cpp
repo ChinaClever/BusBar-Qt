@@ -29,8 +29,8 @@ void InitShm::initCabNum()
 {
     for(int i=0; i<BUS_NUM; ++i) {
         int cabNum = getCabNum(i);  //机柜数
-        if(cabNum < 0) cabNum = shm->data[i].boxNum*3;
-        shm->data[i].cabNum = cabNum;
+        if(cabNum < 0) cabNum = 18*3;
+        shm->cabNum[i] = cabNum;
     }
 }
 
@@ -121,13 +121,49 @@ void InitShm::initBusName()
 
 void InitShm::initCabColName()
 {
-    for(int i=0; i<BUS_NUM; ++i){
-        sBusData *busData = &(shm->data[i]);
+    for(int i=0; i<BUS_NUM/2; ++i){
         QString cabColName = getCabColStr(i);  //机柜列名称
-        if(cabColName.isEmpty()) cabColName = QString("Cabinet-Column%1").arg(i / 2 + 1);
+        if(cabColName.isEmpty()) cabColName = QString("Cabinet-Column%1").arg(i+1);
         QByteArray ba = cabColName.toLatin1();
         char *mm = ba.data();
-        strcpy(busData->cabColName,mm);
+        strcpy(shm->cabColName[i],mm);
+    }
+}
+
+void InitShm::initCabName()
+{
+    for(int i=0; i<BUS_NUM/2; ++i){
+        for(int j=0; j<CABINET_NUM; ++j){
+            QString cabName = "";
+            bool ret = getCabNameStr( i , j , cabName);  //机柜名称
+            if(!ret || cabName.isEmpty()) cabName = QString("Cabinet%1").arg(j+1);
+            QByteArray ba = cabName.toLatin1();
+            char *mm = ba.data();
+            strcpy(shm->cabData[i][j].cabName,mm);
+        }
+    }
+}
+
+void InitShm::initCabParameters()
+{
+    for(int i=0; i<BUS_NUM/2; ++i){
+        for(int j=0; j<CABINET_NUM; ++j){
+            QVector<int> value= getCabParameters( i , j );  //机柜参数
+            if(-1 == value[0] || 0 == value[0]) shm->cabData[i][j].capacity = 5000;
+            else shm->cabData[i][j].capacity = value[0];
+            if(-1 == value[1] || value[1] < 1 || value[1] > 4) shm->cabData[i][j].lineA_No = i==0?1:3;
+            else shm->cabData[i][j].lineA_No = value[1];
+            if(-1 == value[2] || value[2] < 1 || value[2] > 4) shm->cabData[i][j].lineB_No = i==0?2:4;
+            else shm->cabData[i][j].lineB_No = value[2];
+            if(-1 == value[3] || value[3] < 2 || value[3] > 19) shm->cabData[i][j].lineA_Tapoff_No = j/3 + 2;
+            else shm->cabData[i][j].lineA_Tapoff_No = value[3];
+            if(-1 == value[4] || value[4] < 2 || value[4] > 19) shm->cabData[i][j].lineB_Tapoff_No = j/3 + 2;
+            else shm->cabData[i][j].lineB_Tapoff_No = value[4];
+            if(-1 == value[5] || value[5] < 1 || value[5] > 3) shm->cabData[i][j].lineA_Tapoff_Line = j%3 + 1;
+            else shm->cabData[i][j].lineA_Tapoff_Line = value[5];
+            if(-1 == value[6] || value[6] < 1 || value[6] > 3) shm->cabData[i][j].lineB_Tapoff_Line = j%3 + 1;
+            else shm->cabData[i][j].lineA_Tapoff_Line = value[6];
+        }
     }
 }
 
@@ -164,6 +200,7 @@ void InitShm::initLoopName()
 void InitShm::initName()
 {
     initCabColName();
+    initCabName();
     initBusName();
     initBoxName();
     initLoopName();
@@ -173,6 +210,7 @@ void InitShm::run()
 {
     initBoxNum();  //统一ini 与共享内存的数组有效长度
     initCabNum();
+    initCabParameters();
     //sleep(5);
     initName(); //统一SQL 与功效内存内neme
     //sleep(5);

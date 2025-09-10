@@ -236,3 +236,30 @@ void SetShm::setLineBoxNum(int index, int num)
     QString groupStr = QString("Line%1").arg(index+1);
     sys_configFile_writeParam("boxNum",str,groupStr); // Line1/boxNum
 }
+
+/**
+ * @brief SetShm::setCabinetNum  设置机柜数量
+ * @param index  母线编号
+ * @param num    数量
+ */
+void SetShm::setCabinetNum(int index, int num)
+{
+    shm->cabNum[index] = num ;
+    QString str = QString::number(shm->cabNum[index],10);
+    QString groupStr = QString("CabCol%1").arg(index+1);
+    cab_configFile_writeParam("CabinetNum",str,groupStr); // Line1/cabinetNum
+}
+
+/**
+ * @brief SetShm::setCabinetColName  设置机柜列名称
+ * @param index  机柜列编号
+ * @param str    机柜列名称
+ */
+void SetShm::setCabinetColName(int index, const QString &str)
+{
+    QByteArray ba = str.toLatin1();
+    char *mm = ba.data();
+    strcpy(shm->cabColName[index],mm);
+    QString groupStr = QString("CabCol%1").arg(index+1);
+    cab_configFile_writeParam("CabColName",str,groupStr); // Line1/cabinetNum
+}

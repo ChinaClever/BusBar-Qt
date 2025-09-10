@@ -3,6 +3,7 @@
 #include <QtCore>
 #include "msgbox.h"
 #include "sysconfigfile.h"
+#include "cabconfigfile.h"
 #include "datapacket.h"
 #include "common/beep/beepthread.h"
 //const QColor gray(174,225,254);//空设备,原为灰色，现为天蓝色
@@ -42,8 +43,12 @@ bool cm_isIPaddress(const QString& ip);
 QString getPassword();
 bool resetPassword();
 int getBoxNum(int index);
+
 int getCabNum(int index);
 QString getCabColStr(int index);
+bool getCabNameStr(int index , int id , QString &str);
+QVector<int> getCabParameters(int index , int id );
+
 int getRateCur(int index);
 void mdelay(int msec);
 void hexToStr(char * buf , int rtn, QString str=" send");

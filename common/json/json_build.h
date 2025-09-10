@@ -1,10 +1,10 @@
 ﻿#ifndef BUILDJSON_H
 #define BUILDJSON_H
 #include "datapacket.h"
-#include "config.h"
+#include "common.h"
 
-#define SN_TOTAL_NUM 96
-#define PRODUCT_NUM 7
+#define SN_TOTAL_NUM 54
+#define CABINET_COL_NUM 2
 
 class Json_Build
 {

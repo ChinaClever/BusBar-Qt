@@ -11,7 +11,7 @@ SetCabNamesWid::SetCabNamesWid(QWidget *parent) :
     mIndex = 0;
     mSetShm = new SetShm;
     mSetCabNameDlg = new SetCabNameDlg(this);
-    QTimer::singleShot(7650,this,SLOT(initFunSLot()));
+    QTimer::singleShot(365,this,SLOT(initFunSLot()));
 //    initScrollArea(); // 开启滑动功能
     connect(InterfaceChangeSig::get(), SIGNAL(typeSig(int)), this,SLOT(interfaceChangedSlot(int)));
     isRun = false;
@@ -54,17 +54,11 @@ void SetCabNamesWid::initTableWidget()
     }
 
     QStringList horHead;
-    if(gLanguage == 0) horHead<< tr("插接箱");
-    else horHead<< tr("Tap-off box");
+    if(gLanguage == 0) horHead<< tr("机柜名称")<< tr("电力容量\n(kW)")<< tr("A路母线编号")<< tr("A路插接箱地址")<< tr("A路插接箱输出位")
+            << tr("B路母线编号")<< tr("B路插接箱地址")<< tr("B路插接箱输出位");
+    else horHead<< tr("cabinet name")<< tr("power capacity\n(kW)")<< tr("busbar No.\nof Line A")<< tr("tap-off box No.\nof Line A")<< tr("tap-off box\noutput position\nof Line A")
+                << tr("busbar No.\nof Line B")<< tr("tap-off box No.\nof Line B")<< tr("tap-off box\noutput position\nof Line B");
 
-    int dc = mPacket ? mPacket->box[0].dc : 1;
-    if(dc){ //交流9个
-        for(int i = 0; i < LINE_NUM; ++i)
-            horHead << QString((char)('A' + i%3))+ QString("%1").arg(i/3 + 1);
-    }else{ //直流4个
-        for(int i = 0; i < 4; i++)
-            horHead << "D" + QString("%1").arg(i + 1);
-    }
 
     ui->tableWidget->setColumnCount(horHead.size());
 
@@ -79,27 +73,50 @@ void SetCabNamesWid::initTableWidget()
 //    ui->tableWidget->verticalHeader()->setDefaultSectionSize(45);
 
     //    ui->tableWidget->setVerticalScrollBarPolicy ( Qt::ScrollBarAlwaysOff );
-    connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
+    //connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
+    connect(ui->tableWidget, &QTableWidget::cellDoubleClicked, this, &SetCabNamesWid::onCellDoubleClicked);
 }
 
+void SetCabNamesWid::onCellDoubleClicked(int row) {
+    QStringList rowData;
+    for (int col = 0; col < ui->tableWidget->columnCount(); ++col) {
+        QTableWidgetItem *item = ui->tableWidget->item(row, col);
+        rowData << (item ? item->text() : "");
+    }
 
-void SetCabNamesWid::clearWidget()
-{
-    int row = ui->tableWidget->rowCount();
-    for(int i = 0 ; i < row ; i++)
-        ui->tableWidget->removeRow(0);
+//    QString str = QString("第 %1 行数据：\n机柜名称 %2\n 电力容量%3\nA路母线编号%4\nA路插接箱地址%5\nA路插接箱输出位%6\nB路母线编号%7\nB路插接箱地址%8\nB路插接箱输出位%9\n")
+//                                 .arg(row + 1)
+//                                 .arg(rowData.value(0))
+//                                 .arg(rowData.value(1))
+//                                 .arg(rowData.value(2))
+//                             .arg(rowData.value(3))
+//                             .arg(rowData.value(4))
+//                             .arg(rowData.value(5))
+//                             .arg(rowData.value(6))
+//                             .arg(rowData.value(7))
+//                             .arg(rowData.value(8));
+    mSetCabNameDlg->init(mIndex, row);
+    mSetCabNameDlg->setWindowModality(Qt::WindowModal);
+    mSetCabNameDlg->show();
+    mSetCabNameDlg->move(0,0);
 }
+
+//void SetCabNamesWid::clearWidget()
+//{
+//    int row = ui->tableWidget->rowCount();
+//    for(int i = 0 ; i < row ; i++)
+//        ui->tableWidget->removeRow(0);
+//}
 
 void SetCabNamesWid::resetWidget()
 {
     initTableWidget();
-    int boxNum = mPacket->boxNum;
+    int boxNum = get_share_mem()->cabNum[mIndex];
 
     for(int i = 0 ;  i < boxNum ; i++)
     {
         ui->tableWidget->insertRow(i);
-        int len = LINE_NUM; //交流9个
-        if(!mPacket->box[0].dc) len = 4;
+        int len = LINE_NUM-1; //交流9个
 
         for(int j=0; j<=len; j++){
             QTableWidgetItem * item = new QTableWidgetItem("---");
@@ -110,18 +127,18 @@ void SetCabNamesWid::resetWidget()
 }
 
 
-void SetCabNamesWid::checkBus()
-{
-    int row = ui->tableWidget->rowCount();
-    int col = ui->tableWidget->columnCount();
+//void SetCabNamesWid::checkBus()
+//{
+//    int row = ui->tableWidget->rowCount();
+//    int col = ui->tableWidget->columnCount();
 
-    int dc = mPacket ? mPacket->box[0].dc : 1;
-    int len = dc ? LINE_NUM : 4;
-    if(mPacket->boxNum != row || col != len+1) { //修改判断条件——  2018.3.21——By>MW
-        clearWidget();
-        resetWidget();
-    }
-}
+//    int dc = mPacket ? mPacket->box[0].dc : 1;
+//    int len = dc ? LINE_NUM : 4;
+//    if(mPacket->boxNum != row || col != len+1) { //修改判断条件——  2018.3.21——By>MW
+//        clearWidget();
+//        resetWidget();
+//    }
+//}
 
 /**
  * @brief 刷新界面
@@ -131,14 +148,13 @@ void SetCabNamesWid::indexChanged(int index)
 {
     //    if(mIndex == index)  return;
     mIndex = index;
-    mPacket = &(get_share_mem()->data[index]);
     initWid(index);
 }
 
 void SetCabNamesWid::updateWid()
 {
-    checkBus();
-
+//    checkBus();
+    resetWidget();
     int row = ui->tableWidget->rowCount();
     for(int i = 0 ; i < row ; i++)
     {
@@ -160,7 +176,8 @@ void SetCabNamesWid::timeoutDone()
 void SetCabNamesWid::setName(int row, int column)
 {
     QTableWidgetItem *item = ui->tableWidget->item(row,column);
-    QString str = mPacket->box[row+1].boxName;  //第0个为始端箱，所以从第一个开始
+    //QString str = mPacket->box[row+1].boxName;  //第0个为始端箱，所以从第一个开始
+    QString str = get_share_mem()->cabData[mIndex][row].cabName;
     item->setText(str);
 }
 
@@ -169,41 +186,62 @@ void SetCabNamesWid::setTableItem(int row, int column)
 {
     QString str = "---";
     QTableWidgetItem *item = ui->tableWidget->item(row,column);
-    sBoxData *box = &(mPacket->box[row+1]);
 
     //box->rate 直流的情况下，box->rate代表路数
-    if(box->offLine > 0 /* && column <= box->rate */) {
-        if(column <= box->data.lineNum) {
-            str = box->loopName[column-1];
-        }
+    //if(box->offLine > 0 /* && column <= box->rate */) {
+        //if(column <= box->data.lineNum) {
+    switch (column) {
+    case 1:
+        str = QString::number(get_share_mem()->cabData[mIndex][row].capacity/COM_RATE_POW,'f', 3);
+        break;
+    case 2:
+        str = QString::number(get_share_mem()->cabData[mIndex][row].lineA_No);
+        break;
+    case 3:
+        str = QString::number(get_share_mem()->cabData[mIndex][row].lineA_Tapoff_No);
+        break;
+    case 4:
+        str = QString::number(get_share_mem()->cabData[mIndex][row].lineA_Tapoff_Line);
+        break;
+    case 5:
+        str = QString::number(get_share_mem()->cabData[mIndex][row].lineB_No);
+        break;
+    case 6:
+        str = QString::number(get_share_mem()->cabData[mIndex][row].lineB_Tapoff_No);
+        break;
+    case 7:
+        str = QString::number(get_share_mem()->cabData[mIndex][row].lineB_Tapoff_Line);
+        break;
     }
+
+        //}
+    //}
     if(!str.isEmpty())
         item->setText(str);
 }
 
 
-void SetCabNamesWid::itemDoubleClicked(QTableWidgetItem *item)
-{
-    if(item->text().compare("---") == 0) return;  //为空不设置
-    disconnect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
-    int boxNum = item->row() + 1;
-    int column = item->column();
+//void SetCabNamesWid::itemDoubleClicked(QTableWidgetItem *item)
+//{
+//    if(item->text().compare("---") == 0) return;  //为空不设置
+//    disconnect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
+//    int boxNum = item->row() + 1;
+//    int column = item->column();
 
-    mSetCabNameDlg->init(mIndex, boxNum, column, item->text());
-    mSetCabNameDlg->setWindowModality(Qt::WindowModal);
-    mSetCabNameDlg->show();
-    mSetCabNameDlg->move(0,0);
+//    mSetCabNameDlg->init(mIndex, boxNum, column, item->text());
+//    mSetCabNameDlg->setWindowModality(Qt::WindowModal);
+//    mSetCabNameDlg->show();
+//    mSetCabNameDlg->move(0,0);
 
-    connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
-}
+//    connect(ui->tableWidget,SIGNAL(itemClicked(QTableWidgetItem*)),this,SLOT(itemDoubleClicked(QTableWidgetItem*)));
+//}
 
 void SetCabNamesWid::initWid(int index)
 {
-    sBusData *busData = &(get_share_mem()->data[index]);
-    ui->cabnameEdit->setText(busData->busName);
-    ui->cabNumSpin->setValue(busData->boxNum);
+    ui->cabnameEdit->setText(QString(get_share_mem()->cabColName[index]));
+    ui->cabNumSpin->setValue(get_share_mem()->cabNum[index]);
 
-    checkBus();//切换通道，更新表格名称  2018-12-20 pmd
+//    checkBus();//切换通道，更新表格名称  2018-12-20 pmd
     int row = ui->tableWidget->rowCount();
     for(int i = 0 ; i < row ; i++)
     {
@@ -214,27 +252,22 @@ void SetCabNamesWid::initWid(int index)
     }
 }
 
-bool SetCabNamesWid::saveBusName()
+bool SetCabNamesWid::saveCabColName()
 {
     bool ret = true;
-    DbNameItem item;
-    item.bus = mIndex;
-    item.type = 1; // 名称类型 1 母线名称   2 插接箱名称  3 回路名称
-    item.num = 0; // 编号
     QString name = ui->cabnameEdit->text();
     if( (!name.isEmpty()) ) {
         if(!(name.size() > NAME_LEN - 2)){
-            item.name = name;
-            mSetShm->setName(item);
-            emit updateBusNameSig(mIndex , name);
+             mSetShm->setCabinetColName(mIndex, name);
+//            emit updateBusNameSig(mIndex , name);
         }else{
-            if(gLanguage == 0) CriticalMsgBox box(NULL, tr("母线名称不能超过30个字符保存失败!!"));
-            else CriticalMsgBox box(NULL, tr("Busbar name cannot exceed 30 characters, saving failed!!"));
+            if(gLanguage == 0) CriticalMsgBox box(NULL, tr("机柜名称不能超过30个字符保存失败!!"));
+            else CriticalMsgBox box(NULL, tr("Cabinet name cannot exceed 30 characters, saving failed!!"));
             ret = false;
         }
     }else {
-        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("母线名称不能为空保存失败!!"));
-        else CriticalMsgBox box(NULL, tr("Busbar name cannot be empty, saving failed!!"));
+        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("机柜名称不能为空保存失败!!"));
+        else CriticalMsgBox box(NULL, tr("Cabinet name cannot be empty, saving failed!!"));
         ret = false;
     }
     if(ui->cabNumSpin->value() < 0 || ui->cabNumSpin->value() > 18){
@@ -249,9 +282,9 @@ bool SetCabNamesWid::saveBusName()
 
 void SetCabNamesWid::on_saveBtn_clicked()
 {
-    mSetShm->setLineBoxNum(mIndex, ui->cabNumSpin->value());
-    if(saveBusName()) {
-        set_box_num(mIndex, ui->cabNumSpin->value());
+    mSetShm->setCabinetNum(mIndex, ui->cabNumSpin->value());
+    if(saveCabColName()) {
+        //set_box_num(mIndex, ui->cabNumSpin->value());
         updateWid();                               //2018-12-17保存插接箱数量的同时，更新名称设置列表 pmd
 
         //BeepThread::bulid()->beep();

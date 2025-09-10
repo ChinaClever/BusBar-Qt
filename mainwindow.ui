@@ -734,6 +734,41 @@ color: rgb(255, 255, 255);</string>
        </item>
       </widget>
      </item>
+     <item>
+      <widget class="QComboBox" name="cabinetBox">
+       <property name="minimumSize">
+        <size>
+         <width>130</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>130</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <item>
+        <property name="text">
+         <string>Cabinet-Column1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Cabinet-Column2</string>
+        </property>
+       </item>
+      </widget>
+     </item>
     </layout>
    </widget>
   </widget>

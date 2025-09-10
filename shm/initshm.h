@@ -29,6 +29,8 @@ protected:
     void initLoopName();
     void initName();
     void initCabColName();
+    void initCabName();
+    void initCabParameters();
 
 private:
     sDataPacket *shm;

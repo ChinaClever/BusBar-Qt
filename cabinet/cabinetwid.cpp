@@ -7,7 +7,7 @@ CabinetWid::CabinetWid(QWidget *parent) :
 {
     ui->setupUi(this);
     mTableWid = new CabinetTableWidget(ui->widget);
-    connect(this, SIGNAL(busChangedSig(int)), mTableWid, SLOT(busChangeSlot(int)));
+    connect(this, SIGNAL(cabColChangedSig(int)), mTableWid, SLOT(cabColChangeSlot(int)));
 }
 
 
