@@ -56,8 +56,8 @@ void SetCabNamesWid::initTableWidget()
     QStringList horHead;
     if(gLanguage == 0) horHead<< tr("机柜名称")<< tr("电力容量\n(kW)")<< tr("A路母线编号")<< tr("A路插接箱地址")<< tr("A路插接箱输出位")
             << tr("B路母线编号")<< tr("B路插接箱地址")<< tr("B路插接箱输出位");
-    else horHead<< tr("cabinet name")<< tr("power capacity\n(kW)")<< tr("busbar No.\nof Line A")<< tr("tap-off box No.\nof Line A")<< tr("tap-off box\noutput position\nof Line A")
-                << tr("busbar No.\nof Line B")<< tr("tap-off box No.\nof Line B")<< tr("tap-off box\noutput position\nof Line B");
+    else horHead<< tr("cabinet name")<< tr("power capacity\n(kW)")<< tr("busbar No.\nof line A")<< tr("tap-off box No.\nof line A")<< tr("tap-off box\noutput position\nof line A")
+                << tr("busbar No.\nof line B")<< tr("tap-off box No.\nof line B")<< tr("tap-off box\noutput position\nof line B");
 
 
     ui->tableWidget->setColumnCount(horHead.size());
@@ -95,7 +95,7 @@ void SetCabNamesWid::onCellDoubleClicked(int row) {
 //                             .arg(rowData.value(6))
 //                             .arg(rowData.value(7))
 //                             .arg(rowData.value(8));
-    mSetCabNameDlg->init(mIndex, row);
+    mSetCabNameDlg->init(mIndex, row, mSetShm);
     mSetCabNameDlg->setWindowModality(Qt::WindowModal);
     mSetCabNameDlg->show();
     mSetCabNameDlg->move(0,0);

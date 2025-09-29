@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QComboBox>
+#include "shm/setshm.h"
 namespace Ui {
 class SetCabNameDlg;
 }
@@ -15,7 +16,7 @@ public:
     explicit SetCabNameDlg(QWidget *parent = 0);
     ~SetCabNameDlg();
 
-    void init(int bus, int box);
+    void init(int bus, int box, SetShm *setShm);
 protected:
     bool save();
     void initBox(QComboBox *box , int type);
@@ -30,6 +31,7 @@ private slots:
 private:
     Ui::SetCabNameDlg *ui;
     int mBusId, mBox;
+    SetShm *mSetShm;
 };
 
 #endif // SETCABNAMEDLG_H

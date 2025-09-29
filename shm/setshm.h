@@ -32,6 +32,7 @@ public:
     void setLineBoxNum(int index,int num); //设置母线插接箱数量
     void setCabinetNum(int index,int num); //设置母线机柜数量
     void setCabinetColName(int index, const QString &str);
+    void setCabinetParameters(int index,int box);
 
 protected:
     void setThresholdUnit(int id, sThresholdItem &item, sDataUnit &unit);

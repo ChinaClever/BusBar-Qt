@@ -17,13 +17,14 @@ protected:
     void unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataUnit &unit, double rate, const QString &sym);
     void unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym);
     void unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataUnit &unit, double rate, const QString &sym);
-    void unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym);
+    void unitAlarmW(int addr, sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym);
 
-    void boxAlarm(sBoxData &box);
+    void boxAlarm(sBoxData &box, int id);
     void busAlarm(int id);
     void checkAlarm();
 
     void saveMsg(const QString &typeStr, const QString &str , const QString &typeStrEn, const QString &strEn);
+    void getCabColNameAndCabName(int line_no , int line_tapoff_no ,int line_tapoff_line , QString & cabCalName , QString & cabname);
 
 protected slots:
     void timeoutDone();

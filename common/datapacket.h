@@ -33,9 +33,9 @@ extern int gLanguage;//0代表中文 1代表英文
 extern int gUser;
 extern QString gSendIP;
 extern int gSendport;
-extern uchar gStartAlarm;//0代表关闭 1代表启用
-extern uchar gOpenAlarm;//0代表关闭 1代表启用
-extern uchar gCloseAlarm;//
+//extern uchar gStartAlarm;//0代表关闭 1代表启用
+//extern uchar gOpenAlarm;//0代表关闭 1代表启用
+//extern uchar gCloseAlarm;//
 /**
  * 统计数据结构体
  */
@@ -70,6 +70,9 @@ typedef struct _sLoopTgObjData {
     ushort pf[3]; // 功率因数
     uint apPow[3]; // 视在功率
     uint reactivePower[3]; // 无功功率
+    uchar volAlarm[3];
+    uchar curAlarm[3];
+    uchar powAlarm[3];
 }sLoopTgObjData;
 
 /**
@@ -242,12 +245,12 @@ typedef struct _sBusData{
 
 typedef struct _sCabData{
     char cabName[NAME_LEN]; // 机柜名称
-    char lineA_No;
-    char lineB_No;
-    char lineA_Tapoff_No;
-    char lineB_Tapoff_No;
-    char lineA_Tapoff_Line;
-    char lineB_Tapoff_Line;
+    char lineA_No;// A路母线序号
+    char lineB_No;// B路母线序号
+    char lineA_Tapoff_No;// A路母线插接箱地址
+    char lineB_Tapoff_No;// B路母线插接箱地址
+    char lineA_Tapoff_Line;// A路母线插接箱第几个接头
+    char lineB_Tapoff_Line;// B路母线插接箱第几个接头
     int capacity;
 }sCabData;
 

@@ -48,8 +48,9 @@ void OtherSettingDlg::initLanguage()
         ui->label_2->setText("推送数据端口号");
         ui->useBox->setText("是否启用推送数据");
         ui->saveBtn->setText("保存");
-        if(gStartAlarm) ui->alramBtn->setText(tr("关闭告警器"));
-        else ui->alramBtn->setText(tr("启用告警器"));
+//        if(gStartAlarm) ui->alramBtn->setText(tr("关闭告警器"));
+//        else ui->alramBtn->setText(tr("启用告警器"));
+        ui->importBtn->setText(tr("导入配置"));
     }else{
         ui->pwdSetBtn->setText("Password modifiction");
         ui->timeSetBtn->setText("Time modification");
@@ -60,8 +61,9 @@ void OtherSettingDlg::initLanguage()
         ui->label_2->setText("Port number of \npushing data");
         ui->useBox->setText("Is it enabled pushing data");
         ui->saveBtn->setText("Save");
-        if(gStartAlarm) ui->alramBtn->setText(tr("Turn off the buzzer"));
-        else ui->alramBtn->setText(tr("Turn on the buzzer"));
+//        if(gStartAlarm) ui->alramBtn->setText(tr("Turn off the buzzer"));
+//        else ui->alramBtn->setText(tr("Turn on the buzzer"));
+        ui->importBtn->setText(tr("Import configuration"));
     }
 }
 
@@ -129,6 +131,42 @@ static bool update_fun(const QString &str)
 //        sleep(2);
 //        system("reboot");
 #endif
+    } else {
+        ret = false;
+    }
+
+    return ret;
+}
+
+static bool update_jsonFile_fun(const QString &str)
+{
+    bool ret = true;
+    int ans = 0;
+    QString cstr;
+
+    cstr = QString("mount | grep %1").arg(str);
+    ans = system(cstr.toLatin1());
+    if(ans < 0) {
+        qDebug() << "mount err";
+    }
+    QFileInfo fi(QString("/run/media/%1/upgrade/cabconfig.ini").arg(str));
+    if(fi.exists()) {
+        cstr = QString("cp /run/media/%1/upgrade/cabconfig.ini /home/root/.CleverBusbar").arg(str);
+        ans = system(cstr.toLatin1());
+        if(ans < 0) {
+            qDebug() << cstr+" err";
+        }
+
+        ans = system("sync");
+        if(ans < 0) {
+            qDebug() << "sync err";
+        }
+
+        cstr = QString("umount /run/media/%1").arg(str);
+        ans = system(cstr.toLatin1());
+        if(ans < 0) {
+            qDebug() << "umount err";
+        }
     } else {
         ret = false;
     }
@@ -226,18 +264,39 @@ void OtherSettingDlg::on_saveBtn_clicked()
     }
 }
 
-void OtherSettingDlg::on_alramBtn_clicked()
+void OtherSettingDlg::on_importBtn_clicked()
 {
-    if(gStartAlarm){
-        gStartAlarm = 0;
-        if(gLanguage == 0) ui->alramBtn->setText(tr("启用告警器"));
-        else ui->alramBtn->setText(tr("Turn on the buzzer"));
-        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
+//    if(gStartAlarm){
+//        gStartAlarm = 0;
+//        if(gLanguage == 0) ui->alramBtn->setText(tr("启用告警器"));
+//        else ui->alramBtn->setText(tr("Turn on the buzzer"));
+//        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
+//    }else{
+//        gStartAlarm = 1;
+//        if(gLanguage == 0) ui->alramBtn->setText(tr("关闭告警器"));
+//        else ui->alramBtn->setText(tr("Turn off the buzzer"));
+//        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
+//    }
+    if(gLanguage == 0) {
+        QuMsgBox box(NULL, tr("是否升级机柜配置文件?"));
+        if(box.Exec()) {
+            bool ret = update_jsonFile_fun("sda");
+            if(!ret) ret = update_jsonFile_fun("sda1");
+            if(!ret) ret = update_jsonFile_fun("sda2");
+            if(!ret) ret = update_jsonFile_fun("mmcblk0p1");
+            if(!ret)
+                CriticalMsgBox box(NULL, tr("升级机柜配置文件未找到！\n 请插入U盘，把升级文件放入upgrade目录下!"));
+        }
     }else{
-        gStartAlarm = 1;
-        if(gLanguage == 0) ui->alramBtn->setText(tr("关闭告警器"));
-        else ui->alramBtn->setText(tr("Turn off the buzzer"));
-        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
+        QuMsgBox box(NULL, tr("Whether to upgrade the cabconfig.ini file?"));
+        if(box.Exec()) {
+            bool ret = update_jsonFile_fun("sda");
+            if(!ret) ret = update_jsonFile_fun("sda1");
+            if(!ret) ret = update_jsonFile_fun("sda2");
+            if(!ret) ret = update_jsonFile_fun("mmcblk0p1");
+            if(!ret)
+                CriticalMsgBox box(NULL, tr("Upgrade cabconfig.ini file not found！\n Please insert a USB drive and place the upgrade files in the upgrade directory!"));
+        }
     }
 }
 

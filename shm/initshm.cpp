@@ -148,7 +148,7 @@ void InitShm::initCabParameters()
 {
     for(int i=0; i<BUS_NUM/2; ++i){
         for(int j=0; j<CABINET_NUM; ++j){
-            QVector<int> value= getCabParameters( i , j );  //机柜参数
+            QVector<int> value = getCabParameters( i , j );  //机柜参数
             if(-1 == value[0] || 0 == value[0]) shm->cabData[i][j].capacity = 5000;
             else shm->cabData[i][j].capacity = value[0];
             if(-1 == value[1] || value[1] < 1 || value[1] > 4) shm->cabData[i][j].lineA_No = i==0?1:3;

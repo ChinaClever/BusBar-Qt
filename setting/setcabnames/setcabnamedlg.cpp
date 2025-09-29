@@ -10,15 +10,27 @@ SetCabNameDlg::SetCabNameDlg(QWidget *parent) :
     ui->setupUi(this);
 
     if(gLanguage == 0) {com_setBackColour(tr("设置界面"), this);
-        ui->label->setText("名称修改");
-        ui->label_2->setText("修改");
-        ui->label_3->setText("名称");
+        ui->label->setText("参数修改：");
+        ui->label_2->setText("容量修改：");
+        ui->label_3->setText("名称修改：");
+        ui->label_4->setText("A路母线编号：");
+        ui->label_5->setText("A路插接箱地址：");
+        ui->label_6->setText("A路插接箱输出位：");
+        ui->label_7->setText("B路母线编号：");
+        ui->label_8->setText("B路插接箱地址：");
+        ui->label_9->setText("B路插接箱输出位：");
         ui->saveBtn->setText("保存");
         ui->cancelBtn->setText("取消");
     }else {com_setBackColour(tr("Settings interface"), this);
-        ui->label->setText("Name modification");
-        ui->label_2->setText("Modify");
-        ui->label_3->setText("Name");
+        ui->label->setText("Parameter modification:");
+        ui->label_2->setText("Capacity modification:");
+        ui->label_3->setText("Name modification:");
+        ui->label_4->setText("Busbar No. of line A:");
+        ui->label_5->setText("Tap-off box No. of line A:");
+        ui->label_6->setText("Tap-off box output position of line A:");
+        ui->label_7->setText("Busbar No. of line B:");
+        ui->label_8->setText("Tap-off box No. of line B:");
+        ui->label_9->setText("Tap-off box output position of line B:");
         ui->saveBtn->setText("Save");
         ui->cancelBtn->setText("Cancel");
     }
@@ -55,8 +67,9 @@ void SetCabNameDlg::initBox(QComboBox * box , int type)
 //    }
 }
 
-void SetCabNameDlg::init(int bus, int box)
+void SetCabNameDlg::init(int bus, int box , SetShm *setShm)
 {
+    this->mSetShm = setShm;
     mBusId = bus;
     mBox = box;
     QString str = QString("第 %1 行数据：\n机柜名称 %2\n 电力容量%3\nA路母线编号%4\nA路插接箱地址%5\nA路插接箱输出位%6\nB路母线编号%7\nB路插接箱地址%8\nB路插接箱输出位%9\n")
@@ -69,8 +82,9 @@ void SetCabNameDlg::init(int bus, int box)
                       .arg(get_share_mem()->cabData[bus][box].lineB_No)
                       .arg(get_share_mem()->cabData[bus][box].lineB_Tapoff_No)
                       .arg(get_share_mem()->cabData[bus][box].lineB_Tapoff_Line);
+
     ui->nameEdit->setText(get_share_mem()->cabData[bus][box].cabName);
-    ui->capacityEdit->setText(QString::number(get_share_mem()->cabData[bus][box].capacity));
+    ui->capacitySpinBox->setValue(get_share_mem()->cabData[bus][box].capacity/COM_RATE_POW);
     ui->lineA_NoBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineA_No-1);
     ui->lineA_Tapoff_NoBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineA_Tapoff_No-2);
     ui->lineA_Tapoff_LineBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineA_Tapoff_Line-1);
@@ -98,27 +112,18 @@ void SetCabNameDlg::init(int bus, int box)
 
 bool SetCabNameDlg::save()
 {
-//    int type=2, num = mBox;
-//    SetShm shm;
+    QByteArray ba = ui->nameEdit->text().toLatin1();
+    char *mm = ba.data();
+    strcpy(get_share_mem()->cabData[this->mBusId][this->mBox].cabName,mm);
+    get_share_mem()->cabData[this->mBusId][this->mBox].capacity = ui->capacitySpinBox->value()*COM_RATE_POW;
+    get_share_mem()->cabData[this->mBusId][this->mBox].lineA_No = ui->lineA_NoBox->currentIndex()+1;
+    get_share_mem()->cabData[this->mBusId][this->mBox].lineA_Tapoff_No = ui->lineA_Tapoff_NoBox->currentIndex()+2;
+    get_share_mem()->cabData[this->mBusId][this->mBox].lineA_Tapoff_Line = ui->lineA_Tapoff_LineBox->currentIndex()+1;
 
-//    DbNameItem item;
-//    item.bus = mBusId;
-//    if(mLoop) {
-//        type = 3;
-//        num = mBox*LINE_NUM + mLoop-1 ;
-//        //saveToDev();//IP-BUSBAR设置loop名称
-//    }
-
-//    item.type = type;
-//    item.num = num;
-//    item.name = ui->nameEdit->text();
-//    const char *temp = item.name.right(1).toLatin1().data();
-//    if(((*temp)<'0'||(*temp)>'9') && 2 == item.type){
-//        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("名称最后字符不是数字，请重新输入或者是不选择自递增!!"));
-//        else CriticalMsgBox box(NULL, tr("The last character of the name is not a number.\nPlease re-enter or do not select auto-increment!!"));
-//        return false;
-//    }
-//    shm.setName(item);
+    get_share_mem()->cabData[this->mBusId][this->mBox].lineB_No = ui->lineB_NoBox->currentIndex()+1;
+    get_share_mem()->cabData[this->mBusId][this->mBox].lineB_Tapoff_No = ui->lineB_Tapoff_NoBox->currentIndex()+2;
+    get_share_mem()->cabData[this->mBusId][this->mBox].lineB_Tapoff_Line = ui->lineB_Tapoff_LineBox->currentIndex()+1;
+    this->mSetShm->setCabinetParameters(this->mBusId , this->mBox);
     return true;
 }
 
@@ -128,7 +133,6 @@ void SetCabNameDlg::on_saveBtn_clicked()
     if(!str.isEmpty()) {
         if(!(str.size() > NAME_LEN - 2)){
             if(save()){
-                //BeepThread::bulid()->beep();
                 close();
             }
         } else {
@@ -143,7 +147,6 @@ void SetCabNameDlg::on_saveBtn_clicked()
 
 void SetCabNameDlg::on_cancelBtn_clicked()
 {
-    //BeepThread::bulid()->beep();
     close();
 }
 

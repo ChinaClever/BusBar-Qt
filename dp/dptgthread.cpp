@@ -106,6 +106,9 @@ void DpTgThread::loopTgObj(int loop , int phase , sObjData *obj, sLoopTgObjData 
     if(loop == 3 && phase == 0){
         for(int i=0; i<3; ++i){
             tg->vol[i] = obj->vol.value[i];
+            tg->volAlarm[i] = obj->vol.alarm[i];
+            tg->curAlarm[i] = obj->cur.alarm[i];
+            tg->powAlarm[i] = obj->pow.alarm[i];
             tg->cur[i] = obj->cur.value[i];
             tg->pow[i] = obj->pow.value[i];
             tg->ele[i] = obj->ele[i];
@@ -122,6 +125,9 @@ void DpTgThread::loopTgObj(int loop , int phase , sObjData *obj, sLoopTgObjData 
                   tg->ele[i] += obj->ele[i*3+j];
                   tg->apPow[i] += obj->cur.value[i*3+j] * obj->vol.value[i*3+j]/10;
                   tg->reactivePower[i] += obj->reactivePower[i*3+j];
+                  tg->volAlarm[i] |= obj->vol.alarm[i*3+j];
+                  tg->curAlarm[i] |= obj->cur.alarm[i*3+j];
+                  tg->powAlarm[i] |= obj->pow.alarm[i*3+j];
             }
         }
     }

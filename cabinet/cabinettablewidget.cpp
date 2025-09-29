@@ -31,8 +31,8 @@ void CabinetTableWidget::cabColChangeSlot(int id)
 {
     mBusID = id;
     sDataPacket *shm = get_share_mem();
-    mBoxData1 = &(shm->data[shm->cabData[id][0].lineA_No]);///
-    mBoxData2 = &(shm->data[shm->cabData[id][0].lineB_No]);
+    mBoxData1 = &(shm->data[shm->cabData[id][0].lineA_No-1]);///
+    mBoxData2 = &(shm->data[shm->cabData[id][0].lineB_No-1]);
     updateData();
 }
 
@@ -150,6 +150,32 @@ void CabinetTableWidget::setTableItem(int id, int column, const QString &str)
 }
 
 /**
+ * @brief 设置Item的颜色
+ * @param id 行号
+ * @param column 列号
+ * @param alarm 颜色号
+ */
+void CabinetTableWidget::setItemColor(int id, int column, int alarm)
+{
+    QTableWidgetItem *item = ui->tableWidget->item(id-1, column);
+
+    switch (alarm) {
+    case 0:
+        item->setTextColor(QColor(Qt::black));
+        break;
+    case 1:
+        //        item->setTextColor(QColor(232,157,18));
+        //        break;
+    case 2:
+        item->setTextColor(QColor(Qt::red));
+        break;
+    default:
+        item->setTextColor(QColor(Qt::black));
+        break;
+    }
+}
+
+/**
  * @brief 清空表格
  */
 void CabinetTableWidget::clearTable()
@@ -201,11 +227,13 @@ void CabinetTableWidget::setAlarmStatus(int id, int column)
 void CabinetTableWidget::setSumCur(int id1, int line1, int id2, int line2, int row, int column)
 {
     QString str = "---";
+    uchar offline1 = mBoxData1->box[id1].offLine;
+    uchar offline2 = mBoxData2->box[id2].offLine;
     //if(mBoxData->box[id].offLine)
     {
         sLoopTgObjData *unit1 = &(mBoxData1->box[id1].loopTgBox);
         sLoopTgObjData *unit2 = &(mBoxData2->box[id2].loopTgBox);
-        double value = (unit1->cur[line1]+unit2->cur[line2]) / COM_RATE_CUR;
+        double value = (offline1?unit1->cur[line1]:0+offline2?unit2->cur[line2]:0) / COM_RATE_CUR;
         if(value >= 0)
             str = QString::number(value, 'f', 3);
     }
@@ -216,11 +244,13 @@ void CabinetTableWidget::setSumCur(int id1, int line1, int id2, int line2, int r
 void CabinetTableWidget::setSumPow(int id1, int line1, int id2, int line2, int row,  int column)
 {
     QString str = "---";
+    uchar offline1 = mBoxData1->box[id1].offLine;
+    uchar offline2 = mBoxData2->box[id2].offLine;
     //if(mBoxData->box[id].offLine)
     {
         sLoopTgObjData *unit1 = &(mBoxData1->box[id1].loopTgBox);
         sLoopTgObjData *unit2 = &(mBoxData2->box[id2].loopTgBox);
-        double value = (unit1->pow[line1]+unit2->pow[line2]) / COM_RATE_POW;
+        double value = (offline1?unit1->pow[line1]:0+offline2?unit2->pow[line2]:0) / COM_RATE_POW;
         if(value >= 0)
             str = QString::number(value, 'f', 3);
     }
@@ -231,12 +261,14 @@ void CabinetTableWidget::setSumPow(int id1, int line1, int id2, int line2, int r
 void CabinetTableWidget::setSumLoad(int id1, int line1, int id2, int line2, int row,  int column , int load)
 {
     QString str = "---";
+    uchar offline1 = mBoxData1->box[id1].offLine;
+    uchar offline2 = mBoxData2->box[id2].offLine;
     //if(mBoxData->box[id].offLine)
     {
         sLoopTgObjData *unit1 = &(mBoxData1->box[id1].loopTgBox);
         sLoopTgObjData *unit2 = &(mBoxData2->box[id2].loopTgBox);
         if(load){
-            double value = ((unit1->pow[line1]+unit2->pow[line2])*100.0) / load;
+            double value = ((offline1?unit1->pow[line1]:0+offline2?unit2->pow[line2]:0)*100.0) / load;
             if(value >= 0) str = QString::number(value, 'f', 2);
         }
     }
@@ -244,41 +276,47 @@ void CabinetTableWidget::setSumLoad(int id1, int line1, int id2, int line2, int 
 }
 
 //id :第几个插接箱 line ：第几个工业接头
-void CabinetTableWidget::setCur(sLoopTgObjData *unit ,int line, int row, int column)
+void CabinetTableWidget::setCur(sLoopTgObjData *unit ,int line, int row, int column, uchar offline)
 {
     QString str = "---";
     //if(mBoxData->box[id].offLine)
     {
-        double value = unit->cur[line] / COM_RATE_CUR;
+        double value = offline?unit->cur[line]:0 / COM_RATE_CUR;
         if(value >= 0)
             str = QString::number(value, 'f', 3);
     }
     setTableItem(row, column, str);
+    if(offline) setItemColor(row , column , unit->curAlarm[line]);
+    else setItemColor(row , column , 0);
 }
 
 //id :第几条母线 line ：第几个工业接头
-void CabinetTableWidget::setVol(sLoopTgObjData *unit ,int line, int row, int column)
+void CabinetTableWidget::setVol(sLoopTgObjData *unit ,int line, int row, int column , uchar offline)
 {
     QString str = "---";
     //if(mBoxData->box[id].offLine)
     {
-        double value = unit->vol[line] / COM_RATE_VOL;
+        double value = offline?unit->vol[line]:0 / COM_RATE_VOL;
         if(value >= 0)
             str = QString::number(value, 'f', 2);
     }
     setTableItem(row, column, str);
+    if(offline) setItemColor(row , column , unit->volAlarm[line]);
+    else setItemColor(row , column , 0);
 }
 
 //id :第几条母线 line ：第几个工业接头
 void CabinetTableWidget::setSumEle(int id1, int line1, int id2, int line2, int row, int column)
 {
     QString str = "---";
+    uchar offline1 = mBoxData1->box[id1].offLine;
+    uchar offline2 = mBoxData2->box[id2].offLine;
 
     //if(mBoxData->box[id].offLine)
     {
         sLoopTgObjData *unit1 = &(mBoxData1->box[id1].loopTgBox);
         sLoopTgObjData *unit2 = &(mBoxData2->box[id2].loopTgBox);
-        double value = (unit1->ele[line1] + unit2->ele[line2]) / COM_RATE_ELE;
+        double value = (offline1?unit1->ele[line1]:0 + offline2?unit2->ele[line2]:0) / COM_RATE_ELE;
         if(value >= 0)
             str = QString::number(value, 'f', 1);
     }
@@ -307,10 +345,10 @@ void CabinetTableWidget::updateData()
         setName(i, k++); // 设置名称
         //setAlarmStatus(i, k++); //设置告警状态
 
-        setVol(&(mBoxData1->box[id1].loopTgBox) , line1, i, k++);
-        setVol(&(mBoxData2->box[id2].loopTgBox) , line2, i, k++);
-        setCur(&(mBoxData1->box[id1].loopTgBox) , line1, i, k++); // 设置A路电流值
-        setCur(&(mBoxData2->box[id2].loopTgBox) , line2, i, k++); // 设置B路电流值
+        setVol(&(mBoxData1->box[id1].loopTgBox) , line1, i, k++ , mBoxData1->box[id1].offLine);
+        setVol(&(mBoxData2->box[id2].loopTgBox) , line2, i, k++ , mBoxData2->box[id2].offLine);
+        setCur(&(mBoxData1->box[id1].loopTgBox) , line1, i, k++ , mBoxData1->box[id1].offLine); // 设置A路电流值
+        setCur(&(mBoxData2->box[id2].loopTgBox) , line2, i, k++ , mBoxData2->box[id2].offLine); // 设置B路电流值
         setSumCur(id1, line1, id2, line2, i, k++);
         setSumPow(id1, line1, id2, line2, i, k++);
         setSumEle(id1, line1, id2, line2, i, k++);

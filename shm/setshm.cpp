@@ -234,7 +234,7 @@ void SetShm::setLineBoxNum(int index, int num)
     bus->boxNum = num ;
     QString str = QString::number(bus->boxNum,10);
     QString groupStr = QString("Line%1").arg(index+1);
-    sys_configFile_writeParam("boxNum",str,groupStr); // Line1/boxNum
+    sys_configFile_writeParam("boxNum",str,groupStr); //Line1/boxNum
 }
 
 /**
@@ -247,7 +247,7 @@ void SetShm::setCabinetNum(int index, int num)
     shm->cabNum[index] = num ;
     QString str = QString::number(shm->cabNum[index],10);
     QString groupStr = QString("CabCol%1").arg(index+1);
-    cab_configFile_writeParam("CabinetNum",str,groupStr); // Line1/cabinetNum
+    cab_configFile_writeParam("CabinetNum",str,groupStr); //CabCol1/2/cabinetNum
 }
 
 /**
@@ -261,5 +261,25 @@ void SetShm::setCabinetColName(int index, const QString &str)
     char *mm = ba.data();
     strcpy(shm->cabColName[index],mm);
     QString groupStr = QString("CabCol%1").arg(index+1);
-    cab_configFile_writeParam("CabColName",str,groupStr); // Line1/cabinetNum
+    cab_configFile_writeParam("CabColName",str,groupStr); //CabCol1/2/CabColName
+}
+
+/**
+ * @brief SetShm::setCabinetParameters  设置机柜名称
+ * @param index  机柜列编号
+ * @param box    插接箱的地址编号
+ * @param str    机柜名称
+ */
+void SetShm::setCabinetParameters(int index,int box)
+{
+    QString groupStr = QString("CabCol%1_%2").arg(index+1).arg(box+1);
+    cab_configFile_writeParam(tr("CabName_%1").arg(box+1),shm->cabData[index][box].cabName,groupStr); //CabCol1/2/cabinetNum
+    cab_configFile_writeParam(tr("Capacity_%1").arg(box+1),QString::number(shm->cabData[index][box].capacity),groupStr);
+    cab_configFile_writeParam(tr("LineA_No_%1").arg(box+1),QString::number(shm->cabData[index][box].lineA_No),groupStr);
+    cab_configFile_writeParam(tr("LineA_Tapoff_No_%1").arg(box+1),QString::number(shm->cabData[index][box].lineA_Tapoff_No),groupStr);
+    cab_configFile_writeParam(tr("LineA_Tapoff_Line_%1").arg(box+1),QString::number(shm->cabData[index][box].lineA_Tapoff_Line),groupStr);
+
+    cab_configFile_writeParam(tr("LineB_No_%1").arg(box+1),QString::number(shm->cabData[index][box].lineB_No),groupStr);
+    cab_configFile_writeParam(tr("LineB_Tapoff_No_%1").arg(box+1),QString::number(shm->cabData[index][box].lineB_Tapoff_No),groupStr);
+    cab_configFile_writeParam(tr("LineB_Tapoff_Line_%1").arg(box+1),QString::number(shm->cabData[index][box].lineB_Tapoff_Line),groupStr);
 }

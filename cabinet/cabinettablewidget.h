@@ -31,11 +31,12 @@ protected:
     void clearTable();
     bool checkTable();
 
+    void setItemColor(int id, int column, int alarm);
     void setTableItem(int id, int column, const QString &str);
     void setName(int row, int column);
     void setAlarmStatus(int id, int column);
-    void setCur(sLoopTgObjData *unit, int line, int row,  int column);
-    void setVol(sLoopTgObjData *unit, int line, int row,  int column);
+    void setCur(sLoopTgObjData *unit, int line, int row,  int column, uchar offline);
+    void setVol(sLoopTgObjData *unit, int line, int row,  int column, uchar offline);
     void setSumEle(int id1, int line1, int id2, int line2,int row, int column);
     void setSumCur(int id1, int line1, int id2, int line2,int row, int column);
     void setSumPow(int id1, int line1, int id2, int line2, int row, int column);

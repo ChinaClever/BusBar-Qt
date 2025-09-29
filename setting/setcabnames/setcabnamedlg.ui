@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>482</width>
-    <height>491</height>
+    <width>740</width>
+    <height>302</height>
    </rect>
   </property>
   <property name="font">
@@ -24,462 +24,11 @@
   <property name="styleSheet">
    <string notr="true">font: 8pt &quot;Ubuntu&quot;;</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_8">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>B路插接箱地址：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>容量修改：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="5" column="1" colspan="2">
-    <widget class="QComboBox" name="lineA_Tapoff_NoBox">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QComboBox{
-border:2px solid rgb(15,80,232);
-border-radius:15px;
-font: 8pt &quot;Ubuntu&quot;;
-}
-QComboBox::drop-down{
-subcontrol-origin:padding;
-subcontrol-position:top right;
-width:30px;
-border-left-width:1px;
-border-left-color:darkgray;
-border-left-style:solid;
-border-top-right-radius:3px;
-border-bottom-right-radius:3px;
-}
-QComboBox::down-arrow{
-image: url(:/new/prefix1/image/down.png);
-}</string>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>2</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>3</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>4</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>5</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>6</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>7</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>8</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>9</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>10</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>11</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>12</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>13</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>14</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>15</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>16</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>17</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>18</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>19</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="8" column="1" colspan="2">
-    <widget class="QComboBox" name="lineB_Tapoff_NoBox">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QComboBox{
-border:2px solid rgb(15,80,232);
-border-radius:15px;
-font: 8pt &quot;Ubuntu&quot;;
-}
-QComboBox::drop-down{
-subcontrol-origin:padding;
-subcontrol-position:top right;
-width:30px;
-border-left-width:1px;
-border-left-color:darkgray;
-border-left-style:solid;
-border-top-right-radius:3px;
-border-bottom-right-radius:3px;
-}
-QComboBox::down-arrow{
-image: url(:/new/prefix1/image/down.png);
-}</string>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>2</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>3</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>4</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>5</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>6</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>7</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>8</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>9</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>10</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>11</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>12</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>13</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>14</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>15</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>16</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>17</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>18</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>19</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>名称修改：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1" colspan="2">
-    <widget class="QLineEdit" name="capacityEdit">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLineEdit{
-border:2px solid rgb(15,80,232);
-border-radius:15px
-}</string>
-     </property>
-    </widget>
-   </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>A路插接箱输出位：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_9">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>B路插接箱输出位：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="1" colspan="2">
-    <widget class="QComboBox" name="lineA_NoBox">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QComboBox{
-border:2px solid rgb(15,80,232);
-border-radius:15px;
-font: 8pt &quot;Ubuntu&quot;;
-}
-QComboBox QAbstractItemView {
-margin: 2px 0;
-}
-QComboBox::drop-down{
-subcontrol-origin:padding;
-subcontrol-position:top right;
-width:30px;
-border-left-width:1px;
-border-left-color:darkgray;
-border-left-style:solid;
-border-top-right-radius:3px;
-border-bottom-right-radius:3px;
-}
-QComboBox::down-arrow{
-image: url(:/new/prefix1/image/down.png);
-}</string>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <property name="maxVisibleItems">
-      <number>4</number>
-     </property>
-     <item>
-      <property name="text">
-       <string>1</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>2</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>3</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>4</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="7" column="0">
-    <widget class="QLabel" name="label_7">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>B路母线编号：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0" colspan="2">
-    <widget class="QPushButton" name="saveBtn">
-     <property name="maximumSize">
-      <size>
-       <width>120</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton{
-border:2px solid rgb(15,80,232);
-border-radius:15px
-}</string>
-     </property>
-     <property name="text">
-      <string>保存</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
     <widget class="QLabel" name="label">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -500,38 +49,241 @@ border-radius:15px
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>A路插接箱地址：</string>
-     </property>
-    </widget>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>名称修改：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="nameEdit">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLineEdit{
+border:2px solid rgb(15,80,232);
+border-radius:15px
+}</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>容量修改：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDoubleSpinBox" name="capacitySpinBox">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::ClickFocus</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QDoubleSpinBox::up-button
+{
+	width: 35px;
+	height: 25px;
+	border-left-width:1px;
+	border-left-color:darkgray;
+	border-left-style:solid;
+	border-top-right-radius:3px;
+	image: url(:/new/prefix1/image/up.png);
+	font-size:7px;
+}
+
+QDoubleSpinBox::down-button
+{
+	width: 35px;
+	height: 25px;
+	border-left-width:1px;
+	border-left-color:darkgray;
+	border-left-style:solid;	
+	border-bottom-right-radius:3px;
+	image: url(:/new/prefix1/image/down.png);
+}
+QDoubleSpinBox{
+	border:2px solid rgb(15,80,232);
+	border-radius:15px;
+}</string>
+       </property>
+       <property name="decimals">
+        <number>3</number>
+       </property>
+       <property name="singleStep">
+        <double>0.001000000000000</double>
+       </property>
+       <property name="value">
+        <double>5.000000000000000</double>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
-   <item row="6" column="1" colspan="2">
-    <widget class="QComboBox" name="lineA_Tapoff_LineBox">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QComboBox{
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>A路母线编号：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="lineA_NoBox">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox{
+border:2px solid rgb(15,80,232);
+border-radius:15px;
+font: 8pt &quot;Ubuntu&quot;;
+}
+QComboBox QAbstractItemView {
+margin: 2px 0;
+}
+QComboBox::drop-down{
+subcontrol-origin:padding;
+subcontrol-position:top right;
+width:30px;
+border-left-width:1px;
+border-left-color:darkgray;
+border-left-style:solid;
+border-top-right-radius:3px;
+border-bottom-right-radius:3px;
+}
+QComboBox::down-arrow{
+image: url(:/new/prefix1/image/down.png);
+}</string>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <property name="maxVisibleItems">
+        <number>4</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>4</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>B路母线编号：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="lineB_NoBox">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox{
 border:2px solid rgb(15,80,232);
 border-radius:15px;
 font: 8pt &quot;Ubuntu&quot;;
@@ -549,46 +301,68 @@ border-bottom-right-radius:3px;
 QComboBox::down-arrow{
 image: url(:/new/prefix1/image/down.png);
 }</string>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>1</string>
-      </property>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <item>
+        <property name="text">
+         <string>1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>4</string>
+        </property>
+       </item>
+      </widget>
      </item>
-     <item>
-      <property name="text">
-       <string>2</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>3</string>
-      </property>
-     </item>
-    </widget>
+    </layout>
    </item>
-   <item row="7" column="1" colspan="2">
-    <widget class="QComboBox" name="lineB_NoBox">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QComboBox{
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>A路插接箱地址：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="lineA_Tapoff_NoBox">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox{
 border:2px solid rgb(15,80,232);
 border-radius:15px;
 font: 8pt &quot;Ubuntu&quot;;
@@ -606,64 +380,353 @@ border-bottom-right-radius:3px;
 QComboBox::down-arrow{
 image: url(:/new/prefix1/image/down.png);
 }</string>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>1</string>
-      </property>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <item>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>5</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>7</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>8</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>9</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>11</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>12</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>13</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>14</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>15</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>16</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>17</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>18</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>19</string>
+        </property>
+       </item>
+      </widget>
      </item>
      <item>
-      <property name="text">
-       <string>2</string>
-      </property>
+      <widget class="QLabel" name="label_8">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>B路插接箱地址：</string>
+       </property>
+      </widget>
      </item>
      <item>
-      <property name="text">
-       <string>3</string>
-      </property>
+      <widget class="QComboBox" name="lineB_Tapoff_NoBox">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox{
+border:2px solid rgb(15,80,232);
+border-radius:15px;
+font: 8pt &quot;Ubuntu&quot;;
+}
+QComboBox::drop-down{
+subcontrol-origin:padding;
+subcontrol-position:top right;
+width:30px;
+border-left-width:1px;
+border-left-color:darkgray;
+border-left-style:solid;
+border-top-right-radius:3px;
+border-bottom-right-radius:3px;
+}
+QComboBox::down-arrow{
+image: url(:/new/prefix1/image/down.png);
+}</string>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <item>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>4</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>5</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>7</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>8</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>9</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>11</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>12</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>13</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>14</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>15</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>16</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>17</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>18</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>19</string>
+        </property>
+       </item>
+      </widget>
      </item>
-     <item>
-      <property name="text">
-       <string>4</string>
-      </property>
-     </item>
-    </widget>
+    </layout>
    </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_4">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>A路母线编号：</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1" colspan="2">
-    <widget class="QComboBox" name="lineB_Tapoff_LineBox">
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::NoFocus</enum>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QComboBox{
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>A路插接箱输出位：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="lineA_Tapoff_LineBox">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox{
+border:2px solid rgb(15,80,232);
+border-radius:15px;
+font: 8pt &quot;Ubuntu&quot;;
+}
+QComboBox::drop-down{
+subcontrol-origin:padding;
+subcontrol-position:top right;
+width:30px;
+border-left-width:1px;
+border-left-color:darkgray;
+border-left-style:solid;
+border-top-right-radius:3px;
+border-bottom-right-radius:3px;
+}
+QComboBox::down-arrow{
+image: url(:/new/prefix1/image/down.png);
+}</string>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <item>
+        <property name="text">
+         <string>1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_9">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>B路插接箱输出位：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="lineB_Tapoff_LineBox">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>45</height>
+        </size>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QComboBox{
 border:3px solid rgb(15,80,232);
 border-radius:15px;
 font: 8pt &quot;Ubuntu&quot;;
@@ -681,61 +744,70 @@ border-bottom-right-radius:3px;
 QComboBox::down-arrow{
 image: url(:/new/prefix1/image/down.png);
 }</string>
-     </property>
-     <property name="editable">
-      <bool>false</bool>
-     </property>
-     <item>
-      <property name="text">
-       <string>1</string>
-      </property>
+       </property>
+       <property name="editable">
+        <bool>false</bool>
+       </property>
+       <item>
+        <property name="text">
+         <string>1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>3</string>
+        </property>
+       </item>
+      </widget>
      </item>
-     <item>
-      <property name="text">
-       <string>2</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>3</string>
-      </property>
-     </item>
-    </widget>
+    </layout>
    </item>
-   <item row="2" column="1" colspan="2">
-    <widget class="QLineEdit" name="nameEdit">
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLineEdit{
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QPushButton" name="saveBtn">
+       <property name="maximumSize">
+        <size>
+         <width>120</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
 border:2px solid rgb(15,80,232);
 border-radius:15px
 }</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="2">
-    <widget class="QPushButton" name="cancelBtn">
-     <property name="maximumSize">
-      <size>
-       <width>120</width>
-       <height>30</height>
-      </size>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton{
+       </property>
+       <property name="text">
+        <string>保存</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelBtn">
+       <property name="maximumSize">
+        <size>
+         <width>120</width>
+         <height>30</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton{
 border:2px solid rgb(15,80,232);
 border-radius:15px
 }</string>
-     </property>
-     <property name="text">
-      <string>取消</string>
-     </property>
-    </widget>
+       </property>
+       <property name="text">
+        <string>取消</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

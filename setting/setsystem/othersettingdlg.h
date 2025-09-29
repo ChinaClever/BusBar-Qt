@@ -24,10 +24,8 @@ private slots:
     void on_timeSetBtn_clicked();
     void on_pwdSetBtn_clicked();
     void on_languageBtn_clicked();
-
     void on_saveBtn_clicked();
-
-    void on_alramBtn_clicked();
+    void on_importBtn_clicked();
 
 private:
     Ui::OtherSettingDlg *ui;

@@ -224,7 +224,7 @@ bool getCabNameStr(int index , int id , QString &str)
 {
     bool ret = cab_configFile_open();  //打开配置文件
     if(ret){
-        QString strGroup = QString("CabCol%1").arg(index+1);
+        QString strGroup = QString("CabCol%1_%2").arg(index+1).arg(id+1);
         ret = cab_configFile_contains(QString("CabName_%1").arg(id+1),strGroup);
         if(ret) str = cab_configFile_readStr(QString("CabName_%1").arg(id+1),strGroup);
         cab_configFile_close();
@@ -244,7 +244,7 @@ QVector<int> getCabParameters(int index, int id)
     QVector<int> value(7 , -1);
     bool ret = cab_configFile_open();  //打开配置文件
     if(ret){
-        QString strGroup = QString("CabCol%1").arg(index+1);
+        QString strGroup = QString("CabCol%1_%2").arg(index+1).arg(id+1);
         ret = cab_configFile_contains(QString("Capacity_%1").arg(id+1),strGroup);
         if(ret) value[0] = cab_configFile_readInt(QString("Capacity_%1").arg(id+1),strGroup);
         ret = cab_configFile_contains(QString("LineA_No_%1").arg(id+1),strGroup);

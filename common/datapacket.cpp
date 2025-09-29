@@ -14,9 +14,9 @@
  * 获取共享内存
  */
 int gLanguage = 0;
-uchar gStartAlarm = 1;
-uchar gOpenAlarm = 0;
-uchar gCloseAlarm = 0;
+//uchar gStartAlarm = 1;
+//uchar gOpenAlarm = 0;
+//uchar gCloseAlarm = 0;
 int gUser = 0;//默认发送
 QString gSendIP = "192.168.1.41";
 int gSendport = 6000;

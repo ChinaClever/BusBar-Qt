@@ -275,7 +275,7 @@ void DpAlarmSlave::unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg,QSt
     }
 }
 
-void DpAlarmSlave::unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym)
+void DpAlarmSlave::unitAlarmW(int addr ,sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym)
 {
     for(int i=0; i<LINE_NUM_MAX; ++i)
     {
@@ -340,8 +340,28 @@ void DpAlarmSlave::unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, QSt
     }
 }
 
+//need to test??????
+void DpAlarmSlave::getCabColNameAndCabName(int line_no , int line_tapoff_no ,int line_tapoff_line , QString & cabCalName , QString & cabname)
+{
 
-void DpAlarmSlave::boxAlarm(sBoxData &box)
+    cabCalName = QString(shm->cabColName[line_no-1]);
+    int cabnum = shm->cabNum[line_no-1];
+    for(int m = 0 ; m < cabnum ; m++){
+        int line_no_id_A = shm->cabData[line_no-1][m].lineA_No;
+        int line_tapoff_no_id_A = shm->cabData[line_no-1][m].lineA_Tapoff_No;
+        int line_tapoff_line_id_A = shm->cabData[line_no-1][m].lineA_Tapoff_Line;
+
+        int line_no_id_B = shm->cabData[line_no-1][m].lineB_No;
+        int line_tapoff_no_id_B = shm->cabData[line_no-1][m].lineB_Tapoff_No;
+        int line_tapoff_line_id_B = shm->cabData[line_no-1][m].lineB_Tapoff_Line;
+        if( (line_no_id_A == line_no && line_tapoff_no_id_A == line_tapoff_no && line_tapoff_line_id_A == line_tapoff_line)
+            ||(line_no_id_B == line_no && line_tapoff_no_id_B == line_tapoff_no && line_tapoff_line_id_B == line_tapoff_line)){
+            cabname = QString(shm->cabData[line_no-1][m].cabName);
+        }
+    }
+}
+
+void DpAlarmSlave::boxAlarm(sBoxData &box , int id)
 {
     if(box.offLine) {
         if(box.boxAlarm){
@@ -350,7 +370,7 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
             if(box.boxCurAlarm) {
                 QString msg = tr("插接箱：%1，").arg(box.boxName);
                 QString msgEn = tr("Tap-off box：%1，").arg(box.boxName);
-                unitAlarmW(box, typeStr, msg, typeStrEn, msgEn, box.data.cur, COM_RATE_CUR, "A");
+                unitAlarmW(id , box, typeStr, msg, typeStrEn, msgEn, box.data.cur, COM_RATE_CUR, "A");
             }
 
             typeStr = tr("回路电压");
@@ -366,7 +386,7 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
             if(box.boxPowerAlarm) {
                 QString msg = tr("插接箱：%1，").arg(box.boxName);
                 QString msgEn = tr("Tap-off box：%1，").arg(box.boxName);
-                unitAlarmW(box, typeStr, msg, typeStrEn, msgEn, box.data.pow, COM_RATE_POW , "kW");
+                unitAlarmW(id , box, typeStr, msg, typeStrEn, msgEn, box.data.pow, COM_RATE_POW , "kW");
             }
 
             typeStr = tr("插接箱温度");
@@ -733,7 +753,7 @@ void DpAlarmSlave::busAlarm(int id)
 
 
     for(int i=1; i<=bus->boxNum; ++i) {
-        boxAlarm(bus->box[i]);
+        boxAlarm(bus->box[i] , i);
     }
 
 }
