@@ -6,8 +6,8 @@ BeepThread::BeepThread(QObject *parent) : QThread(parent)
 {
     isRun = false ;
 //    gpio_init();
-    initGpio(131);
-    initGpio(132);
+//    initGpio(131);
+//    initGpio(132);
 #if ARM_LINUX == 2 //第一次运行时要执行
     system("echo 129 > /sys/class/gpio/export");
     system("echo \"out\" > /sys/class/gpio/gpio129/direction");

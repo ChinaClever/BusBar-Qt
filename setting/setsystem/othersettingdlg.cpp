@@ -48,8 +48,8 @@ void OtherSettingDlg::initLanguage()
         ui->label_2->setText("推送数据端口号");
         ui->useBox->setText("是否启用推送数据");
         ui->saveBtn->setText("保存");
-        if(gStartAlarm) ui->alramBtn->setText(tr("关闭告警器"));
-        else ui->alramBtn->setText(tr("启用告警器"));
+//        if(gStartAlarm) ui->alramBtn->setText(tr("关闭告警器"));
+//        else ui->alramBtn->setText(tr("启用告警器"));
     }else{
         ui->pwdSetBtn->setText("Password modifiction");
         ui->timeSetBtn->setText("Time modification");
@@ -60,9 +60,10 @@ void OtherSettingDlg::initLanguage()
         ui->label_2->setText("Port number of \npushing data");
         ui->useBox->setText("Is it enabled pushing data");
         ui->saveBtn->setText("Save");
-        if(gStartAlarm) ui->alramBtn->setText(tr("Turn off the buzzer"));
-        else ui->alramBtn->setText(tr("Turn on the buzzer"));
+/*        if(gStartAlarm) ui->alramBtn->setText(tr("Turn off the buzzer"));
+        else ui->alramBtn->setText(tr("Turn on the buzzer"));*/
     }
+    ui->alramBtn->hide();
 }
 
 static bool update_fun(const QString &str)
@@ -228,16 +229,16 @@ void OtherSettingDlg::on_saveBtn_clicked()
 
 void OtherSettingDlg::on_alramBtn_clicked()
 {
-    if(gStartAlarm){
-        gStartAlarm = 0;
-        if(gLanguage == 0) ui->alramBtn->setText(tr("启用告警器"));
-        else ui->alramBtn->setText(tr("Turn on the buzzer"));
-        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
-    }else{
-        gStartAlarm = 1;
-        if(gLanguage == 0) ui->alramBtn->setText(tr("关闭告警器"));
-        else ui->alramBtn->setText(tr("Turn off the buzzer"));
-        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
-    }
+//    if(gStartAlarm){
+//        gStartAlarm = 0;
+//        if(gLanguage == 0) ui->alramBtn->setText(tr("启用告警器"));
+//        else ui->alramBtn->setText(tr("Turn on the buzzer"));
+//        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
+//    }else{
+//        gStartAlarm = 1;
+//        if(gLanguage == 0) ui->alramBtn->setText(tr("关闭告警器"));
+//        else ui->alramBtn->setText(tr("Turn off the buzzer"));
+//        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
+//    }
 }
 

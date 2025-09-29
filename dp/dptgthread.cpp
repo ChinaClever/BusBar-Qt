@@ -76,7 +76,7 @@ void DpTgThread::tgObj(sObjData *obj, sTgObjData *tg)
 }
 
 
-void DpTgThread::lineTgObj(sObjData *obj, sLineTgObjData *tg)
+void DpTgThread::lineTgObj(sObjData *obj, sLineTgObjData *tg , int addr)
 {
     memset(tg, 0, sizeof(sLineTgObjData));
     for(int i=0; i<3; ++i)
@@ -89,6 +89,16 @@ void DpTgThread::lineTgObj(sObjData *obj, sLineTgObjData *tg)
           //  tg->apPow[i] += obj->apPow[i+j*3];
               tg->apPow[i] += obj->cur.value[i+j*3] * obj->vol.value[i+j*3]/10;
               tg->reactivePower[i] += obj->reactivePower[i+j*3];
+        }
+        if(addr != 0 && obj->lineNum == 3){
+            for(int i = 0 ; i < 3 ;i++)
+                obj->pl[i] = tg->cur[i]/(obj->cur.max[i]);
+        }else if(addr != 0 && obj->lineNum == 6){
+            for(int i = 0 ; i < 3 ;i++)
+                obj->pl[i] = tg->cur[i]/(obj->cur.max[i]+obj->cur.max[i+3]);
+        }else if(addr != 0 && obj->lineNum == 9){
+            for(int i = 0 ; i < 3 ;i++)
+                obj->pl[i] = tg->cur[i]/(obj->cur.max[i]+obj->cur.max[i+3]+obj->cur.max[i+6]);
         }
     }
 
@@ -135,7 +145,7 @@ void DpTgThread::dcLineTgObj(sObjData *obj, sLineTgObjData *tg, int line, int le
     }
 }
 
-void DpTgThread::tgBox(sBoxData *box)
+void DpTgThread::tgBox(sBoxData *box , int addr)
 {
     sObjData *loop = &(box->data);
     sTgObjData *tgBox = &(box->tgBox);
@@ -144,7 +154,7 @@ void DpTgThread::tgBox(sBoxData *box)
     if(box->offLine) {
         tgObj(loop, tgBox);
         if(box->dc) {
-            lineTgObj(loop, linTgBox);
+            lineTgObj(loop, linTgBox , addr);
         } else  {
             dcLineTgObj(loop, linTgBox, box->rate.svalue, box->loopNum);
         }
@@ -160,7 +170,7 @@ void DpTgThread::tgBox(sBoxData *box)
 void DpTgThread::tgBus(sBusData *bus)
 {
     for(int i=0; i<=bus->boxNum; ++i) { // 插接箱统计
-        tgBox(&(bus->box[i]));
+        tgBox(&(bus->box[i]) , i);
     }
 }
 

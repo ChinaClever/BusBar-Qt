@@ -316,11 +316,12 @@ void RtuThread::thdDataV3(Rtu_recv *pkt)
     sBoxData *box = &(mBusData->box[pkt->addr-1]);
 
     box->lps = pkt->lps;
-    for(int i=0; i<3; ++i) {
-        box->data.pl[i] = pkt->pl[i];
-    }
+
 
     if(pkt->addr == 1) {
+        for(int i=0; i<3; ++i) {
+            box->data.pl[i] = pkt->pl[i];
+        }
         for(int line = 0 ; line < RTU_LINE_NUM ; ++line){
             box->data.volThd[line] = pkt->volThd[line][0];
             box->data.curThd[line] = pkt->curThd[line][0];

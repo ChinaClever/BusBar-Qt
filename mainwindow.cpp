@@ -203,12 +203,12 @@ void MainWindow::initLanguage()
     }else{
         sys_configFile_write("language" , QString::number(gLanguage));
     }
-    ret = sys_configFile_contains("startalarm");
-    if(ret){
-        gStartAlarm = sys_configFile_readInt("startalarm");
-    }else{
-        sys_configFile_write("startalarm" , QString::number(gStartAlarm));
-    }
+//    ret = sys_configFile_contains("startalarm");
+//    if(ret){
+//        gStartAlarm = sys_configFile_readInt("startalarm");
+//    }else{
+//        sys_configFile_write("startalarm" , QString::number(gStartAlarm));
+//    }
     sys_configFile_close();
 }
 
