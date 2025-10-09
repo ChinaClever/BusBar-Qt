@@ -86,19 +86,28 @@ void DpTgThread::lineTgObj(sObjData *obj, sLineTgObjData *tg , int addr)
             tg->cur[i] += obj->cur.value[i+j*3];
             tg->pow[i] += obj->pow.value[i+j*3];
             tg->ele[i] += obj->ele[i+j*3];
-          //  tg->apPow[i] += obj->apPow[i+j*3];
-              tg->apPow[i] += obj->cur.value[i+j*3] * obj->vol.value[i+j*3]/10;
-              tg->reactivePower[i] += obj->reactivePower[i+j*3];
+            //  tg->apPow[i] += obj->apPow[i+j*3];
+            tg->apPow[i] += obj->cur.value[i+j*3] * obj->vol.value[i+j*3]/10;
+            tg->reactivePower[i] += obj->reactivePower[i+j*3];
         }
-        if(addr != 0 && obj->lineNum == 3){
-            for(int i = 0 ; i < 3 ;i++)
-                obj->pl[i] = tg->cur[i]/(obj->cur.max[i]);
-        }else if(addr != 0 && obj->lineNum == 6){
-            for(int i = 0 ; i < 3 ;i++)
-                obj->pl[i] = tg->cur[i]/(obj->cur.max[i]+obj->cur.max[i+3]);
-        }else if(addr != 0 && obj->lineNum == 9){
-            for(int i = 0 ; i < 3 ;i++)
-                obj->pl[i] = tg->cur[i]/(obj->cur.max[i]+obj->cur.max[i+3]+obj->cur.max[i+6]);
+    }
+    if(addr != 0 && obj->lineNum == 3){
+        for(int i = 0 ; i < 3 ;i++){
+            if(obj->cur.max[i] > 0)
+                obj->pl[i] = tg->cur[i]*100.0/(obj->cur.max[i]);
+            else obj->pl[i] = 0;
+        }
+    }else if(addr != 0 && obj->lineNum == 6){
+        for(int i = 0 ; i < 3 ;i++){
+            int load = obj->cur.max[i]+obj->cur.max[i+3];
+            if( load > 0 ) obj->pl[i] = tg->cur[i]*100.0/load;
+            else obj->pl[i] = 0;
+        }
+    }else if(addr != 0 && obj->lineNum == 9){
+        for(int i = 0 ; i < 3 ;i++){
+            int load = obj->cur.max[i]+obj->cur.max[i+3]+obj->cur.max[i+6];
+            if( load > 0 ) obj->pl[i] = tg->cur[i]*100.0/load;
+            else obj->pl[i] =0;
         }
     }
 
