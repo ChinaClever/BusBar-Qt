@@ -16,10 +16,10 @@ protected:
     void run();
     void unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataUnit &unit, double rate, const QString &sym);
     void unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym);
-    void unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataUnit &unit, double rate, const QString &sym);
-    void unitAlarmW(int addr, sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym);
+    void unitAlarmVA(int bus, int addr, sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataUnit &unit, double rate, const QString &sym);
+    void unitAlarmW(int bus, int addr, sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym);
 
-    void boxAlarm(sBoxData &box, int id);
+    void boxAlarm(int bus, sBoxData &box, int id);
     void busAlarm(int id);
     void checkAlarm();
 
