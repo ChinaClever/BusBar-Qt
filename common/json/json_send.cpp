@@ -179,10 +179,13 @@ void Json_Send::freeMemoryCheck()
     int ret = freeMemory();
     if((ret >0 && ret<100) && rst==0) {
 
-        ret = freeMemory(); rst = 1;
+        rst = 1;cnt = 0;
         //if(ret>0 && ret<100) resetProc(mProcs->core, "/home/root/busbar");
     } else if((ret>0 && ret<80) && rst) system("reboot");
-    else if(ret > 100) rst = 0;
+    else if(ret > 100){
+        rst = 0;
+        cnt = 0;
+    }
 }
 
 // 方法1：通过调用 `free -m` 命令获取空闲内存
@@ -195,7 +198,11 @@ int Json_Send::freeMemory()
         QStringList memoryInfo = lines[1].split(" ", QString::SkipEmptyParts); // 分割第二行（Mem行）
         if (memoryInfo.size() > 3) {
             int freeMemory = memoryInfo[3].toInt(); // 获取空闲内存（MB）
-            if(freeMemory >0 && freeMemory<100) system("echo 3 > /proc/sys/vm/drop_caches");
+            static uint cnt = 0;
+            if((++cnt) % 600 && freeMemory >0 && freeMemory<100){
+                cnt = 0;
+                system("echo 3 > /proc/sys/vm/drop_caches");
+            }
             return freeMemory;
         }
     }
@@ -207,24 +214,25 @@ int Json_Send::freeMemory()
 QString Json_Send::executeCommand(const QString &cmd)
 {
     FILE* pipe = popen(cmd.toStdString().c_str(), "r");
-    if (!pipe)  return NULL;
+    if (!pipe)  return QString();
 
     char buffer[4096];
-    char* result = NULL;
-    size_t resultSize = 0;
-    size_t bufferSize = sizeof(buffer);
+    QString result;
+    //size_t resultSize = 0;
+    //size_t bufferSize = sizeof(buffer);
 
-    while (fgets(buffer, bufferSize, pipe) != NULL) {
-        size_t len = strlen(buffer);
-        char* temp = (char*)realloc(result, resultSize + len + 1);
-        if (!temp) { free(result); pclose(pipe); return NULL; }
-        result = temp; strcpy(result + resultSize, buffer);
-        resultSize += len;
+    while (fgets(buffer, sizeof(buffer), pipe) != NULL) {
+        //size_t len = strlen(buffer);
+        //char* temp = (char*)realloc(result, resultSize + len + 1);
+        //if (!temp) { free(result); pclose(pipe); return NULL; }
+//        result = temp; strcpy(result + resultSize, buffer);
+//        resultSize += len;
+        result += QString::fromLocal8Bit(buffer);
     }
 
-    QString res = result;
-    pclose(pipe); free(result);
-    return res;
+    //QString res = result;
+    pclose(pipe);// free(result);
+    return result;
 }
 
 void Json_Send::run()
