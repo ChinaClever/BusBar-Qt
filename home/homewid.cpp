@@ -9,7 +9,7 @@ HomeWid::HomeWid(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    isRun = true;
+    isRun = false;
     initFun();
     initWidget();
 }

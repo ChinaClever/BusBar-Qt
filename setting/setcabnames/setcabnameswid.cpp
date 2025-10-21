@@ -65,6 +65,7 @@ void SetCabNamesWid::initTableWidget()
     ui->tableWidget->setHorizontalHeaderLabels(horHead);
 
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);  //设置不可编辑
     for(int i = 0 ; i < horHead.size() ; i++) ui->tableWidget->setColumnWidth(i,40); //设置宽度

@@ -61,19 +61,19 @@ typedef struct _sLineTgObjData {
     uint reactivePower[3]; // 无功功率
 }sLineTgObjData;
 
-typedef struct _sLoopTgObjData {
-    ushort vol[3]; // 电压
-    uint cur[3];  // 电流
+//typedef struct _sLoopTgObjData {
+//    ushort vol[3]; // 电压
+//    uint cur[3];  // 电流
 
-    uint pow[3]; // 功率
-    uint ele[3]; // 电能
-    ushort pf[3]; // 功率因数
-    uint apPow[3]; // 视在功率
-    uint reactivePower[3]; // 无功功率
-    uchar volAlarm[3];
-    uchar curAlarm[3];
-    uchar powAlarm[3];
-}sLoopTgObjData;
+//    uint pow[3]; // 功率
+//    uint ele[3]; // 电能
+//    ushort pf[3]; // 功率因数
+//    uint apPow[3]; // 视在功率
+//    uint reactivePower[3]; // 无功功率
+//    uchar volAlarm[3];
+//    uchar curAlarm[3];
+//    uchar powAlarm[3];
+//}sLoopTgObjData;
 
 /**
  * 数据单元：包括当前值，阈值，临界值，告警状态等
@@ -195,7 +195,7 @@ typedef struct _sBoxData {
 
     sTgObjData tgBox; // 插接箱统计信息
     sLineTgObjData lineTgBox;
-    sLoopTgObjData loopTgBox;
+//    sLoopTgObjData loopTgBox;
     char boxAlarm, boxVolAlarm, boxCurAlarm, boxEnvAlarm , boxPowerAlarm , boxOffLineAlarm; // 插接箱告警
     char boxStatus; // 插接箱状态
     char boxSpec; //  0 表示 SI  1 表示 IP

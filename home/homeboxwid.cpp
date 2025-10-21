@@ -12,7 +12,7 @@ HomeBoxWid::HomeBoxWid(QWidget *parent) :
     initWid();
     mBoxNum = mBusID = 0;
 
-    isRun = true;
+    isRun = false;
     timer = new QTimer(this);
     timer->start(2000 + rand()%500); //防止所有对象同时申请刷新
     mCount = 0;

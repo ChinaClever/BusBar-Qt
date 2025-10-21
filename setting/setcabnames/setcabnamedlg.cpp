@@ -72,24 +72,25 @@ void SetCabNameDlg::init(int bus, int box , SetShm *setShm)
     this->mSetShm = setShm;
     mBusId = bus;
     mBox = box;
-    QString str = QString("第 %1 行数据：\n机柜名称 %2\n 电力容量%3\nA路母线编号%4\nA路插接箱地址%5\nA路插接箱输出位%6\nB路母线编号%7\nB路插接箱地址%8\nB路插接箱输出位%9\n")
-                      .arg(box + 1)
-                      .arg(get_share_mem()->cabData[bus][box].cabName)
-                      .arg(get_share_mem()->cabData[bus][box].capacity)
-                      .arg(get_share_mem()->cabData[bus][box].lineA_No)
-                      .arg(get_share_mem()->cabData[bus][box].lineA_Tapoff_No)
-                      .arg(get_share_mem()->cabData[bus][box].lineA_Tapoff_Line)
-                      .arg(get_share_mem()->cabData[bus][box].lineB_No)
-                      .arg(get_share_mem()->cabData[bus][box].lineB_Tapoff_No)
-                      .arg(get_share_mem()->cabData[bus][box].lineB_Tapoff_Line);
+//    QString str = QString("第 %1 行数据：\n机柜名称 %2\n 电力容量%3\nA路母线编号%4\nA路插接箱地址%5\nA路插接箱输出位%6\nB路母线编号%7\nB路插接箱地址%8\nB路插接箱输出位%9\n")
+//                      .arg(box + 1)
+//                      .arg(get_share_mem()->cabData[bus][box].cabName)
+//                      .arg(get_share_mem()->cabData[bus][box].capacity)
+//                      .arg(get_share_mem()->cabData[bus][box].lineA_No)
+//                      .arg(get_share_mem()->cabData[bus][box].lineA_Tapoff_No)
+//                      .arg(get_share_mem()->cabData[bus][box].lineA_Tapoff_Line)
+//                      .arg(get_share_mem()->cabData[bus][box].lineB_No)
+//                      .arg(get_share_mem()->cabData[bus][box].lineB_Tapoff_No)
+//                      .arg(get_share_mem()->cabData[bus][box].lineB_Tapoff_Line);
 
+//    qDebug()<< " str "<<str;
     ui->nameEdit->setText(get_share_mem()->cabData[bus][box].cabName);
     ui->capacitySpinBox->setValue(get_share_mem()->cabData[bus][box].capacity/COM_RATE_POW);
     ui->lineA_NoBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineA_No-1);
     ui->lineA_Tapoff_NoBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineA_Tapoff_No-2);
     ui->lineA_Tapoff_LineBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineA_Tapoff_Line-1);
     ui->lineB_NoBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineB_No-1);
-    ui->lineA_Tapoff_NoBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineB_Tapoff_No-2);
+    ui->lineB_Tapoff_NoBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineB_Tapoff_No-2);
     ui->lineB_Tapoff_LineBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineB_Tapoff_Line-1);
 }
 

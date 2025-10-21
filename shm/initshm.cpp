@@ -162,7 +162,7 @@ void InitShm::initCabParameters()
             if(-1 == value[5] || value[5] < 1 || value[5] > 3) shm->cabData[i][j].lineA_Tapoff_Line = j%3 + 1;
             else shm->cabData[i][j].lineA_Tapoff_Line = value[5];
             if(-1 == value[6] || value[6] < 1 || value[6] > 3) shm->cabData[i][j].lineB_Tapoff_Line = j%3 + 1;
-            else shm->cabData[i][j].lineA_Tapoff_Line = value[6];
+            else shm->cabData[i][j].lineB_Tapoff_Line = value[6];
         }
     }
 }

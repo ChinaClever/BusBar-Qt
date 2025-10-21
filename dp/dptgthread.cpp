@@ -100,45 +100,45 @@ void DpTgThread::lineTgObj(sObjData *obj, sLineTgObjData *tg)
     }
 }
 
-void DpTgThread::loopTgObj(int loop , int phase , sObjData *obj, sLoopTgObjData *tg)
-{
-    memset(tg, 0, sizeof(sLoopTgObjData));
-    if(loop == 3 && phase == 0){
-        for(int i=0; i<3; ++i){
-            tg->vol[i] = obj->vol.value[i];
-            tg->volAlarm[i] = obj->vol.alarm[i];
-            tg->curAlarm[i] = obj->cur.alarm[i];
-            tg->powAlarm[i] = obj->pow.alarm[i];
-            tg->cur[i] = obj->cur.value[i];
-            tg->pow[i] = obj->pow.value[i];
-            tg->ele[i] = obj->ele[i];
-            tg->apPow[i] = obj->cur.value[i] * obj->vol.value[i]/10;
-            tg->reactivePower[i] = obj->reactivePower[i];
-        }
-    }else{
-        for(int i=0; i<3; ++i)
-        {
-            tg->vol[i] = obj->vol.value[i];
-            for(int j=0; j<3; ++j) {
-                  tg->cur[i] += obj->cur.value[i*3+j];
-                  tg->pow[i] += obj->pow.value[i*3+j];
-                  tg->ele[i] += obj->ele[i*3+j];
-                  tg->apPow[i] += obj->cur.value[i*3+j] * obj->vol.value[i*3+j]/10;
-                  tg->reactivePower[i] += obj->reactivePower[i*3+j];
-                  tg->volAlarm[i] |= obj->vol.alarm[i*3+j];
-                  tg->curAlarm[i] |= obj->cur.alarm[i*3+j];
-                  tg->powAlarm[i] |= obj->pow.alarm[i*3+j];
-            }
-        }
-    }
+//void DpTgThread::loopTgObj(int loop , int phase , sObjData *obj, sLoopTgObjData *tg)
+//{
+//    memset(tg, 0, sizeof(sLoopTgObjData));
+//    if(loop == 3 && phase == 0){
+//        for(int i=0; i<3; ++i){
+//            tg->vol[i] = obj->vol.value[i];
+//            tg->volAlarm[i] = obj->vol.alarm[i];
+//            tg->curAlarm[i] = obj->cur.alarm[i];
+//            tg->powAlarm[i] = obj->pow.alarm[i];
+//            tg->cur[i] = obj->cur.value[i];
+//            tg->pow[i] = obj->pow.value[i];
+//            tg->ele[i] = obj->ele[i];
+//            tg->apPow[i] = obj->cur.value[i] * obj->vol.value[i]/10;
+//            tg->reactivePower[i] = obj->reactivePower[i];
+//        }
+//    }else{
+//        for(int i=0; i<3; ++i)
+//        {
+//            tg->vol[i] = obj->vol.value[i];
+//            for(int j=0; j<3; ++j) {
+//                  tg->cur[i] += obj->cur.value[i*3+j];
+//                  tg->pow[i] += obj->pow.value[i*3+j];
+//                  tg->ele[i] += obj->ele[i*3+j];
+//                  tg->apPow[i] += obj->cur.value[i*3+j] * obj->vol.value[i*3+j]/10;
+//                  tg->reactivePower[i] += obj->reactivePower[i*3+j];
+//                  tg->volAlarm[i] |= obj->vol.alarm[i*3+j];
+//                  tg->curAlarm[i] |= obj->cur.alarm[i*3+j];
+//                  tg->powAlarm[i] |= obj->pow.alarm[i*3+j];
+//            }
+//        }
+//    }
 
-    for(int i=0; i<3; ++i) {
-        if(tg->apPow[i] > 0) tg->pf[i] = (tg->pow[i] * 100.0 / tg->apPow[i]);
-        else tg->pf[i] = 0;
-        if(tg->pf[i]>99) tg->pf[i] = 99;
-        if(tg->pow[i] > tg->apPow[i]) tg->pow[i] = tg->apPow[i];
-    }
-}
+//    for(int i=0; i<3; ++i) {
+//        if(tg->apPow[i] > 0) tg->pf[i] = (tg->pow[i] * 100.0 / tg->apPow[i]);
+//        else tg->pf[i] = 0;
+//        if(tg->pf[i]>99) tg->pf[i] = 99;
+//        if(tg->pow[i] > tg->apPow[i]) tg->pow[i] = tg->apPow[i];
+//    }
+//}
 
 
 void DpTgThread::dcLineTgObj(sObjData *obj, sLineTgObjData *tg, int line, int len)
@@ -178,17 +178,17 @@ void DpTgThread::dcLineTgObj(sObjData *obj, sLineTgObjData *tg, int line, int le
 void DpTgThread::tgBox(sBoxData *box)
 {
     sObjData *loop = &(box->data);
-    uchar loopnum = box->loopNum;
-    uchar phasenum = box->phaseFlag;
+    //uchar loopnum = box->loopNum;
+    //uchar phasenum = box->phaseFlag;
     sTgObjData *tgBox = &(box->tgBox);
     sLineTgObjData *linTgBox = &(box->lineTgBox);
-    sLoopTgObjData *loopTgBox = &(box->loopTgBox);
+    //sLoopTgObjData *loopTgBox = &(box->loopTgBox);
 
     if(box->offLine) {
         tgObj(loop, tgBox);
         if(box->dc) {
             lineTgObj(loop, linTgBox);
-            loopTgObj(loopnum , phasenum , loop, loopTgBox);
+            //loopTgObj(loopnum , phasenum , loop, loopTgBox);
         } else  {
             dcLineTgObj(loop, linTgBox, box->rate.svalue, box->loopNum);
         }
@@ -197,7 +197,7 @@ void DpTgThread::tgBox(sBoxData *box)
     }else {
         memset(tgBox, 0, sizeof(sTgObjData));
         memset(linTgBox, 0, sizeof(sLineTgObjData));
-        memset(loopTgBox, 0, sizeof(sLoopTgObjData));
+        //memset(loopTgBox, 0, sizeof(sLoopTgObjData));
         memset(&(box->env), 0, sizeof(sEnvData));
     }
 }
