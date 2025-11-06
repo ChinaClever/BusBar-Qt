@@ -48,5 +48,7 @@
         <file>image/down.png</file>
         <file>image/up.png</file>
         <file>image/startpage.jpg</file>
+        <file>image/topo.png</file>
+        <file>image/topo_select.png</file>
     </qresource>
 </RCC>

@@ -228,13 +228,13 @@ void Json_Pack::Startbox_Data(QJsonObject &obj ,int id)
     if(mBoxData[id]->totalApPow > mBoxData[id]->totalPow.ivalue)
         tgObj.insert("pow_reactive",(qSqrt(qPow(mBoxData[id]->totalApPow , 2)-qPow(mBoxData[id]->totalPow.ivalue , 2))/COM_RATE_POW));//
     else tgObj.insert("pow_reactive",0);//
-    double eleActive = 0,pfTotal = 0;
+    double eleActive = 0;//pfTotal = 0;
     for(int j=0; j<3; ++j) {
         eleActive += ((mBoxData[id]->data.ele[j])/COM_RATE_ELE);
     }
-    if(mBoxData[id]->totalApPow)
-        pfTotal = (((mBoxData[id]->totalPow.ivalue)/(mBoxData[id]->totalApPow))/COM_RATE_POW);
-    else pfTotal = 0;
+//    if(mBoxData[id]->totalApPow)
+//        pfTotal = (((mBoxData[id]->totalPow.ivalue)/(mBoxData[id]->totalApPow))/COM_RATE_POW);
+//    else pfTotal = 0;
 
     tgObj.insert("power_factor",QJsonValue::fromVariant(mBoxData[id]->tgBox.pf/COM_RATE_PF));
 //    tgObj.insert("power_factor",QString::number(pfTotal,'f',2).toDouble());   //功率因素
@@ -324,10 +324,18 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
     cfgObj.insert("alarm_count",BoxData->alarmTime);
     cfgObj.insert("iof",BoxData->iOF);
     cfgObj.insert("box_type",BoxData->boxType);
-    for(int i =0; i < BoxData->loopNum; i++)
-    {
-        swArray.append(BoxData->data.sw[i]);
+    if(BoxData->phaseFlag == 1){
+        uchar breaker_num = (BoxData->plugbreaker>>12)&0x0F;
+        for(int k = 0 ; k < breaker_num ; k++){
+            uchar breaker_ver = (BoxData->plugbreaker>>k*2)&0x03;
+            swArray.append(breaker_ver);
+        }
+    }else{
+        for(int i =0; i < BoxData->loopNum; i++){
+            swArray.append(BoxData->data.sw[i]);
+        }
     }
+
     cfgObj.insert("breaker_status",swArray);
     subObj.insert("box_cfg",cfgObj);
 //-------------------------------回路数据-------------------
@@ -452,7 +460,7 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
                 ele_active[i] += ((LoopData->ele[i*3+j])/COM_RATE_ELE);
             }
 
-            if(pow_active[i] > 0) {
+            if(pow_active[i] > 0 && pow_apparent[i] > 0) {
                 pf_factor = (pow_active[i] * 100.0/ pow_apparent[i]) /COM_RATE_PF;
                 pfPow.append(pf_factor);
             } else pfPow.append(0);
@@ -470,7 +478,7 @@ void Json_Pack::Insertbox_Data(QJsonObject &obj ,int bus_id, int insert_id)
     } else {
         for(int i=0; i<3; ++i)//单相三个输出位
         {
-            if(LoopData->pow.value[i] > 0) {
+            if(LoopData->pow.value[i] > 0 && LoopData->apPow[i] > 0) {
                 pf_factor = (LoopData->pow.value[i] * 100.0 / LoopData->apPow[i]) /COM_RATE_PF;
                 pfPow.append(pf_factor);
             } else pfPow.append(0);

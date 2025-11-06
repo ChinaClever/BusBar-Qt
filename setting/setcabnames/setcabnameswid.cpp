@@ -54,10 +54,10 @@ void SetCabNamesWid::initTableWidget()
     }
 
     QStringList horHead;
-    if(gLanguage == 0) horHead<< tr("机柜名称")<< tr("电力容量\n(kW)")<< tr("A路母线编号")<< tr("A路插接箱地址")<< tr("A路插接箱输出位")
-            << tr("B路母线编号")<< tr("B路插接箱地址")<< tr("B路插接箱输出位");
-    else horHead<< tr("cabinet name")<< tr("power capacity\n(kW)")<< tr("busbar No.\nof line A")<< tr("tap-off box No.\nof line A")<< tr("tap-off box\noutput position\nof line A")
-                << tr("busbar No.\nof line B")<< tr("tap-off box No.\nof line B")<< tr("tap-off box\noutput position\nof line B");
+    if(gLanguage == 0) horHead<< tr("机柜名称")<< tr("主路母线编号")<< tr("主路插接箱地址")<< tr("主路插接箱输出位")
+            << tr("备路母线编号")<< tr("备路插接箱地址")<< tr("备路插接箱输出位");
+    else horHead<< tr("cabinet name")<< tr("busbar No.\nof mains")<< tr("tap-off box No.\nof mains")<< tr("tap-off box\noutput position\nof mains")
+                << tr("busbar No.\nof backup")<< tr("tap-off box No.\nof backup")<< tr("tap-off box\noutput position\nof backup");
 
 
     ui->tableWidget->setColumnCount(horHead.size());
@@ -117,7 +117,7 @@ void SetCabNamesWid::resetWidget()
     for(int i = 0 ;  i < boxNum ; i++)
     {
         ui->tableWidget->insertRow(i);
-        int len = LINE_NUM-1; //交流9个
+        int len = LINE_NUM-3; //交流9个
 
         for(int j=0; j<=len; j++){
             QTableWidgetItem * item = new QTableWidgetItem("---");
@@ -192,25 +192,25 @@ void SetCabNamesWid::setTableItem(int row, int column)
     //if(box->offLine > 0 /* && column <= box->rate */) {
         //if(column <= box->data.lineNum) {
     switch (column) {
+//    case 1:
+//        str = QString::number(get_share_mem()->cabData[mIndex][row].capacity/COM_RATE_POW,'f', 3);
+//        break;
     case 1:
-        str = QString::number(get_share_mem()->cabData[mIndex][row].capacity/COM_RATE_POW,'f', 3);
-        break;
-    case 2:
         str = QString::number(get_share_mem()->cabData[mIndex][row].lineA_No);
         break;
-    case 3:
+    case 2:
         str = QString::number(get_share_mem()->cabData[mIndex][row].lineA_Tapoff_No);
         break;
-    case 4:
+    case 3:
         str = QString::number(get_share_mem()->cabData[mIndex][row].lineA_Tapoff_Line);
         break;
-    case 5:
+    case 4:
         str = QString::number(get_share_mem()->cabData[mIndex][row].lineB_No);
         break;
-    case 6:
+    case 5:
         str = QString::number(get_share_mem()->cabData[mIndex][row].lineB_Tapoff_No);
         break;
-    case 7:
+    case 6:
         str = QString::number(get_share_mem()->cabData[mIndex][row].lineB_Tapoff_Line);
         break;
     }

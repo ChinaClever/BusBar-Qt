@@ -240,7 +240,7 @@ color: rgb(255, 255, 255);</string>
        <property name="minimumSize">
         <size>
          <width>60</width>
-         <height>80</height>
+         <height>60</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -319,7 +319,7 @@ color: rgb(255, 255, 255);</string>
        <property name="minimumSize">
         <size>
          <width>60</width>
-         <height>80</height>
+         <height>60</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -398,7 +398,7 @@ color: rgb(255, 255, 255);</string>
        <property name="minimumSize">
         <size>
          <width>60</width>
-         <height>80</height>
+         <height>60</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -472,7 +472,7 @@ color: rgb(255, 255, 255);</string>
        <property name="minimumSize">
         <size>
          <width>60</width>
-         <height>80</height>
+         <height>60</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -546,7 +546,7 @@ color: rgb(255, 255, 255);</string>
        <property name="minimumSize">
         <size>
          <width>60</width>
-         <height>80</height>
+         <height>60</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -620,7 +620,7 @@ color: rgb(255, 255, 255);</string>
        <property name="minimumSize">
         <size>
          <width>60</width>
-         <height>80</height>
+         <height>60</height>
         </size>
        </property>
        <property name="maximumSize">

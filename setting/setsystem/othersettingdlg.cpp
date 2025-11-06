@@ -167,6 +167,8 @@ static bool update_jsonFile_fun(const QString &str)
         if(ans < 0) {
             qDebug() << "umount err";
         }
+
+        system("reboot");
     } else {
         ret = false;
     }

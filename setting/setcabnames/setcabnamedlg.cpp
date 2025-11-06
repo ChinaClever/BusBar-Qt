@@ -11,26 +11,26 @@ SetCabNameDlg::SetCabNameDlg(QWidget *parent) :
 
     if(gLanguage == 0) {com_setBackColour(tr("设置界面"), this);
         ui->label->setText("参数修改：");
-        ui->label_2->setText("容量修改：");
+        //ui->label_2->setText("容量修改：");
         ui->label_3->setText("名称修改：");
-        ui->label_4->setText("A路母线编号：");
-        ui->label_5->setText("A路插接箱地址：");
-        ui->label_6->setText("A路插接箱输出位：");
-        ui->label_7->setText("B路母线编号：");
-        ui->label_8->setText("B路插接箱地址：");
-        ui->label_9->setText("B路插接箱输出位：");
+        ui->label_4->setText("主路母线编号：");
+        ui->label_5->setText("主路插接箱地址：");
+        ui->label_6->setText("主路插接箱输出位：");
+        ui->label_7->setText("备路母线编号：");
+        ui->label_8->setText("备路插接箱地址：");
+        ui->label_9->setText("备路插接箱输出位：");
         ui->saveBtn->setText("保存");
         ui->cancelBtn->setText("取消");
     }else {com_setBackColour(tr("Settings interface"), this);
         ui->label->setText("Parameter modification:");
-        ui->label_2->setText("Capacity modification:");
+        //ui->label_2->setText("Capacity modification:");
         ui->label_3->setText("Name modification:");
-        ui->label_4->setText("Busbar No. of line A:");
-        ui->label_5->setText("Tap-off box No. of line A:");
-        ui->label_6->setText("Tap-off box output position of line A:");
-        ui->label_7->setText("Busbar No. of line B:");
-        ui->label_8->setText("Tap-off box No. of line B:");
-        ui->label_9->setText("Tap-off box output position of line B:");
+        ui->label_4->setText("Busbar No. of mains:");
+        ui->label_5->setText("Tap-off box No. of mains:");
+        ui->label_6->setText("Tap-off box output position of mains:");
+        ui->label_7->setText("Busbar No. of backup:");
+        ui->label_8->setText("Tap-off box No. of backup:");
+        ui->label_9->setText("Tap-off box output position of backup:");
         ui->saveBtn->setText("Save");
         ui->cancelBtn->setText("Cancel");
     }
@@ -41,6 +41,8 @@ SetCabNameDlg::SetCabNameDlg(QWidget *parent) :
     initBox(ui->lineB_Tapoff_NoBox , 2);
     initBox(ui->lineA_Tapoff_LineBox , 3);
     initBox(ui->lineB_Tapoff_LineBox , 3);
+    //ui->label_2->hide();
+    //ui->capacitySpinBox->hide();
 }
 
 SetCabNameDlg::~SetCabNameDlg()
@@ -85,7 +87,7 @@ void SetCabNameDlg::init(int bus, int box , SetShm *setShm)
 
 //    qDebug()<< " str "<<str;
     ui->nameEdit->setText(get_share_mem()->cabData[bus][box].cabName);
-    ui->capacitySpinBox->setValue(get_share_mem()->cabData[bus][box].capacity/COM_RATE_POW);
+    //ui->capacitySpinBox->setValue(get_share_mem()->cabData[bus][box].capacity/COM_RATE_POW);
     ui->lineA_NoBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineA_No-1);
     ui->lineA_Tapoff_NoBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineA_Tapoff_No-2);
     ui->lineA_Tapoff_LineBox->setCurrentIndex(get_share_mem()->cabData[bus][box].lineA_Tapoff_Line-1);
@@ -116,7 +118,7 @@ bool SetCabNameDlg::save()
     QByteArray ba = ui->nameEdit->text().toLatin1();
     char *mm = ba.data();
     strcpy(get_share_mem()->cabData[this->mBusId][this->mBox].cabName,mm);
-    get_share_mem()->cabData[this->mBusId][this->mBox].capacity = ui->capacitySpinBox->value()*COM_RATE_POW;
+    //get_share_mem()->cabData[this->mBusId][this->mBox].capacity = ui->capacitySpinBox->value()*COM_RATE_POW;
     get_share_mem()->cabData[this->mBusId][this->mBox].lineA_No = ui->lineA_NoBox->currentIndex()+1;
     get_share_mem()->cabData[this->mBusId][this->mBox].lineA_Tapoff_No = ui->lineA_Tapoff_NoBox->currentIndex()+2;
     get_share_mem()->cabData[this->mBusId][this->mBox].lineA_Tapoff_Line = ui->lineA_Tapoff_LineBox->currentIndex()+1;

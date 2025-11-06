@@ -59,8 +59,14 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="minimumSize">
+        <size>
+         <width>175</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
-        <string>名称修改：</string>
+        <string>名称修改： </string>
        </property>
       </widget>
      </item>
@@ -74,13 +80,13 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>0</width>
+         <width>175</width>
          <height>45</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>16777215</width>
+         <width>175</width>
          <height>45</height>
         </size>
        </property>
@@ -93,79 +99,20 @@ border-radius:15px
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="label_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-       <property name="text">
-        <string>容量修改：</string>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="capacitySpinBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
+       <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
-         <height>45</height>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>45</height>
-        </size>
-       </property>
-       <property name="focusPolicy">
-        <enum>Qt::ClickFocus</enum>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QDoubleSpinBox::up-button
-{
-	width: 35px;
-	height: 25px;
-	border-left-width:1px;
-	border-left-color:darkgray;
-	border-left-style:solid;
-	border-top-right-radius:3px;
-	image: url(:/new/prefix1/image/up.png);
-	font-size:7px;
-}
-
-QDoubleSpinBox::down-button
-{
-	width: 35px;
-	height: 25px;
-	border-left-width:1px;
-	border-left-color:darkgray;
-	border-left-style:solid;	
-	border-bottom-right-radius:3px;
-	image: url(:/new/prefix1/image/down.png);
-}
-QDoubleSpinBox{
-	border:2px solid rgb(15,80,232);
-	border-radius:15px;
-}</string>
-       </property>
-       <property name="decimals">
-        <number>3</number>
-       </property>
-       <property name="singleStep">
-        <double>0.001000000000000</double>
-       </property>
-       <property name="value">
-        <double>5.000000000000000</double>
-       </property>
-      </widget>
+      </spacer>
      </item>
     </layout>
    </item>

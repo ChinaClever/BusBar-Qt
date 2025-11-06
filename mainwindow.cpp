@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     insertStrEn = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
     db_system_obj_en()->insertSystem(insertStrEn);
-    mVersion = "V3.0.9.026";//当前软件版本
+    mVersion = "V3.0.9.027";//当前软件版本
     initVersion();
     updateTime();
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
@@ -351,7 +351,7 @@ void MainWindow::showAndHideBoxSlot(int mode)
 void MainWindow::on_topologyBtn_clicked()
 {
     ui->stackedWid->setCurrentWidget(mHomeWid);
-    setButtonClickedImage(ui->topologyBtn,"home_select");
+    setButtonClickedImage(ui->topologyBtn,"topo_select");
 
     InterfaceChangeSig::get()->changeType(2);
     showAndHideBoxSlot(1);
@@ -422,7 +422,7 @@ void MainWindow::setButtonClickedImage(QToolButton *button, QString name)
 void MainWindow::initBackground()
 {
     setButtonImage(ui->homeBtn,"home");
-    setButtonImage(ui->topologyBtn,"home");//？？？
+    setButtonImage(ui->topologyBtn,"topo");//？？？
     setButtonImage(ui->lineBtn,"main");
     setButtonImage(ui->branchBtn,"branch");
     setButtonImage(ui->logBtn,"data");
