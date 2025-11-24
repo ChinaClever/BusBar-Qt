@@ -159,15 +159,32 @@ void set_background_icon(QWidget *widget, const QString &icon,const QSize &size)
  */
 QString getPassword()
 {
-    QString passpord = "";
+    QString password = "";
 
     bool ret = sys_configFile_open();  //打开配置文件
     if(ret){
-        passpord = sys_configFile_readStr("password");
+        password = sys_configFile_readStr("password");
         sys_configFile_close();
     }
 
-    return passpord;
+    return password;
+}
+
+/**
+ * @brief getReservedInformation 读取系统预留信息
+ * @return
+ */
+QString getReservedInformation()
+{
+    QString str= "";
+
+    bool ret = sys_configFile_open();  //打开配置文件
+    if(ret){
+        str = sys_configFile_readStr("reservedinformation");
+        sys_configFile_close();
+    }
+
+    return str;
 }
 
 /**

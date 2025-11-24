@@ -444,12 +444,13 @@ void MainWindow::dialogClosed(bool ret)
         db_system_obj_en()->insertSystem(insertStrEn);
     }
     else{
+        QString str = getReservedInformation();
         if(gLanguage == 0){
-           QuMsgBox box(NULL,"对不起，密码输入不正确，您不具备该权限！");
+            QuMsgBox box(NULL,tr("对不起，密码输入不正确，您不具备该权限！\n预留信息：%1").arg(str));
            box.Exec();
         }
         else{
-           QuMsgBox box(NULL,"Sorry,the passward entered is incorrect.You do not have the permission！");
+           QuMsgBox box(NULL,tr("Sorry,the passward entered is incorrect.You do not have the permission！\nReserved information：%1").arg(str));
            box.Exec();
         }
     }
