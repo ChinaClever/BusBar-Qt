@@ -201,16 +201,23 @@ void IpSettingDlg::on_saveBtn_clicked()
     }
 
 }
+QString IpSettingDlg::returnIp()
+{
+    QString ip = ui->IPlineEdit->text();
+
+    return ip;
+}
 
 void IpSettingDlg::insertSystemLog(const QString &change , const QString &origin , const QString &current)
 {
-    QString insertStr;
+    QString insertStr,insertStrEn;
     if(origin != current){
-        if(gLanguage == 0)insertStr = tr("把系统Net%1的%4从%2改成%3 !")
+        insertStr = tr("把系统Net%1的%4从%2改成%3 !")
                             .arg(this->m_index).arg(origin).arg(current).arg(change);
-        else insertStr = tr("Change the %4 of the system Net%1 from %2 to %3 !")
+        insertStrEn = tr("Change the %4 of the system Net%1 from %2 to %3 !")
                             .arg(this->m_index).arg(origin).arg(current).arg(change);
         db_system_obj()->insertSystem(insertStr);
+        db_system_obj_en()->insertSystem(insertStrEn);
     }
 }
 

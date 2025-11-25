@@ -78,7 +78,7 @@ void SetMainWid::setButtonColor(QPushButton *button)
     ui->powerBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
 
     button->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";background-color: rgb(96,238,250);");
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
 }
 
 void SetMainWid::busChangedSlot(int index)

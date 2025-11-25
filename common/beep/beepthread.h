@@ -12,8 +12,9 @@ class BeepThread : public QThread
 public:
     static BeepThread *bulid();
 
-    void beep();
-    void longBeep();
+    void openBeep();
+    void closeBeep();
+    void initGpio(int num);
 
 protected:
     void run();

@@ -29,6 +29,12 @@
 
 #define SRC_DATA_LEN_MAX 1024 //一包数据最长 —— 用于对接动环
 extern int gLanguage;//0代表中文 1代表英文
+extern int gUser;
+extern QString gSendIP;
+extern int gSendport;
+extern uchar gStartAlarm;//0代表关闭 1代表启用
+extern uchar gOpenAlarm;//0代表关闭 1代表启用
+extern uchar gCloseAlarm;//
 /**
  * 统计数据结构体
  */
@@ -225,7 +231,15 @@ typedef struct _sDataPacket
 {
     sBusData data[BUS_NUM];  // 四条母线数据
 }sDataPacket;
-
+struct sProgress
+{
+    QString addr;
+    QString dev_ip;
+    QString datetime;
+    QString dev_name;
+    int bus_id[BUS_NUM][BOX_NUM+1];
+    int status;
+};
 
 
 /**

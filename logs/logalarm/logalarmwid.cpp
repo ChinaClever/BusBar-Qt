@@ -147,7 +147,10 @@ void LogAlarmWid::initBtnBar()
 
 QString LogAlarmWid::getTableName(int id)
 {
-    return db_alarm_obj(id)->tableName();
+    QString str = db_alarm_obj(id)->tableName();
+    if(gLanguage == 0) str = db_alarm_obj(id)->tableName();
+    else str = db_alarm_obj_en(id)->tableName();
+    return str;
 }
 
 void LogAlarmWid::initTableSlot(int id)
@@ -182,13 +185,16 @@ void LogAlarmWid::clearTableSlot()
 #if SQL_DEL_MODE
     int row = model->model->rowCount();
     DbAlarm* db = db_alarm_obj(mid);
+    DbAlarm* dben = db_alarm_obj_en(mid);
     if(mCount++ % 2 ==0)
     {
         model->model->setTable("markingtable");
         db->clear();
+        dben->clear();
         QTimer::singleShot(row*8,this,SLOT(clearTableSlot()));
     } else {
         db->createTable();
+        dben->createTable();
         initTableSlot(mid);
     }
 #else

@@ -10,21 +10,20 @@ class DpAlarmSlave : public QThread
 public:
     explicit DpAlarmSlave(QObject *parent = 0);
     ~DpAlarmSlave();
-
 signals:
 
 protected:
     void run();
-    void unitAlarm(QString &typeStr, QString &msg, sDataUnit &unit, double rate, const QString &sym);
-    void unitAlarm(QString &typeStr, QString &msg, sDataPowUnit &unit, double rate, const QString &sym);
-    void unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg, sDataUnit &unit, double rate, const QString &sym);
-    void unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, sDataPowUnit &unit, double rate, const QString &sym);
+    void unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataUnit &unit, double rate, const QString &sym);
+    void unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym);
+    void unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataUnit &unit, double rate, const QString &sym);
+    void unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym);
 
     void boxAlarm(sBoxData &box);
     void busAlarm(int id);
     void checkAlarm();
 
-   void saveMsg(const QString &typeStr, const QString &str);
+    void saveMsg(const QString &typeStr, const QString &str , const QString &typeStrEn, const QString &strEn);
 
 protected slots:
     void timeoutDone();
@@ -39,4 +38,5 @@ private:
 
 QString get_email_str();
 QStringList get_alarm_str();
+QStringList get_alarm_json();
 #endif // DPALARMSLAVE_H

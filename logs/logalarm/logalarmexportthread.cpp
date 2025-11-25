@@ -19,7 +19,8 @@ LogAlarmExportThread::~LogAlarmExportThread()
 
 void LogAlarmExportThread::initData(int busId)
 {
-    mEle = db_alarm_obj(busId);
+    if(gLanguage == 0) mEle = db_alarm_obj(busId);
+    else mEle = db_alarm_obj_en(busId);
     mList.clear();
     start();
 }

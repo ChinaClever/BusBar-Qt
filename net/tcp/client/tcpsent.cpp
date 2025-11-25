@@ -38,12 +38,10 @@ TcpSent::TcpSent(QObject *parent) : QThread(parent)
 {
     mTcpClient = new TcpClient(this);
 
-    mLock = gLock;
-    mArrayQue = gArrayQue;
-
+    mHost = "192.168.1.151";
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
-    timer->start(800);
+    timer->start(1000);
 }
 
 
@@ -56,8 +54,8 @@ void TcpSent::newConnect(const QString &host)
 {
     if(host != mHost) {
         mHost = host;
-        QWriteLocker locker(mLock);
-        mArrayQue->clear();
+        QWriteLocker locker(gLock);
+        gArrayQue->clear();
     }
 
     mTcpClient->newConnect(mHost);
@@ -98,10 +96,10 @@ bool TcpSent::sentCheck(void)
  */
 void TcpSent::sentData(void)
 {
-    if(mArrayQue->size() > 0)
+    QWriteLocker locker(gLock);
+    if(gArrayQue->size() > 0)
     {
-        QWriteLocker locker(mLock);
-        QByteArray data = mArrayQue->dequeue();
+        QByteArray data = gArrayQue->dequeue();
         mTcpClient->sentMessage(data);
     }
 }

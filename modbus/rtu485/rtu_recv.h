@@ -66,6 +66,7 @@ struct Rtu_recv {
     uchar alarmTime;// 表示告警滤波2-5
     uchar boxType;// 表示插接箱类型
     uchar phaseFlag;//0-单相，1-三相
+
     uchar shuntRelease;// 表示分励脱扣
     uchar lps; // 防雷开关
     uchar lpsState; // 防雷开关

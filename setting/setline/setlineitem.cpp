@@ -197,7 +197,7 @@ void SetLineItem::setProcessBarColor(QProgressBar *bar, QString color)
 
 void SetLineItem::curBarClicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
 
     sThresholdItem item;
     item.bus = mBus;
@@ -216,7 +216,7 @@ void SetLineItem::curBarClicked()
 
 void SetLineItem::volBarClicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
 
     sThresholdItem item;
     item.bus = mBus;

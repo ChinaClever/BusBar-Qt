@@ -16,6 +16,7 @@ public:
     explicit LocalNetSettingDlg(QWidget *parent = nullptr);
     ~LocalNetSettingDlg();
     void initLanguage();
+//    void initGpio(int num);
 private slots:
     void on_Net1Btn_clicked();
     void on_Net2Btn_clicked();

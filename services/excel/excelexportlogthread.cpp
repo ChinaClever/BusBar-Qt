@@ -110,10 +110,9 @@ void ExcelExportLogThread::exportMsg(QList<QStringList> &list)
     if(gExcelExportStr){
         QString typeStr = transformer(mType);
         QString insertStr =  tr("导出从%1到%2的%3 !").arg(gExcelExportStr->start).arg(gExcelExportStr->end).arg(typeStr);
-        if(gLanguage == 1){
-            insertStr = tr("Export the %3 form %1 to %2 !").arg(gExcelExportStr->start).arg(gExcelExportStr->end).arg(typeStr);
-        }
+        QString insertStrEn = tr("Export the %3 form %1 to %2 !").arg(gExcelExportStr->start).arg(gExcelExportStr->end).arg(typeStr);
         db_system_obj()->insertSystem(insertStr);
+        db_system_obj_en()->insertSystem(insertStrEn);
     }
     emit overSig(ret);
 }

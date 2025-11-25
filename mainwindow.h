@@ -40,6 +40,7 @@ protected:
     void updateTime();
     void checkFile();
     void initLanguage();
+    void initSendUse();
     void initLable();
     void initVersion();
     //void seedWatchdog();

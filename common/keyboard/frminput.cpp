@@ -439,13 +439,13 @@ void frmInput::focusChanged(QWidget *oldWidget, QWidget *nowWidget)
             currentEditType = "QTextBrowser";
             ShowPanel();
         } else if (nowWidget->inherits("QComboBox")) {
-            QComboBox *cbox = (QComboBox *)nowWidget;
-            //只有当下拉选择框处于编辑模式才可以输入
-            if (cbox->isEditable()) {
-                currentLineEdit = cbox->lineEdit() ;
-                currentEditType = "QLineEdit";
-                ShowPanel();
-            }
+//            QComboBox *cbox = (QComboBox *)nowWidget;
+//            //只有当下拉选择框处于编辑模式才可以输入
+//            if (cbox->isEditable()) {
+//                currentLineEdit = cbox->lineEdit() ;
+//                currentEditType = "QLineEdit";
+//                ShowPanel();
+//            }
         } else if (nowWidget->inherits("QSpinBox") ||
                    nowWidget->inherits("QDoubleSpinBox") ||
                    nowWidget->inherits("QDateEdit") ||

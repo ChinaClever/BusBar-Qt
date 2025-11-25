@@ -14,12 +14,22 @@ LocalNetSettingDlg::LocalNetSettingDlg(QWidget *parent) :
     connect(m_net1Dlg , SIGNAL(sendCloseDlgSig1()) , this , SLOT(getCloseDlgSlot1()));
     m_net2Dlg = new IpSettingDlg(NULL,2);
     connect(m_net2Dlg , SIGNAL(sendCloseDlgSig2()) , this , SLOT(getCloseDlgSlot2()));
+//    initGpio(131);
+//    initGpio(132);
 }
 
 LocalNetSettingDlg::~LocalNetSettingDlg()
 {
     delete ui;
 }
+
+//void LocalNetSettingDlg::initGpio(int num)
+//{
+//    QString str = QString("echo %1 > /sys/class/gpio/export").arg(num);
+//    system(str.toLatin1().data());
+//    str = QString("echo out > /sys/class/gpio/gpio%1/direction").arg(num);
+//    system(str.toLatin1().data());
+//}
 
 void LocalNetSettingDlg::initLanguage()
 {
@@ -63,4 +73,16 @@ void LocalNetSettingDlg::getCloseDlgSlot2()
 {
     m_netDlgOpen2 = false;
 }
+
+
+//void LocalNetSettingDlg::on_CloseBtn_clicked()
+//{
+//    system("echo 0  > /sys/class/gpio/gpio131/value");
+//}
+
+
+//void LocalNetSettingDlg::on_OpenBtn_clicked()
+//{
+//    system("echo 1  > /sys/class/gpio/gpio131/value");
+//}
 

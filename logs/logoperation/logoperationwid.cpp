@@ -147,7 +147,10 @@ void LogOperationWid::initBtnBar()
 
 QString LogOperationWid::getTableName(int id)
 {
-    return db_operation_obj(id)->tableName();
+    QString str = db_operation_obj(id)->tableName();
+    if(gLanguage == 0) str = db_operation_obj(id)->tableName();
+    else str = db_operation_obj_en(id)->tableName();
+    return str;
 }
 
 void LogOperationWid::initTableSlot(int id)
@@ -182,13 +185,16 @@ void LogOperationWid::clearTableSlot()
 #if SQL_DEL_MODE
     int row = model->model->rowCount();
     DbOperation* db = db_operation_obj(mid);
+    DbOperation* dben = db_operation_obj_en(mid);
     if(mCount++ % 2 ==0)
     {
         model->model->setTable("markingtable");
         db->clear();
+        dben->clear();
         QTimer::singleShot(row*8,this,SLOT(clearTableSlot()));
     } else {
         db->createTable();
+        dben->createTable();
         initTableSlot(mid);
     }
 #else

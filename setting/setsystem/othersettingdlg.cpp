@@ -22,6 +22,12 @@ OtherSettingDlg::OtherSettingDlg(QWidget *parent) :
     ui->setupUi(this);
     initLanguage();
     ui->timeSetBtn->setHidden(true);
+    ui->ipEdit->setText(gSendIP);
+    if(gUser)ui->useBox->setChecked(true);
+    else ui->useBox->setChecked(false);
+    ui->portEdit->setText(QString::number(gSendport));
+
+
 //    ui->updateBtn->setHidden(true);
 }
 
@@ -38,13 +44,26 @@ void OtherSettingDlg::initLanguage()
         ui->resetBtn->setText("系统重启");
         ui->updateBtn->setText("软件升级");
         ui->languageBtn->setText("语言设置");
+        ui->label->setText("推送数据IP地址");
+        ui->label_2->setText("推送数据端口号");
+        ui->useBox->setText("是否启用推送数据");
+        ui->saveBtn->setText("保存");
+//        if(gStartAlarm) ui->alramBtn->setText(tr("关闭告警器"));
+//        else ui->alramBtn->setText(tr("启用告警器"));
     }else{
         ui->pwdSetBtn->setText("Password modifiction");
         ui->timeSetBtn->setText("Time modification");
         ui->resetBtn->setText("System restart");
         ui->updateBtn->setText("Software upgrading");
         ui->languageBtn->setText("Language settings");
+        ui->label->setText("IP Address of \npushing data");
+        ui->label_2->setText("Port number of \npushing data");
+        ui->useBox->setText("Is it enabled pushing data");
+        ui->saveBtn->setText("Save");
+/*        if(gStartAlarm) ui->alramBtn->setText(tr("Turn off the buzzer"));
+        else ui->alramBtn->setText(tr("Turn on the buzzer"));*/
     }
+    ui->alramBtn->hide();
 }
 
 static bool update_fun(const QString &str)
@@ -120,7 +139,7 @@ static bool update_fun(const QString &str)
 
 void OtherSettingDlg::on_updateBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     if(gLanguage == 0) {
         QuMsgBox box(NULL, tr("是否升级系统?"));
         if(box.Exec()) {
@@ -146,18 +165,20 @@ void OtherSettingDlg::on_updateBtn_clicked()
 
 void OtherSettingDlg::on_resetBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     if(gLanguage == 0){
         QuMsgBox box(NULL, tr("是否重启系统?"));
         if(box.Exec()) {
             db_system_obj()->insertSystem(tr("系统重启 !"));
+            db_system_obj_en()->insertSystem(tr("System restart !"));
             system("reboot");
         }
     }
     else{
         QuMsgBox box(NULL, tr("Do you want to restart the system?"));
         if(box.Exec()) {
-            db_system_obj()->insertSystem(tr("System restart !"));
+            db_system_obj()->insertSystem(tr("系统重启 !"));
+            db_system_obj_en()->insertSystem(tr("System restart !"));
             system("reboot");
         }
     }
@@ -166,14 +187,14 @@ void OtherSettingDlg::on_resetBtn_clicked()
 
 void OtherSettingDlg::on_timeSetBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     TimeSettingDlg dlg(this);
     dlg.exec();
 }
 
 void OtherSettingDlg::on_pwdSetBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     PassordSettingDlg *passwordDlg = new PassordSettingDlg(this);
     passwordDlg->setWindowModality(Qt::WindowModal);
     passwordDlg->show();
@@ -182,10 +203,42 @@ void OtherSettingDlg::on_pwdSetBtn_clicked()
 
 void OtherSettingDlg::on_languageBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     mlanguage = new Languagesetting(this);
     mlanguage->setWindowModality(Qt::WindowModal);
     mlanguage->show();
     mlanguage->move(368,222);
+}
+
+
+void OtherSettingDlg::on_saveBtn_clicked()
+{
+    gSendIP = ui->ipEdit->text();
+    gSendport = ui->portEdit->text().toInt();
+    gUser = ui->useBox->isChecked()?1:0;
+    if(!gSendIP.isEmpty()&&!ui->portEdit->text().isEmpty()){
+
+        sys_configFile_writeParam("SendIP",gSendIP);
+        sys_configFile_writeParam("Sendport",QString::number(gSendport));
+        sys_configFile_writeParam("Senduse",QString::number(gUser));
+        //qDebug()<<"user"<<user;
+        if(gLanguage == 0) { InfoMsgBox box(NULL, tr("保存成功！"));}
+        else InfoMsgBox box(NULL, tr("Save successfully！"));
+    }
+}
+
+void OtherSettingDlg::on_alramBtn_clicked()
+{
+//    if(gStartAlarm){
+//        gStartAlarm = 0;
+//        if(gLanguage == 0) ui->alramBtn->setText(tr("启用告警器"));
+//        else ui->alramBtn->setText(tr("Turn on the buzzer"));
+//        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
+//    }else{
+//        gStartAlarm = 1;
+//        if(gLanguage == 0) ui->alramBtn->setText(tr("关闭告警器"));
+//        else ui->alramBtn->setText(tr("Turn off the buzzer"));
+//        sys_configFile_writeParam("startalarm",QString::number(gStartAlarm));
+//    }
 }
 

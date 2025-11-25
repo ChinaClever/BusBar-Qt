@@ -9,6 +9,7 @@
 //#include "snmp/snmpthread.h"
 #include "mbs/mb_core.h"
 #include "modbus/thirdthread.h"
+#include "json_send.h"
 
 RtuThread *rtu[4] = {NULL, NULL, NULL, NULL};
 ThirdThread *thr = NULL;
@@ -29,14 +30,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mIndex = 0;
     initWidget();
-    QString insertStr;
-    if(gLanguage == 0) insertStr = tr("系统启动 !");
-    else  insertStr = tr("System start !");//插入系统日志
+    QString insertStr,insertStrEn;
+    insertStr = tr("系统启动 !");
+    insertStrEn = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
-    mVersion = "V4.0.0.003";//当前软件版本
+
+    db_system_obj_en()->insertSystem(insertStrEn);
+    mVersion = "V4.0.8.025";//当前软件版本
     initVersion();
     updateTime();
-
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
     on_comboBox_currentIndexChanged(0);
     //BeepThread::bulid()->longBeep(); // 线程 -- 'bi~'
@@ -86,6 +88,8 @@ void MainWindow::initSerial()
 #endif
 
     Mb_Core::build(this);//////
+    Json_Send::bulid(this);
+
 //    rtu[4] = new RtuThread(this);
 //    rtu[4]->init(SERIAL_COM5, 1);
 }
@@ -157,7 +161,8 @@ void MainWindow::initNetSLot()
     mServer = new Server(this);
     mServer->setMaxPendingConnections(2);
     mServer->listen(QHostAddress::AnyIPv4, 22223);
-    Mb_Core::build(this)->start();
+    Mb_Core::build()->start();
+    Json_Send::bulid()->start();
 }
 
 void MainWindow::initFunSLot()
@@ -165,6 +170,7 @@ void MainWindow::initFunSLot()
     initSerial(); //串口
     new DpThread(this); // 创建数据处理线程
     updateTime();
+
 
     timer = new QTimer(this);
     timer->start(1000);
@@ -198,6 +204,28 @@ void MainWindow::initLanguage()
     }else{
         sys_configFile_write("language" , QString::number(gLanguage));
     }
+//    ret = sys_configFile_contains("startalarm");
+//    if(ret){
+//        gStartAlarm = sys_configFile_readInt("startalarm");
+//    }else{
+//        sys_configFile_write("startalarm" , QString::number(gStartAlarm));
+//    }
+    sys_configFile_close();
+}
+
+void MainWindow::initSendUse()
+{
+    bool ret = sys_configFile_open();
+    ret = sys_configFile_contains("Senduse");
+    if(ret){
+        gSendIP = sys_configFile_readStr("SendIP");
+        gSendport = sys_configFile_readInt("Sendport");
+        gUser = sys_configFile_readInt("Senduse");
+    }else{
+        sys_configFile_write("Senduse" , QString::number(gUser));
+        sys_configFile_write("SendIP" , gSendIP);
+        sys_configFile_write("Sendport" , QString::number(gSendport));
+    }
     sys_configFile_close();
 }
 
@@ -209,8 +237,9 @@ void MainWindow::initVersion()
         QString temp = sys_configFile_readStr("version");
         if(temp != mVersion){
             QString insertStr = tr("系统从%1升级到%2 !").arg(temp).arg(mVersion);
-            if(gLanguage == 1) insertStr = tr("Upgrading the system from %1 to %2 !").arg(temp).arg(mVersion);//插入系统日志
+            QString insertStrEn = tr("Upgrading the system from %1 to %2 !").arg(temp).arg(mVersion);//插入系统日志
             db_system_obj()->insertSystem(insertStr);
+            db_system_obj_en()->insertSystem(insertStrEn);
             sys_configFile_write("version" , mVersion);
         }
     }else{
@@ -242,6 +271,7 @@ void MainWindow::initWidget()
     set_background_icon(ui->stackedWid,":/new/prefix1/image/background.png");
     initBackground(); //按钮图标
     initLable();
+    initSendUse();
     mHomeWid = new HomeWid(ui->stackedWid); //主界面
     ui->stackedWid->addWidget(mHomeWid);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), mHomeWid, SIGNAL(busChangedSig(int)));
@@ -309,7 +339,7 @@ void MainWindow::on_logBtn_clicked()
 void MainWindow::on_setBtn_clicked()
 {
     if(ui->stackedWid->currentWidget() != mSettingWid) {
-        BeepThread::bulid()->beep();
+        //BeepThread::bulid()->beep();
         mCheckDlg->clear();
         mCheckDlg->move(0,0);
         mCheckDlg->exec();
@@ -318,14 +348,14 @@ void MainWindow::on_setBtn_clicked()
 
 void MainWindow::on_alarmBtn_clicked()
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     CurrentAlarmsDlg dlg(this);
     dlg.exec();
 }
 
 void MainWindow::on_comboBox_currentIndexChanged(int index)
 {
-    BeepThread::bulid()->beep();
+    //BeepThread::bulid()->beep();
     setBusName(index);
 }
 
@@ -357,10 +387,11 @@ void MainWindow::dialogClosed(bool ret)
         ui->stackedWid->setCurrentWidget(mSettingWid);
         setButtonClickedImage(ui->setBtn,"setting_select");
         InterfaceChangeSig::get()->changeType(5);
-        QString insertStr;
-        if(gLanguage == 0) insertStr = tr("参数设置页面登录 !");
-        else  insertStr = tr("Log in parameter setting !");//插入系统日志
+        QString insertStr,insertStrEn;
+        insertStr = tr("参数设置页面登录 !");
+        insertStrEn = tr("Log in parameter setting !");//插入系统日志
         db_system_obj()->insertSystem(insertStr);
+        db_system_obj_en()->insertSystem(insertStrEn);
     }
     else{
         if(gLanguage == 0){

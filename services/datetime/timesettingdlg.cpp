@@ -14,6 +14,144 @@
 
 extern void com_setBackColour(const QString &str,QWidget *target);
 
+QList<QPair<QString , QString>> g_ZoneTimeList={
+    {"(UTC-12:00) International Date Line West", "posix/Etc/GMT+12"},
+    {"(UTC-11:00) Coordinated Universal Time-11", "Etc/GMT+11"},
+    {"(UTC-11:00) Midway, Samoa", "Pacific/Midway"},
+    {"(UTC-10:00) Hawaii", "Pacific/Honolulu"},
+    {"(UTC-10:00) Aleutian Islands", "America/Adak"},
+    {"(UTC-09:30) Marquesas Islands", "Pacific/Marquesas"},
+    {"(UTC-09:00) Alaska", "America/Anchorage"},
+    {"(UTC-09:00) Coordinated Universal Time-09", "Etc/GMT+9"},
+    {"(UTC-08:00) Baja California", "America/Santa_Isabel"},
+    {"(UTC-08:00) Pacific Time (US & Canada)", "America/Los_Angeles"},
+    {"(UTC-08:00) Coordinated Universal Time-08", "Etc/GMT+8"},
+    {"(UTC-07:00) La Paz, Mazatlan", "America/Mazatlan"},
+    {"(UTC-07:00) Arizona", "America/Phoenix"},
+    {"(UTC-07:00) Mountain Time (US & Canada)", "America/Denver"},
+    {"(UTC-06:00) Central America", "America/Guatemala"},
+    {"(UTC-06:00) Central Time (US & Canada)", "America/Chicago"},
+    {"(UTC-06:00) Saskatchewan", "America/Regina"},
+    {"(UTC-06:00) Guadalajara, Mexico City, Monterey", "America/Mexico_City"},
+    {"(UTC-06:00) Easter Island", "Pacific/Easter"},
+    {"(UTC-05:00) Bogota, Lima, Quito", "America/Bogota"},
+    {"(UTC-05:00) Indiana (East)", "America/Indiana/Indianapolis"},
+    {"(UTC-05:00) Eastern Time (US & Canada)", "America/New_York"},
+    {"(UTC-05:00) Havana", "America/Havana"},
+    {"(UTC-05:00) Haiti", "America/Port-au-Prince"},
+    {"(UTC-05:00) Chetumal", "America/Cancun"},
+    {"(UTC-05:00) Turks and Caicos", "America/Grand_Turk"},
+    {"(UTC-04:00) Caracas", "America/Caracas"},
+    {"(UTC-04:00) Atlantic Time (Canada)", "America/Halifax"},
+    {"(UTC-04:00) Asuncion", "America/Asuncion"},
+    {"(UTC-04:00) Georgetown, La Paz, Manaus, San Juan", "America/La_Paz"},
+    {"(UTC-04:00) Cuiaba", "America/Cuiaba"},
+    {"(UTC-04:00) Santiago", "America/Santiago"},
+    {"(UTC-03:30) Newfoundland", "America/St_Johns"},
+    {"(UTC-03:00) Araguaina", "America/Araguaina"},
+    {"(UTC-03:00) Brasilia", "America/Sao_Paulo"},
+    {"(UTC-03:00) Greenland", "America/Godthab"},
+    {"(UTC-03:00) Cayenne, Fortaleza", "America/Cayenne"},
+    {"(UTC-03:00) City of Buenos Aires", "America/Argentina/Buenos_Aires"},
+    {"(UTC-03:00) Buenos Aires", "America/Argentina/Buenos_Aires"},
+    {"(UTC-03:00) Montevideo", "America/Montevideo"},
+    {"(UTC-03:00) Punta Arenas", "America/Punta_Arenas"},
+    {"(UTC-03:00) Saint Pierre and Miquelon", "America/Miquelon"},
+    {"(UTC-03:00) Salvador", "America/Bahia"},
+    {"(UTC-02:00) Coordinated Universal Time-2", "Etc/GMT+2"},
+    {"(UTC-01:00) Cape Verde", "Atlantic/Cape_Verde"},
+    {"(UTC-01:00) Azores", "Atlantic/Azores"},
+    {"(UTC+00:00) Monrovia, Reykjavik", "Atlantic/Reykjavik"},
+    {"(UTC+00:00) Dublin, Edinburgh, Lisbon, London", "Europe/London"},
+    {"(UTC+00:00) Coordinated Universal Time", "Etc/GMT"},
+    {"(UTC+01:00) Casablanca", "Africa/Casablanca"},
+    {"(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna", "Europe/Berlin"},
+    {"(UTC+01:00) Brussels, Copenhagen, Madrid, Paris", "Europe/Paris"},
+    {"(UTC+01:00) West Central Africa", "Africa/Lagos"},
+    {"(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague", "Europe/Budapest"},
+    {"(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb", "Europe/Warsaw"},
+    {"(UTC+02:00) Windhoek", "Africa/Windhoek"},
+    {"(UTC+02:00) Athens, Bucharest", "Europe/Athens"},
+    {"(UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius", "Europe/Kiev"},
+    {"(UTC+02:00) Cairo", "Africa/Cairo"},
+    {"(UTC+02:00) Damascus", "Asia/Damascus"},
+    {"(UTC+02:00) Amman", "Asia/Amman"},
+    {"(UTC+02:00) Harare, Pretoria", "Africa/Johannesburg"},
+    {"(UTC+02:00) Jerusalem", "Asia/Jerusalem"},
+    {"(UTC+02:00) Beirut", "Asia/Beirut"},
+    {"(UTC+02:00) Chisinau", "Europe/Chisinau"},
+    {"(UTC+02:00) Gaza, Hebron", "Asia/Gaza"},
+    {"(UTC+02:00) Kaliningrad", "Europe/Kaliningrad"},
+    {"(UTC+02:00) Tripoli", "Africa/Tripoli"},
+    {"(UTC+02:00) Khartoum", "Africa/Khartoum"},
+    {"(UTC+03:00) Juba", "Africa/Juba"},
+    {"(UTC+03:00) Istanbul", "Europe/Istanbul"},
+    {"(UTC+03:00) Baghdad", "Asia/Baghdad"},
+    {"(UTC+03:00) Minsk", "Europe/Minsk"},
+    {"(UTC+03:00) Kuwait, Riyadh", "Asia/Riyadh"},
+    {"(UTC+03:00) Nairobi", "Africa/Nairobi"},
+    {"(UTC+03:00) Moscow, St. Petersburg, Volgograd", "Europe/Moscow"},
+    {"(UTC+03:30) Tehran", "Asia/Tehran"},
+    {"(UTC+04:00) Tbilisi", "Asia/Tbilisi"},
+    {"(UTC+04:00) Yerevan", "Asia/Yerevan"},
+    {"(UTC+04:00) Abu Dhabi, Muscat", "Asia/Dubai"},
+    {"(UTC+04:00) Baku", "Asia/Baku"},
+    {"(UTC+04:00) Port Louis", "Indian/Mauritius"},
+    {"(UTC+04:00) Astrakhan, Ulyanovsk", "Europe/Astrakhan"},
+    {"(UTC+04:00) Izhevsk, Samara", "Europe/Samara"},
+    {"(UTC+04:00) Saratov", "Europe/Saratov"},
+    {"(UTC+04:30) Kabul", "Asia/Kabul"},
+    {"(UTC+05:00) Ashgabat, Tashkent", "Asia/Tashkent"},
+    {"(UTC+05:00) Islamabad, Karachi", "Asia/Karachi"},
+    {"(UTC+05:00) Yekaterinburg", "Asia/Yekaterinburg"},
+    {"(UTC+05:00) Qyzylorda", "Asia/Qyzylorda"},
+    {"(UTC+05:30) Sri Jayewardenepura Kotte", "Asia/Colombo"},
+    {"(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi", "Asia/Kolkata"},
+    {"(UTC+05:45) Kathmandu", "Asia/Kathmandu"},
+    {"(UTC+06:00) Astana", "Asia/Almaty"},
+    {"(UTC+06:00) Dhaka", "Asia/Dhaka"},
+    {"(UTC+06:00) Omsk", "Asia/Omsk"},
+    {"(UTC+06:00) Bishkek", "Asia/Bishkek"},
+    {"(UTC+06:30) Yangon", "Asia/Yangon"},
+    {"(UTC+07:00) Bangkok, Hanoi, Jakarta", "Asia/Bangkok"},
+    {"(UTC+07:00) Novosibirsk", "Asia/Novosibirsk"},
+    {"(UTC+07:00) Krasnoyarsk", "Asia/Krasnoyarsk"},
+    {"(UTC+07:00) Barnaul, Gorno-Altaysk", "Asia/Barnaul"},
+    {"(UTC+07:00) Khovd", "Asia/Hovd"},
+    {"(UTC+07:00) Tomsk", "Asia/Tomsk"},
+    {"(UTC+08:00) Ulaanbaatar", "Asia/Ulaanbaatar"},
+    {"(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi", "Asia/Shanghai"},
+    {"(UTC+08:00) Perth", "Australia/Perth"},
+    {"(UTC+08:00) Kuala Lumpur, Singapore", "Asia/Singapore"},
+    {"(UTC+08:00) Taipei", "Asia/Taipei"},
+    {"(UTC+08:00) Irkutsk", "Asia/Irkutsk"},
+    {"(UTC+08:45) Eucla", "Australia/Eucla"},
+    {"(UTC+09:00) Seoul", "Asia/Seoul"},
+    {"(UTC+09:00) Osaka, Sapporo, Tokyo", "Asia/Tokyo"},
+    {"(UTC+09:00) Yakutsk", "Asia/Yakutsk"},
+    {"(UTC+09:00) Chita", "Asia/Chita"},
+    {"(UTC+09:00) Pyongyang", "Asia/Pyongyang"},
+    {"(UTC+09:30) Darwin", "Australia/Darwin"},
+    {"(UTC+10:00) Hobart", "Australia/Hobart"},
+    {"(UTC+10:00) Brisbane", "Australia/Brisbane"},
+    {"(UTC+10:00) Guam, Port Moresby", "Pacific/Port_Moresby"},
+    {"(UTC+10:00) Canberra, Melbourne, Sydney", "Australia/Sydney"},
+    {"(UTC+10:00) Vladivostok", "Asia/Vladivostok"},
+    {"(UTC+10:30) Adelaide", "Australia/Adelaide"},
+    {"(UTC+11:00) Lord Howe Island", "Australia/Lord_Howe"},
+    {"(UTC+11:00) Bougainville Island", "Pacific/Bougainville"},
+    {"(UTC+11:00) Solomon Islands, New Caledonia", "Pacific/Guadalcanal"},
+    {"(UTC+11:00) Magadan", "Asia/Magadan"},
+    {"(UTC+12:00) Coordinated Universal Time+12", "Etc/GMT-12"},
+    {"(UTC+12:00) Fiji, Marshall Islands", "Pacific/Fiji"},
+    {"(UTC+12:00) Auckland, Wellington", "Pacific/Auckland"},
+    {"(UTC+12:00) Anadyr, Petropavlovsk-Kamchatskiy", "Asia/Anadyr"},
+    {"(UTC+12:45) Chatham", "Pacific/Chatham"},
+    {"(UTC+13:00) Nuku'alofa", "Pacific/Tongatapu"},
+    {"(UTC+13:00) Coordinated Universal Time+13", "Etc/GMT-13"},
+    {"(UTC+14:00) Kiritimati Island", "Pacific/Kiritimati"}
+};
+
 TimeSettingDlg::TimeSettingDlg(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TimeSettingDlg)
@@ -50,8 +188,32 @@ TimeSettingDlg::~TimeSettingDlg()
     delete ui;
 }
 
+void TimeSettingDlg::initTimeZone()
+{
+    QPixmap pix(1,60);
+    pix.fill(Qt::transparent);
+    QIcon icon(pix);
+    ui->TimeZoneBox->setIconSize(QSize(1,60));
+    bool ret = sys_configFile_open();
+    ret = sys_configFile_contains("timezone");
+    QString str = "Asia/Shanghai";
+    if(ret){
+        str = sys_configFile_readStr("timezone");
+    }else{
+        sys_configFile_write("timezone" , "Asia/Shanghai");
+    }
+    sys_configFile_close();
+    for(int i = 0 ; i < g_ZoneTimeList.size() ; i++){
+        ui->TimeZoneBox->setItemIcon(i , icon);
+        if(str == g_ZoneTimeList.at(i).second){
+            ui->TimeZoneBox->setCurrentText(g_ZoneTimeList.at(i).first);
+        }
+    }
+}
+
 void TimeSettingDlg::initLanguage()
 {
+    initTimeZone();
     if(gLanguage == 0){
         ui->label_11->setText("时间设置");
         ui->yearBtn->setText("编辑");
@@ -70,6 +232,7 @@ void TimeSettingDlg::initLanguage()
         ui->btn_enter->setText("输入");
         ui->timeSet_but->setText("确定");
         ui->quitBtn->setText("退出");
+        ui->label_12->setText("时区设置");
     }else{
         ui->label_11->setText("Time setting");
         ui->yearBtn->setText("Edit");
@@ -88,6 +251,7 @@ void TimeSettingDlg::initLanguage()
         ui->btn_enter->setText("Iuput");
         ui->timeSet_but->setText("Confirm");
         ui->quitBtn->setText("Quit");
+        ui->label_12->setText("Time zone setting");
     }
 }
 
@@ -452,11 +616,12 @@ void TimeSettingDlg::on_timeSet_but_clicked()
                     || minute_old != minute_new)  {
                 if(gLanguage == 0) str = tr("时间设置成功");
                 else str = tr("Time set successfully");
-                QString insertStr;
+                QString insertStr,insertStrEn;
                 QString dateTimeString = currentTime_new.toString("yyyy-MM-dd hh:mm:ss");
-                if(gLanguage == 0) insertStr = tr("系统时间修改为 %1 !").arg(dateTimeString);
-                else  insertStr = tr("The system time is changed to %1 !").arg(dateTimeString);//插入系统日志
+                insertStr = tr("系统时间修改为 %1 !").arg(dateTimeString);
+                insertStrEn = tr("The system time is changed to %1 !").arg(dateTimeString);//插入系统日志
                 db_system_obj()->insertSystem(insertStr);
+                db_system_obj_en()->insertSystem(insertStrEn);
             }  else {
                 if(gLanguage == 0) str = tr("时间未修改");
                 else str = tr("Time not modified");
@@ -468,5 +633,22 @@ void TimeSettingDlg::on_timeSet_but_clicked()
     }
     else
         this->close();
+}
+
+
+
+void TimeSettingDlg::on_TimeZoneBox_currentTextChanged(const QString &arg1)
+{
+    system("rm -rf /etc/localtime");
+    QString cmd = "ln -sf /usr/share/zoneinfo/";
+    for(int i = 0 ; i < g_ZoneTimeList.size() ; i++){
+        if(arg1 == g_ZoneTimeList.at(i).first){
+            cmd += g_ZoneTimeList.at(i).second;
+            QString str = g_ZoneTimeList.at(i).second;
+            sys_configFile_writeParam("timezone" , str);
+        }
+    }
+    cmd += "  /etc/localtime";
+    system(cmd.toLocal8Bit().data()); //qDebug() << cmd;
 }
 

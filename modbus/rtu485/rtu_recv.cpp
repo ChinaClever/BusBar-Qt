@@ -242,8 +242,8 @@ static int rtu_start_recv_init(uchar *ptr, Rtu_recv *msg)
     msg->dc = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[交直流]
     msg->dc = 1;
     msg->curSpecification = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[电流规格]
-    ptr+=2;len+=2;//[地址码]
-//    msg->workMode = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[始端箱的工作模式]
+//    ptr+=2;len+=2;//[地址码]
+    msg->workMode = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[始端箱的工作模式]
     msg->baudRate = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[波特率]
     msg->buzzerStatus = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[蜂鸣器]
     msg->alarmTime = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
@@ -387,13 +387,14 @@ static int rtu_plug_recv_init(uchar *ptr, Rtu_recv *msg)
     msg->version = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;// 软件版本
     msg->proNum = (*ptr) * 256 + *(ptr+1); ptr+=2; len+=2;// 项目ID
     msg->lineNum = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//回路数
-    //msg->addr = (*ptr) * 256 + *(ptr+1);
+//    msg->addr = (*ptr) * 256 + *(ptr+1);
     ptr+=2;len+=2;//地址
     msg->baudRate = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[波特率]
     msg->iOF = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[iOF触点]
     msg->buzzerStatus = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//[蜂鸣器]
     msg->alarmTime = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->boxType = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+
     msg->phaseFlag = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->dc = 1;
 

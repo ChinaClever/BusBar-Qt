@@ -9,7 +9,6 @@
 #include "tcpclient.h"
 
 static bool isConnect = false;
-
 /**
  * @brief 获取TCP连接状态
  * @return
@@ -24,8 +23,10 @@ TcpClient::TcpClient(QObject *parent) : QThread(parent)
 {
     isConnect = false;
     mServerIP = new QHostAddress();
+    mDatagram.clear();
 
     mTcpSocket = new QTcpSocket(this);
+    mTcpSocket->setSocketOption(QAbstractSocket::LowDelayOption,0);
     connect(mTcpSocket, SIGNAL(connected()), this,SLOT(connectedSlot()));
     connect(mTcpSocket, SIGNAL(disconnected()), this,SLOT(disconnectedSlot()));
     connect(mTcpSocket,SIGNAL(readyRead()),this,SLOT(readMessageSlot()));
@@ -101,7 +102,7 @@ bool TcpClient::sentMessage(QByteArray &data)
     if(isConnect)
     {
         mDatagram.append(data);
-        QTimer::singleShot(1,this,SLOT(timeoutDone()));
+        timeoutDone();
     }
     else
         mDatagram.clear();
@@ -143,10 +144,11 @@ int TcpClient::writeMessage(QByteArray &data)
         if(mTcpSocket->isWritable())
         {
             rtn = mTcpSocket->write(data);
+            mTcpSocket->flush();
             if(rtn != data.size())
                 emit sentErr(mServerIP->toString());
             data.clear();
-        }
+        }       
     }
 
     return rtn;
@@ -157,6 +159,7 @@ void TcpClient::timeoutDone(void)
 {
     if(isConnect)
         writeMessage(mDatagram);
+
 }
 
 /**

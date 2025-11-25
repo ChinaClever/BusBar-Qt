@@ -351,7 +351,7 @@ void SetNamesWid::on_saveBtn_clicked()
         set_box_num(mIndex, ui->boxNumSpin->value());
         updateWid();                               //2018-12-17保存插接箱数量的同时，更新名称设置列表 pmd
 
-        BeepThread::bulid()->beep();
+        //BeepThread::bulid()->beep();
         if(gLanguage == 0) InfoMsgBox box(NULL, tr("保存成功！"));
         else InfoMsgBox box(NULL, tr("Save successfully！"));
     }

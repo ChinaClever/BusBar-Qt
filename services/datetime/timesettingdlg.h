@@ -20,12 +20,13 @@ public:
 
 protected:
     bool isLeap(int );
-
     void initBackground(void);
     void initEditBtn(void);
     void initKey(void);
     void timeSetup(void);
     void initLanguage();
+    void initTimeZone();
+
 protected slots:
     void editBtnPress(int);
     void keyPress(int value);
@@ -36,6 +37,7 @@ private slots:
     void on_btn_enter_clicked();
     void on_quitBtn_clicked();
     void on_timeSet_but_clicked();
+    void on_TimeZoneBox_currentTextChanged(const QString &arg1);
 
 private:
     Ui::TimeSettingDlg *ui;

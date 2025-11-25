@@ -51,13 +51,39 @@ QPushButton
 {
 	border:2px solid rgb(15,80,232);
 	border-radius:15px;
+}
+
+QComboBox{
+border:2px solid rgb(15,80,232);
+border-radius:15px;
+font: 11pt &quot;Ubuntu&quot;;
+}
+QComboBox::drop-down{
+subcontrol-origin:padding;
+subcontrol-position:top right;
+width:30px;
+border-left-width:1px;
+border-left-color:darkgray;
+border-left-style:solid;
+border-top-right-radius:3px;
+border-bottom-right-radius:3px;
+}
+QComboBox::down-arrow{
+image: url(:/new/prefix1/image/down.png);
+}
+QComboBox QAbstractItemView QScrollBar:vertical {
+    width: 30px;
+}
+
+QComboBox QAbstractItemView QScrollBar::handle:vertical {
+    width: 30px;
 }</string>
   </property>
   <widget class="QLabel" name="label_34">
    <property name="geometry">
     <rect>
      <x>470</x>
-     <y>91</y>
+     <y>151</y>
      <width>41</width>
      <height>30</height>
     </rect>
@@ -73,7 +99,7 @@ QPushButton
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>26</y>
+     <y>110</y>
      <width>121</width>
      <height>41</height>
     </rect>
@@ -89,7 +115,7 @@ QPushButton
    <property name="geometry">
     <rect>
      <x>202</x>
-     <y>91</y>
+     <y>151</y>
      <width>100</width>
      <height>40</height>
     </rect>
@@ -124,7 +150,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>390</x>
-     <y>380</y>
+     <y>400</y>
      <width>120</width>
      <height>40</height>
     </rect>
@@ -143,7 +169,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>470</x>
-     <y>186</y>
+     <y>246</y>
      <width>61</width>
      <height>30</height>
     </rect>
@@ -159,7 +185,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>310</x>
-     <y>190</y>
+     <y>250</y>
      <width>41</width>
      <height>30</height>
     </rect>
@@ -175,7 +201,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>202</x>
-     <y>186</y>
+     <y>246</y>
      <width>100</width>
      <height>40</height>
     </rect>
@@ -210,7 +236,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>362</x>
-     <y>91</y>
+     <y>151</y>
      <width>100</width>
      <height>40</height>
     </rect>
@@ -245,7 +271,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>90</y>
+     <y>150</y>
      <width>41</width>
      <height>30</height>
     </rect>
@@ -261,7 +287,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>310</x>
-     <y>90</y>
+     <y>150</y>
      <width>41</width>
      <height>30</height>
     </rect>
@@ -277,7 +303,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>42</x>
-     <y>186</y>
+     <y>246</y>
      <width>100</width>
      <height>40</height>
     </rect>
@@ -312,7 +338,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>40</x>
-     <y>90</y>
+     <y>150</y>
      <width>100</width>
      <height>40</height>
     </rect>
@@ -360,7 +386,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>360</x>
-     <y>186</y>
+     <y>246</y>
      <width>100</width>
      <height>40</height>
     </rect>
@@ -395,7 +421,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>190</y>
+     <y>250</y>
      <width>41</width>
      <height>30</height>
     </rect>
@@ -411,7 +437,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>230</y>
+     <y>290</y>
      <width>60</width>
      <height>30</height>
     </rect>
@@ -439,7 +465,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>240</x>
-     <y>230</y>
+     <y>290</y>
      <width>60</width>
      <height>30</height>
     </rect>
@@ -467,7 +493,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>400</x>
-     <y>230</y>
+     <y>290</y>
      <width>60</width>
      <height>30</height>
     </rect>
@@ -495,7 +521,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>80</x>
-     <y>130</y>
+     <y>190</y>
      <width>60</width>
      <height>30</height>
     </rect>
@@ -523,7 +549,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>240</x>
-     <y>130</y>
+     <y>190</y>
      <width>60</width>
      <height>30</height>
     </rect>
@@ -551,7 +577,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>400</x>
-     <y>130</y>
+     <y>190</y>
      <width>60</width>
      <height>30</height>
     </rect>
@@ -579,7 +605,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>310</x>
-     <y>410</y>
+     <y>430</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -592,7 +618,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>240</x>
-     <y>360</y>
+     <y>380</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -605,7 +631,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>410</y>
+     <y>430</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -618,7 +644,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>240</x>
-     <y>460</y>
+     <y>480</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -631,7 +657,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>360</y>
+     <y>380</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -647,7 +673,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>240</x>
-     <y>410</y>
+     <y>430</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -660,7 +686,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>410</y>
+     <y>430</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -673,7 +699,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>310</x>
-     <y>360</y>
+     <y>380</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -686,7 +712,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>0</x>
-     <y>320</y>
+     <y>340</y>
      <width>91</width>
      <height>30</height>
     </rect>
@@ -710,7 +736,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>460</y>
+     <y>480</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -723,7 +749,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>360</y>
+     <y>380</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -739,7 +765,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>310</x>
-     <y>460</y>
+     <y>480</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -752,7 +778,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>240</x>
-     <y>320</y>
+     <y>340</y>
      <width>121</width>
      <height>35</height>
     </rect>
@@ -768,7 +794,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>100</x>
-     <y>310</y>
+     <y>330</y>
      <width>131</width>
      <height>40</height>
     </rect>
@@ -793,7 +819,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>170</x>
-     <y>460</y>
+     <y>480</y>
      <width>48</width>
      <height>38</height>
     </rect>
@@ -806,7 +832,7 @@ QSpinBox::down-button
    <property name="geometry">
     <rect>
      <x>390</x>
-     <y>450</y>
+     <y>470</y>
      <width>120</width>
      <height>40</height>
     </rect>
@@ -820,6 +846,724 @@ QSpinBox::down-button
    <property name="text">
     <string>退出</string>
    </property>
+  </widget>
+  <widget class="QLabel" name="label_12">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>121</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="text">
+    <string>时区设置</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="TimeZoneBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>60</y>
+     <width>501</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Ubuntu</family>
+     <pointsize>11</pointsize>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="editable">
+    <bool>true</bool>
+   </property>
+   <property name="maxVisibleItems">
+    <number>6</number>
+   </property>
+   <item>
+    <property name="text">
+     <string>(UTC-12:00) International Date Line West</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-11:00) Coordinated Universal Time-11</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-11:00) Midway, Samoa</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-10:00) Hawaii</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-10:00) Aleutian Islands</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-09:30) Marquesas Islands</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-09:00) Alaska</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-09:00) Coordinated Universal Time-09</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-08:00) Baja California</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-08:00) Pacific Time (US &amp; Canada)</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-08:00) Coordinated Universal Time-08</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-07:00) La Paz, Mazatlan</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-07:00) Arizona</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-07:00) Mountain Time (US &amp; Canada)</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-06:00) Central America</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-06:00) Central Time (US &amp; Canada)</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-06:00) Saskatchewan</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-06:00) Guadalajara, Mexico City, Monterey</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-06:00) Easter Island</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-05:00) Bogota, Lima, Quito</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-05:00) Indiana (East)</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-05:00) Eastern Time (US &amp; Canada)</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-05:00) Havana</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-05:00) Haiti</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-05:00) Chetumal</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-05:00) Turks and Caicos</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-04:00) Caracas</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-04:00) Atlantic Time (Canada)</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-04:00) Asuncion</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-04:00) Georgetown, La Paz, Manaus, San Juan</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-04:00) Cuiaba</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-04:00) Santiago</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-03:30) Newfoundland</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-03:00) Araguaina</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-03:00) Brasilia</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-03:00) Greenland</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-03:00) Cayenne, Fortaleza</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-03:00) City of Buenos Aires</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-03:00) Buenos Aires</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-03:00) Montevideo</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-03:00) Punta Arenas</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-03:00) Saint Pierre and Miquelon</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-03:00) Salvador</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-02:00) Coordinated Universal Time-2</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-01:00) Cape Verde</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC-01:00) Azores</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+00:00) Monrovia, Reykjavik</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+00:00) Dublin, Edinburgh, Lisbon, London</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+00:00) Coordinated Universal Time</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+01:00) Casablanca</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+01:00) Brussels, Copenhagen, Madrid, Paris</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+01:00) West Central Africa</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Windhoek</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Athens, Bucharest</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Cairo</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Damascus</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Amman</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Harare, Pretoria</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Jerusalem</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Beirut</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Chisinau</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Gaza, Hebron</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Kaliningrad</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Tripoli</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+02:00) Khartoum</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+03:00) Juba</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+03:00) Istanbul</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+03:00) Baghdad</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+03:00) Minsk</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+03:00) Kuwait, Riyadh</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+03:00) Nairobi</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+03:00) Moscow, St. Petersburg, Volgograd</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+03:30) Tehran</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+04:00) Tbilisi</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+04:00) Yerevan</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+04:00) Abu Dhabi, Muscat</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+04:00) Baku</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+04:00) Port Louis</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+04:00) Astrakhan, Ulyanovsk</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+04:00) Izhevsk, Samara</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+04:00) Saratov</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+04:30) Kabul</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+05:00) Ashgabat, Tashkent</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+05:00) Islamabad, Karachi</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+05:00) Yekaterinburg</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+05:00) Qyzylorda</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+05:30) Sri Jayewardenepura Kotte</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+05:45) Kathmandu</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+06:00) Astana</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+06:00) Dhaka</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+06:00) Omsk</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+06:00) Bishkek</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+06:30) Yangon</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+07:00) Bangkok, Hanoi, Jakarta</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+07:00) Novosibirsk</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+07:00) Krasnoyarsk</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+07:00) Barnaul, Gorno-Altaysk</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+07:00) Khovd</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+07:00) Tomsk</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+08:00) Ulaanbaatar</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+08:00) Perth</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+08:00) Kuala Lumpur, Singapore</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+08:00) Taipei</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+08:00) Irkutsk</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+08:45) Eucla</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+09:00) Seoul</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+09:00) Osaka, Sapporo, Tokyo</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+09:00) Yakutsk</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+09:00) Chita</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+09:00) Pyongyang</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+09:30) Darwin</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+10:00) Hobart</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+10:00) Brisbane</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+10:00) Guam, Port Moresby</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+10:00) Canberra, Melbourne, Sydney</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+10:00) Vladivostok</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+10:30) Adelaide</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+11:00) Lord Howe Island</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+11:00) Bougainville Island</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+11:00) Solomon Islands, New Caledonia</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+11:00) Magadan</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+12:00) Coordinated Universal Time+12</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+12:00) Fiji, Marshall Islands</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+12:00) Auckland, Wellington</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+12:00) Anadyr, Petropavlovsk-Kamchatskiy</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+12:45) Chatham</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+13:00) Nuku'alofa</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+13:00) Coordinated Universal Time+13</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>(UTC+14:00) Kiritimati Island</string>
+    </property>
+   </item>
   </widget>
  </widget>
  <tabstops>

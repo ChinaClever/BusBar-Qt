@@ -14,15 +14,16 @@ public:
     explicit TcpClient(QObject *parent = 0);
     ~TcpClient();
 
-     bool newConnect(const QString &host, int port=TCP_PORT); //连接服务器
+     bool newConnect(const QString &host, int port=2222); //连接服务器
      bool sentMessage(uchar *buf,  int len);
      bool sentMessage(QByteArray &data);
      bool getSentStatue(void);
+     void closeConnect(void);
 
 protected:
      int writeMessage(char *data, int len);
      int writeMessage(QByteArray &data);
-     void closeConnect(void);
+
 
 signals:
      void disconnectedSig(); // 断开信号
