@@ -29,6 +29,7 @@ void SetMainWid::initLanguage()
         ui->loopBtn->setText("支路电流设置");
         ui->nameBtn->setText("名称设置");
         ui->powerBtn->setText("功率设置");
+        ui->breakerBtn->setText("断路器设置");
     }else{
         ui->sysBtn->setText("System settings");
         ui->temBtn->setText("Temperature settings");
@@ -37,6 +38,7 @@ void SetMainWid::initLanguage()
         ui->nameBtn->setText("Name settings");
         ui->cabnameBtn->setText("Cabinet name settings");
         ui->powerBtn->setText("Power settings");
+        ui->breakerBtn->setText("Breaker settings");
     }
 }
 
@@ -69,6 +71,9 @@ void SetMainWid::initWidget()
     mSetCabNamesWid = new SetCabNamesWid(ui->stackedWidget); //名称
     ui->stackedWidget->addWidget(mSetCabNamesWid);
 
+    mSetBreakerWid = new SetBreakerWid(ui->stackedWidget); //断路器
+    ui->stackedWidget->addWidget(mSetBreakerWid);
+
     setButtonColor(ui->lineBtn);
     //    ui->stackedWidget->setCurrentWidget(mSetLineWid);
 }
@@ -83,6 +88,7 @@ void SetMainWid::setButtonColor(QPushButton *button)
     ui->temBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
     ui->sysBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
     ui->powerBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
+    ui->breakerBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
 
     button->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";background-color: rgb(96,238,250);");
     //BeepThread::bulid()->beep();
@@ -95,6 +101,7 @@ void SetMainWid::busChangedSlot(int index)
     mSetPowerMainWid->updateWid(index);
     mSetTemWid->updateWid(index);
     mSetNamesWid->indexChanged(index);
+    mSetBreakerWid->setBus(index);
 #if (SI_RTUWIFI == 1 )
     emit busChangedSig(index);
 #endif
@@ -163,5 +170,14 @@ void SetMainWid::on_cabnameBtn_clicked()
     ui->stackedWidget->setCurrentWidget(mSetCabNamesWid);
     emit showAndHideBoxSig(0);
     mFirstLoad = true;;
+}
+
+
+void SetMainWid::on_breakerBtn_clicked()
+{
+    setButtonColor(ui->breakerBtn);
+    ui->stackedWidget->setCurrentWidget(mSetBreakerWid);
+    emit showAndHideBoxSig(1);
+    mFirstLoad = false;
 }
 

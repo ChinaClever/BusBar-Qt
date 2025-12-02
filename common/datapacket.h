@@ -144,6 +144,7 @@ typedef struct _sObjData {
     ushort pf[LINE_NUM_MAX]; // 功率因数
     uchar sw[LINE_NUM_MAX]; // 开关状态
     uchar swAlarm[LINE_NUM_MAX]; // 开关 0表示未告警  1表示已告警 2表示已记录
+    uchar swAlarmSend[LINE_NUM_MAX]; // 开关和电压告警0 发送 1 不发送
     uint apPow[LINE_NUM_MAX]; // 视在功率
     ushort ratedCur[LINE_NUM_MAX]; // 额定电流
     uint reactivePower[LINE_NUM_MAX]; // 无功功率

@@ -311,6 +311,28 @@ int getRateCur(int index)
     return rateCur;
 }
 
+/**
+ * @brief getSwAlramParameters
+ * @param data 即母线结构体数据
+ * @param bus 即第几条母线
+ * @return
+ */
+void getSwAlramParameters(sBusData *data , int bus)
+{
+    bool ret = sw_alram_configFile_open();  //打开配置文件
+    if(ret){
+        QString strGroup = QString("Bus%1").arg(bus+1);
+        for(int j = 1 ; j < data->boxNum  ; j++){
+            for(int k = 0 ; k < START_LINE_NUM; k++){
+                ret = sw_alram_configFile_contains(QString("swAlram_%1_%2").arg(j+1).arg(k+1),strGroup);
+                if(ret) data->box[j].data.swAlarmSend[k] = sw_alram_configFile_readInt(QString("swAlram_%1_%2").arg(j+1).arg(k+1),strGroup);
+                else{data->box[j].data.swAlarmSend[k] = 0;}
+            }
+        }
+        sw_alram_configFile_close();
+    }
+}
+
 void hexToStr(char * buf , int rtn , QString str)
 {
     QByteArray array;

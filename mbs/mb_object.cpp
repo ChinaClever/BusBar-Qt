@@ -117,13 +117,28 @@ void Mb_Object::upSlaveDevInfo(sBusData *data ,int bus, int index)
         for(int i = 0 ; i < LOOP_NUM_MAX ; i++)
         {
             if( i < dev->loopNum ){
-                vs << p->vol.value[i] << p->vol.upalarm[i];
+                vs << p->vol.value[i];
+                if(dev->phaseFlag){//三相
+                    if(dev->data.swAlarmSend[i/3]==0)vs << p->vol.upalarm[i];
+                    else vs << 0;
+                }else{//单相
+                    if(dev->data.swAlarmSend[i]==0)vs << p->vol.upalarm[i];
+                    else vs << 0;
+                }
+
                 vs << p->cur.value[i] << p->cur.upalarm[i];
                 vs << ( p->pow.value[i] >> 16 ) << ( p->pow.value[i] & 0xffff);
                 vs << p->pow.upalarm[i];
                 vs << ( p->reactivePower[i] >> 16 ) << ( p->reactivePower[i] & 0xffff);
                 vs << ( p->apPow[i] >> 16 ) << ( p->apPow[i] & 0xffff);
-                vs << p->pf[i] << p->sw[i];
+                vs << p->pf[i];
+                if(dev->phaseFlag){//三相
+                    if(dev->data.swAlarmSend[i/3]==0)vs << p->sw[i];
+                    else vs << 0;
+                }else{//单相
+                    if(dev->data.swAlarmSend[i]==0)vs << p->sw[i];
+                    else vs << 0;
+                }
                 vs << ( p->ele[i] >> 16 ) << ( p->ele[i] & 0xffff);
             }else{
                 vs << 0 << 0;

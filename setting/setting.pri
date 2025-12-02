@@ -24,6 +24,7 @@ HEADERS += \
     $$PWD/setline/setlineitem.h \
     $$PWD/setline/setlinewid.h \
     $$PWD/setloop/setloopwid.h \
+    $$PWD/setloop/setbreakerwid.h \
     $$PWD/setloop/settempwid.h \
     $$PWD/setline/setlinetem.h \
     $$PWD/setthreshold/setthresholddlg.h \
@@ -61,6 +62,7 @@ SOURCES += \
     $$PWD/setline/setlineitem.cpp \
     $$PWD/setline/setlinewid.cpp \
     $$PWD/setloop/setloopwid.cpp \
+    $$PWD/setloop/setbreakerwid.cpp \
     $$PWD/setloop/settempwid.cpp \
     $$PWD/setline/setlinetem.cpp \
     $$PWD/setthreshold/setthresholddlg.cpp \

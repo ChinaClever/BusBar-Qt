@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTableWidget>
+#include <QCheckBox>
 #include "common.h"
 
 #include <QScrollBar>
@@ -34,6 +35,20 @@ protected:
     void setBackgroundColor(int id);
     void setItemColor(int id, int column, int alarm);
     void setTableColumnWidth(int column, int width);
+
+    void clearCheckboxTable();
+    void clearCheckboxRow(int row);
+    void setTableCheckboxItem(int id, int column, QString str, int flag=0);
+    void addTableCheckboxRows(int line);
+    void addInitCheckboxRow();
+    void addRowCheckboxContent(QStringList &list);
+    void addItemCheckboxContent(int row, int column, const QString &content);
+    void setTableCheckboxRow(int id, QString str, int flag=0);
+    void checkTableCheckboxRow(int line);
+    void initTableCheckboxWid(QStringList &header, int line, const QString &title);
+    void getCheckboxState(sBusData *packet);
+    void funCheckbox();
+    int count;
 //    void initScrollArea();
 //    bool eventFilter(QObject *obj, QEvent *event);
 
@@ -41,6 +56,7 @@ protected slots:
     virtual void timeoutDone(){}
     virtual void itemDoubleClicked(QTableWidgetItem* ){}
     virtual void itemClicked(QTableWidgetItem* ){}
+    virtual void onCheckBoxStateChanged(int state,sBusData * packet, int row, int col){}
 
 protected:
     QTimer *timer;
@@ -57,6 +73,7 @@ private:
     Ui::ComTableWid *ui;
 //    QScrollBar *m_scrollBarV;
 //    QScrollBar *m_scrollBarH;
+
 };
 
 #endif // COMTABLEWID_H

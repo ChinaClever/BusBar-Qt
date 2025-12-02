@@ -19,7 +19,8 @@ HEADERS +=\
     $$PWD/qcustomplot.h \
     $$PWD/myprogressbar.h \
     $$PWD/comtablewid.h  \
-    $$PWD/cabconfigfile.h
+    $$PWD/cabconfigfile.h  \
+    $$PWD/swalramconfigfile.h
     #$$PWD/permissions.h
 	
 SOURCES +=\
@@ -33,7 +34,8 @@ SOURCES +=\
     $$PWD/qcustomplot.cpp \
     $$PWD/myprogressbar.cpp \
     $$PWD/comtablewid.cpp \
-    $$PWD/cabconfigfile.cpp
+    $$PWD/cabconfigfile.cpp  \
+    $$PWD/swalramconfigfile.cpp
     #$$PWD/permissions.cpp
 
 FORMS += \

@@ -4,6 +4,7 @@
 #include "msgbox.h"
 #include "sysconfigfile.h"
 #include "cabconfigfile.h"
+#include "swalramconfigfile.h"
 #include "datapacket.h"
 #include "common/beep/beepthread.h"
 //const QColor gray(174,225,254);//空设备,原为灰色，现为天蓝色
@@ -49,6 +50,7 @@ int getCabNum(int index);
 QString getCabColStr(int index);
 bool getCabNameStr(int index , int id , QString &str);
 QVector<int> getCabParameters(int index , int id );
+void getSwAlramParameters(sBusData *data , int bus);
 
 int getRateCur(int index);
 void mdelay(int msec);
