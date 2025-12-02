@@ -52,10 +52,9 @@ void SetBreakerWid::checkBus(int index)
 
 int SetBreakerWid::updateDev(sBoxData *dev, int row)
 {
-    //if(dev->offLine)
+    if(dev->offLine)
     {
-        //int flag = dev->phaseFlag;
-        int flag = 1;
+        int flag = dev->phaseFlag;
         setTableCheckboxRow(row, QString(dev->boxName) ,flag);
     }
 

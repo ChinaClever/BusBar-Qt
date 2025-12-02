@@ -490,8 +490,7 @@ void ComTableWid::getCheckboxState(sBusData * packet)
     for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
         for (int col = 1; col < ui->tableWidget->columnCount(); ++col) {
             // 检查这个位置是否是合并单元格的起始位置
-            //int flag = packet->box[row].phaseFlag;
-            int flag = 1;
+            int flag = packet->box[row].phaseFlag;
             int colSpan = ui->tableWidget->columnSpan(row, col);
 
             // 如果是起始位置（colSpan > 1）或者普通单元格（colSpan == 1）
@@ -508,7 +507,10 @@ void ComTableWid::getCheckboxState(sBusData * packet)
                         // 连接信号和槽 - 关键代码
                         int column = (col + 1)/ 3 - 1;
                         int ro = row + 1;
-                        checkBox->setText(QString("断路器%1").arg(column+1));
+                        if(gLanguage == 0)
+                            checkBox->setText(QString("断路器%1").arg(column+1));
+                        else
+                            checkBox->setText(QString("Breaker%1").arg(column+1));
                         uchar breaker_num = (packet->box[ro].plugbreaker>>12)&0x0F;
                         if(column > breaker_num - 1){checkBox->setEnabled(false);continue;}
                         checkBox->setEnabled(true);
@@ -540,7 +542,10 @@ void ComTableWid::getCheckboxState(sBusData * packet)
                                 });
                         checkBox->setChecked(packet->box[ro].data.swAlarmSend[column]==Qt::Checked);
                         checkBox->blockSignals(false); // 恢复信号
-                        checkBox->setText(QString("断路器%1").arg(column+1));
+                        if(gLanguage == 0)
+                            checkBox->setText(QString("断路器%1").arg(column+1));
+                        else
+                            checkBox->setText(QString("Breaker%1").arg(column+1));
                     }//else
                 }//else if(colSpan == 1 && flag == 0){//单相
             }//if (checkBox)
