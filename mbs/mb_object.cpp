@@ -134,10 +134,10 @@ void Mb_Object::upSlaveDevInfo(sBusData *data ,int bus, int index)
                 vs << p->pf[i];
                 if(dev->phaseFlag){//三相
                     if(dev->data.swAlarmSend[i/3]==0)vs << p->sw[i];
-                    else vs << 0;
+                    else vs << 2;
                 }else{//单相
                     if(dev->data.swAlarmSend[i]==0)vs << p->sw[i];
-                    else vs << 0;
+                    else vs << 2;
                 }
                 vs << ( p->ele[i] >> 16 ) << ( p->ele[i] & 0xffff);
             }else{

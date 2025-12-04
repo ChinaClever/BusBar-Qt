@@ -397,12 +397,12 @@ void ComTableWid::setTableCheckboxItem(int id, int column, QString str ,int flag
 {
     addTableCheckboxRows(id+1);
     QTableWidgetItem *item = ui->tableWidget->item(id, column);
-
     if(column == 0) {
         item->setText(str);
-    }else if(column % 3 == 1 && flag == 1){//三相
-        ui->tableWidget->setSpan(id , column , 1 ,3);
     }
+//    else if(column % 3 == 1 && flag == 1){//三相
+//        ui->tableWidget->setSpan(id , column , 1 ,3);
+//    }
 }
 
 //checkbox
@@ -475,11 +475,11 @@ void ComTableWid::addItemCheckboxContent(int row, int column, const QString &con
  */
 void ComTableWid::checkTableCheckboxRow(int line)
 {
-    count++;
-    if(count % 20 == 0){
-        count = 0;
-        ui->tableWidget->clearSpans();//存在三相->单相
-    }
+//    count++;
+//    if(count % 20 == 0){
+//        count = 0;
+//        ui->tableWidget->clearSpans();//存在三相->单相
+//    }
     addTableCheckboxRows(line);
     delTableRows(line);
 }
@@ -490,8 +490,8 @@ void ComTableWid::getCheckboxState(sBusData * packet)
     for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
         for (int col = 1; col < ui->tableWidget->columnCount(); ++col) {
             // 检查这个位置是否是合并单元格的起始位置
-            int flag = packet->box[row].phaseFlag;
-            int colSpan = ui->tableWidget->columnSpan(row, col);
+            int flag = packet->box[row+1].phaseFlag;
+            //int colSpan = ui->tableWidget->columnSpan(row, col);
 
             // 如果是起始位置（colSpan > 1）或者普通单元格（colSpan == 1）
             QCheckBox *checkBox = qobject_cast<QCheckBox*>(
@@ -499,7 +499,7 @@ void ComTableWid::getCheckboxState(sBusData * packet)
                 );
 
             if (checkBox) {
-                if(colSpan > 1 && flag == 1){//三相
+                if(flag == 1){//三相
                     checkBox->setEnabled(true);
                     if(col % 3 == 1 || col % 3 == 0){
                         checkBox->hide();
@@ -507,13 +507,13 @@ void ComTableWid::getCheckboxState(sBusData * packet)
                         // 连接信号和槽 - 关键代码
                         int column = (col + 1)/ 3 - 1;
                         int ro = row + 1;
-                        if(gLanguage == 0)
-                            checkBox->setText(QString("断路器%1").arg(column+1));
-                        else
-                            checkBox->setText(QString("Breaker%1").arg(column+1));
+
                         uchar breaker_num = (packet->box[ro].plugbreaker>>12)&0x0F;
                         if(column > breaker_num - 1){checkBox->setEnabled(false);continue;}
                         checkBox->setEnabled(true);
+//                        if(row == 0)
+//                        qDebug() <<"checkBox 1 "<< checkBox<<"Row:" << row << "Col:" << col
+//                                                        << "Checked:" << checkBox->isChecked();
                         checkBox->blockSignals(true);
                         connect(checkBox, &QCheckBox::stateChanged, this,
                                 [this,packet, ro, column](int state) {
@@ -521,17 +521,22 @@ void ComTableWid::getCheckboxState(sBusData * packet)
                                 });
                         checkBox->setChecked(packet->box[ro].data.swAlarmSend[column]==Qt::Checked);
                         checkBox->blockSignals(false);
+                        if(gLanguage == 0)
+                            checkBox->setText(QString("断路器%1").arg(column+1));
+                        else
+                            checkBox->setText(QString("Breaker%1").arg(column+1));
 
                     }
                 }
-                else if(colSpan == 1 && flag == 0){//单相
+                else if(flag == 0){//单相
                     checkBox->show();
 
-                    if(col > 3) checkBox->setEnabled(false);
+                    if(col > 3) {checkBox->setEnabled(false);checkBox->setText("---");}
                     else{
                         // 连接信号和槽 - 关键代码
+//                        if(row + 1 == 2)
 //                        qDebug() <<"checkBox 1 "<< checkBox<<"Row:" << row << "Col:" << col
-//                                 << "Checked:" << checkBox->isChecked();
+//                                 << "Checked:" << checkBox->isChecked()<<flag;
                         int column = col - 1;
                         int ro = row + 1;
 

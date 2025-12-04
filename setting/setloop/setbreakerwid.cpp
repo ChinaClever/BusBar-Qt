@@ -7,7 +7,7 @@ SetBreakerWid::SetBreakerWid(QWidget *parent) : ComTableWid(parent)
     mPacket =  &(get_share_mem()->data[mBus]);
     initWid();
 
-    getSwAlramParameters(mPacket , mBus);
+    for(int i = 0 ; i < BUS_NUM ; i++){getSwAlramParameters(&(get_share_mem()->data[i]) , i);}
     timer = new QTimer(this);
     timer->start(2000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
@@ -52,7 +52,7 @@ void SetBreakerWid::checkBus(int index)
 
 int SetBreakerWid::updateDev(sBoxData *dev, int row)
 {
-    if(dev->offLine)
+    //if(dev->offLine)
     {
         int flag = dev->phaseFlag;
         setTableCheckboxRow(row, QString(dev->boxName) ,flag);
@@ -78,7 +78,7 @@ void SetBreakerWid::updateData()
 
 void SetBreakerWid::timeoutDone()
 {
-    getSwAlramParameters(mPacket , mBus);
+    for(int i = 0 ; i < BUS_NUM ; i++){getSwAlramParameters(&(get_share_mem()->data[i]) , i);}
     checkBus(mBus);
     updateData();
     getCheckboxState(mPacket);
