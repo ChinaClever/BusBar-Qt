@@ -16,7 +16,6 @@ ComTableWid::ComTableWid(QWidget *parent) :
     ui->setupUi(this);
 //    groupBox_background_icon(this);
 
-    count = 0;
     timer = new QTimer(this);
     timer->start(1*1000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
@@ -396,8 +395,8 @@ void ComTableWid::setTableCheckboxRow(int id, QString str,int flag)
 void ComTableWid::setTableCheckboxItem(int id, int column, QString str ,int flag)
 {
     addTableCheckboxRows(id+1);
-    QTableWidgetItem *item = ui->tableWidget->item(id, column);
     if(column == 0) {
+        QTableWidgetItem *item = ui->tableWidget->item(id, column);
         item->setText(str);
     }
 //    else if(column % 3 == 1 && flag == 1){//三相
@@ -454,18 +453,32 @@ void ComTableWid::addRowCheckboxContent(QStringList &list)
  */
 void ComTableWid::addItemCheckboxContent(int row, int column, const QString &content)
 {
-    QTableWidgetItem *item;
     if(column == 0) {
-        item = new QTableWidgetItem(content);
-        item->setTextAlignment(Qt::AlignCenter);
-        ui->tableWidget->setItem(row, column, item);
+        QTableWidgetItem *item = ui->tableWidget->item(row, column);
+        if (!item) {
+            item = new QTableWidgetItem(content);
+            item->setTextAlignment(Qt::AlignCenter);
+            ui->tableWidget->setItem(row, column, item);
+        } else if (item->text() != content) {
+            // 内容不同才更新
+            item->setText(content);
+        }
     }
     else{
-        QCheckBox *checkBox = new QCheckBox();
-        item = new QTableWidgetItem();
-        item->setTextAlignment(Qt::AlignCenter);
-        checkBox->setText("---");//test
-        ui->tableWidget->setCellWidget(row, column, (QWidget*)checkBox);
+        QCheckBox *checkBox = qobject_cast<QCheckBox*>(
+            ui->tableWidget->cellWidget(row, column)
+            );
+        if(!checkBox){
+            checkBox = new QCheckBox(ui->tableWidget);
+            connect(checkBox, &QCheckBox::stateChanged, this,
+                    [this, row, column](int state) {
+                        onCheckBoxStateChanged(state, row, column);
+                    });
+            //item = new QTableWidgetItem();
+            //item->setTextAlignment(Qt::AlignCenter);
+            checkBox->setText("---");//test
+            ui->tableWidget->setCellWidget(row, column, checkBox);
+        }
     }
 }
 
@@ -475,11 +488,6 @@ void ComTableWid::addItemCheckboxContent(int row, int column, const QString &con
  */
 void ComTableWid::checkTableCheckboxRow(int line)
 {
-//    count++;
-//    if(count % 20 == 0){
-//        count = 0;
-//        ui->tableWidget->clearSpans();//存在三相->单相
-//    }
     addTableCheckboxRows(line);
     delTableRows(line);
 }
@@ -515,10 +523,6 @@ void ComTableWid::getCheckboxState(sBusData * packet)
 //                        qDebug() <<"checkBox 1 "<< checkBox<<"Row:" << row << "Col:" << col
 //                                                        << "Checked:" << checkBox->isChecked();
                         checkBox->blockSignals(true);
-                        connect(checkBox, &QCheckBox::stateChanged, this,
-                                [this,packet, ro, column](int state) {
-                                    onCheckBoxStateChanged(state,packet, ro, column);
-                                });
                         checkBox->setChecked(packet->box[ro].data.swAlarmSend[column]==Qt::Checked);
                         checkBox->blockSignals(false);
                         if(gLanguage == 0)
@@ -534,17 +538,10 @@ void ComTableWid::getCheckboxState(sBusData * packet)
                     if(col > 3) {checkBox->setEnabled(false);checkBox->setText("---");}
                     else{
                         // 连接信号和槽 - 关键代码
-//                        if(row + 1 == 2)
-//                        qDebug() <<"checkBox 1 "<< checkBox<<"Row:" << row << "Col:" << col
-//                                 << "Checked:" << checkBox->isChecked()<<flag;
                         int column = col - 1;
                         int ro = row + 1;
 
                         checkBox->blockSignals(true);// 暂时屏蔽信号
-                        connect(checkBox, &QCheckBox::stateChanged, this,
-                                [this,packet, ro, column](int state) {
-                                    onCheckBoxStateChanged(state,packet, ro, column);
-                                });
                         checkBox->setChecked(packet->box[ro].data.swAlarmSend[column]==Qt::Checked);
                         checkBox->blockSignals(false); // 恢复信号
                         if(gLanguage == 0)

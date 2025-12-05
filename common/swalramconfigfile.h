@@ -1,6 +1,7 @@
 ﻿#ifndef SWALRAMCONFIGFILE_H
 #define SWALRAMCONFIGFILE_H
 #include <QString>
+#include <QSettings>
 
 
 extern bool sw_alram_configFile_open(void);
@@ -12,6 +13,8 @@ extern void sw_alram_configFile_write(QString, QString, QString strGroup="Bus1")
 extern bool sw_alram_configFile_contains(QString strParameterName, QString strGroup="Bus1");
 
 extern void sw_alram_configFile_writeParam(QString, QString, QString strGroup="Bus1");
+
+extern QSettings & sw_alram_config();
 
 
 #endif // SWALRAMCONFIGFILE_H

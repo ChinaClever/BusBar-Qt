@@ -17,7 +17,7 @@ public:
 protected slots:
     void timeoutDone();
     void itemClicked(QTableWidgetItem* it);
-    void onCheckBoxStateChanged(int state,sBusData * packet, int row, int col);
+    void onCheckBoxStateChanged(int state, int row, int col);
 
 protected:
     void initWid();

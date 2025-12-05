@@ -48,7 +48,6 @@ protected:
     void initTableCheckboxWid(QStringList &header, int line, const QString &title);
     void getCheckboxState(sBusData *packet);
     void funCheckbox();
-    int count;
 //    void initScrollArea();
 //    bool eventFilter(QObject *obj, QEvent *event);
 
@@ -56,7 +55,7 @@ protected slots:
     virtual void timeoutDone(){}
     virtual void itemDoubleClicked(QTableWidgetItem* ){}
     virtual void itemClicked(QTableWidgetItem* ){}
-    virtual void onCheckBoxStateChanged(int state,sBusData * packet, int row, int col){}
+    virtual void onCheckBoxStateChanged(int state, int row, int col){}
 
 protected:
     QTimer *timer;

@@ -105,13 +105,18 @@ void SetBreakerWid::itemClicked(QTableWidgetItem *it)
     //}
 }
 
-void SetBreakerWid::onCheckBoxStateChanged(int state,sBusData * packet, int row, int col)
+void SetBreakerWid::onCheckBoxStateChanged(int state, int row, int col)
 {
-    if(packet->box[row].data.swAlarmSend[col] != state){
-        packet->box[row].data.swAlarmSend[col] = state;
+    row = row + 1;
+    if( mPacket->box[row].phaseFlag==0)
+        col = col - 1;
+    else
+        col = (col + 1)/ 3 - 1;
+    //if(mPacket->box[row].data.swAlarmSend[col] != state){
+        mPacket->box[row].data.swAlarmSend[col] = state;
         QString groupStr = QString("Bus%1").arg(mBus+1);
         sw_alram_configFile_writeParam(QString("swAlram_%1_%2").arg(row+1).arg(col+1),QString::number(state),groupStr);
-        bool ret = checkBuzzerStatus(packet , row);
+        bool ret = checkBuzzerStatus(mPacket , row);
         sThresholdItem item;
         item.bus = mBus;
         item.box = row;
@@ -119,7 +124,7 @@ void SetBreakerWid::onCheckBoxStateChanged(int state,sBusData * packet, int row,
         if(ret == false){item.min = 1;mItem = item;}
         else{item.min = 0;mItem = item;}
         SetThread::bulid()->append(mItem);
-    }
+    //}
 }
 
 bool SetBreakerWid::checkBuzzerStatus(sBusData * packet,int row)

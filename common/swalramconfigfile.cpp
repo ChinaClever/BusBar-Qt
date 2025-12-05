@@ -37,6 +37,14 @@ bool sw_alram_configFile_open(void)
     return ret;
 }
 
+QSettings & sw_alram_config()
+{
+    static QSettings settings(
+        cm_pathOfData("swalramconfig.ini"),
+        QSettings::IniFormat
+        );
+    return settings;
+}
 /**
  * 功 能：关闭系统配置文件
  * 开发人员：Lzy     2016 - 七夕
@@ -58,7 +66,7 @@ QString sw_alram_configFile_readStr(QString strParameterName, QString strGroup)
 {
     QString strParameter = "";
     strParameterName = "/" + strGroup + "/" + strParameterName;
-    strParameter = pSwAlramConfigIni->value(strParameterName).toString();
+    strParameter = sw_alram_config().value(strParameterName).toString();
     return strParameter;
 }
 
@@ -70,7 +78,7 @@ int sw_alram_configFile_readInt(QString strParameterName, QString strGroup)
 {
     int nParameter = -1;
     strParameterName = "/" + strGroup + "/" + strParameterName;
-    nParameter = pSwAlramConfigIni->value(strParameterName).toInt();
+    nParameter = sw_alram_config().value(strParameterName).toInt();
 
     return nParameter;
 }
@@ -83,7 +91,7 @@ bool sw_alram_configFile_contains(QString strParameterName, QString strGroup)
 {
     bool ret = false;
     strParameterName = "/" + strGroup + "/" + strParameterName;
-    ret = pSwAlramConfigIni->contains(strParameterName);
+    ret = sw_alram_config().contains(strParameterName);
 
     return ret;
 }
@@ -97,7 +105,7 @@ double sw_alram_configFile_readDouble(QString strParameterName, QString strGroup
 {
     double fParameter = 0;
     strParameterName = "/" + strGroup + "/" + strParameterName;
-    fParameter = pSwAlramConfigIni->value(strParameterName).toDouble();
+    fParameter = sw_alram_config().value(strParameterName).toDouble();
 
     return fParameter;
 }
@@ -109,7 +117,7 @@ double sw_alram_configFile_readDouble(QString strParameterName, QString strGroup
 void sw_alram_configFile_write(QString strParameterName, QString strParameter, QString strGroup)
 {
     strParameterName = "/" + strGroup + "/" + strParameterName;
-    pSwAlramConfigIni->setValue(strParameterName, strParameter);
+    sw_alram_config().setValue(strParameterName, strParameter);
 }
 
 /**
@@ -118,9 +126,9 @@ void sw_alram_configFile_write(QString strParameterName, QString strParameter, Q
  */
 void sw_alram_configFile_writeParam(QString name, QString value, QString strGroup)
 {
-    sw_alram_configFile_open();
+    //sw_alram_configFile_open();
     sw_alram_configFile_write(name, value, strGroup);
-    sw_alram_configFile_close();
+    //sw_alram_configFile_close();
 }
 
 
