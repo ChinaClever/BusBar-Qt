@@ -286,6 +286,7 @@ void ComTableWid::clearRow(int row)
     }
 }
 
+
 /**
  * @brief 清除表格所有内容
  */
@@ -326,8 +327,8 @@ void ComTableWid::setItemColor(int id, int column, int alarm)
         item->setTextColor(QColor(Qt::black));
         break;
     case 1:
-//        item->setTextColor(QColor(232,157,18));
-//        break;
+        //        item->setTextColor(QColor(232,157,18));
+        //        break;
     case 2:
         item->setTextColor(QColor(Qt::red));
         break;
@@ -335,3 +336,223 @@ void ComTableWid::setItemColor(int id, int column, int alarm)
         break;
     }
 }
+
+
+/**
+ * @brief 初始化Checkbox表格
+ * @param header 列表头
+ * @param line 表格行数
+ * @param title 表格名称
+ */
+void ComTableWid::initTableCheckboxWid(QStringList &header, int line, const QString &title)
+{
+    initTableWidget(header,title);
+    for(int i=0; i<line; ++i)
+        addInitCheckboxRow();
+    ui->groupBox->setTitle(title);
+}
+
+/**
+ * @brief 清除表格所有checkbox内容
+ */
+void ComTableWid::clearCheckboxTable()
+{
+    int row = ui->tableWidget->rowCount();
+    for(int i=0; i<row; ++i)
+        clearCheckboxRow(i);
+}
+
+
+/**
+ * @brief 清除一行checkbox内容
+ * @param row 行号
+ */
+void ComTableWid::clearCheckboxRow(int row)
+{
+    int column = ui->tableWidget->columnCount();
+    for(int i=0; i<column; ++i) {
+        setTableCheckboxItem(row, i, "---");
+    }
+}
+
+/**
+ * @brief Checkbox设置一行数据
+ * @param id 行号
+ * @param listStr 字符链表
+ */
+void ComTableWid::setTableCheckboxRow(int id, QString str,int flag)
+{
+    for(int i = 0 ; i < LOOP_NUM_MAX ; i++)
+        setTableCheckboxItem(id, i, str ,flag);
+}
+
+/**
+ * @brief 修改表格Item checkbox
+ * @param id  行号
+ * @param column 列号
+ * @param str 内容
+ */
+void ComTableWid::setTableCheckboxItem(int id, int column, QString str ,int flag)
+{
+    addTableCheckboxRows(id+1);
+    if(column == 0) {
+        QTableWidgetItem *item = ui->tableWidget->item(id, column);
+        item->setText(str);
+    }
+//    else if(column % 3 == 1 && flag == 1){//三相
+//        ui->tableWidget->setSpan(id , column , 1 ,3);
+//    }
+}
+
+//checkbox
+void ComTableWid::addTableCheckboxRows(int line)
+{
+    int row = ui->tableWidget->rowCount();
+    if(row < line)
+    {
+        for(int i=0; i<line-row; ++i)
+            addInitCheckboxRow();
+    }
+}
+
+/**
+ * @brief checkbox初始化一行表格
+ * @param str
+ */
+void ComTableWid::addInitCheckboxRow()
+{
+    QStringList list;
+    int column = ui->tableWidget->columnCount();
+    for(int j=0; j<column; ++j)
+        list << "---";
+    addRowCheckboxContent(list);
+}
+
+
+/**
+ * @brief 增加一行内容
+ * @param list
+ */
+void ComTableWid::addRowCheckboxContent(QStringList &list)
+{
+    int row = ui->tableWidget->rowCount();
+    ui->tableWidget->insertRow(row);
+    // ui->tableWidget->setRowHeight(row, 40);
+
+    for(int i=0; i<list.size(); ++i)
+        addItemCheckboxContent(row,i,list[i]);
+
+    list.clear();
+}
+
+/**
+ * @brief 增加checkbox Item
+ * @param row 行
+ * @param column 列
+ * @param content 信息
+ */
+void ComTableWid::addItemCheckboxContent(int row, int column, const QString &content)
+{
+    if(column == 0) {
+        QTableWidgetItem *item = ui->tableWidget->item(row, column);
+        if (!item) {
+            item = new QTableWidgetItem(content);
+            item->setTextAlignment(Qt::AlignCenter);
+            ui->tableWidget->setItem(row, column, item);
+        } else if (item->text() != content) {
+            // 内容不同才更新
+            item->setText(content);
+        }
+    }
+    else{
+        QCheckBox *checkBox = qobject_cast<QCheckBox*>(
+            ui->tableWidget->cellWidget(row, column)
+            );
+        if(!checkBox){
+            checkBox = new QCheckBox(ui->tableWidget);
+            connect(checkBox, &QCheckBox::stateChanged, this,
+                    [this, row, column](int state) {
+                        onCheckBoxStateChanged(state, row, column);
+                    });
+            //item = new QTableWidgetItem();
+            //item->setTextAlignment(Qt::AlignCenter);
+            checkBox->setText("---");//test
+            ui->tableWidget->setCellWidget(row, column, checkBox);
+        }
+    }
+}
+
+/**
+ * @brief 表格checkbox行数重新调整
+ * @param line 目标行数
+ */
+void ComTableWid::checkTableCheckboxRow(int line)
+{
+    addTableCheckboxRows(line);
+    delTableRows(line);
+}
+
+void ComTableWid::getCheckboxState(sBusData * packet)
+{
+    // 获取所有可见的checkbox（合并后只有起始位置的可见）
+    for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
+        for (int col = 1; col < ui->tableWidget->columnCount(); ++col) {
+            // 检查这个位置是否是合并单元格的起始位置
+            int flag = packet->box[row+1].phaseFlag;
+            //int colSpan = ui->tableWidget->columnSpan(row, col);
+
+            // 如果是起始位置（colSpan > 1）或者普通单元格（colSpan == 1）
+            QCheckBox *checkBox = qobject_cast<QCheckBox*>(
+                ui->tableWidget->cellWidget(row, col)
+                );
+
+            if (checkBox) {
+                if(flag == 1){//三相
+                    checkBox->setEnabled(true);
+                    if(col % 3 == 1 || col % 3 == 0){
+                        checkBox->hide();
+                    }else{
+                        // 连接信号和槽 - 关键代码
+                        int column = (col + 1)/ 3 - 1;
+                        int ro = row + 1;
+
+                        uchar breaker_num = (packet->box[ro].plugbreaker>>12)&0x0F;
+                        if(column > breaker_num - 1){checkBox->setEnabled(false);continue;}
+                        checkBox->setEnabled(true);
+//                        if(row == 0)
+//                        qDebug() <<"checkBox 1 "<< checkBox<<"Row:" << row << "Col:" << col
+//                                                        << "Checked:" << checkBox->isChecked();
+                        checkBox->blockSignals(true);
+                        checkBox->setChecked((packet->box[ro].backup_breaker>>column)&0x1 == 1);
+                        checkBox->blockSignals(false);
+                        if(gLanguage == 0)
+                            checkBox->setText(QString("断路器%1").arg(column+1));
+                        else
+                            checkBox->setText(QString("Breaker%1").arg(column+1));
+
+                    }
+                }
+                else if(flag == 0){//单相
+                    checkBox->show();
+
+                    if(col > 3) {checkBox->setEnabled(false);checkBox->setText("---");}
+                    else{
+                        // 连接信号和槽 - 关键代码
+                        int column = col - 1;
+                        int ro = row + 1;
+
+                        checkBox->blockSignals(true);// 暂时屏蔽信号
+                        checkBox->setChecked((packet->box[ro].backup_breaker>>column)&0x1 == 1);
+                        checkBox->blockSignals(false); // 恢复信号
+                        if(gLanguage == 0)
+                            checkBox->setText(QString("断路器%1").arg(column+1));
+                        else
+                            checkBox->setText(QString("Breaker%1").arg(column+1));
+                    }//else
+                }//else if(colSpan == 1 && flag == 0){//单相
+            }//if (checkBox)
+        }//for (int col = 1; col < ui->tableWidget->columnCount(); ++col)
+    }//for (int row = 0; row < ui->tableWidget->rowCount(); ++row)
+}
+
+

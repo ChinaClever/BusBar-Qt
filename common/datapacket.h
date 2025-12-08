@@ -197,6 +197,8 @@ typedef struct _sBoxData {
     uchar lpsLogAlarm;//防雷告警值 0表示未告警 1表示已告警 2表示已记录
     uchar zeroLineAlarm;//零线电流告警值 0表示未告警 1表示已告警 2表示已记录
     uchar totalPowAlarm;//总功率告警值 0表示未告警 1表示已告警 2表示已记录
+    uchar plug_cur_spec;// 插接箱电流规格
+    uchar backup_breaker;// 插接箱备用断路器
 
     uint zeroCur;//零线电流
     uint volUnbalance;//电压三相不平衡
@@ -475,6 +477,8 @@ enum  sSetPlugType{
     ,SetPlugiOF              = 5           //0:没有 1:有
     ,SetPlugBuzzer           = 6           //0:开启 1:关闭
     ,SetPlugAlarmTime        = 7            //2-5
+    ,SetPlugCurSpec          = 10            //电流规格
+    ,SetPlugBackupBreaker    = 11            //备用断路器
 
     ,PlugTemperatureMIN_1    = 165           //温度上限
     ,PlugTemperatureMAX_1    = 166           //温度下限
@@ -565,6 +569,9 @@ enum  sSetPlugType{
     ,PlugPowerMIN_L9_2       = 242           //功率下限
     ,PlugPowerMAX_L9_1       = 243           //功率上限
     ,PlugPowerMAX_L9_2       = 244           //功率上限
+
+    ,PlugCurrentMIN_HIGH_L1       = 273           //电流下限高位
+    ,PlugCurrentMAX_HIGH_L1       = 275           //电流上限高位
 
 };
 

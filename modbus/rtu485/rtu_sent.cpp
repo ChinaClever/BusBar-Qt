@@ -223,6 +223,29 @@ int rtu_sent_ushortV3_buff(uchar addr, ushort reg, uint num,  uint val1, uint va
     return rtu_sent_packet_ushort_V3(&msg, buf);
 }
 
+int rtu_sent_cur_ushortV3_buff(uchar addr, ushort reg, ushort reg2, uint num,  uint val1, uint val2 , uchar *buf,int mode)
+{
+    static Rtu_Sent_Ushort_V3 msg;
+    static QMutex mutex; // 互拆锁
+    QMutexLocker locker(&mutex);
+
+    msg.addr = addr;
+    msg.fn   = 0x10;
+
+    msg.num  = num;
+    if(mode == 0){
+        msg.reg  = reg;
+        msg.val1 = val1 & 0xffff;
+        msg.val2 = val2 & 0xffff;
+    }else{
+        msg.reg  = reg2;
+        msg.val1 = (val1>>16) & 0xffff;
+        msg.val2 = (val2>>16) & 0xffff;
+    }
+    return rtu_sent_packet_ushort_V3(&msg, buf);
+}
+
+
 /**
   * 功　能：发送数据打包
   * 入口参数：pkt -> 发送结构体
