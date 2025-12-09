@@ -110,9 +110,9 @@ void Mb_Object::upSlaveDevInfo(sBusData *data ,int bus, int index)
     if(dev->offLine > 0){
         vshort vs; //initFucRegs();
         vs << dev->version << dev->proNum << dev->loopNum << (index+1) << dev->baudRate;
-        vs << dev->iOF << dev->buzzerStatus << dev->alarmTime<<dev->boxType << dev->phaseFlag;
+        vs << dev->iOF << dev->buzzerStatus << dev->alarmTime<<dev->boxType << dev->phaseFlag << dev->plug_cur_spec << dev->backup_breaker;
 
-        vs << 0 << 0 << 0 << 0 << 0 << 0;
+        vs << 0 << 0 << 0 << 0 ;
         sObjData *p = &(dev->data);
         for(int i = 0 ; i < LOOP_NUM_MAX ; i++)
         {
@@ -169,11 +169,32 @@ void Mb_Object::upSlaveDevRange(sBusData *data , int bus, int index)
             }else{
                 vs << 0 << 0;
                 vs << 0 << 0;
-                vs << 0  << 0;
-                vs << 0  << 0;
+                vs << 0 << 0;
+                vs << 0 << 0;
             }
         }
         vs << dev->plugbreaker;
+        if(dev->plug_cur_spec){
+            for(int i = 0 ; i < LOOP_NUM_MAX ; i++){
+                vs << 0;
+            }
+            for(int i = 0 ; i < LOOP_NUM_MAX ; i++){
+                if( i < dev->loopNum ){
+                    vs << (dev->data.cur.value[i] >> 16) << (dev->data.cur.value[i] & 0xffff);
+                }else{
+                    vs << 0 << 0;
+                }
+            }
+            for(int i = 0 ; i < LOOP_NUM_MAX ; i++){
+                if( i < dev->loopNum ){
+                    vs << (dev->data.cur.min[i] >> 16) << (dev->data.cur.min[i] & 0xffff);
+                    vs << (dev->data.cur.max[i] >> 16) << (dev->data.cur.max[i] & 0xffff);
+                }else{
+                    vs << 0 << 0;
+                    vs << 0 << 0;
+                }
+            }
+        }
         setRegs(MbSlaveReg_Range+10000*bus+500*index, vs);
     }else{//clear
         vshort vs; //initFucRegs();

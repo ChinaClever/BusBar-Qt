@@ -486,12 +486,9 @@ static int rtu_plug_recv_loop_high_cur_data(uchar *ptr, Rtu_recv *msg , int inde
 {
     RtuRecvLine *p = &(msg->data[index]);
     uint len = 0;
-    uint temp = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    temp  <<= 16;
-    p->cur.imin = temp + p->cur.imin;
-    temp = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    temp  <<= 16;
-    p->cur.imax = temp + p->cur.imax;
+    p->cur.ivalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.ivalue  <<= 16;
+    p->cur.ivalue += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     return len;
 }
 
@@ -499,9 +496,12 @@ static int rtu_plug_recv_loop_high_cur_alram_data(uchar *ptr, Rtu_recv *msg , in
 {
     RtuRecvLine *p = &(msg->data[index]);
     uint len = 0;
-    uint temp = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
-    temp  <<= 16;
-    p->cur.ivalue = temp + p->cur.ivalue;
+    p->cur.imin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imin  <<= 16;
+    p->cur.imin += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imax  <<= 16;
+    p->cur.imax += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     return len;
 }
 
@@ -601,10 +601,12 @@ bool rtu_recv_packetV3(int addr ,uchar *buf, int len, Rtu_recv *pkt)
             pkt->plugBreaker = (*ptr) * 256 + *(ptr+1); ptr+=2;
             for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop load数据
                 ptr += 2;
-            for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop high current数据
-                ptr += rtu_plug_recv_loop_high_cur_data(ptr , pkt , i);
-            for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop high alram数据
-                ptr += rtu_plug_recv_loop_high_cur_alram_data(ptr , pkt , i);
+            if(pkt->plug_cur_spec){
+                for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop current数据
+                    ptr += rtu_plug_recv_loop_high_cur_data(ptr , pkt , i);
+                for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop high alram数据
+                    ptr += rtu_plug_recv_loop_high_cur_alram_data(ptr , pkt , i);
+            }
 
         }
         pkt->crc = (buf[(addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303)*2+6-1]*256) + buf[(addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303)*2+6-2]; // RTU_SENT_LEN_V23*2+5

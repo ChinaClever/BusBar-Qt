@@ -147,20 +147,6 @@ int RtuThread::sendDataUintV3(int addr, ushort reg, uint val1 , uint val2)
     return -1;
 }
 
-int RtuThread::sendCurDataUshortV3(int addr, ushort reg, ushort reg2, uint val1 , uint val2)
-{
-    sBoxData *box = &(mBusData->box[addr]); //共享内存
-    if( box->offLine > 0 ){ //在线
-        //打包数据
-        uchar *buf = mBuf;
-        int rtn = rtu_sent_cur_ushortV3_buff(addr+1, reg, reg2, 2, val1 , val2, buf , 0); // 把数据打包成通讯格式的数据
-        mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
-        rtn = rtu_sent_cur_ushortV3_buff(addr+1, reg, reg2, 2, val1 , val2, buf , 1); // 把数据打包成通讯格式的数据
-        return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
-    }
-    return -1;
-}
-
 int RtuThread::sendDataUshortV3(int addr, ushort reg, uint val1 , uint val2)
 {
     sBoxData *box = &(mBusData->box[addr]); //共享内存

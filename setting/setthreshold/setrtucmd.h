@@ -16,10 +16,9 @@ public:
 protected:
     void sendData(int busID, int addr, ushort reg, uint len);
     void sendReg(int reg, sThresholdItem &item);
-    void sendRegV3(int reg, sThresholdItem &item , int reg2 = 0);
+    void sendRegV3(int reg, sThresholdItem &item);
     void sendDataUintV3(int busID, int addr, ushort reg, uint val1 , uint val2);
     void sendDataUshortV3(int busID, int addr, ushort reg, uint val1 , uint val2);
-    void sendCurDataUshortV3(int busID, int addr, ushort reg, ushort reg2,  uint val1, uint val2);
     void sendDataUcharV3(int busID, int addr, ushort reg, uint val);
     int getReg(sThresholdItem &item);
 

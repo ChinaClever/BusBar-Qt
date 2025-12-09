@@ -6,6 +6,7 @@
 #include "setsystem/systemsettingdlg.h"
 #include "setsystem/checkpassworddlg.h"
 #include "setloop/setpowmain.h"
+#include "setloop/setbreakerwid.h"
 
 namespace Ui {
 class SetMainWid;
@@ -19,6 +20,9 @@ public:
     explicit SetMainWid(QWidget *parent = 0);
     ~SetMainWid();
     SystemSettingDlg *mSystemDlg;
+
+signals:
+    void showAndHideBoxSig(int);
 
 private:
     void initWidget();
@@ -40,6 +44,7 @@ signals:
 #endif
 
     void on_powerBtn_clicked();
+    void on_breakerBtn_clicked();
 
 private:
     Ui::SetMainWid *ui;
@@ -48,6 +53,7 @@ private:
     SetNamesWid *mSetNamesWid;
     SetLineWid *mSetLineWid;
     SetLoopWid *mSetLoopWid;
+    SetBreakerWid *mSetBreakerWid;
     SetPowMain *mSetPowerMainWid;
 
 };

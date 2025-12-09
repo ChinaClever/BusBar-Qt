@@ -122,7 +122,7 @@ void SetBreakerWid::onCheckBoxStateChanged(int state, int row, int col)
         item.box = row;
         item.type = 15;
         uchar temp = mPacket->box[row].backup_breaker;
-        if(state == 0){item.min = temp &(0x111|(0x0 << col));mItem = item;}
+        if(state == 0){item.min = temp & (~(1u << col));mItem = item;}
         else{item.min = temp | (0x1 << col);mItem = item;}
         SetThread::bulid()->append(mItem);
     //}
