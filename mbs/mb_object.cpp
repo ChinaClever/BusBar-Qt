@@ -188,7 +188,23 @@ void Mb_Object::upSlaveDevRange(sBusData *data , int bus, int index)
                 vs << 0  << 0;
             }
         }
-        vs << dev->plugbreaker;
+        //vs << dev->plugbreaker;
+        if(dev->phaseFlag){//三相
+            const ushort SEG_MASK[3] = {0b11u, 0b11u << 2, 0b11u << 4};
+            const ushort SEG_VAL_2   = 0b10u; // 状态值 2
+            uchar breaker_num = (dev->plugbreaker>>12)&0x0F;
+            ushort temp = dev->plugbreaker;
+            for(int i = 0 ; i < breaker_num ; i++){
+                if(dev->data.swAlarmSend[i]==0)continue;
+                else{
+                    // 清空对应段
+                    temp &= ~SEG_MASK[i];
+                    // 写入值 2 (10b) 到该段
+                    temp |= (SEG_VAL_2 << (i * 2));
+                }
+            }
+            vs << temp;
+        }else vs << dev->plugbreaker;
         setRegs(MbSlaveReg_Range+10000*bus+500*index, vs);
     }else{//clear
         vshort vs; //initFucRegs();

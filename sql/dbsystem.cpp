@@ -91,4 +91,13 @@ DbSystem* db_system_obj_en()
     return sington;
 }
 
+void DbSystem::wal_checkpoint()
+{
+    QSqlQuery query(mDb);
+    if (!query.exec("PRAGMA wal_checkpoint(TRUNCATE);")) {
+        qDebug() << "Checkpoint failed:" << query.lastError().text();
+    } else {
+        //qDebug() << "Checkpoint done.";
+    }
+}
 

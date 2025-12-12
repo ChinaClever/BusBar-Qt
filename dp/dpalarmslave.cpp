@@ -80,6 +80,7 @@ void DpAlarmSlave::timeoutDone()
 
 void DpAlarmSlave::saveMsg(const QString &typeStr, const QString &str , const QString &typeStrEn, const QString &strEn)
 {
+    QMutexLocker locker(&mutex);
     DB_Tran tran;
     DbAlarmItem item;
     item.type = typeStr;
@@ -91,7 +92,7 @@ void DpAlarmSlave::saveMsg(const QString &typeStr, const QString &str , const QS
     db_alarm_obj_en(mBusId)->insertItem(itemen);
     msleep(5);
 
-    QMutexLocker locker(&mutex);
+
     gEmailStr += "\t" + typeStr + "\t" +str + "\n"; //邮件发送内容
 }
 

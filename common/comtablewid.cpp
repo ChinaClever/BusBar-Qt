@@ -541,6 +541,8 @@ void ComTableWid::getCheckboxState(sBusData * packet)
                         int column = col - 1;
                         int ro = row + 1;
 
+//                        qDebug() <<"checkBox 1 "<< checkBox<<"Row:" << ro << "Col:" << column
+//                                     << "Checked:" << checkBox->isChecked();
                         checkBox->blockSignals(true);// 暂时屏蔽信号
                         checkBox->setChecked(packet->box[ro].data.swAlarmSend[column]==Qt::Checked);
                         checkBox->blockSignals(false); // 恢复信号
