@@ -18,6 +18,7 @@ public:
     QString tableName(){return QString("%1").arg(DB_TABLE_SYSTEM);}
     bool insertItem(DbSystemItem &item); // 插入
     bool insertSystem(const QString &str);
+    void wal_checkpoint();
 
     void createTable();
 protected:
