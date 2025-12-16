@@ -21,7 +21,7 @@
 #define START_LINE_NUM 3 // 3相
 #define LINE_NUM_MAX 9 // 三相
 #define LOOP_NUM_MAX 9 // 9回路
-#define BOX_NUM 20 // 插接箱数量
+#define BOX_NUM 30 // 插接箱数量
 #define BUS_NUM 4  // 四条母线
 #define NAME_LEN 32 // 名称最大长度
 #define SENSOR_NUM 4  // 四个传感器

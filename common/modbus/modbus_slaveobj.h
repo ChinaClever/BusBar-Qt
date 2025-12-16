@@ -12,7 +12,7 @@ enum eMbMasterRegs {
     MbMasterReg_End     = 472,
     MbSlaveReg_Factory    =   0,
     MbSlaveReg_Range      =   165,
-    MbSlaveReg_End     = 245,
+    MbSlaveReg_End     = 310,
 };
 
 class Modbus_SlaveObj : public Modbus_Object

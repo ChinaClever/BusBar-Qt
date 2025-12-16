@@ -29,7 +29,7 @@ bool Modbus_SlaveObj::initUnitMap()
     //reg.insert(QModbusDataUnit::DiscreteInputs, { QModbusDataUnit::DiscreteInputs, 0, 1999 });
     //reg.insert(QModbusDataUnit::InputRegisters, { QModbusDataUnit::InputRegisters, 0, 1999 });
     //reg.insert(QModbusDataUnit::HoldingRegisters, { QModbusDataUnit::HoldingRegisters, 0, 8999 });
-    reg.insert(QModbusDataUnit::HoldingRegisters, { QModbusDataUnit::HoldingRegisters, 0, 50000 });
+    reg.insert(QModbusDataUnit::HoldingRegisters, { QModbusDataUnit::HoldingRegisters, 0, 65000 });
     bool ret = mDev->setMap(reg);
     if(!ret) throwError("Error: ModbusDataUnitMap");
     return ret;
@@ -64,13 +64,13 @@ void Modbus_SlaveObj::recvDataSlot(QModbusDataUnit::RegisterType table, int addr
 //                mDev->data(QModbusDataUnit::Coils, address + i, &value);
 //                break;
             case QModbusDataUnit::HoldingRegisters:
-                mDev->data(QModbusDataUnit::HoldingRegisters, address + i, &value);
+                //mDev->data(QModbusDataUnit::HoldingRegisters, address + i, &value);
                 break;
             default: value = 0xFF; qDebug() << "Error: Modbus Register Type " << table;
                 continue;
             }
-            setData(table, address+i, value);
-            emit registerDataSig(address+i,value);
+            //setData(table, address+i, value);
+            //emit registerDataSig(address+i,value);
             qDebug() << table << address+i << size << value;
         }
 

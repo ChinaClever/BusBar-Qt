@@ -298,7 +298,7 @@ QSpinBox{
         <number>0</number>
        </property>
        <property name="maximum">
-        <number>18</number>
+        <number>30</number>
        </property>
        <property name="singleStep">
         <number>1</number>

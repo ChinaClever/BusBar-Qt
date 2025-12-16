@@ -63,13 +63,13 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
             for(int j = 0 ; j < 200-172 ; j++) vs << 0 ;
         }
 
-        setRegs(MbMasterReg_Factory+10000*bus, vs);
+        setRegs(MbMasterReg_Factory+15500*bus, vs);
     }else{//clear
         vshort vs; //initFucRegs();
         for(int i = 0 ;  i < MbMasterReg_Range ; i++){
             vs << 0;
         }
-        setRegs(MbMasterReg_Factory+10000*bus, vs);
+        setRegs(MbMasterReg_Factory+15500*bus, vs);
     }
 }
 
@@ -94,13 +94,13 @@ void Mb_Object::upMasterDevRange(sBusData *data , int bus, int index)
             vs << (dev->data.pow.min[i] >> 16)  << (dev->data.pow.min[i] & 0xffff);
             vs << (dev->data.pow.max[i] >> 16)  << (dev->data.pow.max[i] & 0xffff);
         }
-        setRegs(MbMasterReg_Range+10000*bus, vs);
+        setRegs(MbMasterReg_Range+15500*bus, vs);
     }else{//clear
         vshort vs; //initFucRegs();
         for(int i = MbMasterReg_Range ;  i <= MbMasterReg_End ; i++){
             vs << 0;
         }
-        setRegs(MbMasterReg_Range+10000*bus, vs);
+        setRegs(MbMasterReg_Range+15500*bus, vs);
     }
 }
 
@@ -142,13 +142,13 @@ void Mb_Object::upSlaveDevInfo(sBusData *data ,int bus, int index)
         for(int i = 0 ;  i < SENSOR_NUM ; i++){
             vs << dev->env.tem.value[i] << dev->env.tem.upalarm[i];
         }
-        setRegs(MbSlaveReg_Factory+10000*bus+500*index, vs);
+        setRegs(MbSlaveReg_Factory+15500*bus+500*index, vs);
     }else{//clear
         vshort vs; //initFucRegs();
         for(int i = 0 ;  i < MbSlaveReg_Range ; i++){
             vs << 0;
         }
-        setRegs(MbSlaveReg_Factory+10000*bus+500*index, vs);
+        setRegs(MbSlaveReg_Factory+15500*bus+500*index, vs);
     }
 }
 
@@ -195,13 +195,13 @@ void Mb_Object::upSlaveDevRange(sBusData *data , int bus, int index)
                 }
             }
         }
-        setRegs(MbSlaveReg_Range+10000*bus+500*index, vs);
+        setRegs(MbSlaveReg_Range+15500*bus+500*index, vs);
     }else{//clear
         vshort vs; //initFucRegs();
         for(int i = MbSlaveReg_Range ;  i <= MbSlaveReg_End ; i++){
             vs << 0;
         }
-        setRegs(MbSlaveReg_Range+10000*bus+500*index, vs);
+        setRegs(MbSlaveReg_Range+15500*bus+500*index, vs);
     }
 }
 

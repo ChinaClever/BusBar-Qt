@@ -13,7 +13,7 @@ void InitShm::initBoxNum()
 {
     for(int i=0; i<BUS_NUM; ++i) {
         int boxNum = getBoxNum(i);  //插接箱数
-        if(boxNum < 0) boxNum = 18;
+        if(boxNum < 0) boxNum = 30;
         shm->data[i].boxNum = boxNum; // 18个插接箱
 
         int rateCur = getRateCur(i); // rateCur
@@ -111,7 +111,7 @@ void InitShm::initBoxName()
     for(int i=0; i<BUS_NUM; ++i)
     {
         sBusData *busData = &(shm->data[i]);
-        for(int j=1; j<BOX_NUM; ++j)
+        for(int j=1; j<=BOX_NUM; ++j)
         {
             sBoxData *box = &(busData->box[j]);
             initNameUnit(i, 2, j, box->boxName, QString("iBox-%1").arg(j));//插接箱名称各处统一

@@ -329,9 +329,9 @@ bool SetNamesWid::saveBusName()
         else CriticalMsgBox box(NULL, tr("Busbar name cannot be empty, saving failed!!"));
         ret = false;
     }
-    if(ui->boxNumSpin->value() < 0 || ui->boxNumSpin->value() > 18){
-        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("个数应在0-18!!"));
-        else CriticalMsgBox box(NULL, tr("The number should be between 0-18!!"));
+    if(ui->boxNumSpin->value() < 0 || ui->boxNumSpin->value() > 30){
+        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("个数应在0-30!!"));
+        else CriticalMsgBox box(NULL, tr("The number should be between 0-30!!"));
         ret = false;
     }
     if(ui->rateCurSpin->value() < 100 || ui->rateCurSpin->value() > 1200){

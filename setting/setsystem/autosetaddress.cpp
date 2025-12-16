@@ -104,7 +104,7 @@ void AutoSetAddress::on_autoSet4Btn_clicked()
 void AutoSetAddress::setProgressbarPowValue(QProgressBar *bar,int value, int index)
 {
     int min = 2;
-    int max = getBoxNum(index)==-1?18:getBoxNum(index);
+    int max = getBoxNum(index)==-1?30:getBoxNum(index);
     max += 2;
     if(max - min > 0)
     {
