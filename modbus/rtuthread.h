@@ -23,6 +23,7 @@ public:
     int sendDataUintV3(int addr, ushort reg, uint val1 , uint val2);
     int sendDataUshortV3(int addr, ushort reg, uint val1 , uint val2);
     int sendDataUcharV3(int addr, ushort reg, uint val);
+    int sendCurDataUshortV3(int addr, ushort reg, ushort reg2, uint val1 , uint val2);
 
 public slots:
     void autoSetBusSlot(int index);

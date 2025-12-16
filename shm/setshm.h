@@ -16,6 +16,7 @@ struct sThresholdItem{
     uchar num; // 编号第几相，第几回路
     uchar txtype=0;//设置类型 0代表用户在主控屏上设置
     uchar insertlog=0;//0不记录操作日志 1记录操作日志
+    uchar curSpec;//电流规格
     uint min, crmin, crmax, max; // 最小值，临界下限  临界上限  最大值
     uint premin, precrmin, precrmax, premax; // 最小值，临界下限  临界上限  最大值
 };

@@ -397,6 +397,8 @@ static int rtu_plug_recv_init(uchar *ptr, Rtu_recv *msg)
 
     msg->phaseFlag = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->dc = 1;
+    msg->plug_cur_spec = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->backup_breaker = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
 
     return len; //3.0.0版本
 }
@@ -480,6 +482,30 @@ static int rtu_plug_recv_loop_alarm_data(uchar *ptr, Rtu_recv *msg , int index)
     return len; //3.0.0版本
 }
 
+static int rtu_plug_recv_loop_high_cur_data(uchar *ptr, Rtu_recv *msg , int index)
+{
+    RtuRecvLine *p = &(msg->data[index]);
+    uint len = 0;
+    p->cur.ivalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.ivalue  <<= 16;
+    p->cur.ivalue += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    return len;
+}
+
+static int rtu_plug_recv_loop_high_cur_alram_data(uchar *ptr, Rtu_recv *msg , int index)
+{
+    RtuRecvLine *p = &(msg->data[index]);
+    uint len = 0;
+    p->cur.imin = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imin  <<= 16;
+    p->cur.imin += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    p->cur.imax  <<= 16;
+    p->cur.imax += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    return len;
+}
+
+
 static int rtu_recv_rate(uchar *ptr , ushort *cur , ushort *min , ushort *max)
 {
     *cur = (*ptr) * 256 + *(ptr+1); ptr+=2;
@@ -562,7 +588,7 @@ bool rtu_recv_packetV3(int addr ,uchar *buf, int len, Rtu_recv *pkt)
         }
         else{//插接箱
             ptr += rtu_plug_recv_init(ptr , pkt);
-            ptr += (16-10)*2;//保留
+            ptr += (16-12)*2;//保留
             for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop 数据
                 ptr += rtu_plug_recv_loop_data(ptr , pkt , i);
             ptr += rtu_plug_recv_thd_pl_data(ptr , pkt);
@@ -573,6 +599,14 @@ bool rtu_recv_packetV3(int addr ,uchar *buf, int len, Rtu_recv *pkt)
             for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop alarm数据
                 ptr += rtu_plug_recv_loop_alarm_data(ptr , pkt , i);
             pkt->plugBreaker = (*ptr) * 256 + *(ptr+1); ptr+=2;
+            for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop load数据
+                ptr += 2;
+            if(pkt->plug_cur_spec){
+                for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop current数据
+                    ptr += rtu_plug_recv_loop_high_cur_data(ptr , pkt , i);
+                for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop high alram数据
+                    ptr += rtu_plug_recv_loop_high_cur_alram_data(ptr , pkt , i);
+            }
 
         }
         pkt->crc = (buf[(addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303)*2+6-1]*256) + buf[(addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303)*2+6-2]; // RTU_SENT_LEN_V23*2+5

@@ -62,6 +62,8 @@ void SetThresholdDlg::initSpinBox(sThresholdItem &item)
             {
             if(!item.box){
                 str = "A"; range = 1200;
+            }else{
+                range = 125;
             }
             ui->mindoubleSpinBox->setMaximum(range);
             ui->maxdoubleSpinBox->setMaximum(range);
@@ -211,6 +213,7 @@ void SetThresholdDlg::set(sThresholdItem &item)
         ui->maxBox->hide();
         item.min = unitPower->min[item.num];
         item.max = unitPower->max[item.num];
+        item.curSpec = busData->box[item.box].plug_cur_spec;
     }else if( item.type == 4 ){
         ui->minBox->hide();
         ui->maxBox->hide();

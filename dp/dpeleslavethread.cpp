@@ -9,6 +9,7 @@
 #include "dpeleslavethread.h"
 #include "dbbranchele.h"
 #include "dbmainele.h"
+#include "dbsystem.h"
 
 DpEleSlaveThread::DpEleSlaveThread(QObject *parent) : QThread(parent)
 {
@@ -86,7 +87,7 @@ void DpEleSlaveThread::run()
             saveBus(i);
             msleep(800);//////延时进行下一个事务
         }
-
+        db_system_obj()->wal_checkpoint();
         isRun  = false;
     }
 }

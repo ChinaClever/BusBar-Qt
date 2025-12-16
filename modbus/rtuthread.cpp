@@ -638,6 +638,8 @@ int RtuThread::transDataV3(int addr)
                 box->totalPow.imax = pkt->totalPow.imax;
                 box->totalPow.iupalarm=  pkt->totalPow.ialarm;
                 box->plugbreaker = pkt->plugBreaker;
+                box->plug_cur_spec = pkt->plug_cur_spec;
+                box->backup_breaker = pkt->backup_breaker;
                 thdDataV3(pkt);
             }
 
