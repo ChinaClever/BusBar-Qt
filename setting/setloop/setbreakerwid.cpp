@@ -125,6 +125,10 @@ void SetBreakerWid::onCheckBoxStateChanged(int state, int row, int col)
         if(state == 0){item.min = temp & (~(1u << col));mItem = item;}
         else{item.min = temp | (0x1 << col);mItem = item;}
         SetThread::bulid()->append(mItem);
+
+        if(mPacket->box[row].offLine > 0 ){
+            mPacket->box[row].backup_breaker = item.min;
+        }
     //}
 }
 
