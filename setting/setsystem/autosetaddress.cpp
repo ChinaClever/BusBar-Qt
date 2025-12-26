@@ -235,7 +235,7 @@ void AutoSetAddress::getDelaySlot(int index)
         setProcessBarColor(ui->progressBar , "red");
         if(mCurBoxNum[0] == 0){
             msgen = QString(tr("The feeder box of %1 bus did not issue a command !").arg(en));
-        }else if(mCurBoxNum[0] >= 2 && mCurBoxNum[0] <= 20 ){
+        }else if(mCurBoxNum[0] >= 2 && mCurBoxNum[0] <= BOX_NUM+2 ){
             msg = QString(tr("第%2条母线设置地址%1失败 !")).arg(mCurBoxNum[0]).arg(in);
             msgen = QString(tr("The %2 bus set address %1 failed !")).arg(mCurBoxNum[0]).arg(en);
         }
@@ -253,7 +253,7 @@ void AutoSetAddress::getDelaySlot(int index)
         setProcessBarColor(ui->progressBar_2 , "red");
         if(mCurBoxNum[1] == 0){
             msgen = QString(tr("The feeder box of %1 bus did not issue a command !").arg(en));
-        }else if(mCurBoxNum[1] >= 2 && mCurBoxNum[1] <= 20 ){
+        }else if(mCurBoxNum[1] >= 2 && mCurBoxNum[1] <= BOX_NUM+2 ){
             msg = QString(tr("第%2条母线设置地址%1失败 !")).arg(mCurBoxNum[1]).arg(in);
             msgen = QString(tr("The %2 bus set address %1 failed !")).arg(mCurBoxNum[1]).arg(en);
         }
@@ -271,7 +271,7 @@ void AutoSetAddress::getDelaySlot(int index)
         setProcessBarColor(ui->progressBar_3 , "red");
         if(mCurBoxNum[2] == 0){
             msgen = QString(tr("The feeder box of %1 bus did not issue a command !").arg(en));
-        }else if(mCurBoxNum[2] >= 2 && mCurBoxNum[2] <= 20 ){
+        }else if(mCurBoxNum[2] >= 2 && mCurBoxNum[2] <= BOX_NUM+2 ){
             msg = QString(tr("第%2条母线设置地址%1失败 !")).arg(mCurBoxNum[2]).arg(in);
             msgen = QString(tr("The %2 bus set address %1 failed !")).arg(mCurBoxNum[2]).arg(en);
         }
@@ -289,7 +289,7 @@ void AutoSetAddress::getDelaySlot(int index)
         setProcessBarColor(ui->progressBar_4 , "red");
         if(mCurBoxNum[3] == 0){
             msgen= QString(tr("The feeder box of %1 bus did not issue a command !")).arg(en);
-        }else if(mCurBoxNum[3] >= 2 && mCurBoxNum[3] <= 20 ){
+        }else if(mCurBoxNum[3] >= 2 && mCurBoxNum[3] <= BOX_NUM+2 ){
             msg = QString(tr("第%2条母线设置地址%1失败 !")).arg(mCurBoxNum[3]).arg(in);
             msgen = QString(tr("The %2 bus set address %1 failed !")).arg(mCurBoxNum[3]).arg(en);
         }

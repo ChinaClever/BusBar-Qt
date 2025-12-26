@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     db_system_obj_en()->insertSystem(insertStrEn);
 
-    mVersion = "V6.1.12.033";//当前软件版本
+    mVersion = "V6.1.12.035";//当前软件版本
     initVersion();
     updateTime();
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
