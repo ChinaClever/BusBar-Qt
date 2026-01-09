@@ -78,13 +78,13 @@ void frmInput::InitForm()
     frmHeight = this->height();
 
 #if 1
-    mDb = new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE", "pinyin"));
-    mDb->setDatabaseName(qApp->applicationDirPath() + "/pinyin.db");
-    //   qDebug()<<"applicationDirPath:"<<qApp->applicationDirPath();
-    if(!mDb->open()) {
-        qDebug()<<mDb->lastError().text();
-        qDebug("DbConn.open failed");
-    }
+//    mDb = new QSqlDatabase(QSqlDatabase::addDatabase("QSQLITE", "pinyin"));
+//    mDb->setDatabaseName(qApp->applicationDirPath() + "/pinyin.db");
+//    //   qDebug()<<"applicationDirPath:"<<qApp->applicationDirPath();
+//    if(!mDb->open()) {
+//        qDebug()<<mDb->lastError().text();
+//        qDebug("DbConn.open failed");
+//    }
 #else
     QSqlDatabase DbConn;
     DbConn = QSqlDatabase::addDatabase("QSQLITE");
@@ -297,7 +297,7 @@ bool frmInput::eventFilter(QObject *obj, QEvent *event)
         } else if (keyEvent->key() == Qt::Key_Return || keyEvent->key() == Qt::Key_Enter) {
             insertValue(ui->labPY->text());
             ui->labPY->setText("");
-            selectChinese();
+            //selectChinese();
             return true;
         } else if (keyEvent->key() == Qt::Key_Shift) {
             ui->btnType->click();
@@ -682,7 +682,7 @@ void frmInput::btn_clicked()
                 }
             } else if (btn->property("btnLetter").toBool()) {
                 ui->labPY->setText(ui->labPY->text() + value);
-                selectChinese();
+                //selectChinese();
             }
         }
     }

@@ -224,7 +224,7 @@ typedef struct _sThdData {
  */
 typedef struct _sBusData{
     int boxNum; // 插接箱数量
-    sBoxData   box[BOX_NUM+1];  // 最多20个插接箱
+    sBoxData   box[BOX_NUM+2];  // 最多20个插接箱
     char busName[NAME_LEN]; // 母线名称
     sThdData thdData;
 }sBusData;
@@ -239,7 +239,7 @@ struct sProgress
     QString dev_ip;
     QString datetime;
     QString dev_name;
-    int bus_id[BUS_NUM][BOX_NUM+1];
+    int bus_id[BUS_NUM][BOX_NUM+2];
     int status;
 };
 

@@ -88,6 +88,7 @@ void DpEleSlaveThread::run()
             msleep(800);//////延时进行下一个事务
         }
         db_system_obj()->wal_checkpoint();
+        system("echo 3 > /proc/sys/vm/drop_caches");
         isRun  = false;
     }
 }
