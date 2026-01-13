@@ -181,7 +181,7 @@ void Json_Send::freeMemoryCheck()
 
         rst = 1;cnt = 0;
         //if(ret>0 && ret<100) resetProc(mProcs->core, "/home/root/busbar");
-    } else if((ret>0 && ret<80) && rst) system("reboot");
+    } else if((ret>0 && ret<8) && rst) system("reboot");
     else if(ret > 100){
         rst = 0;
         cnt = 0;
@@ -198,11 +198,11 @@ int Json_Send::freeMemory()
         QStringList memoryInfo = lines[1].split(" ", QString::SkipEmptyParts); // 分割第二行（Mem行）
         if (memoryInfo.size() > 3) {
             int freeMemory = memoryInfo[3].toInt(); // 获取空闲内存（MB）
-            static uint cnt = 0;
-            if((++cnt) % 600 && freeMemory >0 && freeMemory<100){
-                cnt = 0;
-                system("echo 3 > /proc/sys/vm/drop_caches");
-            }
+//            static uint cnt = 0;
+//            if((++cnt) % 600 && freeMemory >0 && freeMemory<100){
+//                cnt = 0;
+//                system("echo 3 > /proc/sys/vm/drop_caches");
+//            }
             return freeMemory;
         }
     }
@@ -246,7 +246,7 @@ void Json_Send::run()
         if(gUser) {
             sendData();
         }
-        freeMemoryCheck();
+        //freeMemoryCheck();
         msleep(1000);
     }
 }
