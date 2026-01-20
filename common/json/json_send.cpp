@@ -245,6 +245,8 @@ void Json_Send::run()
     while(ret){
         if(gUser) {
             sendData();
+        }else{
+            break;
         }
         //freeMemoryCheck();
         msleep(1000);

@@ -169,6 +169,7 @@ void SetCabNamesWid::updateWid()
 void SetCabNamesWid::timeoutDone()
 {
     if(isRun){
+        qDebug()<<"SetCabNamesWid ";
         updateWid();
     }
 }

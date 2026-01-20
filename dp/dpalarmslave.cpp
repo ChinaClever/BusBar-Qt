@@ -227,17 +227,17 @@ void DpAlarmSlave::unitAlarmVA(int bus , int addr , sBoxData &box, QString &type
         QString str=msg, tempStr = typeStr, strEn=msgEn, tempStrEn = typeStrEn;
         if(unit.alarm[i])
         {
-            int index = 0;
-            if(box.phaseFlag == 0) index = i;
-            else index = i/3;
-            QString cabColName, cabName;
-            getCabColNameAndCabName(bus , addr , index , cabColName ,cabName);
+//            int index = 0;
+//            if(box.phaseFlag == 0) index = i;
+//            else index = i/3;
+//            QString cabColName, cabName;
+//            getCabColNameAndCabName(bus , addr , index , cabColName ,cabName);
             tempStr = typeStr + tr("告警");
             str += tr("%1，当前值：%2%3, 最小值：%4%5, 最大值：%6%7").arg(alarmStr)
                     .arg(unit.value[i]/rate).arg(sym)
                     .arg(unit.min[i]/rate).arg(sym)
                     .arg(unit.max[i]/rate).arg(sym);
-            str = tr("机柜列名称：%1,机柜名称：%2,").arg(cabColName).arg(cabName) + str;
+//            str = tr("机柜列名称：%1,机柜名称：%2,").arg(cabColName).arg(cabName) + str;
 
             tempStrEn = typeStrEn + tr(" Alarm");
             strEn += tr("%1，current value：%2%3, minimum value：%4%5, maximum value：%6%7").arg(alarmStr)
@@ -245,7 +245,7 @@ void DpAlarmSlave::unitAlarmVA(int bus , int addr , sBoxData &box, QString &type
                     .arg(unit.min[i]/rate).arg(sym)
                     .arg(unit.max[i]/rate).arg(sym);
 
-            strEn = tr("cabColName:%1,cabName:%2,").arg(cabColName).arg(cabName) + strEn;
+//            strEn = tr("cabColName:%1,cabName:%2,").arg(cabColName).arg(cabName) + strEn;
 
             if(unit.alarm[i] == 1){
                 unit.alarm[i] = 2;
@@ -301,24 +301,24 @@ void DpAlarmSlave::unitAlarmW(int bus , int addr ,sBoxData &box, QString &typeSt
         QString str=msg, tempStr = typeStr , strEn = msgEn, tempStrEn = typeStrEn;
         if(unit.alarm[i])
         {
-            int index = 0;
-            if(box.phaseFlag == 0) index = i;
-            else index = i/3;
-            QString cabColName, cabName;
-            getCabColNameAndCabName(bus , addr , index , cabColName ,cabName);
+//            int index = 0;
+//            if(box.phaseFlag == 0) index = i;
+//            else index = i/3;
+//            QString cabColName, cabName;
+//            getCabColNameAndCabName(bus , addr , index , cabColName ,cabName);
             tempStr = typeStr + tr("告警");
             str += tr("%1，当前值：%2%3, 最小值：%4%5, 最大值：%6%7").arg(alarmStr)
                     .arg(unit.value[i]/rate).arg(sym)
                     .arg(unit.min[i]/rate).arg(sym)
                     .arg(unit.max[i]/rate).arg(sym);
-            str = tr("机柜列名称：%1,机柜名称：%2,").arg(cabColName).arg(cabName) + str;
+//            str = tr("机柜列名称：%1,机柜名称：%2,").arg(cabColName).arg(cabName) + str;
 
             tempStrEn = typeStrEn + tr(" Alarm");
             strEn += tr("%1，current value：%2%3, minimum value：%4%5, maximum value：%6%7").arg(alarmStr)
                     .arg(unit.value[i]/rate).arg(sym)
                     .arg(unit.min[i]/rate).arg(sym)
                     .arg(unit.max[i]/rate).arg(sym);
-            strEn = tr("cabColName:%1,cabName:%2,").arg(cabColName).arg(cabName) + strEn;
+//            strEn = tr("cabColName:%1,cabName:%2,").arg(cabColName).arg(cabName) + strEn;
 
             if(unit.alarm[i] == 1){
                 unit.alarm[i] = 2;
@@ -356,25 +356,25 @@ void DpAlarmSlave::unitAlarmW(int bus , int addr ,sBoxData &box, QString &typeSt
 }
 
 //need to test??????
-void DpAlarmSlave::getCabColNameAndCabName(int line_no , int line_tapoff_no ,int line_tapoff_line , QString & cabCalName , QString & cabname)
-{
+//void DpAlarmSlave::getCabColNameAndCabName(int line_no , int line_tapoff_no ,int line_tapoff_line , QString & cabCalName , QString & cabname)
+//{
 
-    cabCalName = QString(shm->cabColName[line_no]);
-    int cabnum = shm->cabNum[line_no];
-    for(int m = 0 ; m < cabnum ; m++){
-        int line_no_id_A = shm->cabData[line_no][m].lineA_No;
-        int line_tapoff_no_id_A = shm->cabData[line_no][m].lineA_Tapoff_No;
-        int line_tapoff_line_id_A = shm->cabData[line_no][m].lineA_Tapoff_Line;
+//    cabCalName = QString(shm->cabColName[line_no]);
+//    int cabnum = shm->cabNum[line_no];
+//    for(int m = 0 ; m < cabnum ; m++){
+//        int line_no_id_A = shm->cabData[line_no][m].lineA_No;
+//        int line_tapoff_no_id_A = shm->cabData[line_no][m].lineA_Tapoff_No;
+//        int line_tapoff_line_id_A = shm->cabData[line_no][m].lineA_Tapoff_Line;
 
-        int line_no_id_B = shm->cabData[line_no][m].lineB_No;
-        int line_tapoff_no_id_B = shm->cabData[line_no][m].lineB_Tapoff_No;
-        int line_tapoff_line_id_B = shm->cabData[line_no][m].lineB_Tapoff_Line;
-        if( (line_no_id_A == line_no + 1 && line_tapoff_no_id_A == line_tapoff_no + 1 && line_tapoff_line_id_A == line_tapoff_line + 1)
-            ||(line_no_id_B == line_no + 1 && line_tapoff_no_id_B == line_tapoff_no + 1 && line_tapoff_line_id_B == line_tapoff_line + 1)){
-            cabname = QString(shm->cabData[line_no][m].cabName);
-        }
-    }
-}
+//        int line_no_id_B = shm->cabData[line_no][m].lineB_No;
+//        int line_tapoff_no_id_B = shm->cabData[line_no][m].lineB_Tapoff_No;
+//        int line_tapoff_line_id_B = shm->cabData[line_no][m].lineB_Tapoff_Line;
+//        if( (line_no_id_A == line_no + 1 && line_tapoff_no_id_A == line_tapoff_no + 1 && line_tapoff_line_id_A == line_tapoff_line + 1)
+//            ||(line_no_id_B == line_no + 1 && line_tapoff_no_id_B == line_tapoff_no + 1 && line_tapoff_line_id_B == line_tapoff_line + 1)){
+//            cabname = QString(shm->cabData[line_no][m].cabName);
+//        }
+//    }
+//}
 
 void DpAlarmSlave::boxAlarm(int bus , sBoxData &box , int id)
 {
@@ -429,10 +429,10 @@ void DpAlarmSlave::boxAlarm(int bus , sBoxData &box , int id)
                         else tempEn = "th";
                         QString statueStrEn = QString(tr(" %1%2 loop OFF")).arg( i + 1 ).arg(tempEn);
                         if(box.version >= 223){
-                            QString cabColName, cabName;
-                            getCabColNameAndCabName(bus , id , i , cabColName ,cabName);
-                            str = tr("机柜列名称：%1,机柜名称：%2,").arg(cabColName).arg(cabName) + str;
-                            strEn = tr("cabColName:%1,cabName:%2,").arg(cabColName).arg(cabName) + strEn;
+//                            QString cabColName, cabName;
+//                            getCabColNameAndCabName(bus , id , i , cabColName ,cabName);
+//                            str = tr("机柜列名称：%1,机柜名称：%2,").arg(cabColName).arg(cabName) + str;
+//                            strEn = tr("cabColName:%1,cabName:%2,").arg(cabColName).arg(cabName) + strEn;
 
                             statueStr = QString(tr(" 第 %1 个断路器断开")).arg( i + 1 );
                             statueStrEn = QString(tr(" %1%2 breaker OFF")).arg( i + 1 ).arg(tempEn);
@@ -457,8 +457,8 @@ void DpAlarmSlave::boxAlarm(int bus , sBoxData &box , int id)
                 uchar breaker_num = (box.plugbreaker>>12)&0x0F;
                 for(int i = 0 ; i < breaker_num ; i++){
                     if( box.data.swAlarm[i] ) {
-                        QString cabColName, cabName;
-                        getCabColNameAndCabName(bus , id , i , cabColName ,cabName);
+//                        QString cabColName, cabName;
+//                        getCabColNameAndCabName(bus , id , i , cabColName ,cabName);
                         QString typeStr = tr("断路器");
                         QString str = tr("插接箱：%1").arg(box.boxName);
                         QString tempStr = typeStr + tr("告警");
@@ -474,8 +474,8 @@ void DpAlarmSlave::boxAlarm(int bus , sBoxData &box , int id)
                         QString statueStrEn = QString(tr(" %1%2 breaker OFF")).arg( i + 1 ).arg(tempEn);
                         str += statueStr;
                         strEn += statueStrEn;
-                        str = tr("机柜列名称：%1,机柜名称：%2,").arg(cabColName).arg(cabName) + str;
-                        strEn = tr("cabColName:%1,cabName:%2,").arg(cabColName).arg(cabName) + strEn;
+//                        str = tr("机柜列名称：%1,机柜名称：%2,").arg(cabColName).arg(cabName) + str;
+//                        strEn = tr("cabColName:%1,cabName:%2,").arg(cabColName).arg(cabName) + strEn;
                         if(box.data.swAlarm[i] == 1){
                             box.data.swAlarm[i]= 2;
                             saveMsg( typeStr , str , typeStrEn , strEn );

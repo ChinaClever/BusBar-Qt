@@ -20,7 +20,8 @@ void CabinetTableWidget::initFunSLot()
 {
     cabColChangeSlot(0);///
     timer = new QTimer(this);
-    timer->start(2500+ rand() % 500);
+//    timer->start(2500+ rand() % 500);////////====
+    timer->start(10);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
     connect(InterfaceChangeSig::get(), SIGNAL(typeSig(int)), this,SLOT(interfaceChangedSlot(int)));
     isRun = true;
@@ -30,9 +31,9 @@ void CabinetTableWidget::initFunSLot()
 void CabinetTableWidget::cabColChangeSlot(int id)
 {
     mBusID = id;
-    sDataPacket *shm = get_share_mem();
-    mBoxData1 = &(shm->data[shm->cabData[id][0].lineA_No-1]);///
-    mBoxData2 = &(shm->data[shm->cabData[id][0].lineB_No-1]);
+    m_shm = get_share_mem();
+    mBoxData1 = &(m_shm->data[m_shm->cabData[id][0].lineA_No-1]);///
+    mBoxData2 = &(m_shm->data[m_shm->cabData[id][0].lineB_No-1]);
     updateData();
 }
 
@@ -135,10 +136,11 @@ void CabinetTableWidget::initTableWid()
 int CabinetTableWidget::getRow()
 {
     int size = 0;
-    int cabnum = get_share_mem()->cabNum[mBusID];
+    int cabnum = m_shm->cabNum[mBusID];
     for(int i = 0; i < cabnum ; i++){
-        uchar addr = get_share_mem()->cabData[mBusID][i].lineA_Tapoff_No-1;
-        size += mBoxData1->box[addr].phaseFlag == 0 ? 1 : 3;
+//        uchar addr = get_share_mem()->cabData[mBusID][i].lineA_Tapoff_No-1;
+//        size += mBoxData1->box[addr].phaseFlag == 0 ? 1 : 3;
+        size += 1;
     }
     return size;
 }
@@ -163,7 +165,9 @@ bool CabinetTableWidget::checkTable()
 void CabinetTableWidget::setTableItem(int id, int column, const QString &str)
 {
     QTableWidgetItem *item = ui->tableWidget->item(id-1, column);
-    item->setText(str);
+    if (item) {
+        item->setText(str);
+    }
 }
 
 /**
@@ -217,11 +221,17 @@ void CabinetTableWidget::setName(int row, int column)
 void CabinetTableWidget::setPhase(int row, int column , int line1 , int line2 , int flag)
 {
     QString name = "";
-    if(0 == flag){
-        name = QString((char)('A' + line1))+"\\"+QString((char)('A' + line2));
-    }else{
-        name = QString((char)('A' + line1%3))+QString::number(line1/3+1);
-    }
+//    if(0 == flag){
+    QString str1 = "",str2 = "";
+    if(line1 >= 0 && line1 <= 2)
+        str1 = QString((char)('A' + line1));
+    if(line2 >= 0 && line2 <= 2)
+        str2 = QString((char)('A' + line2));
+    name = str1+"\\"+str2;
+//    }
+//    else{
+//        name = QString((char)('A' + line1%3))+QString::number(line1/3+1);
+//    }
     setTableItem(row, column, name);
 }
 
@@ -270,13 +280,27 @@ void CabinetTableWidget::setSumCur(int id1, int line1, int id2, int line2, int r
 void CabinetTableWidget::setSumPow(int id1, int line1, int id2, int line2, int row,  int column)
 {
     QString str = "---";
-    uchar offline1 = mBoxData1->box[id1].offLine;
-    uchar offline2 = mBoxData2->box[id2].offLine;
+    uchar offline1 = 0 , offline2 = 0;
+    sObjData *unit1 = NULL;
+    sObjData *unit2 = NULL;
+    if(id1 >= 0 && id1 < BOX_NUM){
+        offline1 = mBoxData1->box[id1].offLine;
+        unit1 = &(mBoxData1->box[id1].data);
+    }
+    if(id2 >= 0 && id2 < BOX_NUM){
+        offline2 = mBoxData2->box[id2].offLine;
+        unit2 = &(mBoxData2->box[id2].data);
+    }
     //if(mBoxData->box[id].offLine)
     {
-        sObjData *unit1 = &(mBoxData1->box[id1].data);
-        sObjData *unit2 = &(mBoxData2->box[id2].data);
-        double value = ((offline1?unit1->pow.value[line1]:0)+(offline2?unit2->pow.value[line2]:0)) / COM_RATE_POW;
+        double v1 = 0, v2 = 0;
+        if(unit1 && line1 >= 0 && line1 < 9){
+            if(offline1) v1 = unit1->pow.value[line1];
+        }
+        if(unit2 && line2 >= 0 && line2 < 9){
+            if(offline2) v2 = unit2->pow.value[line2];
+        }
+        double value = (v1+v2) / COM_RATE_POW;
         if(value >= 0)
             str = QString::number(value, 'f', 3);
     }
@@ -307,12 +331,16 @@ void CabinetTableWidget::setCur(sObjData *unit ,int line, int row, int column, u
     QString str = "---";
     //if(mBoxData->box[id].offLine)
     {
-        double value = (offline?unit->cur.value[line]:0 )/ COM_RATE_CUR;
+        double v = 0;
+        if(unit){
+            if(offline && line >= 0 && line < 9) v = unit->cur.value[line];
+        }
+        double value = (v)/ COM_RATE_CUR;
         if(value >= 0)
             str = QString::number(value, 'f', 3);
     }
     setTableItem(row, column, str);
-    if(offline) setItemColor(row , column , unit->cur.alarm[line]);
+    if(offline && line >= 0 && line < 9) setItemColor(row , column , unit->cur.alarm[line]);
     else setItemColor(row , column , 0);
 }
 
@@ -322,12 +350,16 @@ void CabinetTableWidget::setVol(sObjData *unit , int line, int row, int column ,
     QString str = "---";
     //if(mBoxData->box[id].offLine)
     {
-        double value = (offline?unit->vol.value[line]:0)/ COM_RATE_VOL;
+        double v = 0;
+        if(unit && line >= 0 && line < 9){
+            if(offline) v = unit->vol.value[line];
+        }
+        double value = (v)/ COM_RATE_VOL;
         if(value >= 0)
             str = QString::number(value, 'f', 1);
     }
     setTableItem(row, column, str);
-    if(offline) setItemColor(row , column , unit->vol.alarm[line]);
+    if(offline && line >= 0 && line < 9) setItemColor(row , column , unit->vol.alarm[line]);
     else setItemColor(row , column , 0);
 }
 
@@ -335,14 +367,30 @@ void CabinetTableWidget::setVol(sObjData *unit , int line, int row, int column ,
 void CabinetTableWidget::setSumEle(int id1, int line1, int id2, int line2, int row, int column)
 {
     QString str = "---";
-    uchar offline1 = mBoxData1->box[id1].offLine;
-    uchar offline2 = mBoxData2->box[id2].offLine;
+    uchar offline1 = 0 , offline2 = 0;
+    sObjData *unit1 = NULL;
+    sObjData *unit2 = NULL;
+    if(id1 >= 0 && id1 < BOX_NUM){
+        offline1 = mBoxData1->box[id1].offLine;
+        unit1 = &(mBoxData1->box[id1].data);
+    }
+    if(id2 >= 0 && id2 < BOX_NUM){
+        offline2 = mBoxData2->box[id2].offLine;
+        unit2 = &(mBoxData2->box[id2].data);
+    }
 
     //if(mBoxData->box[id].offLine)
     {
-        sObjData *unit1 = &(mBoxData1->box[id1].data);
-        sObjData *unit2 = &(mBoxData2->box[id2].data);
-        double value = ((offline1?unit1->ele[line1]:0) + (offline2?unit2->ele[line2]:0)) / COM_RATE_ELE;
+
+
+        double v1 = 0, v2 = 0;
+        if(unit1 && line1 >= 0 && line1 < 9){
+            if(offline1) v1 = unit1->ele[line1];
+        }
+        if(unit2 && line1 >= 0 && line1 < 9){
+            if(offline2) v2 = unit2->ele[line2];
+        }
+        double value = (v1 + v2) / COM_RATE_ELE;
         if(value >= 0)
             str = QString::number(value, 'f', 1);
     }
@@ -359,15 +407,15 @@ void CabinetTableWidget::updateData()
     if(ret) initTableWid(); // 重新建立表格
     // id1 , id2 , line1 , line2??
     int row = ui->tableWidget->rowCount();
-    sDataPacket *shm = get_share_mem();
-    int cabnum = shm->cabNum[mBusID];
 
+    int cabnum = m_shm->cabNum[mBusID];
+    //qDebug()<< "cabnum  "<<cabnum << " row "<<row;
     for(int i = 1 , j = 1; i <= cabnum && j <= row; i++ ){
-        int id1 = shm->cabData[mBusID][i-1].lineA_Tapoff_No - 1;
-        int id2 = shm->cabData[mBusID][i-1].lineB_Tapoff_No - 1;
-        int line1 = shm->cabData[mBusID][i-1].lineA_Tapoff_Line - 1;
-        int line2 = shm->cabData[mBusID][i-1].lineB_Tapoff_Line - 1;
-        if(mBoxData1->box[id1].phaseFlag == 0){
+        int id1 = m_shm->cabData[mBusID][i-1].lineA_Tapoff_No - 1;
+        int id2 = m_shm->cabData[mBusID][i-1].lineB_Tapoff_No - 1;
+        int line1 = m_shm->cabData[mBusID][i-1].lineA_Tapoff_Line - 1;
+        int line2 = m_shm->cabData[mBusID][i-1].lineB_Tapoff_Line - 1;
+        //if(mBoxData1->box[id1].phaseFlag == 0){
             int k=0;
             setName(j, k++); // 设置名称
             setPhase(j, k++ , line1 , line2 , mBoxData1->box[id1].phaseFlag); // 设置相
@@ -380,40 +428,43 @@ void CabinetTableWidget::updateData()
             setSumPow(id1, line1, id2, line2, j, k++);
             setSumEle(id1, line1, id2, line2, j, k++);
             j++;
-        }else{
-
-            int start1 = (line1 == 0)?0:((line1 == 1)?3:6);
-            int end1 = (line1 == 0)?3:((line1 == 1)?6:9);
-            int start2 = (line2 == 0)?0:((line2 == 1)?3:6);
-            int end2 = (line2 == 0)?3:((line2 == 1)?6:9);
-
-            for(int m = start1 , n = start2 ; m < end1 && n < end2 && j <= row ; m++ , n++ , j++){
-                int k=0;
-                setName(j, k++); // 设置名称
-                setPhase(j, k++ , m , n , mBoxData1->box[id1].phaseFlag); // 设置相
-                //setAlarmStatus(i, k++); //设置告警状态
-
-                setVol(&(mBoxData1->box[id1].data) , m, j, k++ , mBoxData1->box[id1].offLine);
-                setVol(&(mBoxData2->box[id2].data) , n, j, k++ , mBoxData2->box[id2].offLine);
-                setCur(&(mBoxData1->box[id1].data) , m, j, k++ , mBoxData1->box[id1].offLine); // 设置A路电流值
-                setCur(&(mBoxData2->box[id2].data) , n, j, k++ , mBoxData2->box[id2].offLine); // 设置B路电流值
-                //setSumCur(id1, line1, id2, line2, i, k++);
-                setSumPow(id1, m, id2, n, j, k++);
-                setSumEle(id1, m, id2, n, j, k++);
-            }
-        }
-
     }
-    for(int i = 1 , j = 1; i <= cabnum && j <= row; i++ ){
-        int id1 = shm->cabData[mBusID][i-1].lineA_Tapoff_No - 1;
-        if(mBoxData1->box[id1].phaseFlag == 1){
-            setTableNameItem(i , j , 0 , mBoxData1->box[id1].phaseFlag);
-            j+=3;
-        }else{
-            setTableNameItem(i , j , 0 , mBoxData1->box[id1].phaseFlag);
-            j++;
-        }
-    }
+            //qDebug()<< "id1  "<<id1 << " id2 "<<id2<< " line1  "<<line1 << " line2 "<<line2;
+        //}
+//        else{
+
+//            int start1 = (line1 == 0)?0:((line1 == 1)?3:6);
+//            int end1 = (line1 == 0)?3:((line1 == 1)?6:9);
+//            int start2 = (line2 == 0)?0:((line2 == 1)?3:6);
+//            int end2 = (line2 == 0)?3:((line2 == 1)?6:9);
+
+//            for(int m = start1 , n = start2 ; m < end1 && n < end2 && j <= row ; m++ , n++ , j++){
+//                int k=0;
+//                setName(j, k++); // 设置名称
+//                setPhase(j, k++ , m , n , mBoxData1->box[id1].phaseFlag); // 设置相
+//                //setAlarmStatus(i, k++); //设置告警状态
+
+//                setVol(&(mBoxData1->box[id1].data) , m, j, k++ , mBoxData1->box[id1].offLine);
+//                setVol(&(mBoxData2->box[id2].data) , n, j, k++ , mBoxData2->box[id2].offLine);
+//                setCur(&(mBoxData1->box[id1].data) , m, j, k++ , mBoxData1->box[id1].offLine); // 设置A路电流值
+//                setCur(&(mBoxData2->box[id2].data) , n, j, k++ , mBoxData2->box[id2].offLine); // 设置B路电流值
+//                //setSumCur(id1, line1, id2, line2, i, k++);
+//                setSumPow(id1, m, id2, n, j, k++);
+//                setSumEle(id1, m, id2, n, j, k++);
+//            }
+//        }
+
+//    }
+//    for(int i = 1 , j = 1; i <= cabnum && j <= row; i++ ){
+//        int id1 = m_shm->cabData[mBusID][i-1].lineA_Tapoff_No - 1;
+////        if(mBoxData1->box[id1].phaseFlag == 1){
+////            setTableNameItem(i , j , 0 , mBoxData1->box[id1].phaseFlag);
+////            j+=3;
+////        }else{
+//            setTableNameItem(i , j , 0 , mBoxData1->box[id1].phaseFlag);
+//            j++;
+////        }
+//    }
 }
 
 
@@ -441,9 +492,9 @@ void CabinetTableWidget::getItem(QTableWidgetItem*)
 
 void CabinetTableWidget::setTableNameItem(int id ,int row, int column , int flag)
 {
-    QString name = get_share_mem()->cabData[mBusID][id-1].cabName;
+    QString name = m_shm->cabData[mBusID][id-1].cabName;
     if(name.isEmpty()) name = tr("Cabinet%1").arg(id);
-    if(flag == 1)ui->tableWidget->setSpan(row-1 , column , 3 , 1);
+    //if(flag == 1)ui->tableWidget->setSpan(row-1 , column , 3 , 1);
     QTableWidgetItem *item = ui->tableWidget->item(row-1, column);
     item->setText(name);
 }

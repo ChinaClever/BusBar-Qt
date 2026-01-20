@@ -65,6 +65,7 @@ private:
     sBusData *mBoxData2;
     QTimer *timer;
     bool isRun;
+    sDataPacket *m_shm;
 //    QScrollBar *m_scrollBarV;
 //    QScrollBar *m_scrollBarH;
 };
