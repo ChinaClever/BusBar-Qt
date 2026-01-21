@@ -6,7 +6,8 @@
 #include "serialport/serial_trans.h"
 #include "rtu485/rtu_recv.h"
 
-#define RTU_BUF_SIZE 1024
+//#define RTU_BUF_SIZE 1024
+#define RTU_BUF_SIZE 2048
 extern int gVerflag;//1代表一期 2代表二期
 extern int gReadWriteflag;
 class RtuThread : public QThread
