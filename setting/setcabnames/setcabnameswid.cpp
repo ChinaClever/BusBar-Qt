@@ -155,8 +155,12 @@ void SetCabNamesWid::indexChanged(int index)
 void SetCabNamesWid::updateWid()
 {
 //    checkBus();
-    resetWidget();
     int row = ui->tableWidget->rowCount();
+    int boxNum = get_share_mem()->cabNum[mIndex];
+    if (row != boxNum){
+        resetWidget();
+    }
+    //int row = ui->tableWidget->rowCount();
     for(int i = 0 ; i < row ; i++)
     {
         setName(i,0);
@@ -169,7 +173,6 @@ void SetCabNamesWid::updateWid()
 void SetCabNamesWid::timeoutDone()
 {
     if(isRun){
-        qDebug()<<"SetCabNamesWid ";
         updateWid();
     }
 }

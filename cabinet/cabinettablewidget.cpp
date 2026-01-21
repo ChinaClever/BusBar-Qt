@@ -20,8 +20,8 @@ void CabinetTableWidget::initFunSLot()
 {
     cabColChangeSlot(0);///
     timer = new QTimer(this);
-//    timer->start(2500+ rand() % 500);////////====
-    timer->start(10);
+    timer->start(5500+ rand() % 2000);////////====
+//    timer->start(10);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
     connect(InterfaceChangeSig::get(), SIGNAL(typeSig(int)), this,SLOT(interfaceChangedSlot(int)));
     isRun = true;
