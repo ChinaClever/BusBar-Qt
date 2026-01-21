@@ -90,7 +90,7 @@ void MainWindow::initSerial()
 #endif
 
     Mb_Core::build(this);//////
-    Json_Send::bulid(this);
+//    Json_Send::bulid(this);
 
 //    rtu[4] = new RtuThread(this);
 //    rtu[4]->init(SERIAL_COM5, 1);
@@ -163,7 +163,7 @@ void MainWindow::initNetSLot()
     mServer->setMaxPendingConnections(2);
     mServer->listen(QHostAddress::AnyIPv4, 22223);
     Mb_Core::build()->start();
-    Json_Send::bulid()->start();
+//    Json_Send::bulid()->start();
 }
 
 void MainWindow::initFunSLot()
