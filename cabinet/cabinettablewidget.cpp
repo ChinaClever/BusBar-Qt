@@ -88,7 +88,7 @@ void CabinetTableWidget::addItemContent(int row, int column, const QString &cont
 {
     QTableWidgetItem *item = new QTableWidgetItem(content);
     //if(column > 0)
-        item->setTextAlignment(Qt::AlignCenter);
+    if(item) item->setTextAlignment(Qt::AlignCenter);
     //else
     //    item->setTextAlignment(Qt::AlignVCenter);
 
@@ -182,15 +182,18 @@ void CabinetTableWidget::setItemColor(int id, int column, int alarm)
 
     switch (alarm) {
     case 0:
+        if(item)
         item->setTextColor(QColor(Qt::black));
         break;
     case 1:
         //        item->setTextColor(QColor(232,157,18));
         //        break;
     case 2:
+        if(item)
         item->setTextColor(QColor(Qt::red));
         break;
     default:
+        if(item)
         item->setTextColor(QColor(Qt::black));
         break;
     }
@@ -496,5 +499,5 @@ void CabinetTableWidget::setTableNameItem(int id ,int row, int column , int flag
     if(name.isEmpty()) name = tr("Cabinet%1").arg(id);
     //if(flag == 1)ui->tableWidget->setSpan(row-1 , column , 3 , 1);
     QTableWidgetItem *item = ui->tableWidget->item(row-1, column);
-    item->setText(name);
+    if(item) item->setText(name);
 }

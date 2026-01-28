@@ -198,6 +198,11 @@ void MainWindow::initFunSLot()
     ui->cabinetBox->setIconSize(QSize(1,60));
     ui->cabinetBox->setItemIcon(0 , icon);
     ui->cabinetBox->setItemIcon(1 , icon);
+    for(int i = 0 ; i < BUS_NUM/2 ; i++){
+        sDataPacket *shm = get_share_mem();
+        QString str = shm->cabColName[i];
+        ui->cabinetBox->setItemText(i, str);
+    }
 }
 
 void MainWindow::initLanguage()
