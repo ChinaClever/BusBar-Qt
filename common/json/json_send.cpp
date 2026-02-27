@@ -147,8 +147,9 @@ void Json_Send::mdelay(int msec)
 
 #if 1
     //非阻塞方式延时,现在很多人推荐的方法
-    QCoreApplication::processEvents(QEventLoop::AllEvents, 10);
-    QEventLoop loop; QTimer::singleShot(msec, &loop, SLOT(quit())); loop.exec();
+    QEventLoop loop;
+    QTimer::singleShot(msec, &loop, SLOT(quit()));
+    loop.exec();
 #else
 #if (QT_VERSION >= QT_VERSION_CHECK(6,0,0))
     //阻塞方式延时,如果在主线程会卡住主界面
@@ -245,6 +246,8 @@ void Json_Send::run()
     while(ret){
         if(gUser) {
             sendData();
+        }else{
+            break;
         }
         //freeMemoryCheck();
         msleep(1000);

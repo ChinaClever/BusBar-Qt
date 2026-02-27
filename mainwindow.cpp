@@ -30,13 +30,14 @@ MainWindow::MainWindow(QWidget *parent) :
     mInitShm->start(); //初始化共享内存 -- 单线程运行一次
 
     mIndex = 0;
+    mCabIndex = 0;
     initWidget();
     QString insertStr,insertStrEn;
     insertStr = tr("系统启动 !");
     insertStrEn = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
     db_system_obj_en()->insertSystem(insertStrEn);
-    mVersion = "V3.0.10.037";//当前软件版本
+    mVersion = "V3.0.10.042";//当前软件版本
     initVersion();
     updateTime();
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
@@ -89,7 +90,7 @@ void MainWindow::initSerial()
 #endif
 
     Mb_Core::build(this);//////
-    Json_Send::bulid(this);
+//    Json_Send::bulid(this);
 
 //    rtu[4] = new RtuThread(this);
 //    rtu[4]->init(SERIAL_COM5, 1);
@@ -142,7 +143,6 @@ void MainWindow::setBusName(int index)
 //    ui->nameLab->hide();//legrand need hide
 
     mIndex = index;
-
     //ui->ratedLab->setText("V3.0.4_T03/27");
     ui->ratedLab->setText(mVersion);
 }
@@ -162,8 +162,8 @@ void MainWindow::initNetSLot()
     mServer = new Server(this);
     mServer->setMaxPendingConnections(2);
     mServer->listen(QHostAddress::AnyIPv4, 22223);
-    Mb_Core::build()->start();
-    Json_Send::bulid()->start();
+//    Mb_Core::build()->start();
+//    Json_Send::bulid()->start();
 }
 
 void MainWindow::initFunSLot()
@@ -198,6 +198,11 @@ void MainWindow::initFunSLot()
     ui->cabinetBox->setIconSize(QSize(1,60));
     ui->cabinetBox->setItemIcon(0 , icon);
     ui->cabinetBox->setItemIcon(1 , icon);
+    for(int i = 0 ; i < BUS_NUM/2 ; i++){
+        sDataPacket *shm = get_share_mem();
+        QString str = shm->cabColName[i];
+        ui->cabinetBox->setItemText(i, str);
+    }
 }
 
 void MainWindow::initLanguage()
@@ -338,8 +343,11 @@ void MainWindow::showAndHideBoxSlot(int mode)
         ui->cabinetBox->show();
         ui->busNameLab->show();
         sDataPacket *shm = get_share_mem();
-        QString str = shm->cabColName[mIndex];
+        QString str = shm->cabColName[mCabIndex];
         ui->busNameLab->setText(str);
+        if (mCabIndex >= 0 && mCabIndex < ui->cabinetBox->count()) {
+            ui->cabinetBox->setItemText(mCabIndex, str);
+        }
     }else{
         ui->comboBox->show();
         ui->cabinetBox->hide();
@@ -475,6 +483,6 @@ void MainWindow::setCabinetName(int index)
     sDataPacket *shm = get_share_mem();
     QString str = shm->cabColName[index];
     ui->busNameLab->setText(str);
-    mIndex = index;
+    mCabIndex = index;
     ui->ratedLab->setText(mVersion);
 }

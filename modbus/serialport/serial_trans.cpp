@@ -309,6 +309,8 @@ int Serial_Trans::recvDataV3(uchar *pBuf, int msecs)
                count++;
            }
            if(ret > RTU_SENT_LEN_V303*2+15) {
+//               rtn+=read(fd, pBuf-RTU_SENT_LEN_V303*2+5, RTU_SENT_LEN_V303*2+15);
+//               ret += rtn;
                read(fd, pBuf-RTU_SENT_LEN_V303*2+5, RTU_SENT_LEN_V303*2+15);
                ret = 0;
                break;

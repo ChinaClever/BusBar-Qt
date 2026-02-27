@@ -55,7 +55,7 @@ void set_ch(const QStringList &chs,int recordindex)
 RtuThread::RtuThread(QObject *parent) :
     QThread(parent)
 {
-    mBuf = (uchar *)malloc(RTU_BUF_SIZE); //申请内存  -- 随便用
+    mBuf = (uchar *)malloc(4*RTU_BUF_SIZE); //申请内存  -- 随便用
     mRtuPkt = new Rtu_recv; //传输数据结构
     mSerial = new Serial_Trans(this); //串口线程
 }
@@ -598,7 +598,7 @@ int RtuThread::transDataV3(int addr)
     //        sendarray.append((char *)buf, rtn);
     //        sendstrArray = sendarray.toHex(); // 十六进制
     //        for(int i=0; i<sendarray.size(); ++i)
-    //            sendstrArray.insert(2+3*i, " "); // 插入空格
+    //            sendstrArray.insbufert(2+3*i, " "); // 插入空格
     //        qDebug()<<"  send:" << sendstrArray;
     //        qDebug()<< "rtn  "<<rtn;
     rtn = mSerial->transmitV3(buf, rtn, buf); // 传输数据，发送同时接收

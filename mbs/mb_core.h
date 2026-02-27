@@ -29,7 +29,7 @@ private slots:
     void connectRtuSlot();
 
 private:
-    bool isRun=true;
+    bool isRun=false;
     QTimer *mTimer;
     Mb_Update *mRtu;
     Mb_Update *mTcp;

@@ -89,6 +89,7 @@ bool Modbus_Object::waitForState(int state)
 {
     bool ret = false;
     QModbusDevice *dev = modbusDevice();
+    if(!dev) return ret;
     for(int i=0; i<1000; i+=1) {
         mdelay(1); if(dev->state() == state) {ret = true; break;}
     } if(!ret) throwError("Wait For State");
@@ -98,6 +99,7 @@ bool Modbus_Object::waitForState(int state)
 bool Modbus_Object::replyFinished(QModbusReply *reply)
 {
     bool ret = false;
+    if(!reply) return ret;
     for(int i=0; i<1000; i+=10) {
         if (reply->error() == QModbusDevice::NoError) {
             ret = reply->isFinished(); if(ret) break; else mdelay(10);

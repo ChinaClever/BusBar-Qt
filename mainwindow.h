@@ -77,6 +77,7 @@ private:
     //QTimer *mClearCachetimer;
 
     int mIndex;
+    int mCabIndex;
     HomeWid *mHomeWid;
     LineWid *mLineWid;
     BranchWid *mBranchWid;

@@ -32,7 +32,7 @@ void SetCabNamesWid::initFunSLot()
 //    ui->tableWidget->verticalScrollBar()->setStyleSheet("QScrollBar{width:30px;}");
 //    ui->tableWidget->horizontalScrollBar()->setStyleSheet("QScrollBar{height:30px;}");
     mTimer = new QTimer(this);
-    mTimer->start(3*1000);
+    mTimer->start(5*1000+rand()%1000);
     connect(mTimer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
 }
 
@@ -155,8 +155,12 @@ void SetCabNamesWid::indexChanged(int index)
 void SetCabNamesWid::updateWid()
 {
 //    checkBus();
-    resetWidget();
     int row = ui->tableWidget->rowCount();
+    int boxNum = get_share_mem()->cabNum[mIndex];
+    if (row != boxNum){
+        resetWidget();
+    }
+    //int row = ui->tableWidget->rowCount();
     for(int i = 0 ; i < row ; i++)
     {
         setName(i,0);
@@ -179,7 +183,7 @@ void SetCabNamesWid::setName(int row, int column)
     QTableWidgetItem *item = ui->tableWidget->item(row,column);
     //QString str = mPacket->box[row+1].boxName;  //第0个为始端箱，所以从第一个开始
     QString str = get_share_mem()->cabData[mIndex][row].cabName;
-    item->setText(str);
+    if(item) item->setText(str);
 }
 
 
@@ -217,7 +221,7 @@ void SetCabNamesWid::setTableItem(int row, int column)
 
         //}
     //}
-    if(!str.isEmpty())
+    if(!str.isEmpty() && item)
         item->setText(str);
 }
 
@@ -271,9 +275,9 @@ bool SetCabNamesWid::saveCabColName()
         else CriticalMsgBox box(NULL, tr("Cabinet name cannot be empty, saving failed!!"));
         ret = false;
     }
-    if(ui->cabNumSpin->value() < 0 || ui->cabNumSpin->value() > 18){
-        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("个数应在0-18!!"));
-        else CriticalMsgBox box(NULL, tr("The number should be between 0-18!!"));
+    if(ui->cabNumSpin->value() < 0 || ui->cabNumSpin->value() > 50){
+        if(gLanguage == 0) CriticalMsgBox box(NULL, tr("个数应在0-50!!"));
+        else CriticalMsgBox box(NULL, tr("The number should be between 0-50!!"));
         ret = false;
     }
 

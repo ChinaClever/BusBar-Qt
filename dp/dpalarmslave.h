@@ -24,7 +24,7 @@ protected:
     void checkAlarm();
 
     void saveMsg(const QString &typeStr, const QString &str , const QString &typeStrEn, const QString &strEn);
-    void getCabColNameAndCabName(int line_no , int line_tapoff_no ,int line_tapoff_line , QString & cabCalName , QString & cabname);
+//    void getCabColNameAndCabName(int line_no , int line_tapoff_no ,int line_tapoff_line , QString & cabCalName , QString & cabname);
 
 protected slots:
     void timeoutDone();
