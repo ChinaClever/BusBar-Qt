@@ -286,11 +286,11 @@ void CabinetTableWidget::setSumPow(int id1, int line1, int id2, int line2, int r
     uchar offline1 = 0 , offline2 = 0;
     sObjData *unit1 = NULL;
     sObjData *unit2 = NULL;
-    if(id1 >= 0 && id1 < BOX_NUM){
+    if(mBoxData1 && id1 >= 0 && id1 < BOX_NUM){
         offline1 = mBoxData1->box[id1].offLine;
         unit1 = &(mBoxData1->box[id1].data);
     }
-    if(id2 >= 0 && id2 < BOX_NUM){
+    if(mBoxData2 && id2 >= 0 && id2 < BOX_NUM){
         offline2 = mBoxData2->box[id2].offLine;
         unit2 = &(mBoxData2->box[id2].data);
     }
@@ -373,11 +373,11 @@ void CabinetTableWidget::setSumEle(int id1, int line1, int id2, int line2, int r
     uchar offline1 = 0 , offline2 = 0;
     sObjData *unit1 = NULL;
     sObjData *unit2 = NULL;
-    if(id1 >= 0 && id1 < BOX_NUM){
+    if(mBoxData1 && id1 >= 0 && id1 < BOX_NUM){
         offline1 = mBoxData1->box[id1].offLine;
         unit1 = &(mBoxData1->box[id1].data);
     }
-    if(id2 >= 0 && id2 < BOX_NUM){
+    if(mBoxData2 && id2 >= 0 && id2 < BOX_NUM){
         offline2 = mBoxData2->box[id2].offLine;
         unit2 = &(mBoxData2->box[id2].data);
     }
@@ -421,12 +421,23 @@ void CabinetTableWidget::updateData()
         //if(mBoxData1->box[id1].phaseFlag == 0){
             int k=0;
             setName(j, k++); // 设置名称
-            setPhase(j, k++ , line1 , line2 , mBoxData1->box[id1].phaseFlag); // 设置相
+            if(mBoxData1 && id1 >= 0 && id1 < BOX_NUM){
+                setPhase(j, k++ , line1 , line2 , mBoxData1->box[id1].phaseFlag); // 设置相
+            }
+            else k++;
 
-            setVol(&(mBoxData1->box[id1].data) , line1, j, k++ , mBoxData1->box[id1].offLine);
-            setVol(&(mBoxData2->box[id2].data) , line2, j, k++ , mBoxData2->box[id2].offLine);
-            setCur(&(mBoxData1->box[id1].data) , line1, j, k++ , mBoxData1->box[id1].offLine); // 设置A路电流值
-            setCur(&(mBoxData2->box[id2].data) , line2, j, k++ , mBoxData2->box[id2].offLine); // 设置B路电流值
+            if(mBoxData1 && id1 >= 0 && id1 < BOX_NUM){
+                setVol(&(mBoxData1->box[id1].data) , line1, j, k++ , mBoxData1->box[id1].offLine);
+            }else k++;
+            if(mBoxData2 && id2 >= 0 && id2 < BOX_NUM){
+                setVol(&(mBoxData2->box[id2].data) , line2, j, k++ , mBoxData2->box[id2].offLine);
+            }else k++;
+            if(mBoxData1 && id1 >= 0 && id1 < BOX_NUM){
+                setCur(&(mBoxData1->box[id1].data) , line1, j, k++ , mBoxData1->box[id1].offLine); // 设置A路电流值
+            }else k++;
+            if(mBoxData2 && id2 >= 0 && id2 < BOX_NUM){
+                setCur(&(mBoxData2->box[id2].data) , line2, j, k++ , mBoxData2->box[id2].offLine); // 设置B路电流值
+            }else k++;
             //setSumCur(id1, line1, id2, line2, i, k++);
             setSumPow(id1, line1, id2, line2, j, k++);
             setSumEle(id1, line1, id2, line2, j, k++);
