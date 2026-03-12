@@ -577,11 +577,11 @@ enum  sSetPlugType{
 
 
 enum  sLogType{
-    MainEleLog           = 0           //主路电能
-    ,BranchEleLog        = 1           //支路电能
-    ,AlarmLog            = 2           //告警日志
-    ,OperationLog        = 3           //操作日志
-    ,SystemLog           = 4           //系统日志
+//    MainEleLog           = 0           //主路电能
+//    ,BranchEleLog        = 1           //支路电能
+    AlarmLog            = 0           //告警日志
+    ,OperationLog        = 1           //操作日志
+    ,SystemLog           = 2           //系统日志
 };
 
 sDataPacket *share_mem_get();

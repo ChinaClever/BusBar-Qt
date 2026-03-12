@@ -24,13 +24,13 @@ LogsWid::~LogsWid()
 
 void LogsWid::initWidget()
 {
-    mMainEleWid = new LogMainEleWid(ui->stackedWid);  //主路电量
-    ui->stackedWid->addWidget(mMainEleWid);
-    connect(this, SIGNAL(busChangedSig(int)), mMainEleWid, SLOT(initTableSlot(int)));
+//    mMainEleWid = new LogMainEleWid(ui->stackedWid);  //主路电量
+//    ui->stackedWid->addWidget(mMainEleWid);
+//    connect(this, SIGNAL(busChangedSig(int)), mMainEleWid, SLOT(initTableSlot(int)));
 
-    mBranchEleWid = new LogBranchEleWid(ui->stackedWid); //支路电量
-    ui->stackedWid->addWidget(mBranchEleWid);
-    connect(this, SIGNAL(busChangedSig(int)), mBranchEleWid, SLOT(initTableSlot(int)));
+//    mBranchEleWid = new LogBranchEleWid(ui->stackedWid); //支路电量
+//    ui->stackedWid->addWidget(mBranchEleWid);
+//    connect(this, SIGNAL(busChangedSig(int)), mBranchEleWid, SLOT(initTableSlot(int)));
 
     mAlarmWid = new LogAlarmWid(ui->stackedWid); //告警
     ui->stackedWid->addWidget(mAlarmWid);
@@ -49,12 +49,12 @@ void LogsWid::initWidget()
 void LogsWid::logTypeSlot(int type)
 {
     switch (type) {
-    case MainEleLog:
-        ui->stackedWid->setCurrentWidget(mMainEleWid);
-        break;
-    case BranchEleLog:
-        ui->stackedWid->setCurrentWidget(mBranchEleWid);
-        break;
+//    case MainEleLog:
+//        ui->stackedWid->setCurrentWidget(mMainEleWid);
+//        break;
+//    case BranchEleLog:
+//        ui->stackedWid->setCurrentWidget(mBranchEleWid);
+//        break;
     case AlarmLog:
         ui->stackedWid->setCurrentWidget(mAlarmWid);
         break;

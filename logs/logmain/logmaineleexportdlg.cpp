@@ -55,10 +55,10 @@ void LogMainEleExportDlg::readDbSlot(QString str)
 
 void LogMainEleExportDlg::exportSlot(bool e)
 {
-    if(e)
-        mProgressWid->set(gExcelExportStr->path, gExcelExportStr->file, mDbThread->mList , MainEleLog);
-    else
-        overSlot();
+//    if(e)
+//        mProgressWid->set(gExcelExportStr->path, gExcelExportStr->file, mDbThread->mList , MainEleLog);
+//    else
+//        overSlot();
 }
 
 void LogMainEleExportDlg:: overSlot()

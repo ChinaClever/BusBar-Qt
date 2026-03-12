@@ -19,7 +19,7 @@ void Modbus_SlaveObj::initConnects()
 
 void Modbus_SlaveObj::initRecvSlot()
 {
-    connect(mDev,&QModbusServer::dataWritten,this, &Modbus_SlaveObj::recvDataSlot);
+//    connect(mDev,&QModbusServer::dataWritten,this, &Modbus_SlaveObj::recvDataSlot);
 }
 
 bool Modbus_SlaveObj::initUnitMap()
@@ -37,12 +37,12 @@ bool Modbus_SlaveObj::initUnitMap()
 
 bool Modbus_SlaveObj::checkWriteAddress(int address)
 {
-    for(int i = 0 ; i < BUS_NUM ; i++){
+//    for(int i = 0 ; i < BUS_NUM ; i++){
 //        for(int j = 0 ; j < BOX_NUM-1 ; j++){
 //            if(j == 0){
-                if(MbMasterReg_Factory + 10000*i + 11 == address || MbMasterReg_Factory + 10000*i  + 14== address){
-                    return true;
-                }
+//                if(MbMasterReg_Factory + 10000*i + 11 == address || MbMasterReg_Factory + 10000*i  + 14== address){
+//                    return true;
+//                }
 //            }
 //            else{
 //                if(MbSlaveReg_Range + 10000*i + 500*j <= address && MbSlaveReg_End + 10000*i + 500*j >= address){
@@ -50,7 +50,7 @@ bool Modbus_SlaveObj::checkWriteAddress(int address)
 //                }
 //            }
 //        }
-    }
+//    }
     return false;
 }
 
@@ -84,7 +84,7 @@ void Modbus_SlaveObj::recvDataSlot(QModbusDataUnit::RegisterType table, int addr
 
 bool Modbus_SlaveObj::setData(const QModbusDataUnit &unit)
 {
-    bool ret = isConnectedModbus(); if(ret) ret = mDev->setData(unit);
+    bool ret = isConnectedModbus(); if(mDev&&ret) ret = mDev->setData(unit);
     if(!ret) throwError(Q_FUNC_INFO + QString::number(unit.startAddress()));
     return ret;
 }
@@ -96,8 +96,13 @@ bool Modbus_SlaveObj::setData(QModbusDataUnit::RegisterType table, quint16 addre
 
 bool Modbus_SlaveObj::setData(quint16 address, const vshort &values)
 {
+    if(values.isEmpty()) return false;
     QModbusDataUnit unit(m_type, address, values);
-    return setData(unit);
+    int count = address + values.size();
+    if(count <= 50000)
+        return setData(unit);
+    else
+        return false;
 }
 
 bool Modbus_SlaveObj::setHoldingRegisters(quint16 address, const vshort &values)

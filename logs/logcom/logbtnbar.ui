@@ -95,16 +95,6 @@ image: url(:/new/prefix1/image/down.png);
         </property>
         <item>
          <property name="text">
-          <string>主路电能</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>支路电能</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
           <string>告警日志</string>
          </property>
         </item>

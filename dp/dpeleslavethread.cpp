@@ -83,10 +83,10 @@ void DpEleSlaveThread::run()
     {
         isRun  = true;
 
-        for(int i=0; i<BUS_NUM; ++i){
-            saveBus(i);
-            msleep(800);//////延时进行下一个事务
-        }
+//        for(int i=0; i<BUS_NUM; ++i){
+//            saveBus(i);
+//            msleep(800);//////延时进行下一个事务
+//        }
         //db_system_obj()->wal_checkpoint();
         msleep(800);//////延时进行下一个事务
         system("echo 3 > /proc/sys/vm/drop_caches");

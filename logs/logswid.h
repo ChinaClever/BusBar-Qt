@@ -2,8 +2,8 @@
 #define LOGSWID_H
 
 #include <QWidget>
-#include "logmain/logmainelewid.h"
-#include "logbranch/logbranchelewid.h"
+//#include "logmain/logmainelewid.h"
+//#include "logbranch/logbranchelewid.h"
 #include "logalarm/logalarmwid.h"
 #include "logoperation/logoperationwid.h"
 #include "logsystem/logsystemwid.h"
@@ -32,8 +32,8 @@ private slots:
 private:
     Ui::LogsWid *ui;
 
-    LogMainEleWid *mMainEleWid;
-    LogBranchEleWid *mBranchEleWid;
+//    LogMainEleWid *mMainEleWid;
+//    LogBranchEleWid *mBranchEleWid;
     LogAlarmWid *mAlarmWid;
     LogOperationWid *mOperationWid;
     LogSystemWid *mSystemWid;

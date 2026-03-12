@@ -55,7 +55,7 @@ void set_ch(const QStringList &chs,int recordindex)
 RtuThread::RtuThread(QObject *parent) :
     QThread(parent)
 {
-    mBuf = (uchar *)malloc(RTU_BUF_SIZE); //申请内存  -- 随便用
+    mBuf = (uchar *)malloc(4*RTU_BUF_SIZE); //申请内存  -- 随便用
     mRtuPkt = new Rtu_recv; //传输数据结构
     mSerial = new Serial_Trans(this); //串口线程
 }
