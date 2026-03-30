@@ -63,6 +63,7 @@ public:
     Serial_Trans *mSerial;
 private:
     uchar *mBuf;
+    uchar *mSendBuf;
     Rtu_recv *mRtuPkt;
     sBusData *mBusData;
     int mId;
