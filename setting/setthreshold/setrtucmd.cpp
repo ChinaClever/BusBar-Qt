@@ -32,8 +32,10 @@ void SetRtuCmd::sendRegV3(int reg, sThresholdItem &item)
 {
     if(item.type == 4 || (item.box == 0 && item.type == 2) || (item.box == 0 && item.type == 8))
         sendDataUintV3(item.bus, item.box, reg, item.min , item.max);
-    else if(item.type == 11 || item.type == 14 || item.type == 15)
+    else if(item.type == 11 || item.type == 14 || item.type == 15 || item.type == 17)
         sendDataUcharV3(item.bus, item.box, reg, item.min);
+    else if(item.type == 16)
+        sendDataUcharControlV3(item.bus, item.box, reg, item.min);
     else if(item.type == 2 && item.curSpec == 1)
         sendDataUintV3(item.bus, item.box, reg, item.min , item.max);
     else
@@ -73,6 +75,11 @@ void SetRtuCmd::sendDataUcharV3(int busID, int addr, ushort reg, uint val)
     }
 }
 
+void SetRtuCmd::sendDataUcharControlV3(int busID, int addr, ushort reg, uint val)
+{
+    if(rtu[busID]) rtu[busID]->sendDataUcharControlV3(addr, reg, val);
+}
+
 void SetRtuCmd::send(sThresholdItem &item)
 {
     int reg=0;
@@ -103,6 +110,7 @@ void SetRtuCmd::sendStartV3(sThresholdItem &item)
     case 8: reg = StartZoneCurMAX_1 ; break;
     case 11: reg = SetStartRelease ; break;
     case 14: reg = SetStartControlRelease ; break;
+    case 17: reg = SetStartBuzzer;break;
     }
     sendRegV3(reg, item);
 }
@@ -121,6 +129,8 @@ void SetRtuCmd::sendPlugV3(sThresholdItem &item)
     case 3: reg = PlugTemperatureMIN_1 + item.num*2; break;
     case 4: reg = PlugPowerMIN_L1_1 + item.num*8;break;
     case 15: reg = SetPlugBackupBreaker;break;
+    case 16: reg = PlugShuntRelease;break;
+    case 17: reg = SetPlugBuzzer;break;
     }
     sendRegV3(reg, item);
 }

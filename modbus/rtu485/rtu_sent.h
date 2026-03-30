@@ -55,6 +55,7 @@ ushort rtu_crc(uchar *buf, int len);
 int rtu_sent_buff(uchar addr, uchar *buf , uint len = RTU_SENT_LEN_V303);
 int rtu_sent_buff(uchar addr, ushort reg, uint len, uchar *buf);
 int rtu_sent_ucharV3_buff(uchar addr, ushort reg, uint num,  uint val , uchar *buf);
+int rtu_sent_ucharControlV3_buff(uchar addr, ushort reg, uint num,  uint val , uchar *buf);
 int rtu_sent_ushortV3_buff(uchar addr, ushort reg, uint num,  uint val1, uint val2 , uchar *buf);
 int rtu_sent_uintV3_buff(uchar addr, ushort reg, uint num,  uint val1, uint val2,uchar *buf);
 int rtu_sent_single_uintV3_buff(uchar addr, ushort reg, uint num,  uint val,uchar *buf);

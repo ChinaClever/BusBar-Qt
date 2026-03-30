@@ -15,7 +15,7 @@ ComTableWid::ComTableWid(QWidget *parent) :
 {
     ui->setupUi(this);
 //    groupBox_background_icon(this);
-
+    tableWidget = ui->tableWidget;
     timer = new QTimer(this);
     timer->start(1*1000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));

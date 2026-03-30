@@ -32,8 +32,8 @@ HEADERS += \
     $$PWD/setthreshold/setnetcmd.h \
     $$PWD/setsystem/languagesetting.h \
     $$PWD/setsystem/channelsettingdlg.h \
-    $$PWD/setloop/setbreakerwid.h
-    
+    $$PWD/setloop/setbreakerwid.h \
+    $$PWD/setloop/settripwid.h
     
    
 	
@@ -68,8 +68,8 @@ SOURCES += \
     $$PWD/setthreshold/setnetcmd.cpp \
     $$PWD/setsystem/languagesetting.cpp \
     $$PWD/setsystem/channelsettingdlg.cpp \
-    $$PWD/setloop/setbreakerwid.cpp
-    
+    $$PWD/setloop/setbreakerwid.cpp \
+    $$PWD/setloop/settripwid.cpp
     
 
 FORMS += \

@@ -9,13 +9,14 @@
 struct sThresholdItem{
     uchar id=0;
     // 阈值类型 1 电压阈值;2 电流阈值;3 温度;4 有功功率;5 频率;6 总有功功率
-    //7 线电压;8 零线电流;9 剩余电流;11 分励脱扣;14 控制分励脱扣;
+    //7 线电压;8 零线电流;9 剩余电流;11 始端箱分励脱扣配置;14 始端箱控制分励脱扣;15 备用断路器;16 插接箱控制分励脱扣;
+    //17 蜂鸣器;
     uchar type;
     uchar bus; // 母线编号 0~3
     uchar box; // 0始端箱  >1插接箱
     uchar num; // 编号第几相，第几回路
-    uchar txtype=0;//设置类型 0代表用户在主控屏上设置
-    uchar insertlog=0;//0不记录操作日志 1记录操作日志
+    uchar txtype=0;//设置类型 0代表用户在主控屏上设置 1代表远程设置
+    uchar insertlog=0;//0不记录操作日志 1记录操作日志 2记录分励脱扣操作日志
     uchar curSpec;//电流规格
     uint min, crmin, crmax, max; // 最小值，临界下限  临界上限  最大值
     uint premin, precrmin, precrmax, premax; // 最小值，临界下限  临界上限  最大值

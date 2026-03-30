@@ -572,6 +572,7 @@ enum  sSetPlugType{
 
     ,PlugCurrentMIN_HIGH_L1       = 273           //电流下限高位
     ,PlugCurrentMAX_HIGH_L1       = 275           //电流上限高位
+    ,PlugShuntRelease         = 605           //12：断路器分闸 （连续发两条命令方可控制断路器分闸）
 
 };
 

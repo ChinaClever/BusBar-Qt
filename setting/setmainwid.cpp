@@ -28,6 +28,7 @@ void SetMainWid::initLanguage()
         ui->nameBtn->setText("名称设置");
         ui->powerBtn->setText("功率设置");
         ui->breakerBtn->setText("断路器设置");
+        ui->tripBtn->setText("分励脱扣");
     }else{
         ui->sysBtn->setText("System settings");
         ui->temBtn->setText("Temperature settings");
@@ -36,6 +37,7 @@ void SetMainWid::initLanguage()
         ui->nameBtn->setText("Name settings");
         ui->powerBtn->setText("Power settings");
         ui->breakerBtn->setText("Breaker settings");
+        ui->tripBtn->setText("Shunt trip");
     }
 }
 
@@ -68,6 +70,10 @@ void SetMainWid::initWidget()
     mSetBreakerWid = new SetBreakerWid(ui->stackedWidget); //断路器
     ui->stackedWidget->addWidget(mSetBreakerWid);
 
+
+    mSetTripWid = new SetTripWid(ui->stackedWidget); //分励脱扣
+    ui->stackedWidget->addWidget(mSetTripWid);
+
     setButtonColor(ui->lineBtn);
     //    ui->stackedWidget->setCurrentWidget(mSetLineWid);
 }
@@ -82,6 +88,7 @@ void SetMainWid::setButtonColor(QPushButton *button)
     ui->sysBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
     ui->powerBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
     ui->breakerBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
+    ui->tripBtn->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";");
 
     button->setStyleSheet("border:2px solid rgb(15,80,232);border-radius:15px;font: 8pt \"Ubuntu\";background-color: rgb(96,238,250);");
     //BeepThread::bulid()->beep();
@@ -95,6 +102,7 @@ void SetMainWid::busChangedSlot(int index)
     mSetTemWid->updateWid(index);
     mSetNamesWid->indexChanged(index);
     mSetBreakerWid->setBus(index);
+    mSetTripWid->setBus(index);
 #if (SI_RTUWIFI == 1 )
     emit busChangedSig(index);
 #endif
@@ -146,5 +154,12 @@ void SetMainWid::on_breakerBtn_clicked()
 {
     setButtonColor(ui->breakerBtn);
     ui->stackedWidget->setCurrentWidget(mSetBreakerWid);
+}
+
+
+void SetMainWid::on_tripBtn_clicked()
+{
+    setButtonColor(ui->tripBtn);
+    ui->stackedWidget->setCurrentWidget(mSetTripWid);
 }
 

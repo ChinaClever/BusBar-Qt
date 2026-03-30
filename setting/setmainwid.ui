@@ -42,7 +42,7 @@
      <x>860</x>
      <y>30</y>
      <width>161</width>
-     <height>391</height>
+     <height>401</height>
     </rect>
    </property>
    <property name="font">
@@ -84,6 +84,30 @@ border-radius:15px;
       </property>
       <property name="flat">
        <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="tripBtn">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>&quot;Ubuntu&quot;</family>
+        <pointsize>8</pointsize>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>分励脱扣</string>
       </property>
      </widget>
     </item>

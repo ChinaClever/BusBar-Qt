@@ -19,7 +19,7 @@ void Modbus_SlaveObj::initConnects()
 
 void Modbus_SlaveObj::initRecvSlot()
 {
-//    connect(mDev,&QModbusServer::dataWritten,this, &Modbus_SlaveObj::recvDataSlot);
+    connect(mDev,&QModbusServer::dataWritten,this, &Modbus_SlaveObj::recvDataSlot);
 }
 
 bool Modbus_SlaveObj::initUnitMap()
@@ -37,20 +37,20 @@ bool Modbus_SlaveObj::initUnitMap()
 
 bool Modbus_SlaveObj::checkWriteAddress(int address)
 {
-//    for(int i = 0 ; i < BUS_NUM ; i++){
-//        for(int j = 0 ; j < BOX_NUM-1 ; j++){
-//            if(j == 0){
-//                if(MbMasterReg_Factory + 10000*i + 11 == address || MbMasterReg_Factory + 10000*i  + 14== address){
-//                    return true;
-//                }
-//            }
-//            else{
-//                if(MbSlaveReg_Range + 10000*i + 500*j <= address && MbSlaveReg_End + 10000*i + 500*j >= address){
-//                    return true;
-//                }
-//            }
-//        }
-//    }
+    for(int i = 0 ; i < BUS_NUM ; i++){
+        for(int j = 0 ; j < BOX_NUM-1 ; j++){
+            if(j == 0){
+                if(MbMasterReg_Factory + 10000*i + 6 == address || MbMasterReg_Factory + 10000*i  + 14 == address){
+                    return true;
+                }
+            }
+            else{
+                if(MbSlaveReg_Factory + 10000*i + 500*j + 6 == address || MbSlaveReg_Factory + 10000*i + 500*j + 400 == address){
+                    return true;
+                }
+            }
+        }
+    }
     return false;
 }
 
@@ -71,7 +71,7 @@ void Modbus_SlaveObj::recvDataSlot(QModbusDataUnit::RegisterType table, int addr
             }
             setData(table, address+i, value);
             emit registerDataSig(address+i,value);
-            qDebug() << table << address+i << size << value;
+//            qDebug() << table << address+i << size << value;
         }
 
 //        QModbusDataUnit rcvData(table, address, size);

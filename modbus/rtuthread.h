@@ -23,6 +23,7 @@ public:
     int sendDataUintV3(int addr, ushort reg, uint val1 , uint val2);
     int sendDataUshortV3(int addr, ushort reg, uint val1 , uint val2);
     int sendDataUcharV3(int addr, ushort reg, uint val);
+    int sendDataUcharControlV3(int addr, ushort reg, uint val);
     int sendCurDataUshortV3(int addr, ushort reg, ushort reg2, uint val1 , uint val2);
 
 public slots:
@@ -63,6 +64,7 @@ public:
     Serial_Trans *mSerial;
 private:
     uchar *mBuf;
+    uchar *mSendBuf;
     Rtu_recv *mRtuPkt;
     sBusData *mBusData;
     int mId;

@@ -195,8 +195,11 @@ void Mb_Object::upSlaveDevRange(sBusData *data , int bus, int index)
                 }
             }
         }
+        int s = vs.size();
+        for(int i = MbSlaveReg_Range + s; i <= MbSlaveReg_End; i++) vs << 0;
         setRegs(MbSlaveReg_Range+10000*bus+500*index, vs);
-    }else{//clear
+    }
+    else{//clear
         vshort vs; //initFucRegs();
         for(int i = MbSlaveReg_Range ;  i <= MbSlaveReg_End ; i++){
             vs << 0;

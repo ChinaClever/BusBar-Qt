@@ -56,6 +56,7 @@ RtuThread::RtuThread(QObject *parent) :
     QThread(parent)
 {
     mBuf = (uchar *)malloc(4*RTU_BUF_SIZE); //申请内存  -- 随便用
+    mSendBuf = (uchar *)malloc(RTU_BUF_SIZE); //申请内存  -- 随便用
     mRtuPkt = new Rtu_recv; //传输数据结构
     mSerial = new Serial_Trans(this); //串口线程
 }
@@ -118,14 +119,14 @@ int RtuThread::transmit(int addr, ushort reg, uint len)
 int RtuThread::sendData(int addr, ushort reg, uint len, bool value)
 {
     if(addr == 0xff){
-        uchar *buf = mBuf;
+        uchar *buf = mSendBuf;
         int rtn = rtu_sent_buff(addr, reg, len, buf); // 把数据打包成通讯格式的数据
         return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms
     }else{
         sBoxData *box = &(mBusData->box[addr]); //共享内存
         if((box->offLine > 0) || value){ //在线
             //打包数据
-            uchar *buf = mBuf;
+            uchar *buf = mSendBuf;
             int rtn = rtu_sent_buff(addr+1, reg, len, buf); // 把数据打包成通讯格式的数据
             return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
         }
@@ -138,7 +139,7 @@ int RtuThread::sendDataUintV3(int addr, ushort reg, uint val1 , uint val2)
     sBoxData *box = &(mBusData->box[addr]); //共享内存
     if( box->offLine > 0 ){ //在线
         //打包数据
-        uchar *buf = mBuf;
+        uchar *buf = mSendBuf;
         int rtn = 0;
         if(addr == 0 && reg == StartZoneCurMAX_1) rtn = rtu_sent_single_uintV3_buff(addr+1, reg, 2 , val2 , buf); // 把数据打包成通讯格式的数据
         else rtn = rtu_sent_uintV3_buff(addr+1, reg, 4 , val1 , val2, buf); // 把数据打包成通讯格式的数据
@@ -152,7 +153,7 @@ int RtuThread::sendDataUshortV3(int addr, ushort reg, uint val1 , uint val2)
     sBoxData *box = &(mBusData->box[addr]); //共享内存
     if( box->offLine > 0 ){ //在线
         //打包数据
-        uchar *buf = mBuf;
+        uchar *buf = mSendBuf;
         int rtn = rtu_sent_ushortV3_buff(addr+1, reg, 2 , val1 , val2, buf); // 把数据打包成通讯格式的数据
         return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
     }
@@ -164,8 +165,20 @@ int RtuThread::sendDataUcharV3(int addr, ushort reg, uint val)
     sBoxData *box = &(mBusData->box[addr]); //共享内存
     if( box->offLine > 0 ){ //在线
         //打包数据
-        uchar *buf = mBuf;
+        uchar *buf = mSendBuf;
         int rtn = rtu_sent_ucharV3_buff(addr+1, reg, 1 , val , buf); // 把数据打包成通讯格式的数据
+        return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
+    }
+    return -1;
+}
+
+int RtuThread::sendDataUcharControlV3(int addr, ushort reg, uint val)
+{
+    sBoxData *box = &(mBusData->box[addr]); //共享内存
+    if( box->offLine > 0 ){ //在线
+        //打包数据
+        uchar *buf = mSendBuf;
+        int rtn = rtu_sent_ucharControlV3_buff(addr+1, reg, 1 , val , buf); // 把数据打包成通讯格式的数据
         return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
     }
     return -1;
@@ -547,6 +560,7 @@ void RtuThread::initData(sBoxData *box, Rtu_recv *pkt)
     box->reState = pkt->reState;
     box->boxType = pkt->boxType;
     box->phaseFlag = pkt->phaseFlag;
+    box->shuntRelease = pkt->shuntRelease;
 }
 
 void RtuThread::readLocalTemHum()

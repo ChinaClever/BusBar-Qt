@@ -7,6 +7,7 @@
 #include "setsystem/checkpassworddlg.h"
 #include "setloop/setpowmain.h"
 #include "setloop/setbreakerwid.h"
+#include "setloop/settripwid.h"
 
 namespace Ui {
 class SetMainWid;
@@ -46,6 +47,8 @@ signals:
     void on_powerBtn_clicked();
     void on_breakerBtn_clicked();
 
+    void on_tripBtn_clicked();
+
 private:
     Ui::SetMainWid *ui;
 
@@ -55,6 +58,7 @@ private:
     SetLoopWid *mSetLoopWid;
     SetBreakerWid *mSetBreakerWid;
     SetPowMain *mSetPowerMainWid;
+    SetTripWid *mSetTripWid;
 
 };
 

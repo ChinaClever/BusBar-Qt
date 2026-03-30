@@ -69,8 +69,27 @@ void SetThread::workDown()
                             db_operation_obj_en(item.bus)->insertOperation(typeen , msgen2);
                         }
                     }
-                }
-            }
+                }//if(item.insertlog == 1)
+                if(item.insertlog == 2){
+                    QString type = tr("分励脱扣控制");
+                    QString typeen = tr("Control shunt trip");
+                    QString name = QString(get_share_mem()->data[item.bus].busName);
+                    if(item.box != 0) name = QString(get_share_mem()->data[item.bus].box[item.box].boxName);
+                    QString local = tr("本机");
+                    QString localen = tr("local");
+                    if(item.txtype == 1){
+                        local = tr("远程");
+                        localen = tr("remote");
+                    }
+                    QString msg1 = tr("%2控制%1分励脱扣").arg(name).arg(local);
+                    QString msgen1 = tr("%2 control %1 shunt trip").arg(name).arg(localen);
+
+                    db_operation_obj(item.bus)->insertOperation(type , msg1);
+                    db_operation_obj_en(item.bus)->insertOperation(typeen , msgen1);
+
+                }//if(item.insertlog == 2){
+
+            }//if(gVerflag == 2)
 //            if(gVerflag == 3){
 //                gReadWriteflag = 2;
 //                emit sendSetSnmpSig(&item);
@@ -130,6 +149,7 @@ void SetThread::change(sThresholdItem &item , QString &msg1 , QString &msg2 , QS
     double rate;
     str = changeType(item.type , sym , rate);
     if(item.box == 0){
+
         QString phase = QString('A'+item.num);
         QString phaseen = phase;
         if(item.type == 3 && item.num == 3){
@@ -144,10 +164,12 @@ void SetThread::change(sThresholdItem &item , QString &msg1 , QString &msg2 , QS
                      .arg(busdata->busName).arg(phaseen).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
         msgen2 = tr("Busbar: %1 ，set the maximum %3 of input %2 from %4%5 to %6%7 !")
                      .arg(busdata->busName).arg(phaseen).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);
+
     }
     else if(item.box != 0xff-1){
         msg1 = tr("插接箱:%1 ，").arg(busdata->box[item.box].boxName);
         msgen1 = tr("Tap-off box:%1 ，").arg(busdata->box[item.box].boxName);
+
         int id = item.num;
         QString output = calcLoop(id);
         QString outputen;

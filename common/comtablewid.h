@@ -59,6 +59,7 @@ protected slots:
 
 protected:
     QTimer *timer;
+    QTableWidget *tableWidget;  // 父类成员
 
 private:
     void initTableWidget(QStringList &header, const QString &title);
