@@ -119,8 +119,10 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn,
                     .arg(unit.max[i]/rate).arg(sym);
 
             if(unit.alarm[i] == 1){
-                unit.alarm[i] = 2;
-                saveMsg(typeStr, str, typeStrEn, strEn);
+                if((unit.value[i] < unit.min[i]) || (unit.value[i] > unit.max[i])){
+                    unit.alarm[i] = 2;
+                    saveMsg(typeStr, str, typeStrEn, strEn);
+                }
             }
         }
         else if(unit.crAlarm[i])
@@ -176,8 +178,10 @@ void DpAlarmSlave::unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn,
                     .arg(unit.max[i]/rate).arg(sym);
 
             if(unit.alarm[i] == 1){
-                unit.alarm[i] = 2;
-                saveMsg(typeStr, str , typeStrEn , strEn);
+                if((unit.value[i] < unit.min[i]) || (unit.value[i] > unit.max[i])){
+                    unit.alarm[i] = 2;
+                    saveMsg(typeStr, str , typeStrEn , strEn);
+                }
             }
         }
         else if(unit.crAlarm[i])
@@ -240,8 +244,10 @@ void DpAlarmSlave::unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg,QSt
                     .arg(unit.max[i]/rate).arg(sym);
 
             if(unit.alarm[i] == 1){
-                unit.alarm[i] = 2;
-                saveMsg(typeStr, str ,typeStrEn , strEn);
+                if((unit.value[i] < unit.min[i]) || (unit.value[i] > unit.max[i])){
+                    unit.alarm[i] = 2;
+                    saveMsg(typeStr, str ,typeStrEn , strEn);
+                }
             }
         }
         else if(unit.crAlarm[i])
@@ -306,8 +312,10 @@ void DpAlarmSlave::unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, QSt
                     .arg(unit.max[i]/rate).arg(sym);
 
             if(unit.alarm[i] == 1){
-                unit.alarm[i] = 2;
-                saveMsg(typeStr, str,typeStrEn, strEn);
+                if((unit.value[i] < unit.min[i]) || (unit.value[i] > unit.max[i])){
+                    unit.alarm[i] = 2;
+                    saveMsg(typeStr, str,typeStrEn, strEn);
+                }
             }
         }
         else if(unit.crAlarm[i])
@@ -340,6 +348,54 @@ void DpAlarmSlave::unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, QSt
     }
 }
 
+void DpAlarmSlave::unitAlarmPowerW(sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sRtuULLintUnit &unit, double rate, const QString &sym)
+{
+    QString str=msg, tempStr = typeStr , strEn = msgEn, tempStrEn = typeStrEn;
+    if(unit.ialarm)
+    {
+        tempStr = typeStr + tr("告警");
+        str += tr("%1，当前值：%2%3, 最大值：%4%5").arg(typeStr)
+                .arg(unit.ivalue/rate).arg(sym)
+                .arg(unit.imax/rate).arg(sym);
+
+        tempStrEn = typeStrEn + tr(" Alarm");
+        strEn += tr("%1，current value：%2%3, maximum value：%4%5").arg(typeStrEn)
+                .arg(unit.ivalue/rate).arg(sym)
+                .arg(unit.imax/rate).arg(sym);
+
+        if(unit.ialarm == 1){
+            if(unit.ivalue > unit.imax){
+                unit.ialarm = 2;
+                saveMsg(typeStr, str,typeStrEn, strEn);
+            }
+        }
+    }
+    else if(unit.icrAlarm)
+    {
+
+            tempStr = typeStr +  tr("预警");
+            str += tr("%1，当前值：%2%3, 临界上限值：%6%7").arg(typeStr)
+                    .arg(unit.ivalue/rate).arg(sym)
+                    .arg(unit.icrMax/rate).arg(sym);
+
+            tempStrEn = typeStrEn +  tr(" Warning");
+            strEn += tr("%1，current value：%2%3,critical upper limit：%4%5").arg(typeStrEn)
+                    .arg(unit.ivalue/rate).arg(sym)
+                    .arg(unit.icrMax/rate).arg(sym);
+    }
+
+    // 实时告警信息
+    if((unit.ialarm) || (unit.icrAlarm)) {
+        mAlarmStr << shm->data[mBusId].busName;
+        if(gLanguage == 0){
+            mAlarmStr << tempStr;
+            mAlarmStr << str;
+        }else{
+            mAlarmStr << tempStrEn;
+            mAlarmStr << strEn;
+        }
+    }
+}
 
 void DpAlarmSlave::boxAlarm(sBoxData &box)
 {
@@ -347,33 +403,47 @@ void DpAlarmSlave::boxAlarm(sBoxData &box)
         if(box.boxAlarm){
             QString typeStr = tr("回路电流");
             QString typeStrEn = tr("Loop current");
+            QString msg = tr("插接箱：%1，").arg(box.boxName);
+            QString msgEn = tr("Tap-off box：%1，").arg(box.boxName);
             if(box.boxCurAlarm) {
-                QString msg = tr("插接箱：%1，").arg(box.boxName);
-                QString msgEn = tr("Tap-off box：%1，").arg(box.boxName);
                 unitAlarmW(box, typeStr, msg, typeStrEn, msgEn, box.data.cur, COM_RATE_CUR, "A");
             }
 
             typeStr = tr("回路电压");
             typeStrEn = tr("Loop voltage");
             if(box.boxVolAlarm) {
-                QString msg = tr("插接箱：%1，").arg(box.boxName);
-                QString msgEn = tr("Tap-off box：%1，").arg(box.boxName);
+//                QString msg = tr("插接箱：%1，").arg(box.boxName);
+//                QString msgEn = tr("Tap-off box：%1，").arg(box.boxName);
                 unitAlarmVA(box, typeStr, msg, typeStrEn , msgEn , box.data.vol, COM_RATE_VOL, "V");
             }
 
             typeStr = tr("回路功率");
             typeStrEn = tr("Loop power");
             if(box.boxPowerAlarm) {
-                QString msg = tr("插接箱：%1，").arg(box.boxName);
-                QString msgEn = tr("Tap-off box：%1，").arg(box.boxName);
+//                QString msg = tr("插接箱：%1，").arg(box.boxName);
+//                QString msgEn = tr("Tap-off box：%1，").arg(box.boxName);
                 unitAlarmW(box, typeStr, msg, typeStrEn, msgEn, box.data.pow, COM_RATE_POW , "kW");
+            }
+
+            typeStr = tr("总有功功率");
+            typeStrEn = tr("Total active power");
+            if(box.boxTotalPowerAlarm) {
+                unitAlarmPowerW(box, typeStr, msg, typeStrEn, msgEn, box.totalPow, COM_RATE_POW , "kW");
+            }
+            uchar breaker_num = 3;
+            for(int j = 0 ; j < breaker_num ; j++){
+                typeStr = tr("Output %1 有功功率").arg(j+1);
+                typeStrEn = tr("Output %1 active power").arg(j+1);
+                if(box.boxOutputPowerAlarm) {
+                    unitAlarmPowerW(box, typeStr, msg, typeStrEn, msgEn, box.outputXBox.outputXPow[j], COM_RATE_POW , "kW");
+                }
             }
 
             typeStr = tr("插接箱温度");
             typeStrEn = tr("Tap-off box temperature");
             if(box.boxEnvAlarm) {
-                QString msg = tr("插接箱：%1，温度").arg(box.boxName);
-                QString msgEn = tr("Tap-off box：%1，temperature").arg(box.boxName);
+                msg = tr("插接箱：%1，温度").arg(box.boxName);
+                msgEn = tr("Tap-off box：%1，temperature").arg(box.boxName);
                 unitAlarm(typeStr,msg, typeStrEn , msgEn, box.env.tem, COM_RATE_TEM, "°C");
             }
             if(box.phaseFlag == 0){

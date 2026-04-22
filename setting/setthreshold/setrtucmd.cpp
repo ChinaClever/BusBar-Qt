@@ -30,11 +30,11 @@ void SetRtuCmd::sendReg(int reg, sThresholdItem &item)
 
 void SetRtuCmd::sendRegV3(int reg, sThresholdItem &item)
 {
-    if(item.type == 4 || (item.box == 0 && item.type == 2) || (item.box == 0 && item.type == 8))
+    if(item.type == 4 || (item.box == 0 && item.type == 2) || (item.box == 0 && item.type == 8)|| (item.box > 0 && (item.type == 18||item.type == 19)))
         sendDataUintV3(item.bus, item.box, reg, item.min , item.max);
     else if(item.type == 11 || item.type == 14 || item.type == 15)
         sendDataUcharV3(item.bus, item.box, reg, item.min);
-    else if(item.type == 2 && item.curSpec == 1)
+    else if(item.type == 2 && item.curSpec == 1)//插接箱125A以上的电流阈值
         sendDataUintV3(item.bus, item.box, reg, item.min , item.max);
     else
         sendDataUshortV3(item.bus, item.box, reg, item.min , item.max);
@@ -121,6 +121,8 @@ void SetRtuCmd::sendPlugV3(sThresholdItem &item)
     case 3: reg = PlugTemperatureMIN_1 + item.num*2; break;
     case 4: reg = PlugPowerMIN_L1_1 + item.num*8;break;
     case 15: reg = SetPlugBackupBreaker;break;
+    case 18: reg = PlugOutputPowerMAX+ item.num*2;break;
+    case 19: reg = PlugTotalPowerMAX;break;
     }
     sendRegV3(reg, item);
 }

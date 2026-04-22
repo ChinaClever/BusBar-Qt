@@ -572,7 +572,7 @@
    </item>
    <item row="4" column="0">
     <widget class="QWidget" name="AllWid" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,1,1,1,1,1,0,1">
+     <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,1,1,1,1,0,0,1">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -589,28 +589,6 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QLabel" name="label_6">
-        <property name="minimumSize">
-         <size>
-          <width>50</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>50</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>平均/和</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QLabel" name="volH">
         <property name="minimumSize">
          <size>
@@ -625,7 +603,7 @@
          </size>
         </property>
         <property name="text">
-         <string>220V</string>
+         <string>总视在功率</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -672,7 +650,7 @@
          </size>
         </property>
         <property name="text">
-         <string>50kVA</string>
+         <string>总有功功率</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -716,7 +694,7 @@
          </size>
         </property>
         <property name="text">
-         <string>0.8</string>
+         <string>零线温度</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -739,6 +717,28 @@
         </property>
         <property name="text">
          <string>---</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="minimumSize">
+         <size>
+          <width>50</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>总电能</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>

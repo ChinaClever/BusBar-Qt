@@ -44,6 +44,7 @@ protected:
     void envData(sEnvData *env, Rtu_recv *pkt);
     void envDataV3(sEnvData *env, Rtu_recv *pkt);
     void initData(sBoxData *box, Rtu_recv *pkt);
+    void outputAndTotalInitData(sBoxData *box, Rtu_recv *pkt);
     void setBoxNum(ushort num);
     void thdData(Rtu_recv *pkt);
     void thdDataV3(Rtu_recv *pkt);
@@ -53,6 +54,7 @@ protected:
     void BusTransDataV3();
     void readLocalTemHum();
     void autoSetAddress();
+    bool checkBoxVolAlram(int index);
 
     #if (SI_RTUWIFI==1)
     void ChangeBusCh(int ch, int index);

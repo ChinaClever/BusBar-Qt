@@ -44,7 +44,13 @@
     <widget class="QWidget" name="widget_1" native="true"/>
    </item>
    <item>
-    <widget class="QWidget" name="widget_2" native="true"/>
+    <widget class="QWidget" name="widget_2" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="QTabWidget" name="tabWidget"/>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

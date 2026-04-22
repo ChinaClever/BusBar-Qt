@@ -113,7 +113,7 @@ void LineRoadWid::updateWid(int id)
     ui->eleLab->setText(str);
 
     //str =  QString::number(mEnv->tem.value[id]) + "℃";
-    str =  QString::number(mData->reactivePower[id]/COM_RATE_POW) + "kVar";
+    str =  QString::number(mData->reactivePower[id]/COM_RATE_POW) + "kvar";
     ui->temLab->setText(str);
     //updateAlarmStatus(ui->temLab, mEnv->tem);
 }

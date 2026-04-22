@@ -505,6 +505,54 @@ static int rtu_plug_recv_loop_high_cur_alram_data(uchar *ptr, Rtu_recv *msg , in
     return len;
 }
 
+static int rtu_plug_recv_loop_percentage_load_data(uchar *ptr, Rtu_recv *msg , int index)
+{
+    uint len = 0;
+    msg->data[index].loop_pl = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    return len;
+}
+
+static int rtu_plug_recv_totaldata_output_data(uchar *ptr, Rtu_recv *msg)
+{
+    uint len = 0;
+    msg->totalPow.ivalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->totalPow.ivalue  <<= 16;
+    msg->totalPow.ivalue += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->totalPow.ialarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+
+    msg->totalApPow = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->totalApPow  <<= 16;
+    msg->totalApPow += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+
+    msg->totalEle = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->totalEle  <<= 16;
+    msg->totalEle += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+
+    for(int i = 0 ; i < RTU_LINE_NUM ; i++){
+        msg->outputXPow[i].ivalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+        msg->outputXPow[i].ivalue  <<= 16;
+        msg->outputXPow[i].ivalue += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+        msg->outputXPow[i].ialarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+        msg->outputXApPow[i].ivalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+        msg->outputXApPow[i].ivalue  <<= 16;
+        msg->outputXApPow[i].ivalue += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+        msg->outputXEle[i] = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+        msg->outputXEle[i]  <<= 16;
+        msg->outputXEle[i] += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    }
+
+    msg->totalPow.imax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->totalPow.imax  <<= 16;
+    msg->totalPow.imax += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+
+    for(int i = 0 ; i < RTU_LINE_NUM ; i++){
+        msg->outputXPow[i].imax = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+        msg->outputXPow[i].imax  <<= 16;
+        msg->outputXPow[i].imax += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    }
+
+    return len;
+}
 
 static int rtu_recv_rate(uchar *ptr , ushort *cur , ushort *min , ushort *max)
 {
@@ -600,13 +648,16 @@ bool rtu_recv_packetV3(int addr ,uchar *buf, int len, Rtu_recv *pkt)
                 ptr += rtu_plug_recv_loop_alarm_data(ptr , pkt , i);
             pkt->plugBreaker = (*ptr) * 256 + *(ptr+1); ptr+=2;
             for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop load数据
-                ptr += 2;
+                ptr += rtu_plug_recv_loop_percentage_load_data(ptr , pkt , i);
             if(pkt->plug_cur_spec){
                 for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop current数据
                     ptr += rtu_plug_recv_loop_high_cur_data(ptr , pkt , i);
                 for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop high alram数据
                     ptr += rtu_plug_recv_loop_high_cur_alram_data(ptr , pkt , i);
+            }else{
+                ptr += 2*6*9;
             }
+            ptr += rtu_plug_recv_totaldata_output_data(ptr , pkt);
 
         }
         pkt->crc = (buf[(addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303)*2+6-1]*256) + buf[(addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303)*2+6-2]; // RTU_SENT_LEN_V23*2+5

@@ -34,6 +34,7 @@ struct RtuRecvLine {
     uint apPow; // 视在功率
     uint ele; // 电能值
 
+    ushort loop_pl;// 回路负载百分比
     ushort wave; // 谐波值
     uchar pf; // 功率因素
     uchar sw; // 开关
@@ -82,6 +83,10 @@ struct Rtu_recv {
     RtuUshortUnit reCur;//剩余电流
     RtuUintUnit zeroLineCur;//零线电流
     RtuUshortUnit rate;//频率
+    RtuUintUnit outputXPow[RTU_LOOP_NUM]; //输出位有功功率
+    RtuUintUnit outputXApPow[RTU_LOOP_NUM]; //输出位视在功率
+    uint outputXEle[RTU_LOOP_NUM]; //输出位电能
+
     ushort volThd[RTU_THD_NUM][40];
     ushort curThd[RTU_THD_NUM][40];
     uchar lineNum;
@@ -93,10 +98,11 @@ struct Rtu_recv {
     uchar dc; // 交直流标志位
     uchar type;//箱子类型 0：插接箱 1： 始端箱
 
-    uchar pl[3]; // 负载百分比
+    ushort pl[3]; // 负载百分比
     uchar hc; //谐波通道(00表示A路电压通道，01表示B路电压通道，02表示C路电压通道 03表示A路电流通道，04表示B路电流通道，05表示C路电流通道)
     ushort thd[40]; //   谐波含量
     unsigned long long totalApPow;//   总视在功率
+    uint totalEle;//总电能
     ushort crc; // 检验码
     ushort plugBreaker; // 表示插接箱新加的断路器个数和状态
 };

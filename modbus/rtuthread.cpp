@@ -141,7 +141,7 @@ int RtuThread::sendDataUintV3(int addr, ushort reg, uint val1 , uint val2)
         //打包数据
         uchar *buf = mSendBuf;
         int rtn = 0;
-        if(addr == 0 && reg == StartZoneCurMAX_1) rtn = rtu_sent_single_uintV3_buff(addr+1, reg, 2 , val2 , buf); // 把数据打包成通讯格式的数据
+        if((addr == 0 && reg == StartZoneCurMAX_1 )||(addr > 0 && reg >= PlugTotalPowerMAX && reg <= PlugOutputPowerMAX + 5 ) ) rtn = rtu_sent_single_uintV3_buff(addr+1, reg, 2 , val2 , buf); // 把数据打包成通讯格式的数据
         else rtn = rtu_sent_uintV3_buff(addr+1, reg, 4 , val1 , val2, buf); // 把数据打包成通讯格式的数据
         return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
     }
@@ -296,6 +296,7 @@ void RtuThread::loopObjDataV3(sObjData *loop, int id, RtuRecvLine *data)
     loop->sw[id] = data->sw;
     loop->apPow[id] = data->apPow;
     loop->reactivePower[id] = data->reactivePower;
+    loop->loop_pl[id] = data->loop_pl;
     //    loop->ratedCur[id] = data->curAlarm; ////
 
     //loop->wave[id] = data->wave;
@@ -516,6 +517,18 @@ void RtuThread::BusTransData()
     }
 }
 
+bool RtuThread::checkBoxVolAlram(int index)
+{
+    bool ret = false;
+    int loopNum = mBusData->box[index].loopNum;
+    for(int i = 0 ; i < loopNum; i++){
+        if(mBusData->box[index].data.vol.value[i]==0){
+            ret = true;break;
+        }
+    }
+    return ret;
+}
+
 void RtuThread::BusTransDataV3()
 {
     for(int i=0; i<=mBusData->boxNum; ++i)
@@ -523,8 +536,13 @@ void RtuThread::BusTransDataV3()
         if(gReadWriteflag == 2) continue;
         if(gAutoSetFlag[this->mId] == 1) break;
         int ret = transDataV3(i);
-        if( ret == 0 ) {
-            msleep(900+rand()%500);//900
+        bool volAlram = checkBoxVolAlram(i);
+        if(ret == 0) {
+            msleep(500+rand()%500);//500
+            transDataV3(i);
+        }
+        if(volAlram) {
+            msleep(6000+rand()%500);//6000
             transDataV3(i);
         }
         msleep(750+rand()%500);//750
@@ -585,6 +603,18 @@ void RtuThread::readLocalTemHum()
     }
 }
 
+void RtuThread::outputAndTotalInitData(sBoxData *box, Rtu_recv *pkt)
+{
+    for(int i = 0 ; i < RTU_LINE_NUM ; i++){
+        box->outputXBox.outputXPow[i].ivalue = pkt->outputXPow[i].ivalue;
+        box->outputXBox.outputXPow[i].iupalarm = pkt->outputXPow[i].ialarm;
+        box->outputXBox.outputXPow[i].imax = pkt->outputXPow[i].imax;
+        box->outputXBox.outputXEle[i] = pkt->outputXEle[i];
+        box->outputXBox.outputXApPow[i].ivalue = pkt->outputXApPow[i].ivalue;
+    }
+    box->totalEle = pkt->totalEle;
+}
+
 int RtuThread::transDataV3(int addr)
 {
     char offLine = 0;
@@ -620,6 +650,7 @@ int RtuThread::transDataV3(int addr)
                 loopDataV3(box, pkt); //更新数据
                 envDataV3(&(box->env), pkt);
                 initData(box, pkt);
+                outputAndTotalInitData(box, pkt);
                 box->rate.svalue = pkt->rate.svalue;
                 box->rate.smin = pkt->rate.smin;
                 box->rate.smax = pkt->rate.smax;

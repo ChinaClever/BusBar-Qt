@@ -376,7 +376,7 @@ void BoxLoopTableWid::setRePow(int id, int column)
 
     double value = mData->reactivePower[id] / COM_RATE_POW;
     if(value >= 0)
-        str = QString::number(value, 'f', 3) + "kVar";
+        str = QString::number(value, 'f', 3) + "kvar";
     setTableItem(id, column, str);
 }
 
