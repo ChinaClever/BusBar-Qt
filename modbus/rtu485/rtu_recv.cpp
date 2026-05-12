@@ -311,6 +311,9 @@ static int rtu_start_recv_other_data(uchar *ptr, Rtu_recv *msg)
     msg->breaker = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->rate.svalue = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     msg->rate.salarm = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->totalEle = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
+    msg->totalEle  <<= 16;
+    msg->totalEle += (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;
     return len; //3.0.0版本
 }
 
@@ -619,7 +622,7 @@ bool rtu_recv_packetV3(int addr ,uchar *buf, int len, Rtu_recv *pkt)
             for(int i = 0 ; i < RTU_TH_NUM ; ++i) // 读取温度 数据
                 ptr += rtu_start_recv_env_data(ptr , pkt , i);
             ptr += rtu_start_recv_other_data(ptr , pkt);
-            ptr += (90-63)*2;//保留
+            ptr += (90-65)*2;//保留
 
             for(int i = 0 ; i < RTU_LINE_NUM ; ++i) // 读取相 数据
             {

@@ -31,7 +31,8 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
         vs << (dev->zeroLineCur.ivalue >> 16)<< (dev->zeroLineCur.ivalue & 0xffff) << dev->zeroLineCur.iupalarm;
         vs << dev->volUnbalance << dev->curUnbalance << dev->data.sw[0];
         vs << dev->rate.svalue << dev->rate.supalarm;
-        for(int i = 0 ; i < 90-63 ; i++) vs << 0 ;
+        vs << (dev->totalEle >> 16) << (dev->totalEle & 0xffff);
+        for(int i = 0 ; i < 90-65 ; i++) vs << 0 ;
 
         sObjData *p = &(dev->data);
         for(int i = 0 ; i < START_LINE_NUM ; ++i) // 读取相 数据
