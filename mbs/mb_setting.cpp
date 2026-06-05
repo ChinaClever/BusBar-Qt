@@ -88,7 +88,7 @@ void Mb_Setting::restoreFactoryDefaults()
 void Mb_Setting::registerRecvSlot(int address, ushort value)
 {
 //    qDebug()<<"address "<<address <<"value "<<value;
-    if( address >= 40000) return;
+    if( address >= 40000 ) return;
     sThresholdItem item;
     QDateTime t = QDateTime::currentDateTime();
     item.txtype = 1;
@@ -97,6 +97,25 @@ void Mb_Setting::registerRecvSlot(int address, ushort value)
         if( value > 1 ) return;
         item.bus = address / 10000;
         item.box = (address % 10000) / 500;
+        item.min = value;
+        SetThread::bulid()->append(item);
+        return ;
+    }
+
+    if(( (address % 10000) / 500 == 0 ) && (address % 500 == 35 || address % 500 == 36 || address % 500 == 37)){
+        item.type = 20;
+        item.bus = address / 10000;
+        item.box = (address % 10000) / 500;
+        item.num = address % 500  - 35;
+        item.min = value;
+        SetThread::bulid()->append(item);
+        return ;
+    }
+    if(( (address % 10000) / 500 != 0 ) && (address % 500 == 345 || address % 500 == 346 || address % 500 == 347)){
+        item.type = 20;
+        item.bus = address / 10000;
+        item.box = (address % 10000) / 500;
+        item.num = address % 500  - 345;
         item.min = value;
         SetThread::bulid()->append(item);
         return ;

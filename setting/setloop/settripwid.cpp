@@ -16,12 +16,14 @@ SetTripWid::SetTripWid(QWidget *parent) : ComTableWid(parent)
 void SetTripWid::initWid()
 {
     QString title;QStringList header;
-    if(gLanguage == 0){title = tr("分励脱扣");header<< tr("名称")<<tr("蜂鸣器状态")<<tr("打开蜂鸣器")<<tr("关闭蜂鸣器")<<tr("控制分励脱扣");}
-    else {title = tr("Shunt trip");header<< tr("Name")<<tr("Buzzer status")<<tr("On buzzer")<<tr("Off buzzer")<<tr("Control shunt trip");}
+    if(gLanguage == 0){title = tr("分励脱扣");header<< tr("名称")<<tr("MAC(ro)")<<tr("ID1")<<tr("ID2")<<tr("ID3")<<tr("蜂鸣器状态")<<tr("打开蜂鸣器")<<tr("关闭蜂鸣器")<<tr("控制分励脱扣");}
+    else {title = tr("Shunt trip");header<< tr("Name")<<tr("MAC(ro)")<<tr("ID1")<<tr("ID2")<<tr("ID3")<<tr("Buzzer status")<<tr("On buzzer")<<tr("Off buzzer")<<tr("Control shunt trip");}
 
 
 
     initTableWid(header, 1, title);
+    disconnect(tableWidget, SIGNAL(itemClicked(QTableWidgetItem*)), this, SLOT(itemClicked(QTableWidgetItem*)));
+    connect(tableWidget, SIGNAL(itemClicked(QTableWidgetItem*)), this, SLOT(itemClicked(QTableWidgetItem*)));
     for(int i = 0 ; i < header.size() ; i++) setTableColumnWidth(i,40); //设置宽度
 }
 
@@ -54,24 +56,48 @@ int SetTripWid::updateDev(sBoxData *dev, int row)
         }else{
             list << QString(dev->boxName);
         }
-        if(dev->buzzerStatus == 0) list << "ON";
-        else list << "OFF";
+        quint8 bytes[6];
+        bytes[0] = (dev->boxId[0] >> 8) & 0xFF;
+        bytes[1] = dev->boxId[0] & 0xFF;
+        bytes[2] = (dev->boxId[1] >> 8) & 0xFF;
+        bytes[3] = dev->boxId[1] & 0xFF;
+        bytes[4] = (dev->boxId[2] >> 8) & 0xFF;
+        bytes[5] = dev->boxId[2] & 0xFF;
+
+        // 拼成 MAC 地址字符串
+        QString mac;
+        for (int i = 0; i < 6; i++) {
+            mac += QString("%1").arg(bytes[i], 2, 16, QLatin1Char('0')).toUpper();
+            if (i < 5){
+                mac += ":";
+                if( i == 2) mac += "\n";
+            }
+        }
+        list<<mac;
+        for(int i = 0 ; i < 3 ; i++) list<< QString::number(dev->boxId[i]);
+        if(row != 0){
+            if(dev->buzzerStatus == 0) list << "ON";
+            else list << "OFF";
+        }else{
+            list<<"---"<<"---"<<"---"<<"---";
+        }
+
         setTableRow(row, list);
 
         // 第一次创建按钮，避免重复 new
-        if(tableWidget->cellWidget(row, 2) == nullptr) {
+        if(row != 0 && tableWidget->cellWidget(row, 6) == nullptr) {
             QPushButton *btnOn  = new QPushButton("ON", tableWidget);
             QPushButton *btnOff = new QPushButton("OFF", tableWidget);
             QPushButton *btnCtl = new QPushButton("Control", tableWidget);
 
-            tableWidget->setCellWidget(row, 2, btnOn);
-            tableWidget->setCellWidget(row, 3, btnOff);
-            tableWidget->setCellWidget(row, 4, btnCtl);
+            tableWidget->setCellWidget(row, 6, btnOn);
+            tableWidget->setCellWidget(row, 7, btnOff);
+            tableWidget->setCellWidget(row, 8, btnCtl);
 
             // 信号槽绑定
-            connect(btnOn,  &QPushButton::clicked, this, [=](){ handleButtonClick(row, 2); });
-            connect(btnOff, &QPushButton::clicked, this, [=](){ handleButtonClick(row, 3); });
-            connect(btnCtl, &QPushButton::clicked, this, [=](){ handleButtonClick(row, 4); });
+            connect(btnOn,  &QPushButton::clicked, this, [=](){ handleButtonClick(row, 6); });
+            connect(btnOff, &QPushButton::clicked, this, [=](){ handleButtonClick(row, 7); });
+            connect(btnCtl, &QPushButton::clicked, this, [=](){ handleButtonClick(row, 8); });
         }
     }else{
         QStringList list;
@@ -109,17 +135,17 @@ void SetTripWid::handleButtonClick(int row , int col)
     sThresholdItem item;//设置备用断路器
     item.bus = mBus;
     item.box = row;
-    if(col == 2)//on
+    if(col == 6)//on
     {
         item.type = 17;
         item.min = 0;
         SetThread::bulid()->append(item);
-    }else if(col == 3)//off
+    }else if(col == 7)//off
     {
         item.type = 17;
         item.min = 1;
         SetThread::bulid()->append(item);
-    }else if(col == 4)//control
+    }else if(col == 8)//control
     {
         QString str;
         QString name = QString(mPacket->busName);
@@ -142,22 +168,21 @@ void SetTripWid::handleButtonClick(int row , int col)
     }
 }
 
-//void SetTripWid::itemClicked(QTableWidgetItem *it)
-//{
-//    if(it->text().compare("---") == 0) return;  //为空不设置
-//    int column = it->column();
-//    if(column > 0)
-//    {
-//        //BeepThread::bulid()->beep();
-//        sThresholdItem item;
-//        item.bus = mBus;
-//        item.box = it->row()+1;
-//        item.num = column-1;
-//        item.type = 2;
+void SetTripWid::itemClicked(QTableWidgetItem *it)
+{
+    if(it->text().compare("---") == 0) return;  //为空不设置
+    int column = it->column();
+    if(column == 2||column == 3||column == 4)
+    {
+        sThresholdItem item;
+        item.bus = mBus;
+        item.box = it->row();
+        item.num = column-2;
+        item.type = 20;
 
-//        SetThresholdDlg dlg(this);
-//        dlg.move(0,0);
-//        dlg.set(item);
-//        dlg.exec();
-//    }
-//}
+        SetThresholdDlg dlg(this);
+        dlg.move(0,0);
+        dlg.set(item);
+        dlg.exec();
+    }
+}

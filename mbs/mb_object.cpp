@@ -21,7 +21,9 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
         vs << dev->proNum <<dev->version << dc << dev->curSpecification << 1; // 通讯协议版本
         vs << dev->baudRate << dev->buzzerStatus << dev->alarmTime << dev->lps << dev->iOF;
         vs << dev->isd << dev->shuntRelease << dev->reState << dev->lpsAlarm;
-        for(int i = 0 ; i < 40-14 ; i++) vs << 0 ;
+        for(int i = 0 ; i < 35-14 ; i++) vs << 0 ;
+        for(int i = 0 ; i < 3 ; i++) vs << dev->boxId[i] ;
+        vs << 0 << 0;
         for(int i = 0 ;  i < SENSOR_NUM ; i++){
             vs << dev->env.tem.value[i] << dev->env.tem.upalarm[i];
         }
@@ -196,7 +198,12 @@ void Mb_Object::upSlaveDevRange(sBusData *data , int bus, int index)
             }
         }
         int s = vs.size();
-        for(int i = MbSlaveReg_Range + s; i <= MbSlaveReg_End; i++) vs << 0;
+        for(int i = MbSlaveReg_Range + s; i <= MbSlaveReg_End; i++){
+            if(i==345 || i==346 || i==347)
+                vs << dev->boxId[i-345];
+            else
+                vs << 0;
+        }
         setRegs(MbSlaveReg_Range+10000*bus+500*index, vs);
     }
     else{//clear

@@ -111,8 +111,9 @@ void SetThresholdDlg::initSpinBox(sThresholdItem &item)
         break;
     }
 
-    ui->minBox->setSuffix(str);
+    if(item.type != 20)ui->minBox->setSuffix(str);
     ui->maxBox->setSuffix(str);
+    if(item.type == 20) range = 65535;
 
     ui->minBox->setMaximum(range);
     ui->maxBox->setMaximum(range);
@@ -131,6 +132,7 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
         case 4: str = tr("功率"); break;
         case 5: str = tr("频率"); break;
         case 8: str = tr("零线电流"); break;
+        case 20: str = tr("插接箱ID"); break;
         }
 
         sBoxData *dev = &(share_mem_get()->data[item.bus].box[item.box]); //获取共享内存
@@ -146,6 +148,10 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
         }
         if( item.type == 5 || item.type == 8 ) title = tr("母线%1 %2 %3设置").arg(busName).arg(nameStr).arg(str);
         if(item.type == 8) ui->label_3->setText(tr("超限\n告警值："));
+        if(item.type == 20){
+            title = tr("母线%1 %2 ID设置").arg(busName).arg(nameStr);
+            ui->label_2->setText(tr("ID："));
+        }
         ui->titleLab->setText(title);
     }else{
         QString str;
@@ -156,6 +162,7 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
         case 4: str = tr("Power"); break;
         case 5: str = tr("Frequency"); break;
         case 8: str = tr("Neutral line current"); break;
+        case 20: str = tr("Tap-off box ID"); break;
         }
 
         sBoxData *dev = &(share_mem_get()->data[item.bus].box[item.box]); //获取共享内存
@@ -171,6 +178,10 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
         }
         if( item.type == 5 || item.type == 8 ) title = tr("Busbar %1 %2 %3 set").arg(busName).arg(nameStr).arg(str);
         if(item.type == 8) ui->label_3->setText("Over limit\nalarm value:");
+        if(item.type == 20){
+            title = tr("Busbar %1 %2 ID%3 set").arg(busName).arg(nameStr).arg(item.num+1);
+            ui->label_2->setText(tr("ID："));
+        }
         ui->titleLab->setText(title);
     }
 
@@ -197,7 +208,7 @@ void SetThresholdDlg::set(sThresholdItem &item)
     case 5: rate = 10;break;
     case 8: unitZero = &(busData->box[item.box].zeroLineCur); /*rate = 100;*/  break;//rate = 10; break;
     }
-    ui->label_2->show();
+    ui->label_3->show();
     if( item.type == 3){
         ui->mindoubleSpinBox->hide();
         ui->maxdoubleSpinBox->hide();
@@ -226,6 +237,13 @@ void SetThresholdDlg::set(sThresholdItem &item)
         ui->maxBox->hide();
         item.min = unitZero->imin;
         item.max = unitZero->imax;
+    }else if( item.type == 20){
+        ui->label_3->hide();
+        ui->maxBox->hide();
+        ui->mindoubleSpinBox->hide();
+        ui->maxdoubleSpinBox->hide();
+        ui->checkBox->hide();
+        item.min = busData->box[item.box].boxId[item.num];
     }else{
         ui->minBox->hide();
         ui->maxBox->hide();
@@ -245,7 +263,7 @@ bool SetThresholdDlg::checkData()
     bool ret = true;
     uint min = 0;
     uint max = 0;
-    if(mItem.type == 3){
+    if(mItem.type == 3 || mItem.type == 20){
         min = ui->minBox->value();
         max = ui->maxBox->value();
     }else if(mItem.type == 1){
@@ -261,20 +279,37 @@ bool SetThresholdDlg::checkData()
         min = ui->mindoubleSpinBox->value()*COM_RATE_POW;
         max = ui->maxdoubleSpinBox->value()*COM_RATE_POW;
     }
-    if(min < max)  {
-        mItem.min = min;
-        mItem.max = max;
-    } else {
-        if(gLanguage == 0){
-            WaringMsgBox box(NULL,tr("最小值大于最大值！"));
-            box.Exec();
-        }
-        else{
-            WaringMsgBox box(NULL,tr("The minimun value is greater than the maximum value！"));
-            box.Exec();
-        }
+    if(mItem.type != 20){
+        if(min < max)  {
+            mItem.min = min;
+            mItem.max = max;
+        } else {
+            if(gLanguage == 0){
+                WaringMsgBox box(NULL,tr("最小值大于最大值！"));
+                box.Exec();
+            }
+            else{
+                WaringMsgBox box(NULL,tr("The minimun value is greater than the maximum value！"));
+                box.Exec();
+            }
 
-        ret = false;
+            ret = false;
+        }
+    }else{
+        if(min < 65535)  {
+            mItem.min = min;
+        } else {
+            if(gLanguage == 0){
+                WaringMsgBox box(NULL,tr("ID需小于65535！"));
+                box.Exec();
+            }
+            else{
+                WaringMsgBox box(NULL,tr("ID must be less than 65535！"));
+                box.Exec();
+            }
+
+            ret = false;
+        }
     }
 
     return ret;

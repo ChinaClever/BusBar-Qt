@@ -258,6 +258,15 @@ static int rtu_start_recv_init(uchar *ptr, Rtu_recv *msg)
     return len; //3.0.0版本
 }
 
+static int rtu_recv_init_id(uchar *ptr, Rtu_recv *msg)
+{
+    uint len = 0;
+    msg->boxId[0] = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//
+    msg->boxId[1] = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//
+    msg->boxId[2] = (*ptr) * 256 + *(ptr+1); ptr+=2;len+=2;//
+    return len;
+}
+
 static int rtu_start_recv_line_data(uchar *ptr, Rtu_recv *msg , int index)
 {
     RtuRecvLine *p = &(msg->data[index]);
@@ -568,7 +577,9 @@ bool rtu_recv_packetV3(int addr ,uchar *buf, int len, Rtu_recv *pkt)
         ptr += rtu_recv_head(ptr, pkt); //指针偏移0
         if( pkt->addr == 0x01 ){//始端箱
             ptr += rtu_start_recv_init(ptr , pkt);
-            ptr += (40-14)*2;//保留
+            ptr += (35-14)*2;//保留
+            ptr += rtu_recv_init_id(ptr , pkt);
+            ptr += (40-38)*2;
             for(int i = 0 ; i < RTU_TH_NUM ; ++i) // 读取温度 数据
                 ptr += rtu_start_recv_env_data(ptr , pkt , i);
             ptr += rtu_start_recv_other_data(ptr , pkt);
@@ -607,7 +618,11 @@ bool rtu_recv_packetV3(int addr ,uchar *buf, int len, Rtu_recv *pkt)
                     ptr += rtu_plug_recv_loop_high_cur_data(ptr , pkt , i);
                 for(int i = 0 ; i < RTU_LOOP_NUM ; ++i) // 读取loop high alram数据
                     ptr += rtu_plug_recv_loop_high_cur_alram_data(ptr , pkt , i);
+            }else{
+                ptr += (309-255)*2;
             }
+            ptr += (345-309)*2;
+            ptr += rtu_recv_init_id(ptr , pkt);
 
         }
         pkt->crc = (buf[(addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303)*2+6-1]*256) + buf[(addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303)*2+6-2]; // RTU_SENT_LEN_V23*2+5

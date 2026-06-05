@@ -4,6 +4,7 @@
 #include "common/comtablewid.h"
 #include "setshm.h"
 #include "setthreshold/setthread.h"
+#include "setthreshold/setthresholddlg.h"
 
 class SetTripWid : public ComTableWid
 {
@@ -15,7 +16,7 @@ public:
 
 protected slots:
     void timeoutDone();
-//    void itemClicked(QTableWidgetItem* it);
+    void itemClicked(QTableWidgetItem* it);
     void handleButtonClick(int row , int col);
 
 protected:
@@ -28,6 +29,7 @@ private:
     int mDc, mBus;
     sBusData *mPacket ;
     QTimer* timer;
+    bool m_isDialogOpen=false;
 };
 
 #endif // SETTRIPWID_H

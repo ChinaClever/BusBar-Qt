@@ -207,6 +207,7 @@ typedef struct _sBoxData {
     uint online1;
     uint online2;
     ushort plugbreaker;
+    ushort boxId[3];
 
     ushort rtuLen;
     uchar rtuArray[SRC_DATA_LEN_MAX];
@@ -408,6 +409,8 @@ enum  sSetStartType{
     ,SetStartRelease         = 11           //0:没有 1:有
     ,SetStartControlRelease  = 14           //0:没有 1:有
 
+    ,SetStartID            = 35           //ID
+
     ,StartTemperatureMIN_1   = 420           //温度上限
     ,StartTemperatureMAX_1   = 421           //温度下限
     ,StartTemperatureMIN_2   = 422
@@ -479,6 +482,7 @@ enum  sSetPlugType{
     ,SetPlugAlarmTime        = 7            //2-5
     ,SetPlugCurSpec          = 10            //电流规格
     ,SetPlugBackupBreaker    = 11            //备用断路器
+
 
     ,PlugTemperatureMIN_1    = 165           //温度上限
     ,PlugTemperatureMAX_1    = 166           //温度下限
@@ -572,6 +576,7 @@ enum  sSetPlugType{
 
     ,PlugCurrentMIN_HIGH_L1       = 273           //电流下限高位
     ,PlugCurrentMAX_HIGH_L1       = 275           //电流上限高位
+    ,SetPlugBoxID            = 345           //ID
     ,PlugShuntRelease         = 605           //12：断路器分闸 （连续发两条命令方可控制断路器分闸）
 
 };

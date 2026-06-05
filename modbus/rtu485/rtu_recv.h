@@ -99,6 +99,7 @@ struct Rtu_recv {
     unsigned long long totalApPow;//   总视在功率
     ushort crc; // 检验码
     ushort plugBreaker; // 表示插接箱新加的断路器个数和状态
+    ushort boxId[3];
 };
 
 bool rtu_recv_packet(uchar *buf, int len, Rtu_recv *pkt);

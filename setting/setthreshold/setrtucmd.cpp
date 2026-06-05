@@ -32,7 +32,7 @@ void SetRtuCmd::sendRegV3(int reg, sThresholdItem &item)
 {
     if(item.type == 4 || (item.box == 0 && item.type == 2) || (item.box == 0 && item.type == 8))
         sendDataUintV3(item.bus, item.box, reg, item.min , item.max);
-    else if(item.type == 11 || item.type == 14 || item.type == 15 || item.type == 17)
+    else if(item.type == 11 || item.type == 14 || item.type == 15 || item.type == 17 || item.type == 20)
         sendDataUcharV3(item.bus, item.box, reg, item.min);
     else if(item.type == 16)
         sendDataUcharControlV3(item.bus, item.box, reg, item.min);
@@ -111,6 +111,7 @@ void SetRtuCmd::sendStartV3(sThresholdItem &item)
     case 11: reg = SetStartRelease ; break;
     case 14: reg = SetStartControlRelease ; break;
     case 17: reg = SetStartBuzzer;break;
+    case 20: reg = SetStartID + item.num;break;
     }
     sendRegV3(reg, item);
 }
@@ -131,6 +132,7 @@ void SetRtuCmd::sendPlugV3(sThresholdItem &item)
     case 15: reg = SetPlugBackupBreaker;break;
     case 16: reg = PlugShuntRelease;break;
     case 17: reg = SetPlugBuzzer;break;
+    case 20: reg = SetPlugBoxID + item.num;break;
     }
     sendRegV3(reg, item);
 }
