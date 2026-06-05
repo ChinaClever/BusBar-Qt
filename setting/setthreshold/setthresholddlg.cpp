@@ -296,7 +296,7 @@ bool SetThresholdDlg::checkData()
             ret = false;
         }
     }else{
-        if(min < 65535)  {
+        if(min <= 65535)  {
             mItem.min = min;
         } else {
             if(gLanguage == 0){

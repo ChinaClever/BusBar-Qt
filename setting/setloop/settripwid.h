@@ -29,7 +29,6 @@ private:
     int mDc, mBus;
     sBusData *mPacket ;
     QTimer* timer;
-    bool m_isDialogOpen=false;
 };
 
 #endif // SETTRIPWID_H
