@@ -15,7 +15,7 @@
 
 extern int gVerflag;//1代表一期 2代表二期
 extern int gReadWriteflag;//1代表读 2代表写
-
+extern QMutex g_rtuMutex;
 namespace Ui {
 class MainWindow;
 }

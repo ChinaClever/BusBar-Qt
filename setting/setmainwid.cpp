@@ -28,7 +28,7 @@ void SetMainWid::initLanguage()
         ui->nameBtn->setText("名称设置");
         ui->powerBtn->setText("功率设置");
         ui->breakerBtn->setText("断路器设置");
-        ui->tripBtn->setText("分励脱扣");
+        ui->tripBtn->setText("分励脱扣和RCA");
     }else{
         ui->sysBtn->setText("System settings");
         ui->temBtn->setText("Temperature settings");
@@ -37,7 +37,7 @@ void SetMainWid::initLanguage()
         ui->nameBtn->setText("Name settings");
         ui->powerBtn->setText("Power settings");
         ui->breakerBtn->setText("Breaker settings");
-        ui->tripBtn->setText("Shunt trip");
+        ui->tripBtn->setText("Shunt trip and RCA阿");
     }
 }
 

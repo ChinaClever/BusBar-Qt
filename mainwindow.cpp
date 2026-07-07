@@ -17,6 +17,7 @@ ThirdThread *thr = NULL;
 extern int get_alarm_len();
 int gVerflag = 2;
 int gReadWriteflag = 1;
+QMutex g_rtuMutex;
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -35,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     insertStrEn = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
     db_system_obj_en()->insertSystem(insertStrEn);
-    mVersion = "V5.0.15.050";//当前软件版本
+    mVersion = "V5.0.16.052";//当前软件版本
     initVersion();
     updateTime();
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化

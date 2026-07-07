@@ -578,6 +578,8 @@ enum  sSetPlugType{
     ,PlugCurrentMAX_HIGH_L1       = 275           //电流上限高位
     ,SetPlugBoxID            = 345           //ID
     ,PlugShuntRelease         = 605           //12：断路器分闸 （连续发两条命令方可控制断路器分闸）
+    ,PlugShuntReleaseLegrandRCA         = 606           //12：断路器分闸 （连续发两条命令方可控制断路器分闸）
+    ,PlugIC65RCA         = 607           //7：断路器分闸 8：断路器分闸
 
 };
 

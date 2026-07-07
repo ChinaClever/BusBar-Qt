@@ -179,7 +179,25 @@ int RtuThread::sendDataUcharControlV3(int addr, ushort reg, uint val)
         //打包数据
         uchar *buf = mSendBuf;
         int rtn = rtu_sent_ucharControlV3_buff(addr+1, reg, 1 , val , buf); // 把数据打包成通讯格式的数据
-        return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
+        QByteArray sendarray;
+        QString sendstrArray;
+        sendarray.append((char *)buf, rtn);
+        sendstrArray = sendarray.toHex(); // 十六进制
+        for(int i=0; i<sendarray.size(); ++i)
+            sendstrArray.insert(2+3*i, " "); // 插入空格
+        qDebug()<<"  send:" << sendstrArray;
+        qDebug()<< "rtn  "<<rtn;
+        rtn = mSerial->transmitRecvV3(buf, rtn, buf,10); // 传输数据，发送同时接收
+        QByteArray array;
+        QString strArray;
+        array.append((char *)buf, rtn);
+        strArray = array.toHex(); // 十六进制
+        for(int i=0; i<array.size(); ++i)
+            strArray.insert(2+3*i, " "); // 插入空格
+        qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
+        return rtn;
+
+//        return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms
     }
     return -1;
 }
@@ -532,16 +550,46 @@ void RtuThread::BusTransDataV3()
 {
     for(int i=0; i<=mBusData->boxNum; ++i)
     {
-        if(gReadWriteflag == 2) continue;
+        //if(gReadWriteflag == 2) continue;
+
         if(gAutoSetFlag[this->mId] == 1) break;
-        int ret = transDataV3(i);
-        if( ret == 0 ) {
-            msleep(900+rand()%500);//900
-            transDataV3(i);
+        {
+            int ret = transDataV3(i);
+            if( ret == 0 ) {
+                msleep(900+rand()%500);//900
+                transDataV3(i);
+            }
         }
         msleep(750+rand()%500);//750
     }
 }
+
+//void RtuThread::BusTransDataV3()
+//{
+//    for(int i=0; i<=mBusData->boxNum; ++i)
+//    {
+//        // 核心改动：一旦外面要写(2)，立刻 return 退出函数，把串口彻底让出来！
+//        if(gReadWriteflag == 2) return;
+//        if(gAutoSetFlag[this->mId] == 1) break;
+
+//        int ret = transDataV3(i);
+//        if( ret == 0 ) {
+//            // 拆碎延时：每50ms检查一次全局变量，一旦变2立刻退出
+//            for(int t=0; t<18; ++t) {
+//                if(gReadWriteflag == 2) return;
+//                msleep(50);
+//            }
+//            if(gReadWriteflag == 2) return;
+//            transDataV3(i);
+//        }
+
+//        // 拆碎延时
+//        for(int t=0; t<15; ++t) {
+//            if(gReadWriteflag == 2) return;
+//            msleep(50);
+//        }
+//    }
+//}
 
 void RtuThread::initData(sBoxData *box, Rtu_recv *pkt)
 {

@@ -18,12 +18,14 @@ protected slots:
     void timeoutDone();
     void itemClicked(QTableWidgetItem* it);
     void handleButtonClick(int row , int col);
+    void recvSetThreadTripSlot(QString mac, int val);
 
 protected:
     void initWid();
     void checkBus(int index);
     int updateDev(sBoxData *dev, int row);
     void updateData();
+    QString transformerMac(sBoxData *dev);
 
 private:
     int mDc, mBus;

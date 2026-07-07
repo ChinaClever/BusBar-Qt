@@ -148,7 +148,7 @@ void Serial_Trans :: closeSerialSlot()
   */
 int Serial_Trans::sendData(uchar *pBuff, int nCount, int msec)
 {
-    QMutexLocker locker(&mutex);
+    QMutexLocker locker(&g_rtuMutex);
     int ret;
 
     for(int i = 0; i < 3; i++){ //连发三次
@@ -321,6 +321,35 @@ int Serial_Trans::recvDataV3(uchar *pBuf, int msecs)
 }
 
 /**
+  * 功　能：读取数据
+  * 入口参数：pBuf -> 缓冲区
+  * 返回值：读取的实际长度  <=0 出错
+  */
+int Serial_Trans::recvDataRecvResultV3(uchar *pBuf, int msecs)
+{
+    //QMutexLocker locker(&mutex);
+    int count=0, ret=0;
+    if(fd >= 0)
+    {
+        do
+        {
+           int rtn = read(fd, pBuf, 15);
+           if(rtn > 0) {
+               pBuf += rtn; // 指针移动
+               ret += rtn; // 长度增加
+               count = msecs-1;
+           } else {
+               count++;
+           }
+
+
+        } while (count < msecs);
+
+    }
+    return ret;
+}
+
+/**
   * 功　能：传输数据
   * 入口参数：sent -> 发送缓冲区, len ->  发送长度
   * 出口参数：recv -> 接收缓冲区
@@ -328,12 +357,29 @@ int Serial_Trans::recvDataV3(uchar *pBuf, int msecs)
   */
 int Serial_Trans::transmitV3(uchar *sent, int len, uchar *recv)
 {
-    //QMutexLocker locker(&mutex);
+    QMutexLocker locker(&g_rtuMutex);
     int ret = sendData(sent, len);
     if(ret > 0) {
         usleep(10);
         ret = recvDataV3(recv, 10);
         //         if(ret <=0 ) qDebug() << "Serial Trans Err!!!" << ret;
+    }
+    return ret;
+}
+
+/**
+  * 功　能：传输数据
+  * 入口参数：sent -> 发送缓冲区, len ->  发送长度
+  * 出口参数：recv -> 接收缓冲区
+  * 返回值：读取的实际长度  <=0 出错
+  */
+int Serial_Trans::transmitRecvV3(uchar *sent, int len, uchar *recv, int msec)
+{
+    QMutexLocker locker(&g_rtuMutex);
+    int ret = sendData(sent, len);
+    if(ret > 0) {
+        usleep(msec);
+        ret = recvDataRecvResultV3(recv, 10);
     }
     return ret;
 }

@@ -132,13 +132,21 @@ void Mb_Setting::registerRecvSlot(int address, ushort value)
                 item.insertlog = 2;
                 if( value != 12) return;
             }else if(((address % 10000) / 500 >= 1) && address % 500 == 400){
-                item.type = 16;
+                if(value == 12)item.type = 16;
+                else if(value == 7 || value == 8)item.type = 21;
                 item.insertlog = 2;
-                if( value != 12) return;
+                bool ret = false;
+                if( value == 12 || value == 7 || value == 8 ) ret = true;
+                if( !ret ) return;
             }
+            item.txtype = 1;
             item.bus = address / 10000;
             item.box = (address % 10000) / 500;
             item.min = value;
+            sBoxData * dev = &(get_share_mem()->data[address / 10000].box[(address % 10000) / 500]);
+            item.crmin = dev->boxId[0];
+            item.crmax = dev->boxId[1];
+            item.max = dev->boxId[2];
 //            qDebug()<<t.toString("yyyy-MM-dd hh:mm:ss.zzz")<<"address "<<address <<"value "<<value<<" item.bus "<<item.bus<<
 //                " item.type "<<item.type<<" item.box "<<item.box;
 //            qDebug()<<mPreTime[address / 10000][(address % 10000) / 500].secsTo(t);

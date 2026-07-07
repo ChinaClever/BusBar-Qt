@@ -1,13 +1,13 @@
 #include "setthread.h"
 //#include "snmp/snmpthread.h"
 
-
 SetThread::SetThread(QObject *parent) : QThread(parent)
 {
     isRun = true;
     mSetShm = new SetShm(this);
     mNetCmd = SetNetCmd::bulid(this);
     mRtuCmd = new SetRtuCmd(this);
+    connect(mRtuCmd , SIGNAL(sendTripSig(QString,int)) , this , SIGNAL(sendSetThreadTripSig(QString,int)));
 }
 
 SetThread::~SetThread()
@@ -25,83 +25,117 @@ SetThread *SetThread::bulid(QObject *parent)
     return sington;
 }
 
-
 void SetThread::workDown()
 {
-    if(mItems.size()) {
-        gReadWriteflag = 2;
-        sThresholdItem item = mItems.first();
-        //bool ret = mNetCmd->send(item);
-        //if(!ret) mRtuCmd->send(item);//V2.5
-        bool ret = false;
-        if(!ret){
-            if(gVerflag == 2){
-                if(item.box == 0) mRtuCmd->sendStartV3(item);
-                else mRtuCmd->sendPlugV3(item);
-                if(item.insertlog == 1){
-                    QString type = tr("本机阈值设置");
-                    QString typeen = tr("Local threshold settings");
-                    QString msg1 = tr("");
-                    QString msg2 = tr("");
-                    QString msgen1 = tr("");
-                    QString msgen2 = tr("");
+    if(mItems.isEmpty()) {
+        //gReadWriteflag = 1;
+        msleep(50); // Minor delay when idle to save CPU
+        return;
+    }
 
-                    if(item.bus == 0xff){
-                        for(int i = 0; i < BUS_NUM; i++){
-                            change(item , msg1 , msg2 , msgen1 , msgen2 , i);
-                            if(item.premin != item.min){
-                                db_operation_obj(i)->insertOperation(type , msg1);
-                                db_operation_obj_en(i)->insertOperation(typeen , msgen1);
-                            }
-                            if(item.premax != item.max){
-                                db_operation_obj(i)->insertOperation(type , msg2);
-                                db_operation_obj_en(i)->insertOperation(typeen , msgen2);
-                            }
-                        }
-                    }else{
-                        change(item , msg1 , msg2 , msgen1 , msgen2);
+    //gReadWriteflag = 2;
+    sThresholdItem item = mItems.first();
+    //bool ret = mNetCmd->send(item);
+    //if(!ret) mRtuCmd->send(item);//V2.5
+    bool ret = false;
+    int flag = 0;
+    if(!ret){
+        if(gVerflag == 2){
+            {
+                //QMutexLocker locker(&g_rtuMutex);
+                if(item.box == 0) flag = mRtuCmd->sendStartV3(item);
+                else flag = mRtuCmd->sendPlugV3(item);
+            }
+            if(item.insertlog == 1){
+                QString type = tr("本机阈值设置");
+                QString typeen = tr("Local threshold settings");
+                QString msg1 = tr("");
+                QString msg2 = tr("");
+                QString msgen1 = tr("");
+                QString msgen2 = tr("");
+
+                if(item.bus == 0xff){
+                    for(int i = 0; i < BUS_NUM; i++){
+                        change(item , msg1 , msg2 , msgen1 , msgen2 , i);
                         if(item.premin != item.min){
-                            db_operation_obj(item.bus)->insertOperation(type , msg1);
-                            db_operation_obj_en(item.bus)->insertOperation(typeen , msgen1);
+                            db_operation_obj(i)->insertOperation(type , msg1);
+                            db_operation_obj_en(i)->insertOperation(typeen , msgen1);
                         }
                         if(item.premax != item.max){
-                            db_operation_obj(item.bus)->insertOperation(type , msg2);
-                            db_operation_obj_en(item.bus)->insertOperation(typeen , msgen2);
+                            db_operation_obj(i)->insertOperation(type , msg2);
+                            db_operation_obj_en(i)->insertOperation(typeen , msgen2);
                         }
                     }
-                }//if(item.insertlog == 1)
-                if(item.insertlog == 2){
-                    QString type = tr("分励脱扣控制");
-                    QString typeen = tr("Control shunt trip");
-                    QString name = QString(get_share_mem()->data[item.bus].busName);
-                    if(item.box != 0) name = QString(get_share_mem()->data[item.bus].box[item.box].boxName);
-                    QString local = tr("本机");
-                    QString localen = tr("local");
-                    if(item.txtype == 1){
-                        local = tr("远程");
-                        localen = tr("remote");
+                }else{
+                    change(item , msg1 , msg2 , msgen1 , msgen2);
+                    if(item.premin != item.min){
+                        db_operation_obj(item.bus)->insertOperation(type , msg1);
+                        db_operation_obj_en(item.bus)->insertOperation(typeen , msgen1);
                     }
-                    QString msg1 = tr("%2控制%1分励脱扣").arg(name).arg(local);
-                    QString msgen1 = tr("%2 control %1 shunt trip").arg(name).arg(localen);
+                    if(item.premax != item.max){
+                        db_operation_obj(item.bus)->insertOperation(type , msg2);
+                        db_operation_obj_en(item.bus)->insertOperation(typeen , msgen2);
+                    }
+                }
+            }//if(item.insertlog == 1)
+            if(item.insertlog == 2){
 
-                    db_operation_obj(item.bus)->insertOperation(type , msg1);
-                    db_operation_obj_en(item.bus)->insertOperation(typeen , msgen1);
+                QString name = QString(get_share_mem()->data[item.bus].busName);
+                if(item.box != 0) name = QString(get_share_mem()->data[item.bus].box[item.box].boxName);
+                QString local = tr("本机");
+                QString localen = tr("local");
+                QString success = tr("成功");
+                QString successen = tr("success");
+                QString str = (item.min == 12)?tr("分励脱扣"):tr("RCA");
+                QString stren = (item.min == 12)?tr("shunt trip"):tr("RCA");
 
-                }//if(item.insertlog == 2){
+                QString type = tr("%1控制").arg(str);
+                QString typeen = tr("Control %1").arg(stren);
+                QString operation = (item.min == 8)?tr("合闸"):tr("分闸");
+                QString operationen = (item.min == 8)?tr(" turn on "):tr(" turn off ");
+                quint8 bytes[6];
+                bytes[0] = (item.crmin >> 8) & 0xFF;
+                bytes[1] = item.crmin & 0xFF;
+                bytes[2] = (item.crmax >> 8) & 0xFF;
+                bytes[3] = item.crmax & 0xFF;
+                bytes[4] = (item.max >> 8) & 0xFF;
+                bytes[5] = item.max & 0xFF;
 
-            }//if(gVerflag == 2)
+                // 拼成 MAC 地址字符串
+                QString mac;
+                for (int i = 0; i < 6; i++) {
+                    mac += QString("%1").arg(bytes[i], 2, 16, QLatin1Char('0')).toUpper();
+                    if (i < 5){
+                        mac += ":";
+                    }
+                }
+                if(flag != 6){
+                    success = tr("失败");
+                    successen = tr("failure");
+                }
+                if(item.txtype == 1){
+                    local = tr("远程");
+                    localen = tr("remote");
+                }
+                QString msg1 = tr("%2 %1 mac:%3 %4 %5%6").arg(name).arg(local).arg(mac).arg(str).arg(operation).arg(success);
+                QString msgen1 = tr("%2 %1 mac:%3 %4 %5 %6").arg(name).arg(localen).arg(mac).arg(stren).arg(operationen).arg(successen);
+
+                db_operation_obj(item.bus)->insertOperation(type , msg1);
+                db_operation_obj_en(item.bus)->insertOperation(typeen , msgen1);
+
+            }//if(item.insertlog == 2){
+
+        }//if(gVerflag == 2)
 //            if(gVerflag == 3){
 //                gReadWriteflag = 2;
 //                emit sendSetSnmpSig(&item);
 //            }
-        }
-
-        //mSetShm->setItem(item);
-        mItems.removeFirst();
-        sleep(1);
-    }else{
-        gReadWriteflag = 1;
     }
+
+    //mSetShm->setItem(item);
+    mItems.removeFirst();
+    msleep(100);
+
 }
 
 QString SetThread::changeType(int index , QString &sym , double &rate)

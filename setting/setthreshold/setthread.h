@@ -3,6 +3,7 @@
 
 #include "setnetcmd.h"
 #include "sql/dboperation.h"
+
 extern int gVerflag;//1代表一期 2代表二期
 extern int gReadWriteflag;
 class SetThread : public QThread
@@ -23,6 +24,7 @@ protected:
 
 signals:
     void sendSetSnmpSig(sThresholdItem *);
+    void sendSetThreadTripSig(QString mac, int val);
 
 private:
     bool isRun;

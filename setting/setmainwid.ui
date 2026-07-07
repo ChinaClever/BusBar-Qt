@@ -107,7 +107,7 @@ border-radius:15px;
        <string notr="true"/>
       </property>
       <property name="text">
-       <string>分励脱扣</string>
+       <string>分励脱扣和RCA</string>
       </property>
      </widget>
     </item>

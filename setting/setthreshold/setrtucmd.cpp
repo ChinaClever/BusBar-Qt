@@ -28,18 +28,20 @@ void SetRtuCmd::sendReg(int reg, sThresholdItem &item)
     sendData(item.bus, item.box, reg+1, item.min);
 }
 
-void SetRtuCmd::sendRegV3(int reg, sThresholdItem &item)
+int SetRtuCmd::sendRegV3(int reg, sThresholdItem &item)
 {
+    int ret = 0;
     if(item.type == 4 || (item.box == 0 && item.type == 2) || (item.box == 0 && item.type == 8))
         sendDataUintV3(item.bus, item.box, reg, item.min , item.max);
     else if(item.type == 11 || item.type == 14 || item.type == 15 || item.type == 17 || item.type == 20)
         sendDataUcharV3(item.bus, item.box, reg, item.min);
-    else if(item.type == 16)
-        sendDataUcharControlV3(item.bus, item.box, reg, item.min);
+    else if(item.type == 16 || item.type == 21)
+        ret = sendDataUcharControlV3(item.bus, item.box, reg, item.min , item.crmin , item.crmax , item.max);
     else if(item.type == 2 && item.curSpec == 1)
         sendDataUintV3(item.bus, item.box, reg, item.min , item.max);
     else
         sendDataUshortV3(item.bus, item.box, reg, item.min , item.max);
+    return ret;
 }
 
 void SetRtuCmd::sendDataUintV3(int busID, int addr, ushort reg, uint val1, uint val2)
@@ -75,9 +77,30 @@ void SetRtuCmd::sendDataUcharV3(int busID, int addr, ushort reg, uint val)
     }
 }
 
-void SetRtuCmd::sendDataUcharControlV3(int busID, int addr, ushort reg, uint val)
+int SetRtuCmd::sendDataUcharControlV3(int busID, int addr, ushort reg, uint val , uint mac1 , uint mac2 , uint mac3)
 {
-    if(rtu[busID]) rtu[busID]->sendDataUcharControlV3(addr, reg, val);
+    int ret = 0;
+    if(rtu[busID]) ret = rtu[busID]->sendDataUcharControlV3(addr, reg, val);
+    if(ret != 6){
+        quint8 bytes[6];
+        bytes[0] = (mac1 >> 8) & 0xFF;
+        bytes[1] = mac1 & 0xFF;
+        bytes[2] = (mac2 >> 8) & 0xFF;
+        bytes[3] = mac2 & 0xFF;
+        bytes[4] = (mac3 >> 8) & 0xFF;
+        bytes[5] = mac3 & 0xFF;
+
+        // 拼成 MAC 地址字符串
+        QString mac;
+        for (int i = 0; i < 6; i++) {
+            mac += QString("%1").arg(bytes[i], 2, 16, QLatin1Char('0')).toUpper();
+            if (i < 5){
+                mac += ":";
+            }
+        }
+        emit sendTripSig(mac, val);
+    }
+    return ret;
 }
 
 void SetRtuCmd::send(sThresholdItem &item)
@@ -98,7 +121,7 @@ void SetRtuCmd::send(sThresholdItem &item)
     sendReg(reg, item);
 }
 
-void SetRtuCmd::sendStartV3(sThresholdItem &item)
+int SetRtuCmd::sendStartV3(sThresholdItem &item)
 {
     int reg=0;
     switch (item.type) {
@@ -113,10 +136,10 @@ void SetRtuCmd::sendStartV3(sThresholdItem &item)
     case 17: reg = SetStartBuzzer;break;
     case 20: reg = SetStartID + item.num;break;
     }
-    sendRegV3(reg, item);
+    return sendRegV3(reg, item);
 }
 
-void SetRtuCmd::sendPlugV3(sThresholdItem &item)
+int SetRtuCmd::sendPlugV3(sThresholdItem &item)
 {
     int reg=0;
     switch (item.type) {
@@ -133,6 +156,7 @@ void SetRtuCmd::sendPlugV3(sThresholdItem &item)
     case 16: reg = PlugShuntRelease;break;
     case 17: reg = SetPlugBuzzer;break;
     case 20: reg = SetPlugBoxID + item.num;break;
+    case 21: reg = PlugShuntReleaseLegrandRCA;break;
     }
-    sendRegV3(reg, item);
+    return sendRegV3(reg, item);
 }
