@@ -98,7 +98,7 @@ int SetRtuCmd::sendDataUcharControlV3(int busID, int addr, ushort reg, uint val 
                 mac += ":";
             }
         }
-        emit sendTripSig(mac, val);
+//        emit sendTripSig(mac, val);
     }
     return ret;
 }

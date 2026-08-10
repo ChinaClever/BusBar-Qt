@@ -15,7 +15,7 @@
 #include <QMutexLocker>
 #include "serial_portset.h"
 //// 在头文件或全局定义中
-extern QMutex g_rtuMutex;
+//extern QMutex g_rtuMutex;
 
 class Serial_Trans : public QThread
 {

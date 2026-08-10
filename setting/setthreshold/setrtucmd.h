@@ -13,8 +13,8 @@ public:
     int sendStartV3(sThresholdItem &item);
     int sendPlugV3(sThresholdItem &item);
 
-signals:
-    void sendTripSig(QString mac, int val);
+//signals:
+//    void sendTripSig(QString mac, int val);
 
 protected:
     void sendData(int busID, int addr, ushort reg, uint len);

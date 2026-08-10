@@ -10,7 +10,7 @@ SetTripWid::SetTripWid(QWidget *parent) : ComTableWid(parent)
     timer = new QTimer(this);
     timer->start(2000+rand()%500);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
-    connect(SetThread::bulid() , SIGNAL(sendSetThreadTripSig(QString,int)) , this , SLOT(recvSetThreadTripSlot(QString,int)));
+//    connect(SetThread::bulid() , SIGNAL(sendSetThreadTripSig(QString,int)) , this , SLOT(recvSetThreadTripSlot(QString,int)));
 }
 
 
@@ -253,11 +253,11 @@ void SetTripWid::itemClicked(QTableWidgetItem *it)
     }
 }
 
-void SetTripWid::recvSetThreadTripSlot(QString mac, int val)
-{
-    QString str;
-    if(gLanguage == 0) str= tr("MAC：%1\n%2失败!").arg(mac).arg(val==7?"RCA分闸":"RCA合闸");
-    else str= tr("MAC：%1\n%2 failure?").arg(mac).arg(val==7?"trun off RCA":"trun on RCA");
-    QuMsgBox box(NULL, str);
-    bool ret = box.Exec();
-}
+//void SetTripWid::recvSetThreadTripSlot(QString mac, int val)
+//{
+//    QString str;
+//    if(gLanguage == 0) str= tr("MAC：%1\n%2失败!").arg(mac).arg(val==7?"RCA分闸":"RCA合闸");
+//    else str= tr("MAC：%1\n%2 failure?").arg(mac).arg(val==7?"trun off RCA":"trun on RCA");
+//    QuMsgBox box(NULL, str);
+//    bool ret = box.Exec();
+//}

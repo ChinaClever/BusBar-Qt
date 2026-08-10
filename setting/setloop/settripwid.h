@@ -18,7 +18,7 @@ protected slots:
     void timeoutDone();
     void itemClicked(QTableWidgetItem* it);
     void handleButtonClick(int row , int col);
-    void recvSetThreadTripSlot(QString mac, int val);
+//    void recvSetThreadTripSlot(QString mac, int val);
 
 protected:
     void initWid();

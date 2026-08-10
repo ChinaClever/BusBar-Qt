@@ -179,22 +179,22 @@ int RtuThread::sendDataUcharControlV3(int addr, ushort reg, uint val)
         //打包数据
         uchar *buf = mSendBuf;
         int rtn = rtu_sent_ucharControlV3_buff(addr+1, reg, 1 , val , buf); // 把数据打包成通讯格式的数据
-        QByteArray sendarray;
-        QString sendstrArray;
-        sendarray.append((char *)buf, rtn);
-        sendstrArray = sendarray.toHex(); // 十六进制
-        for(int i=0; i<sendarray.size(); ++i)
-            sendstrArray.insert(2+3*i, " "); // 插入空格
-        qDebug()<<"  send:" << sendstrArray;
-        qDebug()<< "rtn  "<<rtn;
+//        QByteArray sendarray;
+//        QString sendstrArray;
+//        sendarray.append((char *)buf, rtn);
+//        sendstrArray = sendarray.toHex(); // 十六进制
+//        for(int i=0; i<sendarray.size(); ++i)
+//            sendstrArray.insert(2+3*i, " "); // 插入空格
+//        qDebug()<<"  send:" << sendstrArray;
+//        qDebug()<< "rtn  "<<rtn;
         rtn = mSerial->transmitRecvV3(buf, rtn, buf,10); // 传输数据，发送同时接收
-        QByteArray array;
-        QString strArray;
-        array.append((char *)buf, rtn);
-        strArray = array.toHex(); // 十六进制
-        for(int i=0; i<array.size(); ++i)
-            strArray.insert(2+3*i, " "); // 插入空格
-        qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
+//        QByteArray array;
+//        QString strArray;
+//        array.append((char *)buf, rtn);
+//        strArray = array.toHex(); // 十六进制
+//        for(int i=0; i<array.size(); ++i)
+//            strArray.insert(2+3*i, " "); // 插入空格
+//        qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
         return rtn;
 
 //        return mSerial->sendData(buf, rtn, 250); //发送 -- 并占用串口250ms 以前800ms

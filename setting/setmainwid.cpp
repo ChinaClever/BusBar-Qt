@@ -37,7 +37,7 @@ void SetMainWid::initLanguage()
         ui->nameBtn->setText("Name settings");
         ui->powerBtn->setText("Power settings");
         ui->breakerBtn->setText("Breaker settings");
-        ui->tripBtn->setText("Shunt trip and RCA阿");
+        ui->tripBtn->setText("Shunt trip and RCA");
     }
 }
 

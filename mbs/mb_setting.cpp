@@ -11,13 +11,13 @@
 Mb_Setting::Mb_Setting(QObject *parent) : Mb_Object{parent}
 {
     connect(this, &Modbus_SlaveObj::registerDataSig, this, &Mb_Setting::registerRecvSlot);
-    QDateTime t = QDateTime::currentDateTime();
-    for(int i = 0 ; i < BUS_NUM ; i++){
-        for(int j = 0 ; j < BOX_NUM ; j++){
-            mPreTime[i][j] = t;
-            mCount[i][j] = 0;
-        }
-    }
+//    QDateTime t = QDateTime::currentDateTime();
+//    for(int i = 0 ; i < BUS_NUM ; i++){
+//        for(int j = 0 ; j < BOX_NUM ; j++){
+//            mPreTime[i][j] = t;
+//            mCount[i][j] = 0;
+//        }
+//    }
 }
 
 void Mb_Setting::mbSetUpdate()
@@ -90,7 +90,7 @@ void Mb_Setting::registerRecvSlot(int address, ushort value)
 //    qDebug()<<"address "<<address <<"value "<<value;
     if( address >= 40000 ) return;
     sThresholdItem item;
-    QDateTime t = QDateTime::currentDateTime();
+//    QDateTime t = QDateTime::currentDateTime();
     item.txtype = 1;
     if(address % 500 == 6){
         item.type = 17;
@@ -121,16 +121,30 @@ void Mb_Setting::registerRecvSlot(int address, ushort value)
         return ;
     }
 
-    if(mPreTime[address / 10000][(address % 10000) / 500].secsTo(t) < 2*60){
-        if(mCount[address / 10000][(address % 10000) / 500] == 0){
+//    if(mPreTime[address / 10000][(address % 10000) / 500].secsTo(t) < 2*60){
+//        if(mCount[address / 10000][(address % 10000) / 500] == 0){
 //            qDebug()<<(address / 10000)<<((address % 10000) / 500)<<"  "<<t.toString("yyyy-MM-dd hh:mm:ss.zzz");
-            mCount[address / 10000][(address % 10000) / 500]++;
-            mPreTime[address / 10000][(address % 10000) / 500] = t;
-        }else{
+//            mCount[address / 10000][(address % 10000) / 500]++;
+//            mPreTime[address / 10000][(address % 10000) / 500] = t;
+//        }else{
             if(((address % 10000) / 500 == 0) && address % 500 == 14){
                 item.type = 14;
                 item.insertlog = 2;
                 if( value != 12) return;
+                item.txtype = 1;
+                item.bus = address / 10000;
+                item.box = (address % 10000) / 500;
+                item.min = value;
+                sBoxData * dev = &(get_share_mem()->data[address / 10000].box[(address % 10000) / 500]);
+                item.crmin = dev->boxId[0];
+                item.crmax = dev->boxId[1];
+                item.max = dev->boxId[2];
+                //            qDebug()<<t.toString("yyyy-MM-dd hh:mm:ss.zzz")<<"address "<<address <<"value "<<value<<" item.bus "<<item.bus<<
+                //                " item.type "<<item.type<<" item.box "<<item.box;
+                qDebug()<<"address "<<address <<"value "<<value<<" item.bus "<<item.bus<<
+                    " item.type "<<item.type<<" item.box "<<item.box;
+                //            qDebug()<<mPreTime[address / 10000][(address % 10000) / 500].secsTo(t);
+                SetThread::bulid()->append(item);
             }else if(((address % 10000) / 500 >= 1) && address % 500 == 400){
                 if(value == 12)item.type = 16;
                 else if(value == 7 || value == 8)item.type = 21;
@@ -138,24 +152,29 @@ void Mb_Setting::registerRecvSlot(int address, ushort value)
                 bool ret = false;
                 if( value == 12 || value == 7 || value == 8 ) ret = true;
                 if( !ret ) return;
+                item.txtype = 1;
+                item.bus = address / 10000;
+                item.box = (address % 10000) / 500;
+                item.min = value;
+                sBoxData * dev = &(get_share_mem()->data[address / 10000].box[(address % 10000) / 500]);
+                item.crmin = dev->boxId[0];
+                item.crmax = dev->boxId[1];
+                item.max = dev->boxId[2];
+                //            qDebug()<<t.toString("yyyy-MM-dd hh:mm:ss.zzz")<<"address "<<address <<"value "<<value<<" item.bus "<<item.bus<<
+                //                " item.type "<<item.type<<" item.box "<<item.box;
+                qDebug()<<"address "<<address <<"value "<<value<<" item.bus "<<item.bus<<
+                    " item.type "<<item.type<<" item.box "<<item.box;
+                //            qDebug()<<mPreTime[address / 10000][(address % 10000) / 500].secsTo(t);
+                SetThread::bulid()->append(item);
+                item.insertlog = 0;
+                SetThread::bulid()->append(item);
             }
-            item.txtype = 1;
-            item.bus = address / 10000;
-            item.box = (address % 10000) / 500;
-            item.min = value;
-            sBoxData * dev = &(get_share_mem()->data[address / 10000].box[(address % 10000) / 500]);
-            item.crmin = dev->boxId[0];
-            item.crmax = dev->boxId[1];
-            item.max = dev->boxId[2];
-//            qDebug()<<t.toString("yyyy-MM-dd hh:mm:ss.zzz")<<"address "<<address <<"value "<<value<<" item.bus "<<item.bus<<
-//                " item.type "<<item.type<<" item.box "<<item.box;
-//            qDebug()<<mPreTime[address / 10000][(address % 10000) / 500].secsTo(t);
-            SetThread::bulid()->append(item);
-            mCount[address / 10000][(address % 10000) / 500] = 0;
-            mPreTime[address / 10000][(address % 10000) / 500] = t;
-        }
-    }else{
-        mCount[address / 10000][(address % 10000) / 500] = 1;
-        mPreTime[address / 10000][(address % 10000) / 500] = t;
-    }
+
+//            mCount[address / 10000][(address % 10000) / 500] = 0;
+//            mPreTime[address / 10000][(address % 10000) / 500] = t;
+//        }
+//    }else{
+//        mCount[address / 10000][(address % 10000) / 500] = 1;
+//        mPreTime[address / 10000][(address % 10000) / 500] = t;
+//    }
 }

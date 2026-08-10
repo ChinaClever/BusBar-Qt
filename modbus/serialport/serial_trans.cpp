@@ -148,7 +148,7 @@ void Serial_Trans :: closeSerialSlot()
   */
 int Serial_Trans::sendData(uchar *pBuff, int nCount, int msec)
 {
-    QMutexLocker locker(&g_rtuMutex);
+//    QMutexLocker locker(&g_rtuMutex);
     int ret;
 
     for(int i = 0; i < 3; i++){ //连发三次
@@ -357,7 +357,7 @@ int Serial_Trans::recvDataRecvResultV3(uchar *pBuf, int msecs)
   */
 int Serial_Trans::transmitV3(uchar *sent, int len, uchar *recv)
 {
-    QMutexLocker locker(&g_rtuMutex);
+//    QMutexLocker locker(&g_rtuMutex);
     int ret = sendData(sent, len);
     if(ret > 0) {
         usleep(10);
@@ -375,7 +375,7 @@ int Serial_Trans::transmitV3(uchar *sent, int len, uchar *recv)
   */
 int Serial_Trans::transmitRecvV3(uchar *sent, int len, uchar *recv, int msec)
 {
-    QMutexLocker locker(&g_rtuMutex);
+//    QMutexLocker locker(&g_rtuMutex);
     int ret = sendData(sent, len);
     if(ret > 0) {
         usleep(msec);

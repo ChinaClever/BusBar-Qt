@@ -7,7 +7,7 @@ SetThread::SetThread(QObject *parent) : QThread(parent)
     mSetShm = new SetShm(this);
     mNetCmd = SetNetCmd::bulid(this);
     mRtuCmd = new SetRtuCmd(this);
-    connect(mRtuCmd , SIGNAL(sendTripSig(QString,int)) , this , SIGNAL(sendSetThreadTripSig(QString,int)));
+//    connect(mRtuCmd , SIGNAL(sendTripSig(QString,int)) , this , SIGNAL(sendSetThreadTripSig(QString,int)));
 }
 
 SetThread::~SetThread()

@@ -24,7 +24,7 @@ protected:
 
 signals:
     void sendSetSnmpSig(sThresholdItem *);
-    void sendSetThreadTripSig(QString mac, int val);
+//    void sendSetThreadTripSig(QString mac, int val);
 
 private:
     bool isRun;
