@@ -119,16 +119,16 @@ void ExcelExportLogThread::exportMsg(QList<QStringList> &list)
 
 QString ExcelExportLogThread::transformer(int type)
 {
-    QString str = tr("主路电能");
-    if(gLanguage == 1) str = tr("input power");
+    QString str = tr("告警日志");
+    if(gLanguage == 1) str = tr("alarm log");
     switch(type)
     {
-        case MainEleLog:{
-            str = tr("主路电能");if(gLanguage == 1) str = tr("input power");break;
-        }
-        case BranchEleLog:{
-            str = tr("支路电能");if(gLanguage == 1) str = tr("branch power");break;
-        }
+//        case MainEleLog:{
+//            str = tr("主路电能");if(gLanguage == 1) str = tr("input power");break;
+//        }
+//        case BranchEleLog:{
+//            str = tr("支路电能");if(gLanguage == 1) str = tr("branch power");break;
+//        }
         case AlarmLog:{
             str = tr("告警日志");if(gLanguage == 1) str = tr("alarm log");break;
         }
@@ -139,7 +139,7 @@ QString ExcelExportLogThread::transformer(int type)
             str = tr("系统日志");if(gLanguage == 1) str = tr("system log");break;
         }
         default:{
-            str = tr("主路电能");if(gLanguage == 1) str = tr("input power");break;
+            str = tr("告警日志");if(gLanguage == 1) str = tr("alarm log");break;
         }
     }
     return str;

@@ -44,7 +44,7 @@ void InitShm::initBoxThreshold()
             sBoxData *box = &(busData->box[j]); //插接葙
             for(int k=0; k<LINE_NUM_MAX; ++k) //三相
             {
-                initThresholdPowUnit(k, box->data.cur, 3200);
+                initThresholdPowUnit(k, box->data.cur, 32000);
                 initThresholdUnit(k, box->data.vol, 2750);//480
             }
 
@@ -64,7 +64,7 @@ void InitShm::initBusThreshold()
         for(int k=0; k<3; ++k)
         {
             initThresholdUnit( k, bus->data.vol, 2750);//275
-            initThresholdPowUnit( k, bus->data.cur, 60000);//600
+            initThresholdPowUnit( k, bus->data.cur, 600000);//600
             initThresholdUnit( k, bus->env.tem, 99);
         }
     }
@@ -111,7 +111,7 @@ void InitShm::initBoxName()
     for(int i=0; i<BUS_NUM; ++i)
     {
         sBusData *busData = &(shm->data[i]);
-        for(int j=1; j<BOX_NUM; ++j)
+        for(int j=1; j<=BOX_NUM; ++j)
         {
             sBoxData *box = &(busData->box[j]);
             initNameUnit(i, 2, j, box->boxName, QString("iBox-%1").arg(j));//插接箱名称各处统一

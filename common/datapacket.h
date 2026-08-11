@@ -68,6 +68,7 @@ typedef struct _sDataUnit {
     ushort min[LINE_NUM_MAX]; // 最小值
     ushort max[LINE_NUM_MAX]; // 最大值
     uchar alarm[LINE_NUM_MAX]; // 告警值 0表示未告警  1表示已告警 2表示已记录
+    uchar count[LINE_NUM_MAX]; // 滤波次数
     uchar upalarm[LINE_NUM_MAX]; // 读取告警值
 
     ushort crMin[LINE_NUM_MAX]; // 临界最小值
@@ -116,6 +117,15 @@ typedef struct _sDataPowUnit {
 }sDataPowUnit;
 
 /**
+ * 数据单元：包括输出位参数等
+ */
+typedef struct _sOutputXObjData {
+    sRtuULLintUnit outputXPow[LINE_NUM_MAX]; //输出位有功功率
+    sRtuULLintUnit outputXApPow[LINE_NUM_MAX]; //输出位视在功率
+    uint outputXEle[LINE_NUM_MAX]; //输出位电能
+}sOutputXObjData;
+
+/**
  * 插接位数据对象：包括电流，电压，功率，电能，开关状态，插接位名称
  */
 typedef struct _sObjData {
@@ -134,6 +144,7 @@ typedef struct _sObjData {
     uint reactivePower[LINE_NUM_MAX]; // 无功功率
 
     ushort pl[3]; // 负载百分比
+    ushort loop_pl[9]; // 回路负载百分比
     ushort curThd[3]; // 电流谐波含量
     ushort volThd[3]; // 电压谐波含量
     sDataPowUnit totalPow;
@@ -181,6 +192,7 @@ typedef struct _sBoxData {
     sTgObjData tgBox; // 插接箱统计信息
     sLineTgObjData lineTgBox;
     char boxAlarm, boxVolAlarm, boxCurAlarm, boxEnvAlarm , boxPowerAlarm , boxOffLineAlarm; // 插接箱告警
+    char boxTotalPowerAlarm, boxOutputPowerAlarm;
     char boxStatus; // 插接箱状态
     char boxSpec; //  0 表示 SI  1 表示 IP
     char boxName[NAME_LEN]; // 插接箱名称
@@ -190,6 +202,8 @@ typedef struct _sBoxData {
     sRtuUshortUnit reCur;//剩余电流
     sRtuULLintUnit zeroLineCur;//零线电流
     sRtuULLintUnit totalPow; //总有功功率
+    sOutputXObjData outputXBox;//输出位参数
+
     char dc; // 交直流标志位
     uchar lps; // 防雷开关
     uchar lpsAlarm;//防雷开关告警值 0表示未告警 1表示已告警 2表示已记录
@@ -204,6 +218,7 @@ typedef struct _sBoxData {
     uint volUnbalance;//电压三相不平衡
     uint curUnbalance;//电流三相不平衡
     uint totalCur;//总电流
+    uint totalEle;//总电能
     uint online1;
     uint online2;
     ushort plugbreaker;
@@ -572,16 +587,17 @@ enum  sSetPlugType{
 
     ,PlugCurrentMIN_HIGH_L1       = 273           //电流下限高位
     ,PlugCurrentMAX_HIGH_L1       = 275           //电流上限高位
-
+    ,PlugTotalPowerMAX            = 337            //总有功功率最大值
+    ,PlugOutputPowerMAX           = 339            //输出位最大值
 };
 
 
 enum  sLogType{
-    MainEleLog           = 0           //主路电能
-    ,BranchEleLog        = 1           //支路电能
-    ,AlarmLog            = 2           //告警日志
-    ,OperationLog        = 3           //操作日志
-    ,SystemLog           = 4           //系统日志
+//    MainEleLog           = 0           //主路电能
+//    ,BranchEleLog        = 1           //支路电能
+    AlarmLog            = 0           //告警日志
+    ,OperationLog        = 1           //操作日志
+    ,SystemLog           = 2           //系统日志
 };
 
 sDataPacket *share_mem_get();

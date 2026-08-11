@@ -3,6 +3,7 @@ INCLUDEPATH += $$PWD
 
 HEADERS += \
     $$PWD/setloop/setlooppowerwid.h \
+    $$PWD/setloop/setoutputpowerwid.h \
     $$PWD/setloop/setpowmain.h \
     $$PWD/setsystem/autosetaddress.h \
     $$PWD/setsystem/localnetsettingdlg.h \
@@ -39,6 +40,7 @@ HEADERS += \
 	
 SOURCES += \
     $$PWD/setloop/setlooppowerwid.cpp \
+    $$PWD/setloop/setoutputpowerwid.cpp \
     $$PWD/setloop/setpowmain.cpp \
     $$PWD/setsystem/autosetaddress.cpp \
     $$PWD/setsystem/localnetsettingdlg.cpp \

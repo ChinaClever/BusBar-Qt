@@ -33,6 +33,10 @@ void BoxTotalWid::initlanguage()
         ui->label_12->setText("温度");
         ui->label_8->setText("电能(kWh)");
         ui->label_15->setText("无功功率");
+        ui->volH->setText("总视在功率");
+        ui->tApPowH->setText("总有功功率");
+        ui->tPfH->setText("零线温度");
+        ui->label_6->setText("总电能");
     }else{
         ui->label->setText("Input");
         ui->label_11->setText("Voltage(V)");
@@ -45,6 +49,10 @@ void BoxTotalWid::initlanguage()
         ui->label_12->setText("Temperature");
         ui->label_8->setText("Electric energy(kWh)");
         ui->label_15->setText("Reactive power");
+        ui->volH->setText("Total\napparent power");
+        ui->tApPowH->setText("Total\nactive power");
+        ui->tPfH->setText("Neutral line\ntemperature");
+        ui->label_6->setText("Total\nelectric energy");
     }
 }
 void BoxTotalWid::initFun(int bus, int box)
@@ -65,57 +73,70 @@ void BoxTotalWid::timeoutDone()
 
 void BoxTotalWid::updateAll()
 {
-    QString str = "";
-    ui->label_6->setText(str);
-    ui->volH->setText(str);
+    QString str = "---";
+//    ui->label_6->setText(str);
+//    ui->volH->setText(str);
+//    ui->curH->setText(str);
+//    ui->tEleH->setText(str);
+
+//    if(gLanguage == 0) str = tr("总有功功率");
+//    else str = tr("Total\nactive power");
+//    ui->tApPowH->setText(str);
+
+//    if(gLanguage == 0) str = tr("零线温度");
+//    else str = tr("Neutral line\ntemperature");
+//    ui->tPfH->setText(str);
+//    str = "---";
     ui->curH->setText(str);
-    ui->tEleH->setText(str);
-
-    if(gLanguage == 0) str = tr("总有功功率");
-    else str = tr("Total\nactive power");
-    ui->tApPowH->setText(str);
-
-    if(gLanguage == 0) str = tr("零线温度");
-    else str = tr("Neutral line\ntemperature");
-    ui->tPfH->setText(str);
-    str = "---";
     ui->tPowH->setText(str);
     ui->temH->setText(str);
+    ui->tEleH->setText(str);
     if( mBox && mBox->offLine ){
-        mBox->data.totalPow.value[0] = 0;
-        for(int i = 0 ; i < 3 ; ++i) mBox->data.totalPow.value[0] += mLineTgBox->pow[i];
-        str = QString::number(mBox->data.totalPow.value[0]/COM_RATE_POW, 'f', 3)+"kW";
-        ui->tPowH->setText(str);
+        str = QString::number(mBox->totalApPow/COM_RATE_POW, 'f', 3)+"kVA";
+        ui->curH->setText(str);//总视在功率
+//        mBox->data.totalPow.value[0] = 0;
+//        for(int i = 0 ; i < 3 ; ++i) mBox->data.totalPow.value[0] += mLineTgBox->pow[i];
+//        str = QString::number(mBox->data.totalPow.value[0]/COM_RATE_POW, 'f', 3)+"kW";
+        str = QString::number(mBox->totalPow.ivalue/COM_RATE_POW, 'f', 3)+"kW";
+        ui->tPowH->setText(str);//总有功功率
+        setLabeColor(ui->tPowH, mBox->totalPow.ialarm , mBox->totalPow.icrAlarm);
 
         if(mEnvData){
             sDataUnit *unit = &(mEnvData->tem);
             if(unit){
                 str =  QString::number(unit->value[3]/COM_RATE_TEM) + "°C";
-                ui->temH->setText(str);
+                ui->temH->setText(str);//零线温度
                 setLabeColor(ui->temH, unit->alarm[3], unit->crAlarm[3]);
             }
         }
+        str = QString::number(mBox->totalEle/COM_RATE_ELE, 'f', 1)+"kWh";
+        ui->tEleH->setText(str);//总电能
     }
 }
 
 void BoxTotalWid::initWid()
 {
-    QString str = "";
-    ui->label_6->setText(str);
-    ui->volH->setText(str);
+    QString str = "---";
+//    QString str = "";
+//    ui->label_6->setText(str);
+//    ui->volH->setText(str);
+//    ui->curH->setText(str);
+//    ui->tEleH->setText(str);
+
+//    if(gLanguage == 0) str = tr("总有功功率");
+//    else str = tr("Total\nactive power");
+//    ui->tApPowH->setText(str);
+
+//    if(gLanguage == 0) str = tr("零线温度");
+//    else str = tr("Neutral line\ntemperature");
+//    ui->tPfH->setText(str);
+//    str = "---";
+//    ui->tPowH->setText(str);
+//    ui->temH->setText(str);
     ui->curH->setText(str);
-    ui->tEleH->setText(str);
-
-    if(gLanguage == 0) str = tr("总有功功率");
-    else str = tr("Total\nactive power");
-    ui->tApPowH->setText(str);
-
-    if(gLanguage == 0) str = tr("零线温度");
-    else str = tr("Neutral line\ntemperature");
-    ui->tPfH->setText(str);
-    str = "---";
     ui->tPowH->setText(str);
     ui->temH->setText(str);
+    ui->tEleH->setText(str);
 }
 
 
@@ -164,7 +185,7 @@ void BoxTotalWid::updateData()
             str =  QString::number(mLineTgBox->apPow[i]/(COM_RATE_POW*1000), 'f', 3) + "kVA";
             tApPowLab[i]->setText(str);
 
-            str =  QString::number(mLineTgBox->reactivePower[i]/(COM_RATE_POW), 'f', 3) + "kVar";
+            str =  QString::number(mLineTgBox->reactivePower[i]/(COM_RATE_POW), 'f', 3) + "kvar";
             rePowLab[i]->setText(str);
 
             if(mLineTgBox->apPow[i] == 0 )

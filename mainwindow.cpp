@@ -87,7 +87,7 @@ void MainWindow::initSerial()
 #endif
 #endif
 
-    Mb_Core::build(this);//////
+//    Mb_Core::build(this);//////
     Json_Send::bulid(this);
 
 //    rtu[4] = new RtuThread(this);

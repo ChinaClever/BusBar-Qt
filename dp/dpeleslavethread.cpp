@@ -18,7 +18,7 @@ DpEleSlaveThread::DpEleSlaveThread(QObject *parent) : QThread(parent)
 
     timer = new QTimer(this);
     timer->start(24*60*60*1000);
-    //timer->start(30*1000);
+    //timer->start(1*60*1000);
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
 }
 
@@ -87,8 +87,8 @@ void DpEleSlaveThread::run()
 //            saveBus(i);
 //            msleep(800);//////延时进行下一个事务
 //        }
+        //db_system_obj()->wal_checkpoint();
         msleep(800);//////延时进行下一个事务
-//        db_system_obj()->wal_checkpoint();
         system("echo 3 > /proc/sys/vm/drop_caches");
         isRun  = false;
     }

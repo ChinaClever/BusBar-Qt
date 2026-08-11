@@ -1,7 +1,7 @@
-#include "setlooppowerwid.h"
+#include "setoutputpowerwid.h"
 #include <QGridLayout>
 
-SetLoopPowerWid::SetLoopPowerWid(QWidget *parent): ComTableWid(parent)
+SetOutputPowerWid::SetOutputPowerWid(QWidget *parent): ComTableWid(parent)
 {
     mDc = 1;
     mBus = 0;
@@ -15,26 +15,25 @@ SetLoopPowerWid::SetLoopPowerWid(QWidget *parent): ComTableWid(parent)
     connect(timer, SIGNAL(timeout()),this, SLOT(timeoutDone()));
 }
 
-void SetLoopPowerWid::initWid()
+void SetOutputPowerWid::initWid()
 {
     QString title; QStringList header;
-    if(gLanguage == 0){title = tr("回路功率");header<< tr("插接箱");}
+    if(gLanguage == 0){title = tr("输出位功率");header<< tr("插接箱");}
     else {title = tr("Loop power");header<< tr("Tap-off box");}
     if(mDc){ //交流9个
-        for(int i = 0; i < LINE_NUM; ++i)
-            header << QString((char)('A' + i%3))+ QString("%1").arg(i/3 + 1);
-    }else{ //直流4个
-        for(int i = 0; i < 4; i++)
-            header << "D" + QString("%1").arg(i + 1);
+        for(int i = 0; i < START_LINE_NUM; ++i)
+            header << "Output "+QString::number(i+1);
     }
 
+    if(gLanguage == 0){header<< tr("总有功功率");}
+    else {header<< tr("Total\nactive power");}
     initTableWid(header, 1, title);
     for(int i = 0 ; i < header.size() ; i++) setTableColumnWidth(i,40); //设置宽度
 }
 
 
 
-void SetLoopPowerWid::checkBus(int index)
+void SetOutputPowerWid::checkBus(int index)
 {
     //    if(mBus != index) {
     //        mBus = index;
@@ -50,21 +49,25 @@ void SetLoopPowerWid::checkBus(int index)
 }
 
 
-int SetLoopPowerWid::updateDev(sBoxData *dev, int row)
+int SetOutputPowerWid::updateDev(sBoxData *dev, int row)
 {
     if(dev->offLine)
     {
         QStringList list;
         list << dev->boxName;
 
-        sDataPowUnit *unit = &(dev->data.pow);
-        int line = dev->data.lineNum;
+        int line = START_LINE_NUM + 1;
         for(int i=0; i<line; ++i)
         {
-            double value = unit->value[i]/COM_RATE_POW;
-            //            list << QString::number(value,'f', 1) + "A";
-            list << QString::number(value ,'f', 3) + "kW";
-            setItemColor(row, i+1, unit->alarm[i]);
+            if(i < START_LINE_NUM){
+                double value = dev->outputXBox.outputXPow[i].ivalue/COM_RATE_POW;
+                list << QString::number(value ,'f', 3) + "kW";
+                setItemColor(row, i+1, dev->outputXBox.outputXPow[i].ialarm);
+            }else{
+                double value = dev->totalPow.ivalue/COM_RATE_POW;
+                list << QString::number(value ,'f', 3) + "kW";
+                setItemColor(row, i+1, dev->totalPow.ialarm);
+            }
         }
 
         setTableRow(row, list);
@@ -76,7 +79,7 @@ int SetLoopPowerWid::updateDev(sBoxData *dev, int row)
 /**
  * @brief 数据更新入口函数
  */
-void SetLoopPowerWid::updateData()
+void SetOutputPowerWid::updateData()
 {
     int row = 0;
 
@@ -89,25 +92,28 @@ void SetLoopPowerWid::updateData()
     checkTableRow(row);
 }
 
-void SetLoopPowerWid::timeoutDone()
+void SetOutputPowerWid::timeoutDone()
 {
     checkBus(mBus);
     updateData();
 }
 
 
-void SetLoopPowerWid::itemClicked(QTableWidgetItem *it)
+void SetOutputPowerWid::itemClicked(QTableWidgetItem *it)
 {
     if(it->text().compare("---") == 0) return;  //为空不设置
     int column = it->column();
     if(column > 0)
     {
-        //BeepThread::bulid()->beep();
         sThresholdItem item;
         item.bus = mBus;
         item.box = it->row()+1;
         item.num = column-1;
-        item.type = 4;
+        if(column <= START_LINE_NUM){
+            item.type = 18;
+        }else if(column > START_LINE_NUM){
+            item.type = 19;
+        }
 
         SetThresholdDlg dlg(this);
         dlg.move(0,0);

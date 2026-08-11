@@ -110,6 +110,12 @@ QString SetThread::changeType(int index , QString &sym , double &rate)
     case 8:{
         str = tr("零线电流");if(gLanguage == 1)str = tr("neutral line current ");sym = "A";rate = COM_RATE_CUR;break;
     }
+    case 18:{
+        str = tr("功率");if(gLanguage == 1)str = tr("power ");sym = "kW";rate = COM_RATE_POW;break;
+    }
+    case 19:{
+        str = tr("总有功功率");if(gLanguage == 1)str = tr("total active power ");sym = "kW";rate = COM_RATE_POW;break;
+    }
 //    case 11: reg = SetStartRelease ; break;
 //    case 14: reg = SetStartControlRelease ; break;
     }
@@ -159,6 +165,11 @@ void SetThread::change(sThresholdItem &item , QString &msg1 , QString &msg2 , QS
                 outputen = QString(tr("neutral line"));
             }
         }
+        if(item.type == 18){
+            output = tr("Output %1").arg(item.num+1);
+            outputen = tr("Output %1").arg(item.num+1);
+        }
+
         msg2 = msg1;
         msg1 += tr("将%1 %2最小值 %3%4设置成%5%6 !").arg(output).arg(str).arg(item.premin/rate).arg(sym).arg(item.min/rate).arg(sym);
         msg2 += tr("将%1 %2最大值 %3%4设置成%5%6 !").arg(output).arg(str).arg(item.premax/rate).arg(sym).arg(item.max/rate).arg(sym);

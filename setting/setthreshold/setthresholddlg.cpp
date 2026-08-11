@@ -79,6 +79,7 @@ void SetThresholdDlg::initSpinBox(sThresholdItem &item)
             }
             break;
     case 3: str = "℃"; range = 99;  break;
+    case 18:case 19:
     case 4:
         {
             str = "kW"; if(item.box)range = 130; else range = 1500;
@@ -131,6 +132,8 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
         case 4: str = tr("功率"); break;
         case 5: str = tr("频率"); break;
         case 8: str = tr("零线电流"); break;
+        case 18:str = tr("有功功率"); break;
+        case 19:str = tr("总有功功率"); break;
         }
 
         sBoxData *dev = &(share_mem_get()->data[item.bus].box[item.box]); //获取共享内存
@@ -144,8 +147,9 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
             title = tr("母线%1 %2 %3相 %4设置").arg(busName).arg(nameStr).arg(QString('A' + item.num)).arg(str);
             if(item.num == 3)title = tr("母线%1 %2 %3 %4设置").arg(busName).arg(nameStr).arg(tr("零线")).arg(str);
         }
-        if( item.type == 5 || item.type == 8 ) title = tr("母线%1 %2 %3设置").arg(busName).arg(nameStr).arg(str);
-        if(item.type == 8) ui->label_3->setText(tr("超限\n告警值："));
+        if( item.type == 5 || item.type == 8 || item.type == 19) title = tr("母线%1 %2 %3设置").arg(busName).arg(nameStr).arg(str);
+        if( item.type == 8 ) ui->label_3->setText(tr("超限\n告警值："));
+        if( item.type == 18 ) title = tr("母线%1 %2 output %3 %4设置").arg(busName).arg(nameStr).arg(item.num+1).arg(str);
         ui->titleLab->setText(title);
     }else{
         QString str;
@@ -169,8 +173,9 @@ void SetThresholdDlg::setTitle(sThresholdItem &item)
             title = tr("Busbar %1 %2 phase %3 %4 set").arg(busName).arg(nameStr).arg(QString('A' + item.num)).arg(str);
             if(item.num == 3)title = tr("Busbar %1 %2 %3 %4 set").arg(busName).arg(nameStr).arg(tr("neutral line")).arg(str);
         }
-        if( item.type == 5 || item.type == 8 ) title = tr("Busbar %1 %2 %3 set").arg(busName).arg(nameStr).arg(str);
-        if(item.type == 8) ui->label_3->setText("Over limit\nalarm value:");
+        if( item.type == 5 || item.type == 8 || item.type == 19 ) title = tr("Busbar %1 %2 %3 set").arg(busName).arg(nameStr).arg(str);
+        if( item.type == 8 ) ui->label_3->setText("Over limit\nalarm value:");
+        if( item.type == 18 ) title = tr("Busbar %1 %2 output %3 %4 set").arg(busName).arg(nameStr).arg(item.num+1).arg(str);
         ui->titleLab->setText(title);
     }
 
@@ -196,8 +201,11 @@ void SetThresholdDlg::set(sThresholdItem &item)
     case 4: unitPower = &(obj->pow);break;
     case 5: rate = 10;break;
     case 8: unitZero = &(busData->box[item.box].zeroLineCur); /*rate = 100;*/  break;//rate = 10; break;
+    case 18:unitZero = &(busData->box[item.box].outputXBox.outputXPow[item.num]);break;
+    case 19:unitZero = &(busData->box[item.box].totalPow);break;
     }
     ui->label_2->show();
+    ui->checkBox->show();
     if( item.type == 3){
         ui->mindoubleSpinBox->hide();
         ui->maxdoubleSpinBox->hide();
@@ -219,13 +227,14 @@ void SetThresholdDlg::set(sThresholdItem &item)
         ui->maxBox->hide();
         item.min = unitPower->min[item.num];
         item.max = unitPower->max[item.num];
-    }else if( item.type == 8 ){
+    }else if( item.type == 8 || item.type == 18 || item.type == 19){
         ui->label_2->hide();
         ui->mindoubleSpinBox->hide();
         ui->minBox->hide();
         ui->maxBox->hide();
         item.min = unitZero->imin;
         item.max = unitZero->imax;
+        if(item.type == 18 || item.type == 19)ui->checkBox->hide();//插接箱新加的输出位功率和总功率阈值没有加统一设置功能，暂时隐藏
     }else{
         ui->minBox->hide();
         ui->maxBox->hide();

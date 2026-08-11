@@ -6,6 +6,7 @@
 #include "serialport/serial_trans.h"
 #include "rtu485/rtu_recv.h"
 
+
 //#define RTU_BUF_SIZE 1024
 #define RTU_BUF_SIZE 2048
 extern int gVerflag;//1代表一期 2代表二期
@@ -45,6 +46,7 @@ protected:
     void envData(sEnvData *env, Rtu_recv *pkt);
     void envDataV3(sEnvData *env, Rtu_recv *pkt);
     void initData(sBoxData *box, Rtu_recv *pkt);
+    void outputAndTotalInitData(sBoxData *box, Rtu_recv *pkt);
     void setBoxNum(ushort num);
     void thdData(Rtu_recv *pkt);
     void thdDataV3(Rtu_recv *pkt);
@@ -54,6 +56,7 @@ protected:
     void BusTransDataV3();
     void readLocalTemHum();
     void autoSetAddress();
+    bool checkBoxVolAlram(int index);
 
     #if (SI_RTUWIFI==1)
     void ChangeBusCh(int ch, int index);
@@ -64,6 +67,7 @@ public:
     Serial_Trans *mSerial;
 private:
     uchar *mBuf;
+    uchar *mSendBuf;
     Rtu_recv *mRtuPkt;
     sBusData *mBusData;
     int mId;

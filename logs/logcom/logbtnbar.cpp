@@ -22,9 +22,9 @@ LogBtnBar::LogBtnBar(QWidget *parent) :
     ui->comboBox->setIconSize(QSize(1,60));
     ui->comboBox->setItemIcon(0 , icon);
     ui->comboBox->setItemIcon(1 , icon);
-    ui->comboBox->setItemIcon(2 , icon);
+    ui->comboBox->setItemIcon(2 , icon);/*
     ui->comboBox->setItemIcon(3 , icon);
-    ui->comboBox->setItemIcon(4 , icon);
+    ui->comboBox->setItemIcon(4 , icon);*/
     if(gLanguage == 0) com_setBackColour(tr("日志操作"),this);
     else com_setBackColour(tr("Log operation"),this);
     ui->dateEdit->setDate(QDate::currentDate());
@@ -57,22 +57,22 @@ void LogBtnBar::initLanguage()
     if(gLanguage == 0){
         ui->exportBtn->setText("导出");
         ui->dateBtn->setText("时间选择");
-        ui->comboBox->setItemText(0,"主路电能");
-        ui->comboBox->setItemText(1,"支路电能");
-        ui->comboBox->setItemText(2,"告警日志");
-        ui->comboBox->setItemText(3,"操作日志");
-        ui->comboBox->setItemText(4,"系统日志");
+//        ui->comboBox->setItemText(0,"主路电能");
+//        ui->comboBox->setItemText(1,"支路电能");
+        ui->comboBox->setItemText(0,"告警日志");
+        ui->comboBox->setItemText(1,"操作日志");
+        ui->comboBox->setItemText(2,"系统日志");
         ui->clearBtn->setText("清空");
         ui->queryBtn->setText("查询");
         ui->refreshBtn->setText("刷新");
     }else{
         ui->exportBtn->setText("Export");
         ui->dateBtn->setText("Time selection");
-        ui->comboBox->setItemText(0,"Input power");
-        ui->comboBox->setItemText(1,"Branch power");
-        ui->comboBox->setItemText(2,"Alarm log");
-        ui->comboBox->setItemText(3,"Operation log");
-        ui->comboBox->setItemText(4,"System log");
+//        ui->comboBox->setItemText(0,"Input power");
+//        ui->comboBox->setItemText(1,"Branch power");
+        ui->comboBox->setItemText(0,"Alarm log");
+        ui->comboBox->setItemText(1,"Operation log");
+        ui->comboBox->setItemText(2,"System log");
         ui->clearBtn->setText("Clear");
         ui->queryBtn->setText("Inquire");
         ui->refreshBtn->setText("Refresh");

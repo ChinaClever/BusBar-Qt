@@ -41,12 +41,15 @@ void DpAlarmThread::alarmDataUnit(sDataUnit &unit, int lineNum, bool cr)
 {
     for(int i=0; i<lineNum; ++i)
     {
-        if((unit.value[i] < unit.min[i]) || (unit.value[i] > unit.max[i]))
-        {
-            if(unit.alarm[i] == 0)
-                unit.alarm[i] = 1;
-        } else
+        if((unit.value[i] < unit.min[i]) || (unit.value[i] > unit.max[i])){
+            if(unit.alarm[i] == 0){
+                if(unit.count[i] > 8)unit.alarm[i] = 1;
+                else unit.count[i]++;
+            }
+        } else{
             unit.alarm[i] = 0;
+            unit.count[i] = 0;
+        }
 
         if(cr) {
             if((unit.value[i] < unit.crMin[i]) || (unit.value[i] > unit.crMax[i]))
@@ -96,6 +99,26 @@ void DpAlarmThread::alarmDataUnit(sDataPowUnit &unit, int lineNum, bool cr)
             } else
                 unit.crAlarm[i] = 0;
         }
+    }
+}
+
+void DpAlarmThread::alarmDataUnit(sRtuULLintUnit &unit ,bool cr)
+{
+
+    if(unit.ivalue > unit.imax)
+    {
+        if(unit.ialarm == 0)
+            unit.ialarm = 1;
+    } else
+        unit.ialarm = 0;
+
+    if(cr) {
+        if((unit.ivalue < unit.icrMin) || (unit.ivalue > unit.icrMax))
+        {
+            if(unit.icrAlarm == 0)
+                unit.icrAlarm = 1;
+        } else
+            unit.icrAlarm = 0;
     }
 }
 
@@ -175,21 +198,36 @@ void DpAlarmThread::boxAlarm(sBoxData &box , int index )
 
         box.boxOffLineAlarm = 1;
         box.boxAlarm = box.boxCurAlarm + box.boxVolAlarm + box.boxEnvAlarm + box.boxPowerAlarm;
-        if(index == 0){
+        if(index == 0){//始端箱
             box.boxAlarm += box.data.swAlarm[0];
             box.boxAlarm += box.lpsLogAlarm;
             box.boxAlarm += box.totalPowAlarm;
             box.boxAlarm += box.HzAlarm;
             box.boxAlarm += box.zeroLineAlarm;
-        }else{
-            if(box.phaseFlag == 0){
+        }else{//插接箱
+            uchar breaker_num = 3;
+            for(int i = 0 ; i < breaker_num ; i++){
+                alarmDataUnit(box.outputXBox.outputXPow[i]);
+                if(box.outputXBox.outputXPow[i].ialarm){
+                    box.boxOutputPowerAlarm = 2;
+                }
+                box.boxAlarm += box.boxOutputPowerAlarm;
+            }
+
+            alarmDataUnit(box.totalPow);
+            if(box.totalPow.ialarm){
+                box.boxTotalPowerAlarm = 2;
+            }
+            box.boxAlarm += box.boxOutputPowerAlarm;
+
+            if(box.phaseFlag == 0){//单相
                 for(int i  = 0 ; i < box.data.lineNum ; i++){
                     if(box.data.sw[i] == 1){
                         if(box.data.swAlarm[i] == 0) box.data.swAlarm[i] = 1;
                     } else box.data.swAlarm[i] = 0;
                     box.boxAlarm += box.data.swAlarm[i];
                 }
-            }else if(box.phaseFlag == 1){
+            }else if(box.phaseFlag == 1){//三相
                 uchar breaker_num = (box.plugbreaker>>12)&0x0F;
                 for(int i  = 0 ; i < breaker_num ; i++){
                     uchar sw = (box.plugbreaker>>i*2)&0x03;
@@ -199,6 +237,7 @@ void DpAlarmThread::boxAlarm(sBoxData &box , int index )
                     box.boxAlarm += box.data.swAlarm[i];
                 }
             }
+            box.boxAlarm += box.boxTotalPowerAlarm + box.boxOutputPowerAlarm;
         }
     } else {
         if(box.boxOffLineAlarm == 1) box.boxOffLineAlarm = 2;

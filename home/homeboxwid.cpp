@@ -75,12 +75,18 @@ void HomeBoxWid::updateData()
     ui->curLab->setPalette(pe);
 }
 
-void HomeBoxWid::updateAlarmIcon(QLabel *lab,int volAlarm, int curALarm, int envALarm , int powAlarm)
+void HomeBoxWid::updateAlarmIcon(QLabel *lab)
 {
     QString str;
-    if(volAlarm == 2 || curALarm == 2 || envALarm == 2 || powAlarm == 2 ) {
+    int volAlarm = mData->boxVolAlarm;
+    int curALarm = mData->boxCurAlarm;
+    int envALarm = mData->boxEnvAlarm;
+    int powAlarm = mData->boxPowerAlarm;
+    int outputPowerAlarm = mData->boxOutputPowerAlarm;
+    int totalPowerAlarm = mData->boxTotalPowerAlarm;
+    if(volAlarm == 2 || curALarm == 2 || envALarm == 2 || powAlarm == 2 || outputPowerAlarm == 2 || totalPowerAlarm == 2) {
         str = "boxalarm";
-    } else if(volAlarm == 1 || curALarm == 1 || envALarm == 1 || powAlarm == 1 ) {
+    } else if(volAlarm == 1 || curALarm == 1 || envALarm == 1 || powAlarm == 1 || outputPowerAlarm == 1 || totalPowerAlarm == 1) {
         str = "boxciralarm";
     } else {
         str = "boxonline";
@@ -103,16 +109,16 @@ void HomeBoxWid::updateStatus()
                 mData->prealarm = alarm;
                 mData->preboxType = mData->boxType;
                 ui->iconLab_1->hide();ui->iconLab_3->hide();
-                updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+                updateAlarmIcon(ui->iconLab_2);
             }else{
                 mData->firsttime = true;
                 mData->preoffLine = mData->offLine;
                 mData->prealarm = alarm;
                 mData->preboxType = mData->boxType;
                 ui->iconLab_1->show();ui->iconLab_3->show();
-                updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-                updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-                updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+                updateAlarmIcon(ui->iconLab_1);
+                updateAlarmIcon(ui->iconLab_2);
+                updateAlarmIcon(ui->iconLab_3);
             }
             mCount = 0;
         }
@@ -153,9 +159,9 @@ void HomeBoxWid::updateAlarmStatus()
         if(!mData->firsttime || mData->preoffLine == 0){
             mData->firsttime = true;
             mData->preoffLine = mData->offLine;
-            updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-            updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-            updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            updateAlarmIcon(ui->iconLab_1);
+            updateAlarmIcon(ui->iconLab_2);
+            updateAlarmIcon(ui->iconLab_3);
         }
     } else { // 离线
         if(!mData->firsttime || mData->preoffLine > 0){
@@ -189,12 +195,12 @@ void HomeBoxWid::updateUpAndDownAlarmStatus()
     if(mData->offLine > 0) {
         if(mData->boxType){//盒子类型：0-插接箱；1-温度模块
             ui->iconLab_1->hide();ui->iconLab_3->hide();
-            updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            updateAlarmIcon(ui->iconLab_2);
         }else{
             ui->iconLab_1->show();ui->iconLab_3->show();
-            updateAlarmIcon(ui->iconLab_1,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-            updateAlarmIcon(ui->iconLab_2,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
-            updateAlarmIcon(ui->iconLab_3,  mData->boxVolAlarm, mData->boxCurAlarm, mData->boxEnvAlarm , mData->boxPowerAlarm);
+            updateAlarmIcon(ui->iconLab_1);
+            updateAlarmIcon(ui->iconLab_2);
+            updateAlarmIcon(ui->iconLab_3);
         }
     } else { // 离线
         if(mData->boxType){//盒子类型：0-插接箱；1-温度模块

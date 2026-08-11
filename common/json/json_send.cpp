@@ -181,7 +181,7 @@ void Json_Send::freeMemoryCheck()
 
         rst = 1;cnt = 0;
         //if(ret>0 && ret<100) resetProc(mProcs->core, "/home/root/busbar");
-    } else if((ret>0 && ret<80) && rst) system("reboot");
+    } else if((ret>0 && ret<8) && rst) system("reboot");
     else if(ret > 100){
         rst = 0;
         cnt = 0;
@@ -248,7 +248,7 @@ void Json_Send::run()
         }else{
             break;
         }
-//        freeMemoryCheck();
+        //freeMemoryCheck();
         msleep(1000);
     }
 }

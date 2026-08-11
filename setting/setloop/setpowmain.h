@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "setlooppowerwid.h"
+#include "setoutputpowerwid.h"
 #include "setline/setlinetem.h"
 
 namespace Ui {
@@ -23,6 +24,7 @@ private:
 
     SetLineTem *mLineTem;
     SetLoopPowerWid *mLoopPowerTem;
+    SetOutputPowerWid *mOutputPowerTem;
 };
 
 #endif // SETPOWMAIN_H

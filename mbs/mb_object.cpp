@@ -31,7 +31,8 @@ void Mb_Object::upMasterDevInfo(sBusData *data ,int bus, int index)
         vs << (dev->zeroLineCur.ivalue >> 16)<< (dev->zeroLineCur.ivalue & 0xffff) << dev->zeroLineCur.iupalarm;
         vs << dev->volUnbalance << dev->curUnbalance << dev->data.sw[0];
         vs << dev->rate.svalue << dev->rate.supalarm;
-        for(int i = 0 ; i < 90-63 ; i++) vs << 0 ;
+        vs << (dev->totalEle >> 16) << (dev->totalEle & 0xffff);
+        for(int i = 0 ; i < 90-65 ; i++) vs << 0 ;
 
         sObjData *p = &(dev->data);
         for(int i = 0 ; i < START_LINE_NUM ; ++i) // 读取相 数据
@@ -174,10 +175,10 @@ void Mb_Object::upSlaveDevRange(sBusData *data , int bus, int index)
             }
         }
         vs << dev->plugbreaker;
+        for(int i = 0 ; i < LOOP_NUM_MAX ; i++){
+            vs << dev->data.loop_pl[i];
+        }
         if(dev->plug_cur_spec){
-            for(int i = 0 ; i < LOOP_NUM_MAX ; i++){
-                vs << 0;
-            }
             for(int i = 0 ; i < LOOP_NUM_MAX ; i++){
                 if( i < dev->loopNum ){
                     vs << (dev->data.cur.value[i] >> 16) << (dev->data.cur.value[i] & 0xffff);
@@ -194,7 +195,30 @@ void Mb_Object::upSlaveDevRange(sBusData *data , int bus, int index)
                     vs << 0 << 0;
                 }
             }
+        }else{
+            for(int i = 0 ; i < LOOP_NUM_MAX ; i++){
+                vs << 0 << 0;
+            }
+            for(int i = 0 ; i < LOOP_NUM_MAX ; i++){
+                vs << 0 << 0;
+                vs << 0 << 0;
+            }
         }
+        vs << (dev->totalPow.ivalue >> 16) << (dev->totalPow.ivalue & 0xffff);
+        vs << dev->totalPow.iupalarm;
+        vs << (dev->totalApPow >> 16) << (dev->totalApPow & 0xffff);
+        vs << (dev->totalEle >> 16) << (dev->totalEle & 0xffff);
+        for(int i = 0 ; i < START_LINE_NUM; i++){
+            vs << (dev->outputXBox.outputXPow[i].ivalue >> 16) << (dev->outputXBox.outputXPow[i].ivalue & 0xffff);
+            vs << (dev->outputXBox.outputXPow[i].iupalarm);
+            vs << (dev->outputXBox.outputXApPow[i].ivalue >> 16) << (dev->outputXBox.outputXApPow[i].ivalue & 0xffff);
+            vs << (dev->outputXBox.outputXEle[i] >> 16) << (dev->outputXBox.outputXEle[i] & 0xffff);
+        }
+        vs << (dev->totalPow.imax >> 16) << (dev->totalPow.imax & 0xffff);
+        for(int i = 0 ; i < START_LINE_NUM; i++){
+            vs << (dev->outputXBox.outputXPow[i].imax >> 16) << (dev->outputXBox.outputXPow[i].imax & 0xffff);
+        }
+
         setRegs(MbSlaveReg_Range+10000*bus+500*index, vs);
     }else{//clear
         vshort vs; //initFucRegs();

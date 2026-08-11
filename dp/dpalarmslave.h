@@ -18,6 +18,7 @@ protected:
     void unitAlarm(QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym);
     void unitAlarmVA(sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataUnit &unit, double rate, const QString &sym);
     void unitAlarmW(sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sDataPowUnit &unit, double rate, const QString &sym);
+    void unitAlarmPowerW(sBoxData &box, QString &typeStr, QString &msg, QString &typeStrEn, QString &msgEn, sRtuULLintUnit &unit, double rate, const QString &sym);
 
     void boxAlarm(sBoxData &box);
     void busAlarm(int id);

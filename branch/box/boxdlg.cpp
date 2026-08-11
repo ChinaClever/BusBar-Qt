@@ -42,6 +42,12 @@ void BoxDlg::initWid(int bus, int box)
     mLineWid->initLine(bus, box);
     if(gLanguage == 0) ui->tabWidget->addTab(mLineWid, tr("各回路信息"));
     else ui->tabWidget->addTab(mLineWid, tr("Information of each circuit"));
+
+    mOutputWid = new BoxOutputWid(ui->tabWidget);
+    mOutputWid->initFun(bus, box);
+    if(gLanguage == 0) ui->tabWidget->addTab(mOutputWid, tr("各输出信息"));
+    else ui->tabWidget->addTab(mOutputWid, tr("Information of each output"));
+
     ui->tabWidget->setStyleSheet("QTabBar::tab{height:50px; width: 200px;}");
     ui->tabWidget->setTabShape(QTabWidget::Triangular);
 }
