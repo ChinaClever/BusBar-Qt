@@ -6,8 +6,9 @@
 #include "mb_setting.h"
 #include "mb_core.h"
 #include "setthreshold/setthread.h"
+#include "mainwindow.h"
 
-
+extern RtuThread *rtu[4];
 Mb_Setting::Mb_Setting(QObject *parent) : Mb_Object{parent}
 {
     connect(this, &Modbus_SlaveObj::registerDataSig, this, &Mb_Setting::registerRecvSlot);
@@ -160,14 +161,24 @@ void Mb_Setting::registerRecvSlot(int address, ushort value)
                 item.crmin = dev->boxId[0];
                 item.crmax = dev->boxId[1];
                 item.max = dev->boxId[2];
+                if (item.bus >= 0 && item.bus < 4 && rtu[item.bus]) {
+                    rtu[item.bus]->addPriorityBox(item.box);
+                }
                 //            qDebug()<<t.toString("yyyy-MM-dd hh:mm:ss.zzz")<<"address "<<address <<"value "<<value<<" item.bus "<<item.bus<<
                 //                " item.type "<<item.type<<" item.box "<<item.box;
                 qDebug()<<"address "<<address <<"value "<<value<<" item.bus "<<item.bus<<
                     " item.type "<<item.type<<" item.box "<<item.box;
                 //            qDebug()<<mPreTime[address / 10000][(address % 10000) / 500].secsTo(t);
-                SetThread::bulid()->append(item);
-                item.insertlog = 0;
-                SetThread::bulid()->append(item);
+                //SetThread::bulid()->append(item);
+                // 根据 bus 将 item 添加到对应线程的设置队列
+                if (item.bus >= 0 && item.bus < 4 && rtu[item.bus]) {
+                    rtu[item.bus]->addSetItem(item);
+                }
+//                item.insertlog = 0;
+//                if (item.bus >= 0 && item.bus < 4 && rtu[item.bus]) {
+//                    rtu[item.bus]->addSetItem(item);
+//                }
+                //SetThread::bulid()->append(item);
             }
 
 //            mCount[address / 10000][(address % 10000) / 500] = 0;

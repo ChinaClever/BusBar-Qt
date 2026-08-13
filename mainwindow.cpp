@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     insertStrEn = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
     db_system_obj_en()->insertSystem(insertStrEn);
-    mVersion = "V5.0.17.053";//当前软件版本
+    mVersion = "V5.0.17.056";//当前软件版本
     initVersion();
     updateTime();
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
@@ -166,7 +166,7 @@ void MainWindow::initNetSLot()
 }
 
 void MainWindow::initFunSLot()
-{    
+{
     initSerial(); //串口
     new DpThread(this); // 创建数据处理线程
     updateTime();

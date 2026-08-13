@@ -84,8 +84,6 @@ void SetThread::workDown()
                 if(item.box != 0) name = QString(get_share_mem()->data[item.bus].box[item.box].boxName);
                 QString local = tr("本机");
                 QString localen = tr("local");
-                QString success = tr("成功");
-                QString successen = tr("success");
                 QString str = (item.min == 12)?tr("分励脱扣"):tr("RCA");
                 QString stren = (item.min == 12)?tr("shunt trip"):tr("RCA");
 
@@ -109,16 +107,13 @@ void SetThread::workDown()
                         mac += ":";
                     }
                 }
-                if(flag != 6){
-                    success = tr("失败");
-                    successen = tr("failure");
-                }
+
                 if(item.txtype == 1){
                     local = tr("远程");
                     localen = tr("remote");
                 }
-                QString msg1 = tr("%2 %1 mac:%3 %4 %5%6").arg(name).arg(local).arg(mac).arg(str).arg(operation).arg(success);
-                QString msgen1 = tr("%2 %1 mac:%3 %4 %5 %6").arg(name).arg(localen).arg(mac).arg(stren).arg(operationen).arg(successen);
+                QString msg1 = tr("%2 %1 mac:%3 %4 %5").arg(name).arg(local).arg(mac).arg(str).arg(operation);
+                QString msgen1 = tr("%2 %1 mac:%3 %4 %5").arg(name).arg(localen).arg(mac).arg(stren).arg(operationen);
 
                 db_operation_obj(item.bus)->insertOperation(type , msg1);
                 db_operation_obj_en(item.bus)->insertOperation(typeen , msgen1);

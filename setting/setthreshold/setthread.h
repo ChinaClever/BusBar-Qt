@@ -14,10 +14,11 @@ public:
     ~SetThread();
     static SetThread *bulid(QObject *parent = nullptr);
     void append(sThresholdItem &item) {mItems.append(item);}
-
+    void workDown();
+    QList<sThresholdItem> mItems;
+    SetRtuCmd *mRtuCmd;
 protected:
     void run();
-    void workDown();
     void change(sThresholdItem &item , QString &msg1, QString &msg2, QString &msgen1, QString &msgen2, int index = 0);
     QString changeType(int index, QString &sym, double &rate);
     QString calcLoop(int id);
@@ -31,9 +32,8 @@ private:
 
 
     SetShm *mSetShm;
-    SetRtuCmd *mRtuCmd;
     SetNetCmd *mNetCmd;
-    QList<sThresholdItem> mItems;
+
 };
 
 #endif // SETTHREAD_H

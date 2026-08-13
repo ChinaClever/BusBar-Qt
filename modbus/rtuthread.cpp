@@ -9,6 +9,8 @@
 #include "rtuthread.h"
 #include <QMultiHash>
 
+
+
 static ushort gBoxArray[4] = {0, 0, 0, 0};
 static uchar gAutoSetFlag[4] = {0, 0, 0, 0};
 
@@ -59,6 +61,7 @@ RtuThread::RtuThread(QObject *parent) :
     mSendBuf = (uchar *)malloc(RTU_BUF_SIZE); //申请内存  -- 随便用
     mRtuPkt = new Rtu_recv; //传输数据结构
     mSerial = new Serial_Trans(this); //串口线程
+    m_addr = 0;
 }
 
 RtuThread::~RtuThread()
@@ -67,6 +70,20 @@ RtuThread::~RtuThread()
     wait();
 }
 
+void RtuThread::addPriorityBox(int box)
+{
+    QMutexLocker locker(&m_mutex);
+    // 去重：如果队列中已有该 box，不再重复添加
+    //if (!m_priorityQueue.contains(box)) {
+        m_priorityQueue.enqueue(box);
+    //}
+}
+
+void RtuThread::addSetItem(const sThresholdItem &item)
+{
+    QMutexLocker locker(&m_mutex);
+    m_setItems.enqueue(item);
+}
 /**
  * @brief RTU通讯初始化
  * @param name 串口名
@@ -178,7 +195,8 @@ int RtuThread::sendDataUcharControlV3(int addr, ushort reg, uint val)
     if( box->offLine > 0 ){ //在线
         //打包数据
         uchar *buf = mSendBuf;
-        int rtn = rtu_sent_ucharControlV3_buff(addr+1, reg, 1 , val , buf); // 把数据打包成通讯格式的数据
+        uchar *sendbuf = mBuf;
+        int rtn = rtu_sent_ucharControlV3_buff(addr+1, reg, 1 , val , sendbuf); // 把数据打包成通讯格式的数据
 //        QByteArray sendarray;
 //        QString sendstrArray;
 //        sendarray.append((char *)buf, rtn);
@@ -187,7 +205,7 @@ int RtuThread::sendDataUcharControlV3(int addr, ushort reg, uint val)
 //            sendstrArray.insert(2+3*i, " "); // 插入空格
 //        qDebug()<<"  send:" << sendstrArray;
 //        qDebug()<< "rtn  "<<rtn;
-        rtn = mSerial->transmitRecvV3(buf, rtn, buf,10); // 传输数据，发送同时接收
+        rtn = mSerial->transmitRecvV3(sendbuf, rtn, buf,10); // 传输数据，发送同时接收
 //        QByteArray array;
 //        QString strArray;
 //        array.append((char *)buf, rtn);
@@ -548,9 +566,113 @@ void RtuThread::BusTransData()
 
 void RtuThread::BusTransDataV3()
 {
-    for(int i=0; i<=mBusData->boxNum; ++i)
+    // ========== 阶段1：处理所有积压的设置命令 ==========
+    QList<sThresholdItem> setItems;int count = 0;
+    {
+        QMutexLocker locker(&m_mutex);
+        while (!m_setItems.isEmpty()) {
+            setItems.append(m_setItems.dequeue());
+        }
+    }
+    for (sThresholdItem &item : setItems) {
+        // 调用设置发送函数（注意串口锁由 Serial_Trans 内部保证）
+        // 这里可直接调用 SetRtuCmd 的发送方法，但要确保使用同一个 Serial_Trans 实例
+        // 假设我们有一个 m_rtuCmd 成员（可复用 SetRtuCmd 对象）
+        if (item.box == 0){
+            if(SetThread::bulid()->mRtuCmd)
+            SetThread::bulid()->mRtuCmd->sendStartV3(item);   // 始端箱设置
+        }else{
+            int flagvalue = 0;
+            if(SetThread::bulid()->mRtuCmd){
+                msleep(2750);
+                flagvalue = SetThread::bulid()->mRtuCmd->sendPlugV3(item);    // 插接箱设置
+
+                while(flagvalue != 6) {
+                    count++;
+                    if(count == 13) break;
+                    msleep(750);
+                    flagvalue = SetThread::bulid()->mRtuCmd->sendPlugV3(item);
+                }
+            }
+        }
+        // 适当延时，避免连续发送太快
+        if(item.insertlog == 2){
+
+            QString name = QString(get_share_mem()->data[item.bus].busName);
+            if(item.box != 0) name = QString(get_share_mem()->data[item.bus].box[item.box].boxName);
+            QString local = tr("本机");
+            QString localen = tr("local");
+            QString str = (item.min == 12)?tr("分励脱扣"):tr("RCA");
+            QString stren = (item.min == 12)?tr("shunt trip"):tr("RCA");
+
+            QString type = tr("%1控制").arg(str);
+            QString typeen = tr("Control %1").arg(stren);
+            QString operation = (item.min == 8)?tr("合闸"):tr("分闸");
+            QString operationen = (item.min == 8)?tr(" turn on "):tr(" turn off ");
+            quint8 bytes[6];
+            bytes[0] = (item.crmin >> 8) & 0xFF;
+            bytes[1] = item.crmin & 0xFF;
+            bytes[2] = (item.crmax >> 8) & 0xFF;
+            bytes[3] = item.crmax & 0xFF;
+            bytes[4] = (item.max >> 8) & 0xFF;
+            bytes[5] = item.max & 0xFF;
+
+            // 拼成 MAC 地址字符串
+            QString mac;
+            for (int i = 0; i < 6; i++) {
+                mac += QString("%1").arg(bytes[i], 2, 16, QLatin1Char('0')).toUpper();
+                if (i < 5){
+                    mac += ":";
+                }
+            }
+
+            if(item.txtype == 1){
+                local = tr("远程");
+                localen = tr("remote");
+            }
+            QString msg1 = tr("%2 %1 mac:%3 %4 %5").arg(name).arg(local).arg(mac).arg(str).arg(operation);
+            QString msgen1 = tr("%2 %1 mac:%3 %4 %5").arg(name).arg(localen).arg(mac).arg(stren).arg(operationen);
+
+            db_operation_obj(item.bus)->insertOperation(type , msg1);
+            db_operation_obj_en(item.bus)->insertOperation(typeen , msgen1);
+
+        }
+        msleep(50);
+    }
+
+    // ========== 阶段2：处理所有积压的优先读取 ==========
+    QList<int> priorityBoxes;
+    {
+        QMutexLocker locker(&m_mutex);
+        bool hasNew = false;
+        while (!m_priorityQueue.isEmpty()) {
+            int box = m_priorityQueue.dequeue();
+            priorityBoxes.append(box);
+            hasNew = true;
+        }
+        if(hasNew) sleep(15-count);
+    }
+    for (int box : priorityBoxes) {
+        transDataV3(box);
+        msleep(900 + rand() % 500);
+        transDataV3(box);
+        msleep(10);  // 短延时
+    }
+    int i = m_addr;
+    for(; i<=mBusData->boxNum; ++i)
     {
         //if(gReadWriteflag == 2) continue;
+        // 每轮开始前检查是否有新的优先地址插入
+        bool hasNew = false;
+        {
+            QMutexLocker locker(&m_mutex);
+            if (!m_priorityQueue.isEmpty())
+                hasNew = true;
+        }
+        if (hasNew) {
+            m_addr = i;
+            break; // 立即中断正常轮询，进入下一轮 while，优先处理新命令
+        }
 
         if(gAutoSetFlag[this->mId] == 1) break;
         {
@@ -562,6 +684,7 @@ void RtuThread::BusTransDataV3()
         }
         msleep(750+rand()%500);//750
     }
+    if(i > mBusData->boxNum) m_addr = 0;
 }
 
 //void RtuThread::BusTransDataV3()
