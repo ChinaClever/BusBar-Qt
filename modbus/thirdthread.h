@@ -28,7 +28,8 @@ class ThirdThread : public QThread
 public:
     explicit ThirdThread(QObject *parent = 0);
 
-     bool init(const QString& name);
+    bool init(const QString& name);
+    void readLocalTemHum();
 
 signals:
 

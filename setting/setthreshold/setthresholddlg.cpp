@@ -61,7 +61,7 @@ void SetThresholdDlg::initSpinBox(sThresholdItem &item)
     case 8:
             {
             if(!item.box){
-                str = "A"; range = 1200;
+                str = "A"; range = 2000;
             }else{
                 range = 125;
             }

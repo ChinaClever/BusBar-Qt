@@ -3,19 +3,54 @@
 ThirdThread::ThirdThread(QObject *parent)
     : QThread(parent)
 {
-    mThr = new ThrData;
-    mBuf = (uchar *)malloc(RTU_BUF_SIZE); //申请内存  -- 随便用
-    mSerial = new Serial_Trans(this); //串口线程
+    //    mThr = new ThrData;
+    //    mBuf = (uchar *)malloc(RTU_BUF_SIZE); //申请内存  -- 随便用
+    //    mSerial = new Serial_Trans(this); //串口线程
     mShm = get_share_mem(); // 获取共享内存
+    QTimer::singleShot(3*1000+rand()%1000,this,SLOT(start()));  // 启动线程
+}
+
+void ThirdThread::readLocalTemHum()
+{
+    sBoxData *box = &(mShm->data[0].box[0]); //共享内存
+    int data[4];
+    int fd;
+    char *path = "/dev/sht30";
+    fd = open(path, O_RDONLY);
+    if (fd < 0)
+    {
+        //perror("open");
+        return ;
+    }
+    bzero(data, sizeof(data));
+    if (read(fd, data, sizeof(data)) < 0){
+        perror("read");
+    }
+    else{
+        //for (int i = 0; i < sizeof(data) / sizeof(data[0]) / 2; i++){
+        for (int i = 0; i < sizeof(data) / sizeof(data[0]) / 2; i++){
+            if (data[i * 2] == -1 || data[i * 2 + 1] == -1)
+                printf("th%d不存在\n", i);
+            else{
+                if(i == 0){
+                    //printf("th%d:温度(%d),湿度(%d)\n", i, data[i * 2], data[i * 2 + 1]);
+                    box->env.tem.value[7] = data[i * 2];
+                    box->env.tem.value[8] = data[i * 2 + 1];
+                }
+            }
+        }
+    }
+    close(fd);
 }
 
 bool ThirdThread::init(const QString &name)
 {
-    bool ret  = mSerial->openSerial(name); // 打开串口
-    if(ret){
-        QTimer::singleShot(3*1000,this,SLOT(start()));  // 启动线程
-    }
-    return ret;
+    //    bool ret  = mSerial->openSerial(name); // 打开串口
+    //    if(ret){
+    //        QTimer::singleShot(3*1000,this,SLOT(start()));  // 启动线程
+    //    }
+    //    return ret;
+    return true;
 }
 
 void ThirdThread::run()
@@ -23,8 +58,9 @@ void ThirdThread::run()
     isRun = true;
     while(isRun)
     {
-        transData();
-        msleep(1);
+        readLocalTemHum();
+        //transData();
+        sleep(3);
     }
 }
 
@@ -51,9 +87,9 @@ void ThirdThread::transData()
 
         if(mThr->fn == Fn_Get){ //获取数据 _ [未加长度位0时该回复数据]
             if(box->rtuLen > 0) {
-                  box->rtuArray[0] = mThr->addr;//
-                  setCrc(box->rtuArray, box->rtuLen);//
-                  mSerial->sendData(box->rtuArray, box->rtuLen);
+                box->rtuArray[0] = mThr->addr;//
+                setCrc(box->rtuArray, box->rtuLen);//
+                mSerial->sendData(box->rtuArray, box->rtuLen);
 
             } else {
                 mSerial->sendData(buf, rtn);

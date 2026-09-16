@@ -536,16 +536,16 @@ void RtuThread::BusTransDataV3()
         if(gReadWriteflag == 2) continue;
         if(gAutoSetFlag[this->mId] == 1) break;
         int ret = transDataV3(i);
-        bool volAlram = checkBoxVolAlram(i);
+//        bool volAlram = checkBoxVolAlram(i);
         if(ret == 0) {
             msleep(500+rand()%500);//500
             transDataV3(i);
         }
-        if(volAlram) {
-            msleep(6000+rand()%500);//6000
-            transDataV3(i);
-        }
-        msleep(750+rand()%500);//750
+//        if(volAlram) {
+//            msleep(6000+rand()%500);//6000
+//            transDataV3(i);
+//        }
+        msleep(550+rand()%500);//750
     }
 }
 
@@ -622,25 +622,34 @@ int RtuThread::transDataV3(int addr)
     uchar *buf = mBuf;
     Rtu_recv *pkt = mRtuPkt; //数据包
     sBoxData *box = &(mBusData->box[addr]); //共享内存
-    readLocalTemHum();
+    //readLocalTemHum();
 
     int rtn = rtu_sent_buff(addr+1,buf,addr?RTU_SENT_LEN_V30:RTU_SENT_LEN_V303); // 把数据打包成通讯格式的数据
-    //        QByteArray sendarray;
-    //        QString sendstrArray;
-    //        sendarray.append((char *)buf, rtn);
-    //        sendstrArray = sendarray.toHex(); // 十六进制
-    //        for(int i=0; i<sendarray.size(); ++i)
-    //            sendstrArray.insert(2+3*i, " "); // 插入空格
-    //        qDebug()<<"  send:" << sendstrArray;
-    //        qDebug()<< "rtn  "<<rtn;
+//            QByteArray sendarray;
+//            QString sendstrArray;
+//            sendarray.append((char *)buf, rtn);
+//            sendstrArray = sendarray.toHex(); // 十六进制
+//            for(int i=0; i<sendarray.size(); ++i)
+//                sendstrArray.insert(2+3*i, " "); // 插入空格
+
+//            if(mId == 0){
+//            QDateTime dt1 = QDateTime::currentDateTime();
+//            QString str1 = dt1.toString("yyyy-MM-dd hh:mm:ss");
+//            qDebug()<<"  send:" << sendstrArray;
+//            qDebug()<<str1<< "rtn  "<<rtn;
+//            }
     rtn = mSerial->transmitV3(buf, rtn, buf); // 传输数据，发送同时接收
-    //        QByteArray array;
-    //        QString strArray;
-    //        array.append((char *)buf, rtn);
-    //        strArray = array.toHex(); // 十六进制
-    //        for(int i=0; i<array.size(); ++i)
-    //            strArray.insert(2+3*i, " "); // 插入空格
-    //        qDebug()<< "rtn  "<<rtn<<"  recv:" << strArray;
+//            QByteArray array;
+//            QString strArray;
+//            array.append((char *)buf, rtn);
+//            strArray = array.toHex(); // 十六进制
+//            for(int i=0; i<array.size(); ++i)
+//                strArray.insert(2+3*i, " "); // 插入空格
+//            if(mId==0){
+//            QDateTime dt = QDateTime::currentDateTime();
+//            QString str = dt.toString("yyyy-MM-dd hh:mm:ss");
+//            qDebug()<< str<<"rtn  "<<rtn<<"  recv:" << strArray;
+//            }
 
     if(rtn > 0) {
         bool ret = rtu_recv_packetV3(addr ,buf, rtn, pkt); // 解析数据 data - len - it

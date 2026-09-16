@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     insertStrEn = tr("System start !");//插入系统日志
     db_system_obj()->insertSystem(insertStr);
     db_system_obj_en()->insertSystem(insertStrEn);
-    mVersion = "V5.1.0.055";//当前软件版本
+    mVersion = "V5.1.0.056";//当前软件版本
     initVersion();
     updateTime();
     QTimer::singleShot(1000,this,SLOT(initFunSLot())); //延时初始化
@@ -44,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    count = 0;
 
     for(int i=0; i < 4; i++) rtu[i] = NULL;
+    //ui->label_2->hide();
 }
 
 MainWindow::~MainWindow()
@@ -182,6 +183,8 @@ void MainWindow::initFunSLot()
     mCheckDlg = new CheckPasswordDlg(this);
     connect(mCheckDlg,SIGNAL(dialogClosed(bool)),this,SLOT(dialogClosed(bool)));
     QTimer::singleShot(7750,this,SLOT(initNetSLot())); //延时初始化
+
+    new ThirdThread();
 
     ui->comboBox->setEnabled(false);
     QPixmap pix(1,60);
