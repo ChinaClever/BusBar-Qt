@@ -333,7 +333,7 @@ int Serial_Trans::transmitV3(uchar *sent, int len, uchar *recv)
 {
     //QMutexLocker locker(&mutex);
     int ret = sendData(sent, len);
-    if(ret > 0) { msleep(70);
+    if(ret > 0) { msleep(120);
         ret = recvDataV3(recv, 2);
         //         if(ret <=0 ) qDebug() << "Serial Trans Err!!!" << ret;
     }
