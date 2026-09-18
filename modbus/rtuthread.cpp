@@ -529,23 +529,28 @@ bool RtuThread::checkBoxVolAlram(int index)
     return ret;
 }
 
+#define cout qDebug() << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz") << "[" << __FILE__ << ":" << Q_FUNC_INFO << ":" << __LINE__ << "]"
+
 void RtuThread::BusTransDataV3()
 {
     for(int i=0; i<=mBusData->boxNum; ++i)
     {
         if(gReadWriteflag == 2) continue;
         if(gAutoSetFlag[this->mId] == 1) break;
+
         int ret = transDataV3(i);
 //        bool volAlram = checkBoxVolAlram(i);
-        if(ret == 0) {
-            msleep(500+rand()%500);//500
+//        if(mId==3) cout << mId << i << (ret ? true:false );
+        char lastOk = mBusData->box[i].offLine; // 上次读到时为8
+        if(ret == 0 && lastOk > 5) { // 上次读到了，这次突然读不到才重试
+            usleep(500+rand()%500);//500
             transDataV3(i);
         }
 //        if(volAlram) {
 //            msleep(6000+rand()%500);//6000
 //            transDataV3(i);
 //        }
-        msleep(550+rand()%500);//750
+        usleep(550+rand()%500);//750
     }
 }
 

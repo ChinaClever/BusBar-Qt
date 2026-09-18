@@ -105,7 +105,7 @@ bool Serial_Trans::openSerial(const QString serialName)
     }
 
     tcflush(fd, TCIFLUSH);
-    setting.c_cc[VTIME] = 2; // 超时时间 0.5S
+    setting.c_cc[VTIME] = 1; // 超时时间 0.5S
     setting.c_cc[VMIN] = 0; // 数据最小长度
     tcsetattr(fd, TCSANOW, &setting);
 
@@ -305,9 +305,12 @@ int Serial_Trans::recvDataV3(uchar *pBuf, int msecs)
                pBuf += rtn; // 指针移动
                ret += rtn; // 长度增加
                count = msecs-1;
+           } else if(ret){
+               break;
            } else {
                count++;
            }
+
            if(ret > RTU_SENT_LEN_V303*2+15) {
                read(fd, pBuf-RTU_SENT_LEN_V303*2+5, RTU_SENT_LEN_V303*2+15);
                ret = 0;
@@ -330,9 +333,8 @@ int Serial_Trans::transmitV3(uchar *sent, int len, uchar *recv)
 {
     //QMutexLocker locker(&mutex);
     int ret = sendData(sent, len);
-    if(ret > 0) {
-        usleep(10);
-        ret = recvDataV3(recv, 10);
+    if(ret > 0) { msleep(70);
+        ret = recvDataV3(recv, 2);
         //         if(ret <=0 ) qDebug() << "Serial Trans Err!!!" << ret;
     }
     return ret;
